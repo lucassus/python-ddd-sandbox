@@ -1,0 +1,14 @@
+fastapi
+pydantic
+sqlalchemy
+uvicorn
+
+# development
+black
+factory_boy
+isort
+flake8
+mypy
+pytest
+pytest-watch
+sqlalchemy-stubs

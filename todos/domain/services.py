@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from todos.db.abstract_repository import AbstractRepository
+from todos.domain.abstract_repository import AbstractRepository
 from todos.domain.errors import TodoNotFoundError
 from todos.domain.models import Todo
 

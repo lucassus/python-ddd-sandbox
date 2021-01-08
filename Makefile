@@ -5,6 +5,7 @@ venv:
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 install:
+	pip install pip-tools
 	pip install -r requirements.txt
 
 server-dev:

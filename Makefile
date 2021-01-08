@@ -4,8 +4,18 @@ venv:
 	python3.8 -m venv $(VENV_DIR)
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
-install:
-	pip install -r requirements.txt
+deps-pre:
+	pip install pip-tools
+
+deps-compile:
+	pip-compile requirements.in --output-file=requirements.txt
+
+deps-install:
+	pip-sync
+
+deps: deps-pre deps-compile deps-install
+
+install: deps-pre deps-install
 
 server-dev:
 	uvicorn todos.main:app --reload

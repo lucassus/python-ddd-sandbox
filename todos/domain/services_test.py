@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.db.repositories import FakeRepository
+from todos.db.fake_repository import FakeRepository
 from todos.domain.models import Todo
 from todos.domain.services import Service
 

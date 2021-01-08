@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from todos.api import schemas
 from todos.api.dependencies import get_session
-from todos.db.repositories import Repository
+from todos.db.repository import Repository
 from todos.domain.services import Service
 
 # TODO: Nest routes

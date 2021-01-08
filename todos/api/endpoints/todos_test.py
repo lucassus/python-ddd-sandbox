@@ -54,3 +54,14 @@ def test_todo_endpoint_returns_todo(session, client):
 def test_todo_endpoint_returns_404(client):
     response = client.get("/todos/1")
     assert response.status_code == 404
+
+
+def test_todo_complete_endpoint(session, client):
+    todo = Todo(name="Test")
+    session.add(todo)
+    session.commit()
+
+    response = client.put(f"/todos/{todo.id}/complete")
+
+    assert response.status_code == 200
+    assert todo.completed_at is not None

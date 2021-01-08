@@ -44,10 +44,10 @@ def todo_endpoint(id: int, session: Session = Depends(get_session)):
 @router.put("/{id}/complete", response_model=schemas.Todo)
 def todo_complete_endpoint(id: int, session: Session = Depends(get_session)):
     repository = Repository(session)
-    return complete_todo(id, repository)
+    return complete_todo(id, repository=repository)
 
 
 @router.put("/{id}/incomplete", response_model=schemas.Todo)
 def todo_incomplete_endpoint(id: int, session: Session = Depends(get_session)):
     repository = Repository(session)
-    return incomplete_todo(id, repository)
+    return incomplete_todo(id, repository=repository)

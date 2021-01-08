@@ -1,11 +1,14 @@
-from datetime import datetime
+from datetime import date, datetime
+from typing import Callable
 
 from todos.domain.abstract_repository import AbstractRepository
 from todos.domain.errors import TodoNotFoundError
 from todos.domain.models import Todo
 
 
-def complete_todo(id: int, repository: AbstractRepository) -> Todo:
+def complete_todo(
+    id: int, repository: AbstractRepository, now: Callable[..., date] = datetime.now
+) -> Todo:
     todo = repository.get(id)
 
     if not todo:
@@ -14,7 +17,7 @@ def complete_todo(id: int, repository: AbstractRepository) -> Todo:
     if todo.is_completed:
         return todo
 
-    return repository.update(todo, completed_at=datetime.now())
+    return repository.update(todo, completed_at=now())
 
 
 def incomplete_todo(id: int, repository: AbstractRepository) -> Todo:

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from todos.api import schemas
 from todos.api.dependencies import get_session
 from todos.db.repository import Repository
-from todos.domain.services import Service
+from todos.domain.services import complete_todo, incomplete_todo
 
 # TODO: Nest routes
 router = APIRouter()
@@ -49,11 +49,11 @@ def todo_create_endpoint(
 
 @router.put("/todos/{id}/complete", response_model=schemas.Todo)
 def todo_complete_endpoint(id: int, session: Session = Depends(get_session)):
-    service = Service(repository=Repository(session))
-    return service.complete(id)
+    repository = Repository(session)
+    return complete_todo(id, repository)
 
 
 @router.put("/todos/{id}/incomplete", response_model=schemas.Todo)
 def todo_incomplete_endpoint(id: int, session: Session = Depends(get_session)):
-    service = Service(repository=Repository(session))
-    return service.incomplete(id)
+    repository = Repository(session)
+    return incomplete_todo(id, repository)

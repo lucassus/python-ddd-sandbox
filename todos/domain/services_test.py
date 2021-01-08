@@ -2,16 +2,16 @@ from datetime import date
 
 from todos.db.fake_repository import FakeRepository
 from todos.domain.models import Todo
-from todos.domain.services import Service
+from todos.domain.services import complete_todo, incomplete_todo
 
 
 def test_complete():
     # Given
     todo = Todo(id=1, name="Test todo")
-    service = Service(repository=FakeRepository([todo]))
+    repository = FakeRepository([todo])
 
     # When
-    completed_todo = service.complete(todo.id)
+    completed_todo = complete_todo(todo.id, repository=repository)
 
     # Then
     assert completed_todo == todo
@@ -21,10 +21,10 @@ def test_complete():
 def test_incomplete():
     # Given
     todo = Todo(id=1, name="Test todo", completed_at=date(2021, 1, 5))
-    service = Service(repository=FakeRepository([todo]))
+    repository = FakeRepository([todo])
 
     # When
-    completed_todo = service.incomplete(todo.id)
+    completed_todo = incomplete_todo(todo.id, repository=repository)
 
     # Then
     assert completed_todo == todo

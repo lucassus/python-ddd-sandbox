@@ -6,5 +6,7 @@ def get_session():
 
     try:
         yield session
+    except Exception:
+        session.rollback()
     finally:
         session.close()

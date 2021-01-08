@@ -10,4 +10,5 @@ flake8
 mypy
 pytest
 pytest-watch
+requests
 sqlalchemy-stubs

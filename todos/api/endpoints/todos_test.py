@@ -3,13 +3,6 @@ from datetime import date
 from todos.domain.models import Todo
 
 
-def test_hello_endpoint(client):
-    response = client.get("/")
-
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello World"}
-
-
 def test_integration(client):
     response = client.get("/todos")
 

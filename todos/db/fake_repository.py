@@ -1,7 +1,7 @@
 from datetime import date
 from typing import List, Optional
 
-from todos.domain.abstract_repository import AbstractRepository
+from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models import Todo
 
 

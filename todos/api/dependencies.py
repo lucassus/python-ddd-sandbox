@@ -1,3 +1,7 @@
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+from todos.db.repository import Repository
 from todos.db.session import SessionLocal
 
 
@@ -10,3 +14,7 @@ def get_session():
         session.rollback()
     finally:
         session.close()
+
+
+def get_repository(session: Session = Depends(get_session)):
+    return Repository(session=session)

@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from sqlalchemy.orm.session import Session
 
-from todos.domain.abstract_repository import AbstractRepository
+from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models import Todo
 
 

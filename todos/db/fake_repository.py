@@ -21,8 +21,21 @@ class FakeRepository(AbstractRepository):
 
         return todo
 
-    def update(self, todo: Todo, completed_at: Optional[date]) -> Todo:
-        todo.completed_at = completed_at
+    def update(
+        self,
+        id: int,
+        name: Optional[str] = None,
+        completed_at: Optional[date] = ...,
+    ) -> Todo:
+        todo = self.get(id)
+        assert todo is not None
+
+        if name is not None and name != todo.name:
+            todo.name = name
+
+        if completed_at is not ...:
+            todo.completed_at = completed_at
+
         return todo
 
     def list(self) -> List[Todo]:

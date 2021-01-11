@@ -12,6 +12,7 @@ def test_complete():
 
     # When
     now = date(2021, 1, 8)
+    assert todo.id is not None
     completed_todo = complete_todo(todo.id, now=lambda: now, repository=repository)
 
     # Then
@@ -25,6 +26,7 @@ def test_incomplete():
     repository = FakeRepository([todo])
 
     # When
+    assert todo.id is not None
     completed_todo = incomplete_todo(todo.id, repository=repository)
 
     # Then

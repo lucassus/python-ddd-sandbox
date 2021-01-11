@@ -20,12 +20,19 @@ class Repository(AbstractRepository):
     def create(self, name: str) -> Todo:
         todo = Todo(name=name)
         self._session.add(todo)
-        self._session.commit()
 
         return todo
 
-    def update(self, todo: Todo, completed_at: Optional[date]) -> Todo:
-        todo.completed_at = completed_at
-        self._session.commit()
+    def update(
+        self, id: int, name: Optional[str] = None, completed_at: Optional[date] = ...
+    ) -> Todo:
+        todo = self.get(id)
+        assert todo is not None
+
+        if name is not None:
+            todo.name = name
+
+        if completed_at is not ...:
+            todo.completed_at = completed_at
 
         return todo

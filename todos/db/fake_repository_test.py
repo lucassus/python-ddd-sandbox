@@ -14,9 +14,10 @@ def test_fake_repository():
     assert repository.get(1) == Todo(id=1, name="Foo")
 
     todo = repository.get(2)
-    assert todo
+    assert todo == Todo(id=2, name="Bar")
 
-    updated_todo = repository.update(todo, completed_at=date(2021, 1, 6))
+    assert todo.id is not None
+    updated_todo = repository.update(todo.id, completed_at=date(2021, 1, 6))
     assert updated_todo.completed_at is not None
 
     assert repository.get(123) is None

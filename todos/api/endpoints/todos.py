@@ -1,10 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Path
 from fastapi.responses import JSONResponse
+from sqlalchemy.orm import Session
 
 from todos.api import schemas
-from todos.api.dependencies import get_repository
+from todos.api.dependencies import get_repository, get_session
 from todos.db.repository import Repository
 from todos.domain.services import complete_todo, incomplete_todo
 
@@ -20,10 +21,14 @@ def todos_endpoint(
 
 @router.post("", response_model=schemas.Todo)
 def todo_create_endpoint(
-    todo: schemas.CreateTodo,
+    data: schemas.CreateTodo,
     repository: Repository = Depends(get_repository),
+    session: Session = Depends(get_session),
 ):
-    return repository.create(todo.name)
+    todo = repository.create(data.name)
+    session.commit()
+
+    return todo
 
 
 @router.get(
@@ -32,7 +37,7 @@ def todo_create_endpoint(
     responses={404: {"description": "Todo not found"}},
 )
 def todo_endpoint(
-    id: int,
+    id: int = Path(..., description="The ID of the todo to get", ge=1),
     repository: Repository = Depends(get_repository),
 ):
     todo = repository.get(id)

@@ -17,9 +17,9 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def update(
         self,
-        todo: Todo,
+        id: int,
         name: Optional[str] = None,
-        completed_at: Optional[date] = None,
+        completed_at: Optional[date] = ...,
     ) -> Todo:
         pass
 

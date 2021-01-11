@@ -17,7 +17,7 @@ def complete_todo(
     if todo.is_completed:
         return todo
 
-    return repository.update(todo, completed_at=now())
+    return repository.update(id, completed_at=now())
 
 
 def incomplete_todo(id: int, repository: AbstractRepository) -> Todo:
@@ -29,4 +29,4 @@ def incomplete_todo(id: int, repository: AbstractRepository) -> Todo:
     if not todo.is_completed:
         return todo
 
-    return repository.update(todo, completed_at=None)
+    return repository.update(id, completed_at=None)

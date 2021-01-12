@@ -2,8 +2,8 @@ from datetime import date, datetime
 from typing import Callable
 
 from todos.db.abstract_repository import AbstractRepository
-from todos.domain.errors import TodoNotFoundError
 from todos.domain.models.todo import Todo
+from todos.service_layer.errors import TodoNotFoundError
 
 
 def complete_todo(

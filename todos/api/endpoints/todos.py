@@ -9,7 +9,7 @@ from todos.api.dependencies import get_repository, get_session
 from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models.todo import Todo
 from todos.service_layer.errors import TodoNotFoundError
-from todos.service_layer.services import complete_todo, incomplete_todo
+from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 
 router = APIRouter()
 
@@ -27,12 +27,7 @@ def todo_create_endpoint(
     repository: AbstractRepository = Depends(get_repository),
     session: Session = Depends(get_session),
 ):
-    todo = Todo(name=data.name)
-
-    repository.create(todo)
-    session.commit()
-
-    return todo
+    return create_todo(name=data.name, repository=repository, session=session)
 
 
 @router.get(
@@ -59,11 +54,9 @@ def todo_complete_endpoint(
     session: Session = Depends(get_session),
 ):
     try:
-        todo = complete_todo(id, repository=repository)
+        todo = complete_todo(id, repository=repository, session=session)
     except TodoNotFoundError:
         return JSONResponse(status_code=404)
-
-    session.commit()
 
     return todo
 
@@ -75,10 +68,8 @@ def todo_incomplete_endpoint(
     session: Session = Depends(get_session),
 ):
     try:
-        todo = incomplete_todo(id, repository=repository)
+        todo = incomplete_todo(id, repository=repository, session=session)
     except TodoNotFoundError:
         return JSONResponse(status_code=404)
-
-    session.commit()
 
     return todo

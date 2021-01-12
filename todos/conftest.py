@@ -1,31 +1,42 @@
+import os
+
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.orm import clear_mappers, sessionmaker
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session
 
 from todos.api import api_router
 from todos.api.dependencies import get_session
 from todos.db.tables import metadata, start_mappers
 
 
-@pytest.fixture
-def session():
+@pytest.fixture(scope="session")
+def engine() -> Engine:
+    db_file = os.path.join(os.path.dirname(__file__), "../todos_test.db")
+    print(db_file)
     engine = create_engine(
-        "sqlite:///:memory:",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,  # A pool for exactly one connection
+        f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
     )
 
     metadata.create_all(bind=engine)
     start_mappers()
 
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = TestingSessionLocal()
+    return engine
+
+
+@pytest.fixture
+def session(engine):
+    connection = engine.connect()
+    transaction = connection.begin()
+    session = Session(bind=connection)
 
     yield session
-    clear_mappers()
+
+    session.close()
+    transaction.rollback()
+    connection.close()
 
 
 @pytest.fixture

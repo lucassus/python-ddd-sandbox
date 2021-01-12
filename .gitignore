@@ -3,3 +3,4 @@ venv
 .coverage
 README.local.md
 todos.db
+todos_test.db

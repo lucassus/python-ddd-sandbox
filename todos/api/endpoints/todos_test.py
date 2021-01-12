@@ -3,6 +3,7 @@ from datetime import date
 from todos.domain.models.todo import Todo
 
 
+# TODO: Find a way to write proper integration tests
 # TODO: How to organize tests by type: unit/integration/e2e
 def test_integration(session, client):
     response = client.get("/todos")

@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from todos.api import schemas
 from todos.api.dependencies import get_repository, get_session
 from todos.db.repository import Repository
+from todos.service_layer.errors import TodoNotFoundError
 from todos.service_layer.services import complete_todo, incomplete_todo
 
 router = APIRouter()
@@ -48,27 +49,33 @@ def todo_endpoint(
     return todo
 
 
-# TODO: Handle 404 errors
 @router.put("/{id}/complete", response_model=schemas.Todo)
 def todo_complete_endpoint(
     id: int,
     repository: Repository = Depends(get_repository),
     session: Session = Depends(get_session),
 ):
-    todo = complete_todo(id, repository=repository)
+    try:
+        todo = complete_todo(id, repository=repository)
+    except TodoNotFoundError:
+        return JSONResponse(status_code=404)
+
     session.commit()
 
     return todo
 
 
-# TODO: Handle 404 errors
 @router.put("/{id}/incomplete", response_model=schemas.Todo)
 def todo_incomplete_endpoint(
     id: int,
     repository: Repository = Depends(get_repository),
     session: Session = Depends(get_session),
 ):
-    todo = incomplete_todo(id, repository=repository)
+    try:
+        todo = incomplete_todo(id, repository=repository)
+    except TodoNotFoundError:
+        return JSONResponse(status_code=404)
+
     session.commit()
 
     return todo

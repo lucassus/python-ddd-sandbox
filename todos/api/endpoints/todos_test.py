@@ -3,6 +3,7 @@ from datetime import date
 from todos.domain.models.todo import Todo
 
 
+# TODO: How to organize tests by type: unit/integration/e2e
 def test_integration(session, client):
     response = client.get("/todos")
 
@@ -70,3 +71,8 @@ def test_todo_complete_endpoint(session, client):
 
     assert response.status_code == 200
     assert todo.completed_at is not None
+
+
+def test_todo_complete_endpoint_returns_404(client):
+    response = client.put(f"/todos/{123}/complete")
+    assert response.status_code == 404

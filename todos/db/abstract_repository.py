@@ -14,5 +14,5 @@ class AbstractRepository(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def create(self, name: str) -> Todo:
+    def create(self, todo: Todo) -> None:
         pass

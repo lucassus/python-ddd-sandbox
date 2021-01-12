@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from todos.api import schemas
 from todos.api.dependencies import get_repository, get_session
 from todos.db.repository import Repository
+from todos.domain.models.todo import Todo
 from todos.service_layer.errors import TodoNotFoundError
 from todos.service_layer.services import complete_todo, incomplete_todo
 
@@ -26,7 +27,9 @@ def todo_create_endpoint(
     repository: Repository = Depends(get_repository),
     session: Session = Depends(get_session),
 ):
-    todo = repository.create(data.name)
+    todo = Todo(name=data.name)
+
+    repository.create(todo)
     session.commit()
 
     return todo

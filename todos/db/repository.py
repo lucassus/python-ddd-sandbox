@@ -16,8 +16,5 @@ class Repository(AbstractRepository):
     def list(self) -> List[Todo]:
         return self._session.query(Todo).all()
 
-    def create(self, name: str) -> Todo:
-        todo = Todo(name=name)
+    def create(self, todo: Todo) -> None:
         self._session.add(todo)
-
-        return todo

@@ -5,10 +5,10 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from todos.api import schemas
-from todos.api.dependencies import get_repository, get_session
+from todos.api.dependencies import CreateTodoService, get_repository, get_session
 from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer.errors import TodoNotFoundError
-from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
+from todos.service_layer.services import complete_todo, incomplete_todo
 
 router = APIRouter()
 
@@ -23,10 +23,9 @@ def todos_endpoint(
 @router.post("", response_model=schemas.Todo)
 def todo_create_endpoint(
     data: schemas.CreateTodo,
-    repository: AbstractRepository = Depends(get_repository),
-    session: Session = Depends(get_session),
+    create_todo: CreateTodoService = Depends(),
 ):
-    return create_todo(name=data.name, repository=repository, session=session)
+    return create_todo(name=data.name)
 
 
 @router.get(

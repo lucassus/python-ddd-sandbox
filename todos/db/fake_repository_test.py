@@ -5,8 +5,8 @@ from todos.domain.models.todo import Todo
 def test_fake_repository():
     repository = FakeRepository([])
 
-    repository.create("Foo")
-    repository.create("Bar")
+    repository.create(Todo(name="Foo"))
+    repository.create(Todo(name="Bar"))
 
     assert repository.list() == [Todo(id=1, name="Foo"), Todo(id=2, name="Bar")]
     assert repository.get(1) == Todo(id=1, name="Foo")

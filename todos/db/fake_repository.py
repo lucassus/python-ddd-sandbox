@@ -14,17 +14,14 @@ class FakeRepository(AbstractRepository):
         except StopIteration:
             return None
 
-    def create(self, name: str) -> Todo:
-        todo = Todo(id=self._next_id, name=name)
+    def create(self, todo: Todo) -> None:
+        todo.id = self._get_next_id()
         self._todos.append(todo)
-
-        return todo
 
     def list(self) -> List[Todo]:
         return self._todos
 
-    @property
-    def _next_id(self) -> int:
+    def _get_next_id(self) -> int:
         return (
             max(todo.id for todo in self._todos if todo.id) + 1
             if len(self._todos) > 0

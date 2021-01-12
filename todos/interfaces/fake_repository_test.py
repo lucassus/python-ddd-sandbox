@@ -1,5 +1,5 @@
-from todos.db.fake_repository import FakeRepository
 from todos.domain.models.todo import Todo
+from todos.interfaces.fake_repository import FakeRepository
 
 
 def test_fake_repository():

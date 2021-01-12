@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from todos.api import api_router
 from todos.api.dependencies import get_session
-from todos.db.tables import metadata, start_mappers
+from todos.interfaces.db.tables import metadata, start_mappers
 
 
 @pytest.fixture(scope="session")

@@ -1,9 +1,9 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from todos.db.abstract_repository import AbstractRepository
-from todos.db.repository import Repository
-from todos.db.session import SessionLocal
+from todos.interfaces.abstract_repository import AbstractRepository
+from todos.interfaces.db.repository import Repository
+from todos.interfaces.db.session import SessionLocal
 
 
 def get_session():

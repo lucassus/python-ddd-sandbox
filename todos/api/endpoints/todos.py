@@ -6,8 +6,7 @@ from sqlalchemy.orm import Session
 
 from todos.api import schemas
 from todos.api.dependencies import get_repository, get_session
-from todos.db.abstract_repository import AbstractRepository
-from todos.domain.models.todo import Todo
+from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer.errors import TodoNotFoundError
 from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 

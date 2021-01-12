@@ -1,8 +1,8 @@
 from datetime import date, datetime
 from typing import Callable, Protocol
 
-from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models.todo import Todo
+from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer.errors import TodoNotFoundError
 
 

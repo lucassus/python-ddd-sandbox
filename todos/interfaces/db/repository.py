@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from sqlalchemy.orm.session import Session
 
-from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models.todo import Todo
+from todos.interfaces.abstract_repository import AbstractRepository
 
 
 class Repository(AbstractRepository):

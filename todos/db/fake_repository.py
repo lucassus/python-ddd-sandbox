@@ -20,20 +20,6 @@ class FakeRepository(AbstractRepository):
 
         return todo
 
-    def update(
-        self,
-        id: int,
-        *args,
-        **kwargs,
-    ) -> Todo:
-        todo = self.get(id)
-        assert todo is not None
-
-        for field, value in kwargs.items():
-            setattr(todo, field, value)
-
-        return todo
-
     def list(self) -> List[Todo]:
         return self._todos
 

@@ -12,7 +12,9 @@ class SupportsCommit(Protocol):
 
 
 def create_todo(
-    name: str, repository: AbstractRepository, session: SupportsCommit
+    name: str,
+    repository: AbstractRepository,
+    session: SupportsCommit,
 ) -> Todo:
     todo = Todo(name=name)
 

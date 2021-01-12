@@ -22,7 +22,10 @@ def test_complete():
     now = date(2021, 1, 8)
     assert todo.id is not None
     completed_todo = complete_todo(
-        todo.id, now=lambda: now, repository=fake_repository, session=fake_session
+        todo.id,
+        repository=fake_repository,
+        session=fake_session,
+        now=lambda: now,
     )
 
     # Then
@@ -40,7 +43,9 @@ def test_incomplete():
     # When
     assert todo.id is not None
     completed_todo = incomplete_todo(
-        todo.id, repository=fake_repository, session=fake_session
+        todo.id,
+        repository=fake_repository,
+        session=fake_session,
     )
 
     # Then

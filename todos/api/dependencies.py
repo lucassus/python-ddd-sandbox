@@ -5,7 +5,7 @@ from todos.domain.models.todo import Todo
 from todos.interfaces.abstract_repository import AbstractRepository
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
-from todos.service_layer.services import create_todo
+from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 
 
 def get_session():
@@ -23,12 +23,28 @@ def get_repository(session: Session = Depends(get_session)) -> AbstractRepositor
     return Repository(session=session)
 
 
-class CreateTodoService:
+class Service:
     def __init__(self, session: Session = Depends(get_session)):
         self._session = session
         self._repository = Repository(session=session)
 
-    def __call__(self, name: str) -> Todo:
+    def create_todo(self, name: str) -> Todo:
         return create_todo(
-            name=name, repository=self._repository, session=self._session
+            name,
+            repository=self._repository,
+            session=self._session,
+        )
+
+    def complete_todo(self, id: int) -> Todo:
+        return complete_todo(
+            id,
+            repository=self._repository,
+            session=self._session,
+        )
+
+    def incomplete_todo(self, id: int) -> Todo:
+        return incomplete_todo(
+            id,
+            repository=self._repository,
+            session=self._session,
         )

@@ -29,8 +29,9 @@ def test_integration(session, client):
 
     response = client.put("/todos/1/complete")
     assert response.status_code == 200
-    # TODO: Does not work
-    assert session.query(Todo).get(1).completed_at is not None
+
+    completed_todo = session.query(Todo).get(1)
+    assert completed_todo.completed_at is not None
 
 
 def test_todos_endpoint(session, client):
@@ -52,6 +53,8 @@ def test_todos_endpoint(session, client):
 
 def test_todo_endpoint_returns_todo(session, client):
     session.add(Todo(id=1, name="Test name"))
+    session.commit()
+
     response = client.get("/todos/1")
 
     assert response.status_code == 200

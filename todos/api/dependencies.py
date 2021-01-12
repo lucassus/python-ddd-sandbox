@@ -5,6 +5,7 @@ from todos.db.repository import Repository
 from todos.db.session import SessionLocal
 
 
+# TODO: It couples api with the db, consider unit of work design pattern
 def get_session():
     session = SessionLocal()
 

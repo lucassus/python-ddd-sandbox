@@ -1,10 +1,9 @@
-from datetime import date
-from typing import List, Optional, overload
+from typing import List, Optional
 
 from sqlalchemy.orm.session import Session
 
 from todos.db.abstract_repository import AbstractRepository
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
 class Repository(AbstractRepository):
@@ -20,19 +19,5 @@ class Repository(AbstractRepository):
     def create(self, name: str) -> Todo:
         todo = Todo(name=name)
         self._session.add(todo)
-
-        return todo
-
-    def update(
-        self,
-        id: int,
-        *args,
-        **kwargs,
-    ) -> Todo:
-        todo = self.get(id)
-        assert todo is not None
-
-        for field, value in kwargs.items():
-            setattr(todo, field, value)
 
         return todo

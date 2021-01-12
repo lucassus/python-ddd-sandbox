@@ -1,9 +1,9 @@
 from datetime import date
 
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
-def test_integration(client):
+def test_integration(session, client):
     response = client.get("/todos")
 
     assert response.status_code == 200
@@ -24,6 +24,11 @@ def test_integration(client):
         {"id": 1, "name": "Test todo", "completed_at": None},
         {"id": 2, "name": "The other todo", "completed_at": None},
     ]
+
+    response = client.put("/todos/1/complete")
+    assert response.status_code == 200
+    # TODO: Does not work
+    assert session.query(Todo).get(1).completed_at is not None
 
 
 def test_todos_endpoint(session, client):

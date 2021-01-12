@@ -48,17 +48,27 @@ def todo_endpoint(
     return todo
 
 
+# TODO: Handle 404 errors
 @router.put("/{id}/complete", response_model=schemas.Todo)
 def todo_complete_endpoint(
     id: int,
     repository: Repository = Depends(get_repository),
+    session: Session = Depends(get_session),
 ):
-    return complete_todo(id, repository=repository)
+    todo = complete_todo(id, repository=repository)
+    session.commit()
+
+    return todo
 
 
+# TODO: Handle 404 errors
 @router.put("/{id}/incomplete", response_model=schemas.Todo)
 def todo_incomplete_endpoint(
     id: int,
     repository: Repository = Depends(get_repository),
+    session: Session = Depends(get_session),
 ):
-    return incomplete_todo(id, repository=repository)
+    todo = incomplete_todo(id, repository=repository)
+    session.commit()
+
+    return todo

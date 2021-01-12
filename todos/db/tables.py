@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Date, Integer, MetaData, String, Table
 from sqlalchemy.orm import mapper
 
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 metadata = MetaData()
 

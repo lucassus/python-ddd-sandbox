@@ -2,7 +2,7 @@ from datetime import date
 
 from todos.db.session import SessionLocal, engine
 from todos.db.tables import metadata, start_mappers
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
 def seed():

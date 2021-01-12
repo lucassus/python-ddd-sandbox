@@ -44,6 +44,7 @@ def session(engine, tables):
 
 @pytest.fixture
 def client(session):
+    # TODO: Probably not a great idea, because all requests in a test will re-use the same session
     def override_get_session():
         return session
 

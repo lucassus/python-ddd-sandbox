@@ -3,7 +3,7 @@ from typing import Callable
 
 from todos.db.abstract_repository import AbstractRepository
 from todos.domain.errors import TodoNotFoundError
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
 def complete_todo(
@@ -14,10 +14,9 @@ def complete_todo(
     if not todo:
         raise TodoNotFoundError
 
-    if todo.is_completed:
-        return todo
+    todo.complete(now)
 
-    return repository.update(id, completed_at=now())
+    return todo
 
 
 def incomplete_todo(id: int, repository: AbstractRepository) -> Todo:
@@ -26,7 +25,6 @@ def incomplete_todo(id: int, repository: AbstractRepository) -> Todo:
     if not todo:
         raise TodoNotFoundError
 
-    if not todo.is_completed:
-        return todo
+    todo.incomplete()
 
-    return repository.update(id, completed_at=None)
+    return todo

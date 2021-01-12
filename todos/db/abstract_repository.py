@@ -1,8 +1,7 @@
 import abc
-from datetime import date
-from typing import List, Optional, overload
+from typing import List, Optional
 
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
 class AbstractRepository(abc.ABC):
@@ -12,20 +11,6 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def list(self) -> List[Todo]:
-        pass
-
-    @overload
-    def update(self, id: int) -> Todo:
-        ...
-
-    @overload
-    def update(
-        self, id: int, name: Optional[str] = None, completed_at: Optional[date] = None
-    ) -> Todo:
-        ...
-
-    @abc.abstractmethod
-    def update(self, id: int, *args, **kwargs) -> Todo:
         pass
 
     @abc.abstractmethod

@@ -1,8 +1,7 @@
-from datetime import date
 from typing import List, Optional
 
 from todos.db.abstract_repository import AbstractRepository
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
 class FakeRepository(AbstractRepository):

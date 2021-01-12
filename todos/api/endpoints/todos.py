@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from todos.api import schemas
 from todos.api.dependencies import get_repository, get_session
 from todos.db.repository import Repository
-from todos.domain.services import complete_todo, incomplete_todo
+from todos.services import complete_todo, incomplete_todo
 
 router = APIRouter()
 

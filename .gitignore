@@ -1,4 +1,5 @@
 .idea
 venv
+.coverage
 README.local.md
 todos.db

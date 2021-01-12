@@ -8,12 +8,12 @@ from todos.service_layer.services import complete_todo, incomplete_todo
 def test_complete():
     # Given
     todo = Todo(id=1, name="Test todo")
-    repository = FakeRepository([todo])
+    fake_repository = FakeRepository([todo])
 
     # When
     now = date(2021, 1, 8)
     assert todo.id is not None
-    completed_todo = complete_todo(todo.id, now=lambda: now, repository=repository)
+    completed_todo = complete_todo(todo.id, now=lambda: now, repository=fake_repository)
 
     # Then
     assert completed_todo == todo
@@ -23,11 +23,11 @@ def test_complete():
 def test_incomplete():
     # Given
     todo = Todo(id=1, name="Test todo", completed_at=date(2021, 1, 5))
-    repository = FakeRepository([todo])
+    fake_repository = FakeRepository([todo])
 
     # When
     assert todo.id is not None
-    completed_todo = incomplete_todo(todo.id, repository=repository)
+    completed_todo = incomplete_todo(todo.id, repository=fake_repository)
 
     # Then
     assert completed_todo == todo

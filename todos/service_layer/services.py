@@ -1,14 +1,19 @@
 from datetime import date, datetime
-from typing import Callable
-
-from sqlalchemy.orm import Session
+from typing import Callable, Protocol
 
 from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models.todo import Todo
 from todos.service_layer.errors import TodoNotFoundError
 
 
-def create_todo(name: str, repository: AbstractRepository, session: Session) -> Todo:
+class SupportsCommit(Protocol):
+    def commit(self) -> None:
+        ...
+
+
+def create_todo(
+    name: str, repository: AbstractRepository, session: SupportsCommit
+) -> Todo:
     todo = Todo(name=name)
 
     repository.create(todo)
@@ -20,7 +25,7 @@ def create_todo(name: str, repository: AbstractRepository, session: Session) -> 
 def complete_todo(
     id: int,
     repository: AbstractRepository,
-    session: Session,
+    session: SupportsCommit,
     now: Callable[..., date] = datetime.utcnow,
 ) -> Todo:
     todo = repository.get(id)
@@ -37,7 +42,7 @@ def complete_todo(
 def incomplete_todo(
     id: int,
     repository: AbstractRepository,
-    session: Session,
+    session: SupportsCommit,
 ) -> Todo:
     todo = repository.get(id)
 

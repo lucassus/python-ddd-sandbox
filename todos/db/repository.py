@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List, Optional
+from typing import List, Optional, overload
 
 from sqlalchemy.orm.session import Session
 
@@ -24,15 +24,15 @@ class Repository(AbstractRepository):
         return todo
 
     def update(
-        self, id: int, name: Optional[str] = None, completed_at: Optional[date] = ...
+        self,
+        id: int,
+        *args,
+        **kwargs,
     ) -> Todo:
         todo = self.get(id)
         assert todo is not None
 
-        if name is not None:
-            todo.name = name
-
-        if completed_at is not ...:
-            todo.completed_at = completed_at
+        for field, value in kwargs.items():
+            setattr(todo, field, value)
 
         return todo

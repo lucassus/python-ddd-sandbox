@@ -24,17 +24,14 @@ class FakeRepository(AbstractRepository):
     def update(
         self,
         id: int,
-        name: Optional[str] = None,
-        completed_at: Optional[date] = ...,
+        *args,
+        **kwargs,
     ) -> Todo:
         todo = self.get(id)
         assert todo is not None
 
-        if name is not None and name != todo.name:
-            todo.name = name
-
-        if completed_at is not ...:
-            todo.completed_at = completed_at
+        for field, value in kwargs.items():
+            setattr(todo, field, value)
 
         return todo
 

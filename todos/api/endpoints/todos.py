@@ -9,6 +9,7 @@ from todos.api.dependencies import get_repository, get_session
 from todos.db.repository import Repository
 from todos.service_layer.errors import TodoNotFoundError
 from todos.service_layer.services import complete_todo, incomplete_todo
+from todos.service_layer.unit_of_work import UnitOfWork
 
 router = APIRouter()
 
@@ -21,13 +22,12 @@ def todos_endpoint(
 
 
 @router.post("", response_model=schemas.Todo)
-def todo_create_endpoint(
-    data: schemas.CreateTodo,
-    repository: Repository = Depends(get_repository),
-    session: Session = Depends(get_session),
-):
-    todo = repository.create(data.name)
-    session.commit()
+def todo_create_endpoint(data: schemas.CreateTodo):
+    # TODO: Figure out how to inject it
+    uof = UnitOfWork()
+    with uof:
+        todo = uof.todos.create(data.name)
+        uof.commit()
 
     return todo
 

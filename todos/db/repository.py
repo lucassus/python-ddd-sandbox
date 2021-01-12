@@ -7,6 +7,7 @@ from todos.domain.models.todo import Todo
 
 
 class Repository(AbstractRepository):
+    # TODO: How to correctly type class members?
     def __init__(self, session: Session):
         self._session = session
 
@@ -16,6 +17,7 @@ class Repository(AbstractRepository):
     def list(self) -> List[Todo]:
         return self._session.query(Todo).all()
 
+    # TODO: Change the signature to `add(self, todo: Todo) -> None`
     def create(self, name: str) -> Todo:
         todo = Todo(name=name)
         self._session.add(todo)

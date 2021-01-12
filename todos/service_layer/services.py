@@ -13,6 +13,7 @@ class SupportsCommit(Protocol):
 
 def create_todo(
     name: str,
+    *,
     repository: AbstractRepository,
     session: SupportsCommit,
 ) -> Todo:
@@ -26,6 +27,7 @@ def create_todo(
 
 def complete_todo(
     id: int,
+    *,
     repository: AbstractRepository,
     session: SupportsCommit,
     now: Callable[..., date] = datetime.utcnow,
@@ -43,6 +45,7 @@ def complete_todo(
 
 def incomplete_todo(
     id: int,
+    *,
     repository: AbstractRepository,
     session: SupportsCommit,
 ) -> Todo:

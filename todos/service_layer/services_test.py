@@ -2,7 +2,7 @@ from datetime import date
 
 from todos.db.fake_repository import FakeRepository
 from todos.domain.models.todo import Todo
-from todos.services import complete_todo, incomplete_todo
+from todos.service_layer.services import complete_todo, incomplete_todo
 
 
 def test_complete():

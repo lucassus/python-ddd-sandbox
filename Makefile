@@ -38,7 +38,7 @@ check-flake8:
 	flake8 .
 
 check-mypy:
-	mypy todos
+	mypy todos --namespace-packages
 
 format: format-isort format-black
 

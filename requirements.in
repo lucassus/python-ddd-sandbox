@@ -9,6 +9,7 @@ isort
 flake8
 mypy
 pytest
+pytest-cov
 pytest-watch
 requests
 sqlalchemy-stubs

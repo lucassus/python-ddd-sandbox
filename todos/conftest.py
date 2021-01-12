@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, clear_mappers
 
-from todos.api import routes
+from todos.api import api_router
 from todos.api.dependencies import get_session
 from todos.db.tables import metadata, start_mappers
 
@@ -44,11 +44,12 @@ def session(engine, tables):
 
 @pytest.fixture
 def client(session):
+    # TODO: Probably not a great idea, because all requests in a test will re-use the same session
     def override_get_session():
         return session
 
     app = FastAPI()
-    app.include_router(routes.router)
+    app.include_router(api_router)
     app.dependency_overrides[get_session] = override_get_session
 
     with TestClient(app) as client:

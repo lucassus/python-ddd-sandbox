@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from todos.api import routes
+from todos.api import api_router
 from todos.db.session import engine
 from todos.db.tables import metadata, start_mappers
 
@@ -10,7 +10,7 @@ start_mappers()
 
 def create_app() -> FastAPI:
     app = FastAPI()
-    app.include_router(routes.router)
+    app.include_router(api_router)
 
     return app
 

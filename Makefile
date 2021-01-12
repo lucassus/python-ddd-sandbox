@@ -1,7 +1,7 @@
 VENV_DIR=venv
 
 venv:
-	python3.8 -m venv $(VENV_DIR)
+	python3.9 -m venv $(VENV_DIR)
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:
@@ -47,7 +47,7 @@ lint: check-mypy check-isort check-black check-flake8
 # Testing
 
 test:
-	pytest
+	pytest --cov=todos --cov-report=term
 
 test-watch:
 	ptw .

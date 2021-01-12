@@ -1,16 +1,11 @@
 from datetime import date
 
-from todos.domain.models import Todo
+from todos.domain.models.todo import Todo
 
 
-def test_hello_endpoint(client):
-    response = client.get("/")
-
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello World"}
-
-
-def test_integration(client):
+# TODO: Find a way to write proper integration tests
+# TODO: How to organize tests by type: unit/integration/e2e
+def test_integration(session, client):
     response = client.get("/todos")
 
     assert response.status_code == 200
@@ -31,6 +26,11 @@ def test_integration(client):
         {"id": 1, "name": "Test todo", "completed_at": None},
         {"id": 2, "name": "The other todo", "completed_at": None},
     ]
+
+    response = client.put("/todos/1/complete")
+    assert response.status_code == 200
+    # TODO: Does not work
+    assert session.query(Todo).get(1).completed_at is not None
 
 
 def test_todos_endpoint(session, client):
@@ -60,4 +60,20 @@ def test_todo_endpoint_returns_todo(session, client):
 
 def test_todo_endpoint_returns_404(client):
     response = client.get("/todos/1")
+    assert response.status_code == 404
+
+
+def test_todo_complete_endpoint(session, client):
+    todo = Todo(name="Test")
+    session.add(todo)
+    session.commit()
+
+    response = client.put(f"/todos/{todo.id}/complete")
+
+    assert response.status_code == 200
+    assert todo.completed_at is not None
+
+
+def test_todo_complete_endpoint_returns_404(client):
+    response = client.put(f"/todos/{123}/complete")
     assert response.status_code == 404

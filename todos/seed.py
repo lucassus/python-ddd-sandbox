@@ -1,6 +1,7 @@
 from datetime import date
 
 import typer
+from tabulate import tabulate
 
 from todos.domain.models.todo import Todo
 from todos.interfaces.db.session import SessionLocal, engine
@@ -17,14 +18,20 @@ def main(rebuild_db: bool = True):
     session = SessionLocal()
 
     session.add(Todo(name="Learn Python", completed_at=date(2021, 1, 9)))
-    session.add(Todo(name="Clean house"))
-    session.add(Todo(name="Do shopping"))
+    session.add(Todo(name="Clean the house"))
+    session.add(Todo(name="Do the shopping"))
+    session.add(Todo(name="Learn Domain Driven Design"))
     session.commit()
 
-    typer.echo("Seeding completed 🚀")
+    typer.echo("Seeding todos completed 🚀\n")
 
     todos = session.query(Todo).all()
-    typer.echo(todos)
+    typer.echo(
+        tabulate(
+            [[todo.id, todo.name, todo.completed_at] for todo in todos],
+            headers=["Id", "Name", "Completed At"],
+        ),
+    )
 
 
 if __name__ == "__main__":

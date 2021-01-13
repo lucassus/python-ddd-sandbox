@@ -91,6 +91,8 @@ sqlalchemy==1.3.22
     # via -r requirements.in
 starlette==0.13.6
     # via fastapi
+tabulate==0.8.7
+    # via -r requirements.in
 toml==0.10.2
     # via
     #   black

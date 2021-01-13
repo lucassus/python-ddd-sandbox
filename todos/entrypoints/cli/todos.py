@@ -1,3 +1,5 @@
+from typing import Optional
+
 import typer
 from tabulate import tabulate
 
@@ -32,9 +34,11 @@ def list():
     _print_todos(repository.list())
 
 
-# TODO: Add a prompt for todo name
 @app.command(help="Creates a new task")
-def create(name: str):
+def create(name: Optional[str] = None):
+    if name is None:
+        name = typer.prompt("Enter new task name")
+
     create_todo(name, session=session, repository=repository)
     _print_todos(repository.list())
 

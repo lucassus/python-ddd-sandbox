@@ -47,7 +47,7 @@ lint: check-mypy check-isort check-black check-flake8
 # Testing
 
 test:
-	pytest -vv --cov=todos --cov-report=term
+	pytest -vv
 
 test-watch:
 	ptw .

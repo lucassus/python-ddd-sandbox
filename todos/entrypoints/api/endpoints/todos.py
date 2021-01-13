@@ -3,8 +3,8 @@ from typing import List
 from fastapi import APIRouter, Depends, Path
 from fastapi.responses import JSONResponse
 
-from todos.api import schemas
-from todos.api.dependencies import Service, get_repository
+from todos.entrypoints.api import schemas
+from todos.entrypoints.api.dependencies import Service, get_repository
 from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer.errors import TodoNotFoundError
 

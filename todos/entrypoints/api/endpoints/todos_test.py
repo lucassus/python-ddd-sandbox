@@ -1,7 +1,7 @@
 from datetime import date
 
-from todos.api.dependencies import get_repository
 from todos.domain.models.todo import Todo
+from todos.entrypoints.api.dependencies import get_repository
 from todos.interfaces.fake_repository import FakeRepository
 
 

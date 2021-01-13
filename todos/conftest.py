@@ -7,8 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
-from todos.api import api_router
-from todos.api.dependencies import get_session
+from todos.entrypoints.api import api_router
+from todos.entrypoints.api.dependencies import get_session
 from todos.interfaces.db.tables import metadata, start_mappers
 
 

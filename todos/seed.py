@@ -1,13 +1,16 @@
 from datetime import date
 
+import typer
+
 from todos.domain.models.todo import Todo
 from todos.interfaces.db.session import SessionLocal, engine
 from todos.interfaces.db.tables import metadata, start_mappers
 
 
-def seed():
-    metadata.drop_all(bind=engine)
-    metadata.create_all(bind=engine)
+def main(rebuild_db: bool = True):
+    if rebuild_db:
+        metadata.drop_all(bind=engine)
+        metadata.create_all(bind=engine)
 
     start_mappers()
 
@@ -18,6 +21,11 @@ def seed():
     session.add(Todo(name="Do shopping"))
     session.commit()
 
+    typer.echo("Seeding completed 🚀")
+
+    todos = session.query(Todo).all()
+    typer.echo(todos)
+
 
 if __name__ == "__main__":
-    seed()
+    typer.run(main)

@@ -47,7 +47,7 @@ lint: check-mypy check-isort check-black check-flake8
 # Testing
 
 test:
-	pytest -vv
+	pytest
 
 test-watch:
 	ptw .

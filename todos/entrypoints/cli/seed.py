@@ -24,7 +24,6 @@ def main(rebuild_db: bool = True):
 
     typer.echo("Seeding todos completed 🚀\n")
 
-    # TODO: Dry it
     todos = session.query(Todo).all()
     typer.echo(
         tabulate(

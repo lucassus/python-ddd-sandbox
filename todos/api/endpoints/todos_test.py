@@ -1,9 +1,34 @@
 from datetime import date
 
+from todos.api.dependencies import get_repository
 from todos.domain.models.todo import Todo
+from todos.interfaces.fake_repository import FakeRepository
 
 
-def test_todos_endpoint(session, client):
+def test_todos_endpoint(client):
+    # Given
+    fake_repository = FakeRepository(
+        [
+            Todo(id=1, name="Test todo"),
+            Todo(id=2, name="The other todo", completed_at=date(2021, 1, 6)),
+            Todo(id=3, name="Testing 123"),
+        ]
+    )
+    client.app.dependency_overrides[get_repository] = lambda: fake_repository
+
+    # When
+    response = client.get("/todos")
+
+    # Then
+    assert response.status_code == 200
+    assert response.json() == [
+        {"id": 1, "name": "Test todo", "completed_at": None},
+        {"id": 2, "name": "The other todo", "completed_at": "2021-01-06"},
+        {"id": 3, "name": "Testing 123", "completed_at": None},
+    ]
+
+
+def test_todos_endpoint_integration(session, client):
     # Given
     session.add(Todo(name="Test todo"))
     session.add(Todo(name="The other todo", completed_at=date(2021, 1, 6)))

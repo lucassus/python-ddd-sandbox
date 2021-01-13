@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import List
 
 import typer
 from tabulate import tabulate
 
+from todos.domain.models.todo import Todo
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 from todos.interfaces.db.tables import start_mappers
@@ -13,7 +14,7 @@ app = typer.Typer()
 
 
 # TODO: Move to utils or something like that
-def _print_todos(todos):
+def _print_todos(todos: List[Todo]):
     typer.echo(
         tabulate(
             [[todo.id, todo.name, todo.completed_at] for todo in todos],

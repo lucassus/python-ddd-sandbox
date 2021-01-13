@@ -26,8 +26,6 @@ start_mappers()
 session = SessionLocal()
 repository = Repository(session=session)
 
-# TODO: Wire somehow methods
-
 
 @app.command(help="Prints the list of all tasks")
 def list():
@@ -35,16 +33,15 @@ def list():
 
 
 @app.command(help="Creates a new task")
-def create(name: Optional[str] = None):
-    if name is None:
-        name = typer.prompt("Enter new task name")
-
+def create(
+    name: str = typer.Option(..., help="Task name", prompt="Enter new task name")
+):
     create_todo(name, session=session, repository=repository)
     _print_todos(repository.list())
 
 
 @app.command(help="Completes a task with the given ID")
-def complete(id: int):
+def complete(id: int = typer.Option(..., help="ID of task to complete")):
     try:
         complete_todo(id, session=session, repository=repository)
         _print_todos(repository.list())
@@ -54,7 +51,7 @@ def complete(id: int):
 
 
 @app.command(help="Undo a task with the given ID")
-def incomplete(id: int):
+def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
     try:
         incomplete_todo(id, session=session, repository=repository)
         _print_todos(repository.list())

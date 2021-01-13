@@ -10,6 +10,7 @@ flake8
 mypy
 pytest
 pytest-cov
+pytest-icdiff
 pytest-watch
 requests
 sqlalchemy-stubs

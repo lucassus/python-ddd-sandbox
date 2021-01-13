@@ -4,6 +4,7 @@ from tabulate import tabulate
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 from todos.interfaces.db.tables import start_mappers
+from todos.service_layer.errors import TodoNotFoundError
 from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 
 app = typer.Typer()
@@ -23,30 +24,39 @@ start_mappers()
 session = SessionLocal()
 repository = Repository(session=session)
 
+# TODO: Wire somehow methods
 
-@app.command()
+
+@app.command(help="Prints the list of all tasks")
 def list():
     _print_todos(repository.list())
 
 
-@app.command()
+# TODO: Add a prompt for todo name
+@app.command(help="Creates a new task")
 def create(name: str):
     create_todo(name, session=session, repository=repository)
     _print_todos(repository.list())
 
 
-# TODO: Handle TodoNotFoundError
-@app.command()
+@app.command(help="Completes a task with the given ID")
 def complete(id: int):
-    complete_todo(id, session=session, repository=repository)
-    _print_todos(repository.list())
+    try:
+        complete_todo(id, session=session, repository=repository)
+        _print_todos(repository.list())
+    except TodoNotFoundError:
+        typer.secho(f"Cannot find a todo with id={id}", fg=typer.colors.RED)
+        raise typer.Exit(code=1)
 
 
-# TODO: Handle TodoNotFoundError
-@app.command()
+@app.command(help="Undo a task with the given ID")
 def incomplete(id: int):
-    incomplete_todo(id, session=session, repository=repository)
-    _print_todos(repository.list())
+    try:
+        incomplete_todo(id, session=session, repository=repository)
+        _print_todos(repository.list())
+    except TodoNotFoundError:
+        typer.secho(f"Cannot find a todo with id={id}", fg=typer.colors.RED)
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":

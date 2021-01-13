@@ -1,5 +1,5 @@
-from todos.db.repository import Repository
 from todos.domain.models.todo import Todo
+from todos.interfaces.db.repository import Repository
 
 
 def test_repository_get(session):

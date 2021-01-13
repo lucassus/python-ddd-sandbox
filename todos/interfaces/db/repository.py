@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from sqlalchemy.orm.session import Session
 
-from todos.db.abstract_repository import AbstractRepository
 from todos.domain.models.todo import Todo
+from todos.interfaces.abstract_repository import AbstractRepository
 
 
 class Repository(AbstractRepository):
@@ -16,8 +16,5 @@ class Repository(AbstractRepository):
     def list(self) -> List[Todo]:
         return self._session.query(Todo).all()
 
-    def create(self, name: str) -> Todo:
-        todo = Todo(name=name)
+    def create(self, todo: Todo) -> None:
         self._session.add(todo)
-
-        return todo

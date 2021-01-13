@@ -1,8 +1,8 @@
 from datetime import date
 
-from todos.db.session import SessionLocal, engine
-from todos.db.tables import metadata, start_mappers
 from todos.domain.models.todo import Todo
+from todos.interfaces.db.session import SessionLocal, engine
+from todos.interfaces.db.tables import metadata, start_mappers
 
 
 def seed():

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
 from todos.api import api_router
-from todos.db.session import engine
-from todos.db.tables import metadata, start_mappers
+from todos.interfaces.db.session import engine
+from todos.interfaces.db.tables import metadata, start_mappers
 
 metadata.create_all(bind=engine)
 start_mappers()

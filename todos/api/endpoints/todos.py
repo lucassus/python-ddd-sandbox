@@ -2,20 +2,18 @@ from typing import List
 
 from fastapi import APIRouter, Depends, Path
 from fastapi.responses import JSONResponse
-from sqlalchemy.orm import Session
 
 from todos.api import schemas
-from todos.api.dependencies import get_repository, get_session
-from todos.db.repository import Repository
+from todos.api.dependencies import Service, get_repository
+from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer.errors import TodoNotFoundError
-from todos.service_layer.services import complete_todo, incomplete_todo
 
 router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.Todo])
 def todos_endpoint(
-    repository: Repository = Depends(get_repository),
+    repository: AbstractRepository = Depends(get_repository),
 ):
     return repository.list()
 
@@ -23,13 +21,9 @@ def todos_endpoint(
 @router.post("", response_model=schemas.Todo)
 def todo_create_endpoint(
     data: schemas.CreateTodo,
-    repository: Repository = Depends(get_repository),
-    session: Session = Depends(get_session),
+    service: Service = Depends(),
 ):
-    todo = repository.create(data.name)
-    session.commit()
-
-    return todo
+    return service.create_todo(name=data.name)
 
 
 @router.get(
@@ -39,7 +33,7 @@ def todo_create_endpoint(
 )
 def todo_endpoint(
     id: int = Path(..., description="The ID of the todo to get", ge=1),
-    repository: Repository = Depends(get_repository),
+    repository: AbstractRepository = Depends(get_repository),
 ):
     todo = repository.get(id)
 
@@ -52,15 +46,12 @@ def todo_endpoint(
 @router.put("/{id}/complete", response_model=schemas.Todo)
 def todo_complete_endpoint(
     id: int,
-    repository: Repository = Depends(get_repository),
-    session: Session = Depends(get_session),
+    service: Service = Depends(),
 ):
     try:
-        todo = complete_todo(id, repository=repository)
+        todo = service.complete_todo(id)
     except TodoNotFoundError:
         return JSONResponse(status_code=404)
-
-    session.commit()
 
     return todo
 
@@ -68,14 +59,11 @@ def todo_complete_endpoint(
 @router.put("/{id}/incomplete", response_model=schemas.Todo)
 def todo_incomplete_endpoint(
     id: int,
-    repository: Repository = Depends(get_repository),
-    session: Session = Depends(get_session),
+    service: Service = Depends(),
 ):
     try:
-        todo = incomplete_todo(id, repository=repository)
+        todo = service.incomplete_todo(id)
     except TodoNotFoundError:
         return JSONResponse(status_code=404)
-
-    session.commit()
 
     return todo

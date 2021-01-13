@@ -1,6 +1,8 @@
 fastapi
 pydantic
 sqlalchemy
+tabulate
+typer
 uvicorn
 
 # development

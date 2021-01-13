@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from todos.api.endpoints import health, todos
+from todos.entrypoints.api.endpoints import health, todos
 
 api_router = APIRouter()
 api_router.include_router(health.router)

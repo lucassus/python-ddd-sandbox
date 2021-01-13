@@ -1,6 +1,14 @@
 # fastapi sandbox
 
-1. `make venv`
-2. `make install`
-3. `python -m todos.seed`
-4. `make server-dev`
+## Preparing and running the app
+
+* `make venv`
+* `make install`
+* `python -m todos.entrypoints.cli.seed`
+* `make server-dev`
+
+## Linting and testing
+
+* `make lint`
+* `make test`
+* `make test-watch`

@@ -1,14 +1,14 @@
-from todos.db.repository import Repository
-from todos.domain.models.todo import Todo
+from todos.domain.models import Task
+from todos.interfaces.db.repository import Repository
 
 
 def test_repository_get(session):
-    todo = Todo(name="Test todo")
-    session.add(todo)
+    task = Task(name="Test task")
+    session.add(task)
     session.commit()
 
     repository = Repository(session=session)
-    assert repository.get(1) == todo
+    assert repository.get(1) == task
 
 
 def test_repository_get_returns_none(session):
@@ -21,11 +21,11 @@ def test_repository_list(session):
 
     assert repository.list() == []
 
-    todo = Todo(name="One")
-    session.add(todo)
+    task = Task(name="One")
+    session.add(task)
 
-    todo = Todo(name="Two")
-    session.add(todo)
+    task = Task(name="Two")
+    session.add(task)
 
     session.commit()
 

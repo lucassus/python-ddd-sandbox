@@ -18,7 +18,7 @@ deps: deps-pre deps-compile deps-install
 install: deps-pre deps-install
 
 server-dev:
-	uvicorn todos.main:app --reload
+	uvicorn todos.entrypoints.api.main:app --reload
 
 # Linting
 
@@ -38,7 +38,7 @@ check-flake8:
 	flake8 .
 
 check-mypy:
-	mypy todos
+	mypy todos/entrypoints/*
 
 format: format-isort format-black
 
@@ -47,7 +47,7 @@ lint: check-mypy check-isort check-black check-flake8
 # Testing
 
 test:
-	pytest --cov=todos --cov-report=term
+	pytest
 
 test-watch:
-	ptw .
+	ptw . --runner "pytest --testmon"

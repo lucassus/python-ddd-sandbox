@@ -1,6 +1,8 @@
 fastapi
 pydantic
 sqlalchemy
+tabulate
+typer
 uvicorn
 
 # development
@@ -10,6 +12,7 @@ flake8
 mypy
 pytest
 pytest-cov
+pytest-icdiff
 pytest-watch
 requests
 sqlalchemy-stubs

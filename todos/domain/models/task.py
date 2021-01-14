@@ -1,12 +1,19 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import Callable, List, Optional
+from typing import TYPE_CHECKING, Callable, List, Optional
+
+if TYPE_CHECKING:
+    from todos.domain.models import Project
 
 
 @dataclass
-class Todo:
+class Task:
+    id: int = field(init=False)
+    project_id: int = field(init=False)
+
     name: str
-    id: Optional[int] = None
+
+    project: Optional["Project"] = None
     completed_at: Optional[date] = None
 
     @property
@@ -22,8 +29,8 @@ class Todo:
             self.completed_at = None
 
 
-def complete_todos(
-    todos: List[Todo], now: Callable[..., date] = datetime.utcnow
+def complete_tasks(
+    tasks: List[Task], now: Callable[..., date] = datetime.utcnow
 ) -> None:
-    for todo in todos:
-        todo.complete(now)
+    for task in tasks:
+        task.complete(now)

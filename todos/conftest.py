@@ -1,36 +1,32 @@
+import os
+
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Session, clear_mappers
+from sqlalchemy.orm import Session
 
-from todos.api import api_router
-from todos.api.dependencies import get_session
-from todos.db.tables import metadata, start_mappers
+from todos.entrypoints.api import api_router
+from todos.entrypoints.api.dependencies import get_session
+from todos.interfaces.db.tables import metadata, start_mappers
 
 
 @pytest.fixture(scope="session")
 def engine() -> Engine:
-    return create_engine(
-        "sqlite:///:memory:", connect_args={"check_same_thread": False}
+    db_file = os.path.join(os.path.dirname(__file__), "../todos_test.db")
+    engine = create_engine(
+        f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
     )
 
-
-@pytest.fixture(scope="session")
-def tables(engine):
     metadata.create_all(bind=engine)
     start_mappers()
 
-    yield
-
-    clear_mappers()
+    return engine
 
 
 @pytest.fixture
-def session(engine, tables):
-    """Returns an sqlalchemy session, and after the test tears down everything properly."""
-
+def session(engine):
     connection = engine.connect()
     transaction = connection.begin()
     session = Session(bind=connection)
@@ -44,13 +40,8 @@ def session(engine, tables):
 
 @pytest.fixture
 def client(session):
-    # TODO: Probably not a great idea, because all requests in a test will re-use the same session
-    def override_get_session():
-        return session
-
     app = FastAPI()
     app.include_router(api_router)
-    app.dependency_overrides[get_session] = override_get_session
+    app.dependency_overrides[get_session] = lambda: session
 
-    with TestClient(app) as client:
-        yield client
+    return TestClient(app)

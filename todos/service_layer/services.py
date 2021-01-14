@@ -1,30 +1,43 @@
 from datetime import date, datetime
-from typing import Callable
+from typing import Callable, Protocol
 
-from todos.db.abstract_repository import AbstractRepository
-from todos.domain.models.todo import Todo
-from todos.service_layer.errors import TodoNotFoundError
-
-
-def complete_todo(
-    id: int, repository: AbstractRepository, now: Callable[..., date] = datetime.utcnow
-) -> Todo:
-    todo = repository.get(id)
-
-    if not todo:
-        raise TodoNotFoundError
-
-    todo.complete(now)
-
-    return todo
+from todos.domain.models import Task
+from todos.interfaces.abstract_repository import AbstractRepository
 
 
-def incomplete_todo(id: int, repository: AbstractRepository) -> Todo:
-    todo = repository.get(id)
+class SupportsCommit(Protocol):
+    def commit(self) -> None:
+        ...
 
-    if not todo:
-        raise TodoNotFoundError
 
-    todo.incomplete()
+def create_task(
+    name: str,
+    *,
+    repository: AbstractRepository,
+    session: SupportsCommit,
+) -> Task:
+    task = Task(name=name)
 
-    return todo
+    repository.create(task)
+    session.commit()
+
+    return task
+
+
+def complete_task(
+    task: Task,
+    *,
+    session: SupportsCommit,
+    now: Callable[..., date] = datetime.utcnow,
+) -> Task:
+    task.complete(now)
+    session.commit()
+
+    return task
+
+
+def incomplete_task(task: Task, *, session: SupportsCommit) -> Task:
+    task.incomplete()
+    session.commit()
+
+    return task

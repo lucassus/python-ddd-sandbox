@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Date, Integer, MetaData, String, Table
 from sqlalchemy.orm import mapper
 
-from todos.domain.models.todo import Todo
+from todos.domain.models.task import Task
 
 metadata = MetaData()
 
@@ -15,4 +15,4 @@ todos = Table(
 
 
 def start_mappers():
-    mapper(Todo, todos)
+    mapper(Task, todos)

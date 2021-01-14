@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models.todo import Todo
+from todos.domain.models.task import Task
 from todos.entrypoints.api.dependencies import get_repository
 from todos.interfaces.fake_repository import FakeRepository
 
@@ -9,9 +9,9 @@ def test_todos_endpoint(client):
     # Given
     fake_repository = FakeRepository(
         [
-            Todo(id=1, name="Test todo"),
-            Todo(id=2, name="The other todo", completed_at=date(2021, 1, 6)),
-            Todo(id=3, name="Testing 123"),
+            Task(id=1, name="Test todo"),
+            Task(id=2, name="The other todo", completed_at=date(2021, 1, 6)),
+            Task(id=3, name="Testing 123"),
         ]
     )
     client.app.dependency_overrides[get_repository] = lambda: fake_repository
@@ -30,8 +30,8 @@ def test_todos_endpoint(client):
 
 def test_todos_endpoint_integration(session, client):
     # Given
-    session.add(Todo(name="Test todo"))
-    session.add(Todo(name="The other todo", completed_at=date(2021, 1, 6)))
+    session.add(Task(name="Test todo"))
+    session.add(Task(name="The other todo", completed_at=date(2021, 1, 6)))
     session.commit()
 
     # When
@@ -53,7 +53,7 @@ def test_todos_endpoint_creates_todo(client):
 
 
 def test_todo_endpoint_returns_todo(session, client):
-    session.add(Todo(id=1, name="Test name"))
+    session.add(Task(id=1, name="Test name"))
     session.commit()
 
     response = client.get("/todos/1")
@@ -68,7 +68,7 @@ def test_todo_endpoint_returns_404(client):
 
 
 def test_todo_complete_endpoint(session, client):
-    todo = Todo(name="Test")
+    todo = Task(name="Test")
     session.add(todo)
     session.commit()
 
@@ -84,7 +84,7 @@ def test_todo_complete_endpoint_returns_404(client):
 
 
 def test_todo_incomplete_endpoint(session, client):
-    todo = Todo(name="Test", completed_at=date(2021, 1, 12))
+    todo = Task(name="Test", completed_at=date(2021, 1, 12))
     session.add(todo)
     session.commit()
 

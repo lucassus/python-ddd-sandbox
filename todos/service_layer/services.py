@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import Callable, Protocol
 
-from todos.domain.models.todo import Todo
+from todos.domain.models.task import Task
 from todos.interfaces.abstract_repository import AbstractRepository
 
 
@@ -15,8 +15,8 @@ def create_todo(
     *,
     repository: AbstractRepository,
     session: SupportsCommit,
-) -> Todo:
-    todo = Todo(name=name)
+) -> Task:
+    todo = Task(name=name)
 
     repository.create(todo)
     session.commit()
@@ -25,18 +25,18 @@ def create_todo(
 
 
 def complete_todo(
-    todo: Todo,
+    todo: Task,
     *,
     session: SupportsCommit,
     now: Callable[..., date] = datetime.utcnow,
-) -> Todo:
+) -> Task:
     todo.complete(now)
     session.commit()
 
     return todo
 
 
-def incomplete_todo(todo: Todo, *, session: SupportsCommit) -> Todo:
+def incomplete_todo(todo: Task, *, session: SupportsCommit) -> Task:
     todo.incomplete()
     session.commit()
 

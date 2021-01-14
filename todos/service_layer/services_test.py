@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models.todo import Todo
+from todos.domain.models.task import Task
 from todos.interfaces.fake_repository import FakeRepository
 from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 
@@ -33,7 +33,7 @@ def test_create_todo():
 
 def test_complete():
     # Given
-    todo = Todo(id=1, name="Test todo")
+    todo = Task(id=1, name="Test todo")
     fake_session = FakeSession()
 
     # When
@@ -52,7 +52,7 @@ def test_complete():
 
 def test_incomplete():
     # Given
-    todo = Todo(id=1, name="Test todo", completed_at=date(2021, 1, 5))
+    todo = Task(id=1, name="Test todo", completed_at=date(2021, 1, 5))
     fake_session = FakeSession()
 
     # When

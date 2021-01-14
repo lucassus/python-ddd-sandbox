@@ -1,7 +1,7 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from todos.domain.models.todo import Todo
+from todos.domain.models.task import Task
 from todos.interfaces.abstract_repository import AbstractRepository
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
@@ -31,7 +31,7 @@ class CreateTodoHandler:
     ):
         self._deps = dict(session=session, repository=repository)
 
-    def __call__(self, name: str) -> Todo:
+    def __call__(self, name: str) -> Task:
         return services.create_todo(name, **self._deps)
 
 
@@ -39,7 +39,7 @@ class CompleteTodoHandler:
     def __init__(self, session: Session = Depends(get_session)):
         self._deps = dict(session=session)
 
-    def __call__(self, todo: Todo) -> Todo:
+    def __call__(self, todo: Task) -> Task:
         return services.complete_todo(todo, **self._deps)
 
 
@@ -47,5 +47,5 @@ class IncompleteTodoHandler:
     def __init__(self, session: Session = Depends(get_session)):
         self._deps = dict(session=session)
 
-    def __call__(self, todo: Todo) -> Todo:
+    def __call__(self, todo: Task) -> Task:
         return services.incomplete_todo(todo, **self._deps)

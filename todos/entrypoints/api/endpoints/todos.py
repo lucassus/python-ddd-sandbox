@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
-from todos.domain.models.todo import Todo
+from todos.domain.models.task import Task
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import (
     CompleteTodoHandler,
@@ -15,16 +15,16 @@ from todos.interfaces.abstract_repository import AbstractRepository
 router = APIRouter()
 
 
-@router.get("", response_model=List[schemas.Todo])
+@router.get("", response_model=List[schemas.Task])
 def todos_endpoint(
     repository: AbstractRepository = Depends(get_repository),
 ):
     return repository.list()
 
 
-@router.post("", response_model=schemas.Todo)
+@router.post("", response_model=schemas.Task)
 def todo_create_endpoint(
-    data: schemas.CreateTodo,
+    data: schemas.CreateTask,
     create_todo: CreateTodoHandler = Depends(),
 ):
     return create_todo(name=data.name)
@@ -33,7 +33,7 @@ def todo_create_endpoint(
 def get_todo(
     id: int = Path(..., description="The ID of the todo", ge=1),
     repository: AbstractRepository = Depends(get_repository),
-) -> Todo:
+) -> Task:
     todo = repository.get(id)
 
     if todo is None:
@@ -45,22 +45,22 @@ def get_todo(
     return todo
 
 
-@router.get("/{id}", response_model=schemas.Todo)
-def todo_endpoint(todo: Todo = Depends(get_todo)):
+@router.get("/{id}", response_model=schemas.Task)
+def todo_endpoint(todo: Task = Depends(get_todo)):
     return todo
 
 
-@router.put("/{id}/complete", response_model=schemas.Todo)
+@router.put("/{id}/complete", response_model=schemas.Task)
 def todo_complete_endpoint(
-    todo: Todo = Depends(get_todo),
+    todo: Task = Depends(get_todo),
     complete_todo: CompleteTodoHandler = Depends(),
 ):
     return complete_todo(todo)
 
 
-@router.put("/{id}/incomplete", response_model=schemas.Todo)
+@router.put("/{id}/incomplete", response_model=schemas.Task)
 def todo_incomplete_endpoint(
-    todo: Todo = Depends(get_todo),
+    todo: Task = Depends(get_todo),
     incomplete_todo: IncompleteTodoHandler = Depends(),
 ):
     return incomplete_todo(todo)

@@ -21,6 +21,8 @@ def create_task(
         uof.repository.create(task)
         uof.commit()
 
+    # TODO: Task is detached here
+    # TODO: Returned task has to be in the same session because of lazy loading
     return task
 
 

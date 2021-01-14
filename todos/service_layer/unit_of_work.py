@@ -9,6 +9,8 @@ from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 
 # TODO: See https://github.com/cosmicpython/code/issues/23
 # TODO: http://io.made.com/blog/2017-09-08-repository-and-unit-of-work-pattern-in-python.html
+# TODO: Inject the session and start the nested transaction
+#  https://docs.sqlalchemy.org/en/13/orm/session_transaction.html#using-savepoint
 class UnitOfWork(AbstractUnitOfWork):
     _session: Optional[Session]
 
@@ -17,6 +19,7 @@ class UnitOfWork(AbstractUnitOfWork):
 
     def __enter__(self):
         self._session = self._session_factory(expire_on_commit=False)
+        # self._session.expire_on_commit = False
 
         return super().__enter__()
 

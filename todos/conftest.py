@@ -15,7 +15,6 @@ from todos.interfaces.db.tables import metadata, start_mappers
 @pytest.fixture(scope="session")
 def engine() -> Engine:
     db_file = os.path.join(os.path.dirname(__file__), "../todos_test.db")
-    print(db_file)
     engine = create_engine(
         f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
     )

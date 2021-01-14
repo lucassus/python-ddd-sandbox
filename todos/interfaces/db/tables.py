@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Date, ForeignKey, Integer, MetaData, String, Table
-from sqlalchemy.orm import mapper
+from sqlalchemy.orm import mapper, relationship
 
 from todos.domain.models.project import Project
 from todos.domain.models.task import Task
@@ -24,5 +24,12 @@ tasks = Table(
 
 
 def start_mappers():
-    mapper(Project, projects)
+    mapper(
+        Project,
+        projects,
+        properties={
+            "tasks": relationship(Task, backref="project", order_by=tasks.c.id),
+        },
+    )
+
     mapper(Task, tasks)

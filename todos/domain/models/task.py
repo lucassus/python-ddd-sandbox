@@ -6,7 +6,8 @@ from typing import Callable, List, Optional
 @dataclass
 class Task:
     name: str
-    id: Optional[int] = None
+    id: Optional[int] = None  # TODO: Use field(init=False)
+    project_id: Optional[int] = None  # TODO: Use field(init=False)
     completed_at: Optional[date] = None
 
     @property

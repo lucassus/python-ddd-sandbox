@@ -1,7 +1,6 @@
 from datetime import date
 
 from todos.domain.models.todo import Todo
-from todos.interfaces.fake_repository import FakeRepository
 from todos.service_layer.services import complete_todo, incomplete_todo
 
 
@@ -15,15 +14,13 @@ class FakeSession:
 def test_complete():
     # Given
     todo = Todo(id=1, name="Test todo")
-    fake_repository = FakeRepository([todo])
     fake_session = FakeSession()
 
     # When
     now = date(2021, 1, 8)
     assert todo.id is not None
     completed_todo = complete_todo(
-        todo.id,
-        repository=fake_repository,
+        todo,
         session=fake_session,
         now=lambda: now,
     )
@@ -37,14 +34,12 @@ def test_complete():
 def test_incomplete():
     # Given
     todo = Todo(id=1, name="Test todo", completed_at=date(2021, 1, 5))
-    fake_repository = FakeRepository([todo])
     fake_session = FakeSession()
 
     # When
     assert todo.id is not None
     completed_todo = incomplete_todo(
-        todo.id,
-        repository=fake_repository,
+        todo,
         session=fake_session,
     )
 

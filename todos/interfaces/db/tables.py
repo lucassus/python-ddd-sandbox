@@ -5,8 +5,8 @@ from todos.domain.models.task import Task
 
 metadata = MetaData()
 
-todos = Table(
-    "todos",
+tasks = Table(
+    "tasks",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("name", String(255)),
@@ -15,4 +15,4 @@ todos = Table(
 
 
 def start_mappers():
-    mapper(Task, todos)
+    mapper(Task, tasks)

@@ -29,23 +29,26 @@ class CreateTaskHandler:
         session: Session = Depends(get_session),
         repository: AbstractRepository = Depends(get_repository),
     ):
-        self._deps = dict(session=session, repository=repository)
+        self._session = session
+        self._repository = repository
 
     def __call__(self, name: str) -> Task:
-        return services.create_task(name, **self._deps)
+        return services.create_task(
+            name, session=self._session, repository=self._repository
+        )
 
 
 class CompleteTaskHandler:
     def __init__(self, session: Session = Depends(get_session)):
-        self._deps = dict(session=session)
+        self._session = session
 
     def __call__(self, task: Task) -> Task:
-        return services.complete_task(task, **self._deps)
+        return services.complete_task(task, session=self._session)
 
 
 class IncompleteTaskHandler:
     def __init__(self, session: Session = Depends(get_session)):
-        self._deps = dict(session=session)
+        self._session = session
 
     def __call__(self, task: Task) -> Task:
-        return services.incomplete_task(task, **self._deps)
+        return services.incomplete_task(task, session=self._session)

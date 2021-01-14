@@ -24,10 +24,10 @@ def main(rebuild_db: bool = True):
 
     typer.echo("Seeding tasks completed 🚀\n")
 
-    todos = session.query(Task).all()
+    tasks = session.query(Task).all()
     typer.echo(
         tabulate(
-            [[todo.id, todo.name, todo.completed_at] for todo in todos],
+            [[task.id, task.name, task.completed_at] for task in tasks],
             headers=["Id", "Name", "Completed At"],
         ),
     )

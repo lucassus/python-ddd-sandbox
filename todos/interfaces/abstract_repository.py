@@ -14,5 +14,5 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create(self, todo: Task) -> None:
+    def create(self, task: Task) -> None:
         raise NotImplementedError

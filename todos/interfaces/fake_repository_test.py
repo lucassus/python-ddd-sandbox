@@ -11,7 +11,7 @@ def test_fake_repository():
     assert repository.list() == [Task(id=1, name="Foo"), Task(id=2, name="Bar")]
     assert repository.get(1) == Task(id=1, name="Foo")
 
-    todo = repository.get(2)
-    assert todo == Task(id=2, name="Bar")
+    task = repository.get(2)
+    assert task == Task(id=2, name="Bar")
 
     assert repository.get(123) is None

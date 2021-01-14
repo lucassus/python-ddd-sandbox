@@ -1,57 +1,57 @@
 from datetime import date
 
-from todos.domain.models.task import Task, complete_todos
+from todos.domain.models.task import Task, complete_tasks
 
 
-def test_todo_is_completed_returns_false():
-    todo = Task(name="Foo", completed_at=None)
-    assert not todo.is_completed
+def test_task_is_completed_returns_false():
+    task = Task(name="Foo", completed_at=None)
+    assert not task.is_completed
 
 
-def test_todo_is_completed_returns_true():
-    todo = Task(name="Foo", completed_at=date(2020, 12, 31))
-    assert todo.is_completed
+def test_task_is_completed_returns_true():
+    task = Task(name="Foo", completed_at=date(2020, 12, 31))
+    assert task.is_completed
 
 
-def test_complete_todo_sets_completed_at():
-    todo = Task(name="Foo")
+def test_complete_task_sets_completed_at():
+    task = Task(name="Foo")
     now = date(2020, 12, 31)
 
-    todo.complete(now=lambda: now)
+    task.complete(now=lambda: now)
 
-    assert todo.completed_at is not None
-    assert todo.completed_at == now
+    assert task.completed_at is not None
+    assert task.completed_at == now
 
 
-def test_complete_todo_does_nothing_when_todo_is_already_completed():
+def test_complete_task_does_nothing_when_task_is_already_completed():
     completed_at = date(2020, 12, 31)
-    todo = Task(name="Foo", completed_at=completed_at)
+    task = Task(name="Foo", completed_at=completed_at)
 
-    todo.complete()
+    task.complete()
 
-    assert todo.completed_at == completed_at
-
-
-def test_incomplete_todo_sets_completed_at():
-    todo = Task(name="Foo", completed_at=date(2020, 12, 31))
-    todo.incomplete()
-    assert todo.completed_at is None
+    assert task.completed_at == completed_at
 
 
-def test_incomplete_todo_does_nothing_when_todo_is_already_completed():
-    todo = Task(name="Foo", completed_at=None)
-    todo.incomplete()
-    assert todo.completed_at is None
+def test_incomplete_task_sets_completed_at():
+    task = Task(name="Foo", completed_at=date(2020, 12, 31))
+    task.incomplete()
+    assert task.completed_at is None
 
 
-def test_complete_todos():
-    todos = [
+def test_incomplete_task_does_nothing_when_task_is_already_completed():
+    task = Task(name="Foo", completed_at=None)
+    task.incomplete()
+    assert task.completed_at is None
+
+
+def test_complete_tasks():
+    tasks = [
         Task(name="Foo", completed_at=None),
         Task(name="Foo", completed_at=date(2020, 12, 31)),
         Task(name="Foo", completed_at=None),
     ]
 
-    complete_todos(todos, now=lambda: date(2021, 1, 12))
+    complete_tasks(tasks, now=lambda: date(2021, 1, 12))
 
-    for todo in todos:
-        assert todo.is_completed
+    for task in tasks:
+        assert task.is_completed

@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models.task import Task, complete_tasks
+from todos.domain.models import Task, complete_tasks
 
 
 def test_task_is_completed_returns_false():

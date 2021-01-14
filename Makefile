@@ -50,4 +50,4 @@ test:
 	pytest
 
 test-watch:
-	ptw .
+	ptw . --runner "pytest --testmon"

@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import (
     CompleteTaskHandler,

@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.entrypoints.api.dependencies import get_repository
 from todos.interfaces.fake_repository import FakeRepository
 
@@ -9,9 +9,9 @@ def test_tasks_endpoint(client):
     # Given
     fake_repository = FakeRepository(
         [
-            Task(id=1, name="Test task"),
-            Task(id=2, name="The other task", completed_at=date(2021, 1, 6)),
-            Task(id=3, name="Testing 123"),
+            Task(name="Test task"),
+            Task(name="The other task", completed_at=date(2021, 1, 6)),
+            Task(name="Testing 123"),
         ]
     )
     client.app.dependency_overrides[get_repository] = lambda: fake_repository
@@ -53,7 +53,7 @@ def test_tasks_endpoint_creates_task(client):
 
 
 def test_task_endpoint_returns_task(session, client):
-    session.add(Task(id=1, name="Test name"))
+    session.add(Task(name="Test name"))
     session.commit()
 
     response = client.get("/tasks/1")

@@ -1,12 +1,15 @@
 from typing import List, Optional
 
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.interfaces.abstract_repository import AbstractRepository
 
 
 class FakeRepository(AbstractRepository):
     def __init__(self, tasks: List[Task]):
         self._tasks = tasks
+
+        for task in self._tasks:
+            task.id = self._get_next_id()
 
     def get(self, id: int) -> Optional[Task]:
         try:
@@ -22,8 +25,9 @@ class FakeRepository(AbstractRepository):
         return self._tasks
 
     def _get_next_id(self) -> int:
-        return (
-            max(task.id for task in self._tasks if task.id) + 1
-            if len(self._tasks) > 0
-            else 1
-        )
+        persisted_tasks = [task.id for task in self._tasks if task.id]
+
+        if len(persisted_tasks) == 0:
+            return 1
+
+        return max(persisted_tasks) + 1

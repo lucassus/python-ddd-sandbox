@@ -1,7 +1,7 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.interfaces.abstract_repository import AbstractRepository
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal

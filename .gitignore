@@ -2,6 +2,7 @@
 htmlcov
 venv
 .coverage
+.testmondata
 coverage.xml
 README.local.md
 todos.db

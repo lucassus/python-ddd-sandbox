@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from typing import Callable, Protocol
 
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.interfaces.abstract_repository import AbstractRepository
 
 

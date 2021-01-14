@@ -1,4 +1,4 @@
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.interfaces.db.repository import Repository
 
 

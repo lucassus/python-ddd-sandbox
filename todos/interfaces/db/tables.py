@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, MetaData, String, Table
+from sqlalchemy import (Column, Date, ForeignKey, Integer, MetaData, String,
+                        Table)
 from sqlalchemy.orm import mapper, relationship
 
-from todos.domain.models.project import Project
-from todos.domain.models.task import Task
+from todos.domain.models import Project, Task
 
 metadata = MetaData()
 

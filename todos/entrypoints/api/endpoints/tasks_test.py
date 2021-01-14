@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models.task import Task
+from todos.domain.models import Task
 from todos.entrypoints.api.dependencies import get_repository
 from todos.interfaces.fake_repository import FakeRepository
 

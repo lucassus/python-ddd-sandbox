@@ -9,11 +9,11 @@ if TYPE_CHECKING:
 @dataclass
 class Task:
     id: int = field(init=False)
-
     project_id: int = field(init=False)
-    project: Optional["Project"] = field(init=False)
 
     name: str
+
+    project: Optional["Project"] = None
     completed_at: Optional[date] = None
 
     @property

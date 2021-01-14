@@ -22,7 +22,9 @@ click==7.1.2
 colorama==0.4.4
     # via pytest-watch
 coverage==5.3.1
-    # via pytest-cov
+    # via
+    #   pytest-cov
+    #   pytest-testmon
 docopt==0.6.2
     # via pytest-watch
 fastapi==0.63.0
@@ -73,6 +75,8 @@ pytest-cov==2.10.1
     # via -r requirements.in
 pytest-icdiff==0.5
     # via -r requirements.in
+pytest-testmon==1.0.3
+    # via -r requirements.in
 pytest-watch==4.2.0
     # via -r requirements.in
 pytest==6.2.1
@@ -80,6 +84,7 @@ pytest==6.2.1
     #   -r requirements.in
     #   pytest-cov
     #   pytest-icdiff
+    #   pytest-testmon
     #   pytest-watch
 regex==2020.11.13
     # via black

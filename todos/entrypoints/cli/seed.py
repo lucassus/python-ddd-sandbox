@@ -45,7 +45,7 @@ def main(rebuild_db: bool = True):
                 [
                     task.id,
                     task.name,
-                    task.project.name,  # TODO: It should warn!
+                    task.project.name if task.project else None,
                     task.completed_at,
                 ]
                 for task in tasks

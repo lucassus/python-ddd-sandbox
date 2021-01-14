@@ -4,7 +4,12 @@ from fastapi import APIRouter, Depends, Path
 from fastapi.responses import JSONResponse
 
 from todos.entrypoints.api import schemas
-from todos.entrypoints.api.dependencies import Service, get_repository
+from todos.entrypoints.api.dependencies import (
+    CompleteTodoHandler,
+    CreateTodoHandler,
+    IncompleteTodoHandler,
+    get_repository,
+)
 from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer.errors import TodoNotFoundError
 
@@ -21,9 +26,9 @@ def todos_endpoint(
 @router.post("", response_model=schemas.Todo)
 def todo_create_endpoint(
     data: schemas.CreateTodo,
-    service: Service = Depends(),
+    create_todo: CreateTodoHandler = Depends(),
 ):
-    return service.create_todo(name=data.name)
+    return create_todo(name=data.name)
 
 
 @router.get(
@@ -46,10 +51,10 @@ def todo_endpoint(
 @router.put("/{id}/complete", response_model=schemas.Todo)
 def todo_complete_endpoint(
     id: int,
-    service: Service = Depends(),
+    complete_todo: CompleteTodoHandler = Depends(),
 ):
     try:
-        todo = service.complete_todo(id)
+        todo = complete_todo(id)
     except TodoNotFoundError:
         return JSONResponse(status_code=404)
 
@@ -59,10 +64,10 @@ def todo_complete_endpoint(
 @router.put("/{id}/incomplete", response_model=schemas.Todo)
 def todo_incomplete_endpoint(
     id: int,
-    service: Service = Depends(),
+    incomplete_todo: IncompleteTodoHandler = Depends(),
 ):
     try:
-        todo = service.incomplete_todo(id)
+        todo = incomplete_todo(id)
     except TodoNotFoundError:
         return JSONResponse(status_code=404)
 

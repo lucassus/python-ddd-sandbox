@@ -1,4 +1,4 @@
-import functools
+import abc
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
@@ -25,22 +25,25 @@ def get_repository(session: Session = Depends(get_session)) -> AbstractRepositor
     return Repository(session=session)
 
 
-class Service:
-    def __init__(self, session: Session = Depends(get_session)):
-        deps = dict(
-            session=session,
-            repository=Repository(session=session),
-        )
+class BaseServiceHandler(abc.ABC):
+    def __init__(
+        self,
+        session: Session = Depends(get_session),
+        repository: AbstractRepository = Depends(get_repository),
+    ):
+        self._deps = dict(session=session, repository=repository)
 
-        self._create_todo = functools.partial(services.create_todo, **deps)
-        self._complete_todo = functools.partial(services.complete_todo, **deps)
-        self._incomplete_todo = functools.partial(services.incomplete_todo, **deps)
 
-    def create_todo(self, *, name: str) -> Todo:
-        return self._create_todo(name=name)
+class CreateTodoHandler(BaseServiceHandler):
+    def __call__(self, name: str) -> Todo:
+        return services.create_todo(name, **self._deps)
 
-    def complete_todo(self, id: str) -> Todo:
-        return self._complete_todo(id=id)
 
-    def incomplete_todo(self, id: str) -> Todo:
-        return self._incomplete_todo(id=id)
+class CompleteTodoHandler(BaseServiceHandler):
+    def __call__(self, id: int) -> Todo:
+        return services.complete_todo(id, **self._deps)
+
+
+class IncompleteTodoHandler(BaseServiceHandler):
+    def __call__(self, id: int) -> Todo:
+        return services.incomplete_todo(id, **self._deps)

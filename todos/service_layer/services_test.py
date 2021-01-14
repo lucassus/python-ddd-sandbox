@@ -18,7 +18,6 @@ def test_complete():
 
     # When
     now = date(2021, 1, 8)
-    assert todo.id is not None
     completed_todo = complete_todo(
         todo,
         session=fake_session,
@@ -37,7 +36,6 @@ def test_incomplete():
     fake_session = FakeSession()
 
     # When
-    assert todo.id is not None
     completed_todo = incomplete_todo(
         todo,
         session=fake_session,

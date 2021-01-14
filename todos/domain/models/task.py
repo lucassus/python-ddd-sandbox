@@ -1,13 +1,14 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from typing import Callable, List, Optional
 
 
 @dataclass
 class Task:
+    id: int = field(init=False)
+    project_id: int = field(init=False)
+
     name: str
-    id: Optional[int] = None  # TODO: Use field(init=False)
-    project_id: Optional[int] = None  # TODO: Use field(init=False)
     completed_at: Optional[date] = None
 
     @property

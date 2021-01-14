@@ -33,7 +33,7 @@ def test_create_task():
 
 def test_complete():
     # Given
-    task = Task(id=1, name="Test task")
+    task = Task(name="Test task")
     fake_session = FakeSession()
 
     # When
@@ -52,7 +52,7 @@ def test_complete():
 
 def test_incomplete():
     # Given
-    task = Task(id=1, name="Test task", completed_at=date(2021, 1, 5))
+    task = Task(name="Test task", completed_at=date(2021, 1, 5))
     fake_session = FakeSession()
 
     # When

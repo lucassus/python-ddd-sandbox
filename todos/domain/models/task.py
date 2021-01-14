@@ -4,7 +4,7 @@ from typing import Callable, List, Optional
 
 
 @dataclass
-class Todo:
+class Task:
     name: str
     id: Optional[int] = None
     completed_at: Optional[date] = None
@@ -22,8 +22,8 @@ class Todo:
             self.completed_at = None
 
 
-def complete_todos(
-    todos: List[Todo], now: Callable[..., date] = datetime.utcnow
+def complete_tasks(
+    tasks: List[Task], now: Callable[..., date] = datetime.utcnow
 ) -> None:
-    for todo in todos:
-        todo.complete(now)
+    for task in tasks:
+        task.complete(now)

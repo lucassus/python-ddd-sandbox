@@ -4,11 +4,11 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class CreateTodo(BaseModel):
-    name: str = Field(..., title="New todo's name", min_length=4, max_length=32)
+class CreateTask(BaseModel):
+    name: str = Field(..., title="New task's name", min_length=4, max_length=32)
 
 
-class Todo(BaseModel):
+class Task(BaseModel):
     id: int
     name: str
     completed_at: Optional[date]

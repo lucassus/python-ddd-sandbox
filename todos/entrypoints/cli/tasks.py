@@ -4,7 +4,7 @@ from tabulate import tabulate
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 from todos.interfaces.db.tables import start_mappers
-from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
+from todos.service_layer.services import complete_task, create_task, incomplete_task
 
 app = typer.Typer()
 
@@ -17,10 +17,10 @@ repository = Repository(session=session)
 
 @app.command(help="Prints the list of all tasks")
 def list():
-    todos = repository.list()
+    tasks = repository.list()
     typer.echo(
         tabulate(
-            [[todo.id, todo.name, todo.completed_at] for todo in todos],
+            [[task.id, task.name, task.completed_at] for task in tasks],
             headers=["Id", "Name", "Completed At"],
         )
     )
@@ -30,31 +30,31 @@ def list():
 def create(
     name: str = typer.Option(..., help="Task name", prompt="Enter new task name")
 ):
-    create_todo(name, session=session, repository=repository)
+    create_task(name, session=session, repository=repository)
     list()
 
 
 @app.command(help="Completes a task with the given ID")
 def complete(id: int = typer.Option(..., help="ID of task to complete")):
-    todo = repository.get(id)
+    task = repository.get(id)
 
-    if todo is None:
-        typer.secho(f"Cannot find a todo with ID={id}", fg=typer.colors.RED)
+    if task is None:
+        typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
 
-    complete_todo(todo, session=session)
+    complete_task(task, session=session)
     list()
 
 
 @app.command(help="Undo a task with the given ID")
 def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
-    todo = repository.get(id)
+    task = repository.get(id)
 
-    if todo is None:
-        typer.secho(f"Cannot find a todo with ID={id}", fg=typer.colors.RED)
+    if task is None:
+        typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
 
-    incomplete_todo(todo, session=session)
+    incomplete_task(task, session=session)
     list()
 
 

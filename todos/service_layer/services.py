@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Callable, Protocol
 
 from todos.domain.models import Task
-from todos.interfaces.abstract_repository import AbstractRepository
+from todos.service_layer.unit_of_work import UnitOfWork
 
 
 class SupportsCommit(Protocol):
@@ -13,13 +13,13 @@ class SupportsCommit(Protocol):
 def create_task(
     name: str,
     *,
-    repository: AbstractRepository,
-    session: SupportsCommit,
+    uof: UnitOfWork,  # TODO: Should use an abstraction
 ) -> Task:
     task = Task(name=name)
 
-    repository.create(task)
-    session.commit()
+    with uof:
+        uof.repository.create(task)
+        uof.commit()
 
     return task
 

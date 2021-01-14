@@ -6,6 +6,7 @@ from todos.interfaces.abstract_repository import AbstractRepository
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 from todos.service_layer import services
+from todos.service_layer.unit_of_work import UnitOfWork
 
 
 def get_session():
@@ -24,18 +25,11 @@ def get_repository(session: Session = Depends(get_session)) -> AbstractRepositor
 
 
 class CreateTaskHandler:
-    def __init__(
-        self,
-        session: Session = Depends(get_session),
-        repository: AbstractRepository = Depends(get_repository),
-    ):
-        self._session = session
-        self._repository = repository
+    def __init__(self):
+        self._uof = UnitOfWork()
 
     def __call__(self, name: str) -> Task:
-        return services.create_task(
-            name, session=self._session, repository=self._repository
-        )
+        return services.create_task(name, uof=self._uof)
 
 
 class CompleteTaskHandler:

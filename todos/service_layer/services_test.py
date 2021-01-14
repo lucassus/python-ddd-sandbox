@@ -12,23 +12,23 @@ class FakeSession:
         self.committed = True
 
 
-def test_create_task():
-    # Given
-    fake_session = FakeSession()
-    fake_repository = FakeRepository([])
-
-    task = create_task(
-        "Testing...",
-        session=fake_session,
-        repository=fake_repository,
-    )
-
-    assert task
-    assert task.id == 1
-    assert task.name == "Testing..."
-    assert fake_session.committed
-
-    assert fake_repository.get(1) == task
+# def test_create_task():
+#     # Given
+#     fake_session = FakeSession()
+#     fake_repository = FakeRepository([])
+#
+#     task = create_task(
+#         "Testing...",
+#         session=fake_session,
+#         repository=fake_repository,
+#     )
+#
+#     assert task
+#     assert task.id == 1
+#     assert task.name == "Testing..."
+#     assert fake_session.committed
+#
+#     assert fake_repository.get(1) == task
 
 
 def test_complete():

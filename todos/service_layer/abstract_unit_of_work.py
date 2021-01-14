@@ -1,9 +1,8 @@
 import abc
 
-from todos.db.abstract_repository import AbstractRepository
+from todos.interfaces.abstract_repository import AbstractRepository
 
 
-# TODO: Should I use this pattern for reading
 class AbstractUnitOfWork(abc.ABC):
     def __enter__(self):
         return self
@@ -13,7 +12,7 @@ class AbstractUnitOfWork(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def todos(self) -> AbstractRepository:
+    def repository(self) -> AbstractRepository:
         pass
 
     @abc.abstractmethod

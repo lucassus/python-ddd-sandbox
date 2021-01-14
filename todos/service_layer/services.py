@@ -10,34 +10,34 @@ class SupportsCommit(Protocol):
         ...
 
 
-def create_todo(
+def create_task(
     name: str,
     *,
     repository: AbstractRepository,
     session: SupportsCommit,
 ) -> Task:
-    todo = Task(name=name)
+    task = Task(name=name)
 
-    repository.create(todo)
+    repository.create(task)
     session.commit()
 
-    return todo
+    return task
 
 
-def complete_todo(
-    todo: Task,
+def complete_task(
+    task: Task,
     *,
     session: SupportsCommit,
     now: Callable[..., date] = datetime.utcnow,
 ) -> Task:
-    todo.complete(now)
+    task.complete(now)
     session.commit()
 
-    return todo
+    return task
 
 
-def incomplete_todo(todo: Task, *, session: SupportsCommit) -> Task:
-    todo.incomplete()
+def incomplete_task(task: Task, *, session: SupportsCommit) -> Task:
+    task.incomplete()
     session.commit()
 
-    return todo
+    return task

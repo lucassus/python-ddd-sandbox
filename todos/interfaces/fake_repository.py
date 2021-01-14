@@ -5,25 +5,25 @@ from todos.interfaces.abstract_repository import AbstractRepository
 
 
 class FakeRepository(AbstractRepository):
-    def __init__(self, todos: List[Task]):
-        self._todos = todos
+    def __init__(self, tasks: List[Task]):
+        self._tasks = tasks
 
     def get(self, id: int) -> Optional[Task]:
         try:
-            return next(todo for todo in self._todos if todo.id == id)
+            return next(task for task in self._tasks if task.id == id)
         except StopIteration:
             return None
 
-    def create(self, todo: Task) -> None:
-        todo.id = self._get_next_id()
-        self._todos.append(todo)
+    def create(self, task: Task) -> None:
+        task.id = self._get_next_id()
+        self._tasks.append(task)
 
     def list(self) -> List[Task]:
-        return self._todos
+        return self._tasks
 
     def _get_next_id(self) -> int:
         return (
-            max(todo.id for todo in self._todos if todo.id) + 1
-            if len(self._todos) > 0
+            max(task.id for task in self._tasks if task.id) + 1
+            if len(self._tasks) > 0
             else 1
         )

@@ -22,7 +22,7 @@ def main(rebuild_db: bool = True):
     session.add(Task(name="Learn Domain Driven Design"))
     session.commit()
 
-    typer.echo("Seeding todos completed 🚀\n")
+    typer.echo("Seeding tasks completed 🚀\n")
 
     todos = session.query(Task).all()
     typer.echo(

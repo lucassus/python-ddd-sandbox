@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status
 from todos.domain.models.task import Task
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import (
-    CompleteTodoHandler,
-    CreateTodoHandler,
-    IncompleteTodoHandler,
+    CompleteTaskHandler,
+    CreateTaskHandler,
+    IncompleteTaskHandler,
     get_repository,
 )
 from todos.interfaces.abstract_repository import AbstractRepository
@@ -25,7 +25,7 @@ def todos_endpoint(
 @router.post("", response_model=schemas.Task)
 def todo_create_endpoint(
     data: schemas.CreateTask,
-    create_todo: CreateTodoHandler = Depends(),
+    create_todo: CreateTaskHandler = Depends(),
 ):
     return create_todo(name=data.name)
 
@@ -53,7 +53,7 @@ def todo_endpoint(todo: Task = Depends(get_todo)):
 @router.put("/{id}/complete", response_model=schemas.Task)
 def todo_complete_endpoint(
     todo: Task = Depends(get_todo),
-    complete_todo: CompleteTodoHandler = Depends(),
+    complete_todo: CompleteTaskHandler = Depends(),
 ):
     return complete_todo(todo)
 
@@ -61,6 +61,6 @@ def todo_complete_endpoint(
 @router.put("/{id}/incomplete", response_model=schemas.Task)
 def todo_incomplete_endpoint(
     todo: Task = Depends(get_todo),
-    incomplete_todo: IncompleteTodoHandler = Depends(),
+    incomplete_todo: IncompleteTaskHandler = Depends(),
 ):
     return incomplete_todo(todo)

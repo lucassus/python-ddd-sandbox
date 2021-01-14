@@ -2,7 +2,7 @@ from datetime import date
 
 from todos.domain.models.task import Task
 from todos.interfaces.fake_repository import FakeRepository
-from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
+from todos.service_layer.services import complete_task, create_task, incomplete_task
 
 
 class FakeSession:
@@ -12,56 +12,56 @@ class FakeSession:
         self.committed = True
 
 
-def test_create_todo():
+def test_create_task():
     # Given
     fake_session = FakeSession()
     fake_repository = FakeRepository([])
 
-    todo = create_todo(
+    task = create_task(
         "Testing...",
         session=fake_session,
         repository=fake_repository,
     )
 
-    assert todo
-    assert todo.id == 1
-    assert todo.name == "Testing..."
+    assert task
+    assert task.id == 1
+    assert task.name == "Testing..."
     assert fake_session.committed
 
-    assert fake_repository.get(1) == todo
+    assert fake_repository.get(1) == task
 
 
 def test_complete():
     # Given
-    todo = Task(id=1, name="Test todo")
+    task = Task(id=1, name="Test task")
     fake_session = FakeSession()
 
     # When
     now = date(2021, 1, 8)
-    completed_todo = complete_todo(
-        todo,
+    completed_task = complete_task(
+        task,
         session=fake_session,
         now=lambda: now,
     )
 
     # Then
-    assert completed_todo == todo
-    assert completed_todo.completed_at is now
+    assert completed_task == task
+    assert completed_task.completed_at is now
     assert fake_session.committed
 
 
 def test_incomplete():
     # Given
-    todo = Task(id=1, name="Test todo", completed_at=date(2021, 1, 5))
+    task = Task(id=1, name="Test task", completed_at=date(2021, 1, 5))
     fake_session = FakeSession()
 
     # When
-    completed_todo = incomplete_todo(
-        todo,
+    completed_task = incomplete_task(
+        task,
         session=fake_session,
     )
 
     # Then
-    assert completed_todo == todo
-    assert completed_todo.completed_at is None
+    assert completed_task == task
+    assert completed_task.completed_at is None
     assert fake_session.committed

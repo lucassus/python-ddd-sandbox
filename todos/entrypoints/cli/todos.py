@@ -11,6 +11,7 @@ app = typer.Typer()
 
 
 start_mappers()
+
 session = SessionLocal()
 repository = Repository(session=session)
 

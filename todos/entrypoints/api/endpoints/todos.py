@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, Path, status
 from fastapi.responses import JSONResponse
 
+from todos.domain.models.todo import Todo
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import (
     CompleteTodoHandler,
@@ -31,17 +32,19 @@ def todo_create_endpoint(
     return create_todo(name=data.name)
 
 
+def get_todo(
+    id: int = Path(..., description="The ID of the todo to get", ge=1),
+    repository: AbstractRepository = Depends(get_repository),
+) -> Todo:
+    # TODO: Raise 404 error here
+    return repository.get(id)
+
+
 @router.get(
     "/{id}",
     response_model=schemas.Todo,
-    responses={404: {"description": "Todo not found"}},
 )
-def todo_endpoint(
-    id: int = Path(..., description="The ID of the todo to get", ge=1),
-    repository: AbstractRepository = Depends(get_repository),
-):
-    todo = repository.get(id)
-
+def todo_endpoint(todo: Todo = Depends(get_todo)):
     if todo is None:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
 

@@ -29,26 +29,23 @@ class CreateTodoHandler:
         session: Session = Depends(get_session),
         repository: AbstractRepository = Depends(get_repository),
     ):
-        self._session = session
-        self._repository = repository
+        self._deps = dict(session=session, repository=repository)
 
     def __call__(self, name: str) -> Todo:
-        return services.create_todo(
-            name, session=self._session, repository=self._repository
-        )
+        return services.create_todo(name, **self._deps)
 
 
 class CompleteTodoHandler:
     def __init__(self, session: Session = Depends(get_session)):
-        self._session = session
+        self._deps = dict(session=session)
 
     def __call__(self, todo: Todo) -> Todo:
-        return services.complete_todo(todo, session=self._session)
+        return services.complete_todo(todo, **self._deps)
 
 
 class IncompleteTodoHandler:
     def __init__(self, session: Session = Depends(get_session)):
-        self._session = session
+        self._deps = dict(session=session)
 
     def __call__(self, todo: Todo) -> Todo:
-        return services.incomplete_todo(todo, session=self._session)
+        return services.incomplete_todo(todo, **self._deps)

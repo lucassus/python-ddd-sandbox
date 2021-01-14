@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends, Path, status
 from fastapi.responses import JSONResponse
 
 from todos.entrypoints.api import schemas
@@ -43,7 +43,7 @@ def todo_endpoint(
     todo = repository.get(id)
 
     if todo is None:
-        return JSONResponse(status_code=404)
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
 
     return todo
 
@@ -56,7 +56,7 @@ def todo_complete_endpoint(
     try:
         todo = complete_todo(id)
     except TodoNotFoundError:
-        return JSONResponse(status_code=404)
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
 
     return todo
 
@@ -69,6 +69,6 @@ def todo_incomplete_endpoint(
     try:
         todo = incomplete_todo(id)
     except TodoNotFoundError:
-        return JSONResponse(status_code=404)
+        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
 
     return todo

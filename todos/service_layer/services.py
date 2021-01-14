@@ -3,7 +3,6 @@ from typing import Callable, Protocol
 
 from todos.domain.models.todo import Todo
 from todos.interfaces.abstract_repository import AbstractRepository
-from todos.service_layer.errors import TodoNotFoundError
 
 
 class SupportsCommit(Protocol):
@@ -26,34 +25,18 @@ def create_todo(
 
 
 def complete_todo(
-    id: int,
+    todo: Todo,
     *,
-    repository: AbstractRepository,
     session: SupportsCommit,
     now: Callable[..., date] = datetime.utcnow,
 ) -> Todo:
-    todo = repository.get(id)
-
-    if not todo:
-        raise TodoNotFoundError
-
     todo.complete(now)
     session.commit()
 
     return todo
 
 
-def incomplete_todo(
-    id: int,
-    *,
-    repository: AbstractRepository,
-    session: SupportsCommit,
-) -> Todo:
-    todo = repository.get(id)
-
-    if not todo:
-        raise TodoNotFoundError
-
+def incomplete_todo(todo: Todo, *, session: SupportsCommit) -> Todo:
     todo.incomplete()
     session.commit()
 

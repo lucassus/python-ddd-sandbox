@@ -4,13 +4,13 @@ from tabulate import tabulate
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 from todos.interfaces.db.tables import start_mappers
-from todos.service_layer.errors import TodoNotFoundError
 from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 
 app = typer.Typer()
 
 
 start_mappers()
+
 session = SessionLocal()
 repository = Repository(session=session)
 
@@ -36,22 +36,26 @@ def create(
 
 @app.command(help="Completes a task with the given ID")
 def complete(id: int = typer.Option(..., help="ID of task to complete")):
-    try:
-        complete_todo(id, session=session, repository=repository)
-        list()
-    except TodoNotFoundError:
-        typer.secho(f"Cannot find a todo with id={id}", fg=typer.colors.RED)
+    todo = repository.get(id)
+
+    if todo is None:
+        typer.secho(f"Cannot find a todo with ID={id}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
+
+    complete_todo(todo, session=session)
+    list()
 
 
 @app.command(help="Undo a task with the given ID")
 def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
-    try:
-        incomplete_todo(id, session=session, repository=repository)
-        list()
-    except TodoNotFoundError:
-        typer.secho(f"Cannot find a todo with id={id}", fg=typer.colors.RED)
+    todo = repository.get(id)
+
+    if todo is None:
+        typer.secho(f"Cannot find a todo with ID={id}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
+
+    incomplete_todo(todo, session=session)
+    list()
 
 
 if __name__ == "__main__":

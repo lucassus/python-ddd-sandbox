@@ -1,2 +1,0 @@
-class TodoNotFoundError(Exception):
-    pass

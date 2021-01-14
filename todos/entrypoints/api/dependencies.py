@@ -1,5 +1,3 @@
-import abc
-
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
@@ -25,7 +23,7 @@ def get_repository(session: Session = Depends(get_session)) -> AbstractRepositor
     return Repository(session=session)
 
 
-class BaseServiceHandler(abc.ABC):
+class CreateTodoHandler:
     def __init__(
         self,
         session: Session = Depends(get_session),
@@ -33,17 +31,21 @@ class BaseServiceHandler(abc.ABC):
     ):
         self._deps = dict(session=session, repository=repository)
 
-
-class CreateTodoHandler(BaseServiceHandler):
     def __call__(self, name: str) -> Todo:
         return services.create_todo(name, **self._deps)
 
 
-class CompleteTodoHandler(BaseServiceHandler):
-    def __call__(self, id: int) -> Todo:
-        return services.complete_todo(id, **self._deps)
+class CompleteTodoHandler:
+    def __init__(self, session: Session = Depends(get_session)):
+        self._deps = dict(session=session)
+
+    def __call__(self, todo: Todo) -> Todo:
+        return services.complete_todo(todo, **self._deps)
 
 
-class IncompleteTodoHandler(BaseServiceHandler):
-    def __call__(self, id: int) -> Todo:
-        return services.incomplete_todo(id, **self._deps)
+class IncompleteTodoHandler:
+    def __init__(self, session: Session = Depends(get_session)):
+        self._deps = dict(session=session)
+
+    def __call__(self, todo: Todo) -> Todo:
+        return services.incomplete_todo(todo, **self._deps)

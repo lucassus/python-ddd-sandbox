@@ -1,12 +1,17 @@
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import Callable, List, Optional
+from typing import TYPE_CHECKING, Callable, List, Optional
+
+if TYPE_CHECKING:
+    from todos.domain.models import Project
 
 
 @dataclass
 class Task:
     id: int = field(init=False)
+
     project_id: int = field(init=False)
+    project: Optional["Project"] = field(init=False)
 
     name: str
     completed_at: Optional[date] = None

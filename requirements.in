@@ -13,7 +13,6 @@ mypy
 pytest
 pytest-cov
 pytest-icdiff
-pytest-testmon
 pytest-watch
 requests
 sqlalchemy-stubs

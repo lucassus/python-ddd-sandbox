@@ -38,7 +38,7 @@ def create(
 def complete(id: int = typer.Option(..., help="ID of task to complete")):
     todo = repository.get(id)
 
-    if not todo:
+    if todo is None:
         typer.secho(f"Cannot find a todo with ID={id}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
 
@@ -50,7 +50,7 @@ def complete(id: int = typer.Option(..., help="ID of task to complete")):
 def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
     todo = repository.get(id)
 
-    if not todo:
+    if todo is None:
         typer.secho(f"Cannot find a todo with ID={id}", fg=typer.colors.RED)
         raise typer.Exit(code=1)
 

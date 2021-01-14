@@ -31,12 +31,12 @@ def todo_create_endpoint(
 
 
 def get_todo(
-    id: int = Path(..., description="The ID of the todo to get", ge=1),
+    id: int = Path(..., description="The ID of the todo", ge=1),
     repository: AbstractRepository = Depends(get_repository),
 ) -> Todo:
     todo = repository.get(id)
 
-    if not todo:
+    if todo is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Unable to find a todo with ID={id}",

@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, Path, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 from fastapi.responses import JSONResponse
 
 from todos.domain.models.todo import Todo
@@ -36,8 +36,15 @@ def get_todo(
     id: int = Path(..., description="The ID of the todo to get", ge=1),
     repository: AbstractRepository = Depends(get_repository),
 ) -> Todo:
-    # TODO: Raise 404 error here
-    return repository.get(id)
+    todo = repository.get(id)
+
+    if not todo:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Unable to find todo with ID={id}",
+        )
+
+    return todo
 
 
 @router.get(
@@ -45,9 +52,6 @@ def get_todo(
     response_model=schemas.Todo,
 )
 def todo_endpoint(todo: Todo = Depends(get_todo)):
-    if todo is None:
-        return JSONResponse(status_code=status.HTTP_404_NOT_FOUND)
-
     return todo
 
 

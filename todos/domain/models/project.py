@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 
 from todos.domain.models.task import Task
 
@@ -9,4 +9,4 @@ class Project:
     id: int = field(init=False)
 
     name: str
-    tasks: Optional[List[Task]] = field(default_factory=list)
+    tasks: List[Task] = field(default_factory=list)

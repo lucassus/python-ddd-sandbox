@@ -28,12 +28,12 @@ def main(rebuild_db: bool = True):
     )
     session.add(
         Task(
-            name=123,
+            name="Learn Domain Driven Design",
             project=project,
         )
     )
     session.add(Task(name="Do the shopping"))
-    session.add(Task(name="Learn Domain Driven Design"))
+    session.add(Task(name="Clean the house"))
     session.commit()
 
     typer.echo("Seeding tasks completed 🚀\n")

@@ -4,10 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from todos.domain.models import Task
 from todos.entrypoints.api import schemas
-from todos.entrypoints.api.dependencies import (CompleteTaskHandler,
-                                                CreateTaskHandler,
-                                                IncompleteTaskHandler,
-                                                get_repository)
+from todos.entrypoints.api.dependencies import (
+    CompleteTaskHandler,
+    CreateTaskHandler,
+    IncompleteTaskHandler,
+    get_repository,
+)
 from todos.interfaces.abstract_repository import AbstractRepository
 
 router = APIRouter()
@@ -25,7 +27,7 @@ def task_create_endpoint(
     data: schemas.CreateTask,
     create_task: CreateTaskHandler = Depends(),
 ):
-    return create_task(name=123)
+    return create_task(name=data.name)
 
 
 def get_task(

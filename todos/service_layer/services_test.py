@@ -1,7 +1,8 @@
 from datetime import date
 
 from todos.domain.models.todo import Todo
-from todos.service_layer.services import complete_todo, incomplete_todo
+from todos.interfaces.fake_repository import FakeRepository
+from todos.service_layer.services import complete_todo, create_todo, incomplete_todo
 
 
 class FakeSession:
@@ -9,6 +10,25 @@ class FakeSession:
 
     def commit(self):
         self.committed = True
+
+
+def test_create_todo():
+    # Given
+    fake_session = FakeSession()
+    fake_repository = FakeRepository([])
+
+    todo = create_todo(
+        "Testing...",
+        session=fake_session,
+        repository=fake_repository,
+    )
+
+    assert todo
+    assert todo.id == 1
+    assert todo.name == "Testing..."
+    assert fake_session.committed
+
+    assert fake_repository.get(1) == todo
 
 
 def test_complete():

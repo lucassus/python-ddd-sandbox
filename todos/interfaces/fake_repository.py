@@ -5,11 +5,8 @@ from todos.interfaces.abstract_repository import AbstractRepository
 
 
 class FakeRepository(AbstractRepository):
-    def __init__(self, tasks: List[Task]):
+    def __init__(self, *, tasks: List[Task]):
         self._tasks = tasks
-
-        for task in self._tasks:
-            task.id = self._get_next_id()
 
     def get(self, id: int) -> Optional[Task]:
         try:
@@ -25,9 +22,9 @@ class FakeRepository(AbstractRepository):
         return self._tasks
 
     def _get_next_id(self) -> int:
-        persisted_tasks = [task.id for task in self._tasks if task.id]
+        ids = [task.id for task in self._tasks if task.id is not None]
 
-        if len(persisted_tasks) == 0:
+        if len(ids) == 0:
             return 1
 
-        return max(persisted_tasks) + 1
+        return max(ids) + 1

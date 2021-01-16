@@ -19,21 +19,21 @@ def main(rebuild_db: bool = True):
     project = Project(name="Work")
     session.add(project)
 
-    session.add(
-        Task(
-            name="Learn Python",
-            project=project,
-            completed_at=date(2021, 1, 9),
-        )
+    session.add_all(
+        [
+            Task(
+                name="Learn Python",
+                project=project,
+                completed_at=date(2021, 1, 9),
+            ),
+            Task(
+                name="Learn Domain Driven Design",
+                project=project,
+            ),
+            Task(name="Do the shopping"),
+            Task(name="Clean the house"),
+        ]
     )
-    session.add(
-        Task(
-            name="Learn Domain Driven Design",
-            project=project,
-        )
-    )
-    session.add(Task(name="Do the shopping"))
-    session.add(Task(name="Clean the house"))
     session.commit()
 
     typer.echo("Seeding tasks completed 🚀\n")

@@ -1,20 +1,23 @@
 from datetime import date
 
+import pytest
+
 from todos.domain.models import Task
-from todos.entrypoints.api.dependencies import get_repository
-from todos.interfaces.fake_repository import FakeRepository
+from todos.entrypoints.api.dependencies import get_uow
+from todos.factories import build_task
+from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_tasks_endpoint(client):
     # Given
-    fake_repository = FakeRepository(
-        [
-            Task(name="Test task"),
-            Task(name="The other task", completed_at=date(2021, 1, 6)),
-            Task(name="Testing 123"),
+    fake_uow = FakeUnitOfWork(
+        tasks=[
+            build_task(id=1, name="Test task"),
+            build_task(id=2, name="The other task", completed_at=date(2021, 1, 6)),
+            build_task(id=3, name="Testing 123"),
         ]
     )
-    client.app.dependency_overrides[get_repository] = lambda: fake_repository
+    client.app.dependency_overrides[get_uow] = lambda: fake_uow
 
     # When
     response = client.get("/tasks")
@@ -28,6 +31,7 @@ def test_tasks_endpoint(client):
     ]
 
 
+@pytest.mark.integration
 def test_tasks_endpoint_integration(session, client):
     # Given
     session.add(Task(name="Test task"))
@@ -45,6 +49,7 @@ def test_tasks_endpoint_integration(session, client):
     ]
 
 
+@pytest.mark.integration
 def test_tasks_endpoint_creates_task(client):
     response = client.post("/tasks", json={"name": "Some task"})
 
@@ -52,6 +57,7 @@ def test_tasks_endpoint_creates_task(client):
     assert response.json() == {"id": 1, "name": "Some task", "completed_at": None}
 
 
+@pytest.mark.integration
 def test_task_endpoint_returns_task(session, client):
     session.add(Task(name="Test name"))
     session.commit()
@@ -67,6 +73,7 @@ def test_task_endpoint_returns_404(client):
     assert response.status_code == 404
 
 
+@pytest.mark.integration
 def test_task_complete_endpoint(session, client):
     task = Task(name="Test")
     session.add(task)
@@ -83,6 +90,7 @@ def test_task_complete_endpoint_returns_404(client):
     assert response.status_code == 404
 
 
+@pytest.mark.integration
 def test_task_incomplete_endpoint(session, client):
     task = Task(name="Test", completed_at=date(2021, 1, 12))
     session.add(task)

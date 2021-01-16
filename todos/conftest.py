@@ -8,8 +8,9 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
 from todos.entrypoints.api import api_router
-from todos.entrypoints.api.dependencies import get_session
+from todos.entrypoints.api.dependencies import get_uow
 from todos.interfaces.db.tables import metadata, start_mappers
+from todos.service_layer.unit_of_work import UnitOfWork
 
 
 @pytest.fixture(scope="session")
@@ -38,10 +39,22 @@ def session(engine):
     connection.close()
 
 
+# TODO: Find a better idea
+# TODO: Should tests be depended of sqla session?
 @pytest.fixture
-def client(session):
+def uow(session):
+    return UnitOfWork(session_factory=lambda: session)
+
+
+@pytest.fixture
+def client(uow):
     app = FastAPI()
     app.include_router(api_router)
-    app.dependency_overrides[get_session] = lambda: session
+
+    def _get_uow():
+        with uow:
+            yield uow
+
+    app.dependency_overrides[get_uow] = _get_uow
 
     return TestClient(app)

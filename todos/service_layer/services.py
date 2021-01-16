@@ -1,45 +1,41 @@
 from datetime import date, datetime
-from typing import Callable, Protocol
+from typing import Callable
 
 from todos.domain.models import Task
-from todos.service_layer.unit_of_work import UnitOfWork
-
-
-class SupportsCommit(Protocol):
-    def commit(self) -> None:
-        ...
+from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 
 
 def create_task(
     name: str,
     *,
-    uof: UnitOfWork,  # TODO: Should use an abstraction
+    uow: AbstractUnitOfWork,
 ) -> Task:
     task = Task(name=name)
 
-    with uof:
-        uof.repository.create(task)
-        uof.commit()
+    uow.repository.create(task)
+    uow.commit()
 
-    # TODO: Task is detached here
-    # TODO: Returned task has to be in the same session because of lazy loading
     return task
 
 
 def complete_task(
     task: Task,
     *,
-    session: SupportsCommit,
+    uow: AbstractUnitOfWork,
     now: Callable[..., date] = datetime.utcnow,
 ) -> Task:
     task.complete(now)
-    session.commit()
+    uow.commit()
 
     return task
 
 
-def incomplete_task(task: Task, *, session: SupportsCommit) -> Task:
+def incomplete_task(
+    task: Task,
+    *,
+    uow: AbstractUnitOfWork,
+) -> Task:
     task.incomplete()
-    session.commit()
+    uow.commit()
 
     return task

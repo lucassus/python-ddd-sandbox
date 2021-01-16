@@ -2,15 +2,12 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
+from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
-from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 
 
-# TODO: See https://github.com/cosmicpython/code/issues/23
-# TODO: http://io.made.com/blog/2017-09-08-repository-and-unit-of-work-pattern-in-python.html
 # TODO: Inject the session and start the nested transaction
-#  https://docs.sqlalchemy.org/en/13/orm/session_transaction.html#using-savepoint
 class UnitOfWork(AbstractUnitOfWork):
     _session: Optional[Session]
 
@@ -18,9 +15,7 @@ class UnitOfWork(AbstractUnitOfWork):
         self._session_factory = session_factory
 
     def __enter__(self):
-        self._session = self._session_factory(expire_on_commit=False)
-        # self._session.expire_on_commit = False
-
+        self._session = self._session_factory()
         return super().__enter__()
 
     def __exit__(self, *args):

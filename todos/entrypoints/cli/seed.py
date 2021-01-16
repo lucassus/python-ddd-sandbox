@@ -19,7 +19,6 @@ def main(rebuild_db: bool = True):
     project = Project(name="Work")
     session.add(project)
 
-    # TODO: Backport it
     session.add_all(
         [
             Task(

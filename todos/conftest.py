@@ -53,16 +53,16 @@ def client(request):
     app = FastAPI()
     app.include_router(api_router)
 
-    def _get_uow():
-        if "integration" in request.keywords:
-            session = request.getfixturevalue("session")
-            uow = UnitOfWork(session_factory=lambda: session)
-        else:
-            uow = FakeUnitOfWork(tasks=[])
+    if "integration" in request.keywords:
+        # For tests marked as "integration" create Unit Of Work
+        # instance that uses the database...
+        session = request.getfixturevalue("session")
+        uow = UnitOfWork(session_factory=lambda: session)
+    else:
+        # ...otherwise go with the fake implementation.
+        uow = FakeUnitOfWork(tasks=[])
 
-        with uow:
-            yield uow
+    app.dependency_overrides[get_uow] = lambda: uow
 
-    app.dependency_overrides[get_uow] = _get_uow
-
-    return TestClient(app)
+    with uow:
+        yield TestClient(app)

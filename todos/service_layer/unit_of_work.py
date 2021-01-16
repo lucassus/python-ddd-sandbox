@@ -7,7 +7,6 @@ from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 
 
-# TODO: Inject the session and start the nested transaction
 class UnitOfWork(AbstractUnitOfWork):
     _session: Optional[Session]
     repository: Repository

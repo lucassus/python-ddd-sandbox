@@ -1,7 +1,10 @@
+import pytest
+
 from todos.domain.models import Task
 from todos.interfaces.db.repository import Repository
 
 
+@pytest.mark.integration
 def test_repository_get(session):
     task = Task(name="Test task")
     session.add(task)
@@ -11,11 +14,13 @@ def test_repository_get(session):
     assert repository.get(1) == task
 
 
+@pytest.mark.integration
 def test_repository_get_returns_none(session):
     repository = Repository(session=session)
     assert repository.get(1) is None
 
 
+@pytest.mark.integration
 def test_repository_list(session):
     repository = Repository(session=session)
 

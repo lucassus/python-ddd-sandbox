@@ -14,7 +14,7 @@ from todos.service_layer.unit_of_work import UnitOfWork
 
 
 @pytest.fixture(scope="session")
-def engine() -> Engine:
+def db_engine() -> Engine:
     db_file = os.path.join(os.path.dirname(__file__), "../todos_test.db")
     engine = create_engine(
         f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
@@ -27,32 +27,30 @@ def engine() -> Engine:
 
 
 @pytest.fixture
-def session(engine):
-    connection = engine.connect()
+def db_connection(db_engine):
+    connection = db_engine.connect()
     transaction = connection.begin()
-    session = Session(bind=connection)
 
-    yield session
+    yield connection
 
-    session.close()
     transaction.rollback()
     connection.close()
 
 
-# TODO: Find a better idea
-# TODO: Should tests be depended of sqla session?
 @pytest.fixture
-def uow(session):
-    return UnitOfWork(session_factory=lambda: session)
+def session(db_connection):
+    session = Session(bind=db_connection)
+    yield session
+    session.close()
 
 
 @pytest.fixture
-def client(uow):
+def client(session):
     app = FastAPI()
     app.include_router(api_router)
 
     def _get_uow():
-        with uow:
+        with UnitOfWork(session_factory=lambda: session) as uow:
             yield uow
 
     app.dependency_overrides[get_uow] = _get_uow

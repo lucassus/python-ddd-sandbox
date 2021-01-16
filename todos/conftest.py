@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from todos.entrypoints.api import api_router
 from todos.entrypoints.api.dependencies import get_uow
 from todos.interfaces.db.tables import metadata, start_mappers
+from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
 from todos.service_layer.unit_of_work import UnitOfWork
 
 
@@ -38,19 +39,28 @@ def db_connection(db_engine):
 
 
 @pytest.fixture
-def session(db_connection):
+def session(request, db_connection):
+    if "integration" not in request.keywords:
+        raise AttributeError("Fixture session can be used only with integration tests!")
+
     session = Session(bind=db_connection)
     yield session
     session.close()
 
 
 @pytest.fixture
-def client(session):
+def client(request):
     app = FastAPI()
     app.include_router(api_router)
 
     def _get_uow():
-        with UnitOfWork(session_factory=lambda: session) as uow:
+        if "integration" in request.keywords:
+            session = request.getfixturevalue("session")
+            uow = UnitOfWork(session_factory=lambda: session)
+        else:
+            uow = FakeUnitOfWork(tasks=[])
+
+        with uow:
             yield uow
 
     app.dependency_overrides[get_uow] = _get_uow

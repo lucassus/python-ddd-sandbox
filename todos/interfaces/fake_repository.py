@@ -8,9 +8,6 @@ class FakeRepository(AbstractRepository):
     def __init__(self, *, tasks: List[Task]):
         self._tasks = tasks
 
-        for task in self._tasks:
-            task.id = self._get_next_id()
-
     def get(self, id: int) -> Optional[Task]:
         try:
             return next(task for task in self._tasks if task.id == id)

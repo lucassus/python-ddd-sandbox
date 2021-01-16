@@ -3,20 +3,20 @@ from datetime import date
 import pytest
 
 from todos.domain.models import Task
-from todos.entrypoints.api.dependencies import get_repository
-from todos.interfaces.fake_repository import FakeRepository
+from todos.entrypoints.api.dependencies import get_uow
+from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_tasks_endpoint(client):
     # Given
-    fake_repository = FakeRepository(
-        [
+    fake_uow = FakeUnitOfWork(
+        tasks=[
             Task(name="Test task"),
             Task(name="The other task", completed_at=date(2021, 1, 6)),
             Task(name="Testing 123"),
         ]
     )
-    client.app.dependency_overrides[get_repository] = lambda: fake_repository
+    client.app.dependency_overrides[get_uow] = lambda: fake_uow
 
     # When
     response = client.get("/tasks")
@@ -98,6 +98,8 @@ def test_task_incomplete_endpoint(session, client):
     response = client.put(f"/tasks/{task.id}/incomplete")
 
     assert response.status_code == 200
+
+    # TODO: Figure out how to write such tests
     # assert task.completed_at is None
 
 

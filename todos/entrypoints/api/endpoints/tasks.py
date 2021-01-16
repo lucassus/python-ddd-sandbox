@@ -9,17 +9,17 @@ from todos.entrypoints.api.dependencies import (
     CreateTaskHandler,
     IncompleteTaskHandler,
     get_repository,
+    get_uow,
 )
 from todos.interfaces.abstract_repository import AbstractRepository
+from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 
 router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.Task])
-def tasks_endpoint(
-    repository: AbstractRepository = Depends(get_repository),
-):
-    return repository.list()
+def tasks_endpoint(uof: AbstractUnitOfWork = Depends(get_uow)):
+    return uof.repository.list()
 
 
 @router.post("", response_model=schemas.Task)

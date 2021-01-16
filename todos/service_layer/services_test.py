@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models import Task
+from todos.factories import build_task
 from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
 from todos.service_layer.services import complete_task, create_task, incomplete_task
 
@@ -17,15 +17,15 @@ def test_create_task():
     assert task
     assert task.id == 1
     assert task.name == "Testing..."
-    assert fake_unit_of_work.committed
 
+    assert fake_unit_of_work.committed
     assert fake_unit_of_work.repository.get(1) == task
 
 
 def test_complete():
     # Given
-    task = Task(name="Test task")
-    fake_uow = FakeUnitOfWork([])
+    task = build_task(id=1, name="Test task")
+    fake_uow = FakeUnitOfWork([task])
 
     # When
     now = date(2021, 1, 8)
@@ -43,7 +43,7 @@ def test_complete():
 
 def test_incomplete():
     # Given
-    task = Task(name="Test task", completed_at=date(2021, 1, 5))
+    task = build_task(id=1, name="Test task", completed_at=date(2021, 1, 5))
     fake_uow = FakeUnitOfWork([task])
 
     # When

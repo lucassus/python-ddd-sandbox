@@ -2,8 +2,8 @@ import typer
 from tabulate import tabulate
 
 from todos.interfaces.db.tables import start_mappers
+from todos.interfaces.db.unit_of_work import UnitOfWork
 from todos.service_layer.services import complete_task, create_task, incomplete_task
-from todos.service_layer.unit_of_work import UnitOfWork
 
 app = typer.Typer()
 

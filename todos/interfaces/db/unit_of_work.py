@@ -1,14 +1,10 @@
-from typing import Optional
-
-from sqlalchemy.orm import Session
-
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 
 
+# TODO: Does it belong here? It has sqlalchemy dependency.
 class UnitOfWork(AbstractUnitOfWork):
-    _session: Optional[Session]
     repository: Repository
 
     def __init__(self, session_factory=SessionLocal):

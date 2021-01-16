@@ -1,8 +1,8 @@
 from fastapi import Depends
 
 from todos.domain.models import Task
+from todos.interfaces.db.unit_of_work import UnitOfWork
 from todos.service_layer import services
-from todos.service_layer.unit_of_work import UnitOfWork
 
 
 def get_uow():

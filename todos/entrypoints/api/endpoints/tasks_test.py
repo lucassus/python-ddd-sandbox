@@ -1,5 +1,7 @@
 from datetime import date
 
+import pytest
+
 from todos.domain.models import Task
 from todos.entrypoints.api.dependencies import get_repository
 from todos.interfaces.fake_repository import FakeRepository
@@ -28,6 +30,7 @@ def test_tasks_endpoint(client):
     ]
 
 
+@pytest.mark.integration
 def test_tasks_endpoint_integration(session, client):
     # Given
     session.add(Task(name="Test task"))
@@ -45,6 +48,7 @@ def test_tasks_endpoint_integration(session, client):
     ]
 
 
+@pytest.mark.integration
 def test_tasks_endpoint_creates_task(client):
     response = client.post("/tasks", json={"name": "Some task"})
 
@@ -52,6 +56,7 @@ def test_tasks_endpoint_creates_task(client):
     assert response.json() == {"id": 1, "name": "Some task", "completed_at": None}
 
 
+@pytest.mark.integration
 def test_task_endpoint_returns_task(session, client):
     session.add(Task(name="Test name"))
     session.commit()
@@ -67,6 +72,7 @@ def test_task_endpoint_returns_404(client):
     assert response.status_code == 404
 
 
+@pytest.mark.integration
 def test_task_complete_endpoint(session, client):
     task = Task(name="Test")
     session.add(task)
@@ -83,6 +89,7 @@ def test_task_complete_endpoint_returns_404(client):
     assert response.status_code == 404
 
 
+@pytest.mark.integration
 def test_task_incomplete_endpoint(session, client):
     task = Task(name="Test", completed_at=date(2021, 1, 12))
     session.add(task)

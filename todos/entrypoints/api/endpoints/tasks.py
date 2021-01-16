@@ -4,35 +4,31 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status
 
 from todos.domain.models import Task
 from todos.entrypoints.api import schemas
-from todos.entrypoints.api.dependencies import (
-    CompleteTaskHandler,
-    CreateTaskHandler,
-    IncompleteTaskHandler,
-    get_uow,
-)
+from todos.entrypoints.api.dependencies import get_uow
+from todos.service_layer import services
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 
 router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.Task])
-def tasks_endpoint(uof: AbstractUnitOfWork = Depends(get_uow)):
-    return uof.repository.list()
+def tasks_endpoint(uow: AbstractUnitOfWork = Depends(get_uow)):
+    return uow.repository.list()
 
 
 @router.post("", response_model=schemas.Task)
 def task_create_endpoint(
     data: schemas.CreateTask,
-    create_task: CreateTaskHandler = Depends(),
+    uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    return create_task(name=data.name)
+    return services.create_task(name=data.name, uow=uow)
 
 
 def get_task(
     id: int = Path(..., description="The ID of the task", ge=1),
-    uof: AbstractUnitOfWork = Depends(get_uow),
+    uow: AbstractUnitOfWork = Depends(get_uow),
 ) -> Task:
-    task = uof.repository.get(id)
+    task = uow.repository.get(id)
 
     if task is None:
         raise HTTPException(
@@ -51,14 +47,14 @@ def task_endpoint(task: Task = Depends(get_task)):
 @router.put("/{id}/complete", response_model=schemas.Task)
 def task_complete_endpoint(
     task: Task = Depends(get_task),
-    complete_task: CompleteTaskHandler = Depends(),
+    uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    return complete_task(task)
+    return services.complete_task(task, uow=uow)
 
 
 @router.put("/{id}/incomplete", response_model=schemas.Task)
 def task_incomplete_endpoint(
     task: Task = Depends(get_task),
-    incomplete_task: IncompleteTaskHandler = Depends(),
+    uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    return incomplete_task(task)
+    return services.incomplete_task(task, uow=uow)

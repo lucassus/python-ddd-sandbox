@@ -11,7 +11,7 @@ from todos.entrypoints.api import api_router
 from todos.entrypoints.api.dependencies import get_uow
 from todos.interfaces.db.tables import metadata, start_mappers
 from todos.interfaces.db.unit_of_work import UnitOfWork
-from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
+from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 start_mappers()
 

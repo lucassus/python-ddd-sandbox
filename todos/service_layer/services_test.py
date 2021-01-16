@@ -1,8 +1,8 @@
 from datetime import date
 
-from todos.factories import build_task
-from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
 from todos.service_layer.services import complete_task, create_task, incomplete_task
+from todos.test_utils.factories import build_task
+from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_create_task():

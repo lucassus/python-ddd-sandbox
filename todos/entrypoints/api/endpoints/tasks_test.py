@@ -4,8 +4,8 @@ import pytest
 
 from todos.domain.models import Task
 from todos.entrypoints.api.dependencies import get_uow
-from todos.factories import build_task
-from todos.interfaces.fake_unit_of_work import FakeUnitOfWork
+from todos.test_utils.factories import build_task
+from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_tasks_endpoint(client):

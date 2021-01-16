@@ -8,10 +8,8 @@ from todos.entrypoints.api.dependencies import (
     CompleteTaskHandler,
     CreateTaskHandler,
     IncompleteTaskHandler,
-    get_repository,
     get_uow,
 )
-from todos.interfaces.abstract_repository import AbstractRepository
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 
 router = APIRouter()
@@ -32,9 +30,9 @@ def task_create_endpoint(
 
 def get_task(
     id: int = Path(..., description="The ID of the task", ge=1),
-    repository: AbstractRepository = Depends(get_repository),
+    uof: AbstractUnitOfWork = Depends(get_uow),
 ) -> Task:
-    task = repository.get(id)
+    task = uof.repository.get(id)
 
     if task is None:
         raise HTTPException(

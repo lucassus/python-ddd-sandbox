@@ -1,7 +1,6 @@
 from fastapi import Depends
 
 from todos.domain.models import Task
-from todos.interfaces.abstract_repository import AbstractRepository
 from todos.service_layer import services
 from todos.service_layer.unit_of_work import UnitOfWork
 
@@ -9,11 +8,6 @@ from todos.service_layer.unit_of_work import UnitOfWork
 def get_uow():
     with UnitOfWork() as uow:
         yield uow
-
-
-# TODO: Kill this dependency
-def get_repository(uow: UnitOfWork = Depends(get_uow)) -> AbstractRepository:
-    return uow.repository
 
 
 class CreateTaskHandler:

@@ -1,19 +1,12 @@
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import TYPE_CHECKING, Callable, List, Optional
-
-if TYPE_CHECKING:
-    from todos.domain.models import Project
+from typing import Callable, Optional
 
 
 @dataclass
 class Task:
     id: int = field(init=False)
-    project_id: int = field(init=False)
-
     name: str
-
-    project: Optional["Project"] = None  # TODO: More likely redundant association
     completed_at: Optional[date] = None
 
     @property

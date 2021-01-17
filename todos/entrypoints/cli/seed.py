@@ -17,23 +17,14 @@ def main(rebuild_db: bool = True):
         metadata.create_all(bind=engine)
 
     project = Project(name="Work")
-    session.add(project)
+    project.tasks = [
+        Task(name="Learn Python", completed_at=date(2021, 1, 9)),
+        Task(name="Learn Domain Driven Design"),
+        Task(name="Do the shopping"),
+        Task(name="Clean the house"),
+    ]
 
-    session.add_all(
-        [
-            Task(
-                name="Learn Python",
-                project=project,
-                completed_at=date(2021, 1, 9),
-            ),
-            Task(
-                name="Learn Domain Driven Design",
-                project=project,
-            ),
-            Task(name="Do the shopping"),
-            Task(name="Clean the house"),
-        ]
-    )
+    session.add(project)
     session.commit()
 
     typer.echo("Seeding tasks completed 🚀\n")

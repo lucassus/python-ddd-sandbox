@@ -1,5 +1,3 @@
-from datetime import date
-
 import typer
 from tabulate import tabulate
 
@@ -19,16 +17,14 @@ def main(rebuild_db: bool = True):
     project = Project(name="Work")
 
     task = project.add_task(name="Learn Python")
-    task.completed_at = date(2021, 1, 9)
-
     project.add_task(name="Learn Domain Driven Design")
     project.add_task(name="Do the shopping")
     project.add_task(name="Clean the house")
-
     session.add(project)
     session.commit()
 
-    typer.echo("Seeding tasks completed 🚀\n")
+    project.complete_task(id=task.id)
+    session.commit()
 
     typer.echo(
         tabulate(
@@ -43,6 +39,7 @@ def main(rebuild_db: bool = True):
             headers=["Id", "Name", "Completed At"],
         ),
     )
+    typer.echo("\nSeeding completed 🚀")
 
 
 if __name__ == "__main__":

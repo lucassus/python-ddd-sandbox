@@ -10,3 +10,6 @@ class Project:
 
     name: str
     tasks: List[Task] = field(default_factory=list)
+
+    def add_task(self, *, name):
+        self.tasks.append(Task(name=name))

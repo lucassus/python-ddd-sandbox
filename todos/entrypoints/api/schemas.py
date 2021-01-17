@@ -6,10 +6,19 @@ from pydantic import BaseModel, Field
 from todos.utils import camelize
 
 
+class Project(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 class CreateTask(BaseModel):
     name: str = Field(..., title="New task's name", min_length=4, max_length=32)
 
 
+# TODO: Create a base class for camelized schemas
 class Task(BaseModel):
     id: int
     name: str

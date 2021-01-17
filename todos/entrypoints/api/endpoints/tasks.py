@@ -28,6 +28,7 @@ def task_create_endpoint(
     return task
 
 
+# TODO: Dry it
 def get_project(
     uow: AbstractUnitOfWork = Depends(get_uow),
 ) -> Project:

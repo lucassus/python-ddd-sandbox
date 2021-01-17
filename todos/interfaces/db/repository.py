@@ -11,8 +11,12 @@ class Repository(AbstractRepository):
     def __init__(self, session: Session):
         self._session = session
 
-    def get(self) -> Optional[Project]:
+    def get(self, id: Optional[int] = None) -> Optional[Project]:
+        if id:
+            return self._session.query(Project).get(id)
+
         try:
+
             return self._session.query(Project).one()
         except NoResultFound:
             return None

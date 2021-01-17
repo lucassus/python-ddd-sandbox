@@ -5,9 +5,9 @@ from todos.domain.models import Project
 
 
 class AbstractRepository(abc.ABC):
-    # TODO: For the sake of simplicity return the first project
+    # TODO: Remove the optional parameter
     @abc.abstractmethod
-    def get(self) -> Optional[Project]:
+    def get(self, id: Optional[int] = None) -> Optional[Project]:
         raise NotImplementedError
 
     @abc.abstractmethod

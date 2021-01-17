@@ -1,5 +1,5 @@
-from todos.factories import build_task
-from todos.interfaces.fake_repository import FakeRepository
+from todos.test_utils.factories import build_task
+from todos.test_utils.fake_repository import FakeRepository
 
 
 def test_fake_repository():

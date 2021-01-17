@@ -25,9 +25,9 @@ def test_tasks_endpoint(client):
     # Then
     assert response.status_code == 200
     assert response.json() == [
-        {"id": 1, "name": "Test task", "completed_at": None},
-        {"id": 2, "name": "The other task", "completed_at": "2021-01-06"},
-        {"id": 3, "name": "Testing 123", "completed_at": None},
+        {"id": 1, "name": "Test task", "completedAt": None},
+        {"id": 2, "name": "The other task", "completedAt": "2021-01-06"},
+        {"id": 3, "name": "Testing 123", "completedAt": None},
     ]
 
 
@@ -44,8 +44,8 @@ def test_tasks_endpoint_integration(session, client):
     # Then
     assert response.status_code == 200
     assert response.json() == [
-        {"id": 1, "name": "Test task", "completed_at": None},
-        {"id": 2, "name": "The other task", "completed_at": "2021-01-06"},
+        {"id": 1, "name": "Test task", "completedAt": None},
+        {"id": 2, "name": "The other task", "completedAt": "2021-01-06"},
     ]
 
 
@@ -54,7 +54,7 @@ def test_tasks_endpoint_creates_task(client):
     response = client.post("/tasks", json={"name": "Some task"})
 
     assert response.status_code == 200
-    assert response.json() == {"id": 1, "name": "Some task", "completed_at": None}
+    assert response.json() == {"id": 1, "name": "Some task", "completedAt": None}
 
 
 @pytest.mark.integration
@@ -65,7 +65,7 @@ def test_task_endpoint_returns_task(session, client):
     response = client.get("/tasks/1")
 
     assert response.status_code == 200
-    assert response.json() == {"id": 1, "name": "Test name", "completed_at": None}
+    assert response.json() == {"id": 1, "name": "Test name", "completedAt": None}
 
 
 def test_task_endpoint_returns_404(client):

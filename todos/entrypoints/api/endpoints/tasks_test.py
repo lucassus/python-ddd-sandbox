@@ -9,7 +9,7 @@ from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 def test_tasks_endpoint(client):
     # Given
-    project = build_project(name="Test project")
+    project = build_project(id=1)
     project.tasks.extend(
         [
             build_task(id=1, name="Test task"),
@@ -18,11 +18,16 @@ def test_tasks_endpoint(client):
         ]
     )
 
-    fake_uow = FakeUnitOfWork(projects=[project])
+    fake_uow = FakeUnitOfWork(
+        projects=[
+            project,
+            build_project(id=2, name="Other Project"),
+        ]
+    )
     client.app.dependency_overrides[get_uow] = lambda: fake_uow
 
     # When
-    response = client.get("/tasks")
+    response = client.get("/projects/1/tasks")
 
     # Then
     assert response.status_code == 200
@@ -45,7 +50,7 @@ def test_tasks_endpoint_integration(session, client):
     session.commit()
 
     # When
-    response = client.get("/tasks")
+    response = client.get(f"/projects/{project.id}/tasks")
 
     # Then
     assert response.status_code == 200
@@ -57,24 +62,35 @@ def test_tasks_endpoint_integration(session, client):
 
 @pytest.mark.integration
 def test_tasks_endpoint_creates_task(session, client):
-    session.add(build_project(name="Test project"))
+    # Given
+    project = build_project(name="Test project")
+    session.add(project)
     session.commit()
 
-    response = client.post("/tasks", json={"name": "Some task"})
+    # When
+    response = client.post(
+        f"/projects/{project.id}/tasks",
+        json={"name": "Some task"},
+    )
 
+    # Then
     assert response.status_code == 200
     assert response.json() == {"id": 1, "name": "Some task", "completedAt": None}
 
 
 @pytest.mark.integration
 def test_task_endpoint_returns_task(session, client):
+    # Given
     project = build_project()
-    project.tasks = [build_task(name="Test name")]
+    task = build_task(name="Test name")
+    project.tasks = [task]
     session.add(project)
     session.commit()
 
-    response = client.get("/tasks/1")
+    # When
+    response = client.get(f"/projects/{project.id}/tasks/{task.id}")
 
+    # Then
     assert response.status_code == 200
     assert response.json() == {"id": 1, "name": "Test name", "completedAt": None}
 
@@ -95,7 +111,7 @@ def test_task_complete_endpoint(session, client):
     task = project.tasks[0]
 
     # When
-    response = client.put(f"/tasks/{task.id}/complete")
+    response = client.put(f"/projects/{project.id}/tasks/{task.id}/complete")
 
     # Then
     assert response.status_code == 200
@@ -118,7 +134,7 @@ def test_task_incomplete_endpoint(session, client):
     task = project.tasks[0]
 
     # When
-    response = client.put(f"/tasks/{task.id}/incomplete")
+    response = client.put(f"/projects/{project.id}/tasks/{task.id}/incomplete")
 
     # Then
     assert response.status_code == 200

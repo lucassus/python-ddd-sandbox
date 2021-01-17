@@ -1,9 +1,15 @@
+from datetime import date, datetime
+
 from fastapi import Depends, HTTPException
 from starlette import status
 
 from todos.domain.models import Project
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 from todos.interfaces.db.unit_of_work import UnitOfWork
+
+
+def get_current_time() -> date:
+    return datetime.utcnow()
 
 
 def get_uow():

@@ -21,7 +21,7 @@ def test_complete_task():
     task = build_task(id=1, name="One")
     project.tasks = [task]
 
-    task = project.complete_task(id=1, now=lambda: date(2021, 1, 17))
+    task = project.complete_task(id=1, now=date(2021, 1, 17))
 
     assert task.completed_at is not None
     assert task.completed_at == date(2021, 1, 17)
@@ -65,7 +65,7 @@ def test_complete_tasks_completes_all_tasks():
     project.tasks = tasks
 
     # When
-    project.complete_tasks(now=lambda: date(2021, 1, 12))
+    project.complete_tasks(now=date(2021, 1, 12))
 
     # Then
     for task in tasks:

@@ -17,7 +17,7 @@ def test_complete_task_sets_completed_at():
     task = Task(name="Foo")
     now = date(2020, 12, 31)
 
-    task.complete(now=lambda: now)
+    task.complete(now=now)
 
     assert task.completed_at is not None
     assert task.completed_at == now
@@ -27,7 +27,7 @@ def test_complete_task_does_nothing_when_task_is_already_completed():
     completed_at = date(2020, 12, 31)
     task = Task(name="Foo", completed_at=completed_at)
 
-    task.complete()
+    task.complete(now=date(2021, 1, 17))
 
     assert task.completed_at == completed_at
 

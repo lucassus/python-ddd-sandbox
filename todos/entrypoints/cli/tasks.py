@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import typer
 from tabulate import tabulate
 
@@ -43,7 +45,7 @@ def complete(id: int = typer.Option(..., help="ID of task to complete")):
     assert project
 
     try:
-        complete_task(id, project=project, uow=uow)
+        complete_task(id, project=project, now=datetime.utcnow(), uow=uow)
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)

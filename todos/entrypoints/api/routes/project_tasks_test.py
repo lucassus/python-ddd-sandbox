@@ -1,8 +1,8 @@
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 
-from todos.entrypoints.api.dependencies import get_uow
+from todos.entrypoints.api.dependencies import get_current_time, get_uow
 from todos.test_utils.factories import build_project, build_task
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
@@ -108,6 +108,9 @@ def test_task_complete_endpoint(session, client):
     session.add(project)
     session.commit()
 
+    now = datetime(2012, 1, 18, 9, 30)
+    client.app.dependency_overrides[get_current_time] = lambda: now
+
     task = project.tasks[0]
 
     # When
@@ -115,7 +118,7 @@ def test_task_complete_endpoint(session, client):
 
     # Then
     assert response.status_code == 200
-    assert task.completed_at is not None
+    assert task.completed_at == now.date()
 
 
 def test_task_complete_endpoint_returns_404(client):

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from typing import Callable, Optional
+from datetime import date
+from typing import Optional
 
 
 @dataclass
@@ -13,10 +13,9 @@ class Task:
     def is_completed(self) -> bool:
         return self.completed_at is not None
 
-    # TODO: Figure out how to dry it
-    def complete(self, now: Callable[..., date] = datetime.utcnow) -> None:
+    def complete(self, now: date) -> None:
         if not self.is_completed:
-            self.completed_at = now()
+            self.completed_at = now
 
     def incomplete(self) -> None:
         if self.is_completed:

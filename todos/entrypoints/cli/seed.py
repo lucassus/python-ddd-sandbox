@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import typer
 from tabulate import tabulate
 
@@ -23,7 +25,7 @@ def main(rebuild_db: bool = True):
     session.add(project)
     session.commit()
 
-    project.complete_task(id=task.id)
+    project.complete_task(id=task.id, now=datetime.utcnow())
     session.commit()
 
     typer.echo(

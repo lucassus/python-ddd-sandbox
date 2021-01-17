@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from datetime import date, datetime
-from typing import Callable, List
+from datetime import date
+from typing import List
 
 from todos.domain.errors import TaskNotFoundError
 from todos.domain.models.task import Task
@@ -14,7 +14,7 @@ class Project:
     tasks: List[Task] = field(default_factory=list)
 
     # TODO: Can have max 3 incomplete tasks per project
-    def add_task(self, *, name):
+    def add_task(self, *, name: str) -> Task:
         task = Task(name=name)
         self.tasks.append(task)
 
@@ -23,7 +23,7 @@ class Project:
     def complete_task(
         self,
         id: int,
-        now: Callable[..., date] = datetime.utcnow,
+        now: date,
     ) -> Task:
         task = self.get_task(id)
         task.complete(now)
@@ -43,6 +43,6 @@ class Project:
         except StopIteration:
             raise TaskNotFoundError
 
-    def complete_tasks(self, now: Callable[..., date] = datetime.utcnow):
+    def complete_tasks(self, now: date):
         for task in self.tasks:
             task.complete(now)

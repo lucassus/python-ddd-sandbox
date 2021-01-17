@@ -1,5 +1,4 @@
-from datetime import date, datetime
-from typing import Callable
+from datetime import date
 
 from todos.domain.models import Project, Task
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
@@ -21,8 +20,8 @@ def complete_task(
     id: int,
     *,
     project: Project,
+    now: date,
     uow: AbstractUnitOfWork,
-    now: Callable[..., date] = datetime.utcnow,
 ) -> Task:
     task = project.complete_task(id, now)
     uow.commit()

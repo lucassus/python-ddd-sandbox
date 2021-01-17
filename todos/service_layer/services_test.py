@@ -35,7 +35,7 @@ def test_complete_task():
         task.id,
         project=project,
         uow=fake_uow,
-        now=lambda: now,
+        now=now,
     )
 
     # Then

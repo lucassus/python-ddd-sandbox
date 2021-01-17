@@ -22,7 +22,8 @@ def task_create_endpoint(
     data: schemas.CreateTask,
     uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    return services.create_task(name=data.name, uow=uow)
+    task = services.create_task(name=data.name, uow=uow)
+    return task
 
 
 def get_task(

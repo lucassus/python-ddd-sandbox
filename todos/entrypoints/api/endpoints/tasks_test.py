@@ -53,7 +53,10 @@ def test_tasks_endpoint_integration(session, client):
 
 
 @pytest.mark.integration
-def test_tasks_endpoint_creates_task(client):
+def test_tasks_endpoint_creates_task(session, client):
+    session.add(build_project(name="Test project"))
+    session.commit()
+
     response = client.post("/tasks", json={"name": "Some task"})
 
     assert response.status_code == 200

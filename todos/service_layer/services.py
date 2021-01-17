@@ -10,9 +10,8 @@ def create_task(
     *,
     uow: AbstractUnitOfWork,
 ) -> Task:
-    task = Task(name=name)
-
-    uow.repository.create(task)
+    project = uow.repository.get()
+    task = project.add_task(name=name)
     uow.commit()
 
     return task

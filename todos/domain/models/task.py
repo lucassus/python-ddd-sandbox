@@ -29,6 +29,7 @@ class Task:
             self.completed_at = None
 
 
+# TODO: Move to Project aggregate root
 def complete_tasks(
     tasks: List[Task], now: Callable[..., date] = datetime.utcnow
 ) -> None:

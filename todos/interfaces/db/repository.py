@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
 from todos.domain.models import Project
@@ -11,7 +12,10 @@ class Repository(AbstractRepository):
         self._session = session
 
     def get(self) -> Optional[Project]:
-        return self._session.query(Project).get(id)
+        try:
+            return self._session.query(Project).one()
+        except NoResultFound:
+            return None
 
     def list(self) -> List[Project]:
         return self._session.query(Project).all()

@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 
-from todos.domain.models import Project, Task
+from todos.domain.models import Project
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import get_uow
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
@@ -14,6 +14,8 @@ router = APIRouter()
 @router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
 def tasks_endpoint(uow: AbstractUnitOfWork = Depends(get_uow)):
     project = uow.repository.get()
+    assert project  # TODO: Kill asserts like this one
+
     return project.tasks
 
 
@@ -34,20 +36,23 @@ def get_project(
     if project is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Unable to find a project",
+            detail="Unable to find a project",
         )
 
     return project
 
 
 @router.get("/{id}", response_model=schemas.Task)
-def task_endpoint(task: Task = Depends(get_project)):
-    return task
+def task_endpoint(
+    project: Project = Depends(get_project),
+    id: int = Path(..., description="The ID of the task", ge=1),
+):
+    return project.get_task(id)
 
 
 @router.put("/{id}/complete", response_model=schemas.Task)
 def task_complete_endpoint(
-    project: Task = Depends(get_project),
+    project: Project = Depends(get_project),
     id: int = Path(..., description="The ID of the task", ge=1),
     uow: AbstractUnitOfWork = Depends(get_uow),
 ):
@@ -57,7 +62,7 @@ def task_complete_endpoint(
 
 @router.put("/{id}/incomplete", response_model=schemas.Task)
 def task_incomplete_endpoint(
-    project: Task = Depends(get_project),
+    project: Project = Depends(get_project),
     id: int = Path(..., description="The ID of the task", ge=1),
     uow: AbstractUnitOfWork = Depends(get_uow),
 ):

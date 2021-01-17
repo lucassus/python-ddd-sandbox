@@ -2,7 +2,6 @@ from datetime import date
 
 import pytest
 
-from todos.domain.models import Task
 from todos.entrypoints.api.dependencies import get_uow
 from todos.test_utils.factories import build_project, build_task
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
@@ -37,8 +36,12 @@ def test_tasks_endpoint(client):
 @pytest.mark.integration
 def test_tasks_endpoint_integration(session, client):
     # Given
-    session.add(Task(name="Test task"))
-    session.add(Task(name="The other task", completed_at=date(2021, 1, 6)))
+    project = build_project()
+    project.tasks = [
+        build_task(name="Test task"),
+        build_task(name="The other task", completed_at=date(2021, 1, 6)),
+    ]
+    session.add(project)
     session.commit()
 
     # When
@@ -65,7 +68,9 @@ def test_tasks_endpoint_creates_task(session, client):
 
 @pytest.mark.integration
 def test_task_endpoint_returns_task(session, client):
-    session.add(Task(name="Test name"))
+    project = build_project()
+    project.tasks = [build_task(name="Test name")]
+    session.add(project)
     session.commit()
 
     response = client.get("/tasks/1")

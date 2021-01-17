@@ -3,7 +3,6 @@ from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 
 
-# TODO: Does it belong here? It has sqlalchemy dependency.
 class UnitOfWork(AbstractUnitOfWork):
     repository: Repository
 

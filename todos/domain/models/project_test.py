@@ -52,3 +52,21 @@ def test_get_task_raises_error():
 
     with pytest.raises(TaskNotFoundError):
         project.get_task(3)
+
+
+def test_complete_tasks_completes_all_tasks():
+    # Given
+    tasks = [
+        build_task(name="Foo", completed_at=None),
+        build_task(name="Foo", completed_at=date(2020, 12, 31)),
+        build_task(name="Foo", completed_at=None),
+    ]
+    project = build_project()
+    project.tasks = tasks
+
+    # When
+    project.complete_tasks(now=lambda: date(2021, 1, 12))
+
+    # Then
+    for task in tasks:
+        assert task.is_completed

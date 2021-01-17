@@ -42,3 +42,7 @@ class Project:
             return next(iter(filter(lambda t: t.id == id, self.tasks)))
         except StopIteration:
             raise TaskNotFoundError
+
+    def complete_tasks(self, now: Callable[..., date] = datetime.utcnow):
+        for task in self.tasks:
+            task.complete(now)

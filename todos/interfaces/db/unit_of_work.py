@@ -18,6 +18,7 @@ class UnitOfWork(AbstractUnitOfWork):
     def __exit__(self, *args):
         super().__exit__(*args)
         self._session.close()
+        self.rollback()  # It does nothing when the session has been committed before
 
     def commit(self):
         self._session.commit()

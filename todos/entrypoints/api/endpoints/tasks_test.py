@@ -81,12 +81,18 @@ def test_task_endpoint_returns_404(client):
 
 @pytest.mark.integration
 def test_task_complete_endpoint(session, client):
-    task = Task(name="Test")
-    session.add(task)
+    # Given
+    project = build_project(name="Test project")
+    project.tasks = [build_task(name="Test")]
+    session.add(project)
     session.commit()
 
+    task = project.tasks[0]
+
+    # When
     response = client.put(f"/tasks/{task.id}/complete")
 
+    # Then
     assert response.status_code == 200
     assert task.completed_at is not None
 
@@ -98,12 +104,18 @@ def test_task_complete_endpoint_returns_404(client):
 
 @pytest.mark.integration
 def test_task_incomplete_endpoint(session, client):
-    task = Task(name="Test", completed_at=date(2021, 1, 12))
-    session.add(task)
+    # Given
+    project = build_project(name="Test project")
+    project.tasks = [build_task(name="Test", completed_at=date(2021, 1, 12))]
+    session.add(project)
     session.commit()
 
+    task = project.tasks[0]
+
+    # When
     response = client.put(f"/tasks/{task.id}/incomplete")
 
+    # Then
     assert response.status_code == 200
     assert task.completed_at is None
 

@@ -11,7 +11,7 @@ from todos.service_layer import services
 router = APIRouter()
 
 
-@router.get("", response_model=List[schemas.Task])
+@router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
 def tasks_endpoint(uow: AbstractUnitOfWork = Depends(get_uow)):
     return uow.repository.list()
 

@@ -3,7 +3,6 @@ from todos.interfaces.db.repository import Repository
 from todos.interfaces.db.session import SessionLocal
 
 
-# TODO: Does it belong here? It has sqlalchemy dependency.
 class UnitOfWork(AbstractUnitOfWork):
     repository: Repository
 
@@ -19,6 +18,7 @@ class UnitOfWork(AbstractUnitOfWork):
     def __exit__(self, *args):
         super().__exit__(*args)
         self._session.close()
+        self.rollback()  # It does nothing when the session has been committed before
 
     def commit(self):
         self._session.commit()

@@ -10,7 +10,7 @@ class AbstractUnitOfWork(abc.ABC):
         return self
 
     def __exit__(self, *args):
-        self.rollback()  # It does nothing when commit has been called before
+        pass
 
     @abc.abstractmethod
     def commit(self):

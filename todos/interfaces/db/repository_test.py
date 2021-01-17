@@ -1,17 +1,17 @@
 import pytest
 
-from todos.domain.models import Task
+from todos.domain.models import Project
 from todos.interfaces.db.repository import Repository
 
 
 @pytest.mark.integration
 def test_repository_get(session):
-    task = Task(name="Test task")
-    session.add(task)
+    project = Project(name="Test project")
+    session.add(project)
     session.commit()
 
     repository = Repository(session=session)
-    assert repository.get(1) == task
+    assert repository.get(1) == project
 
 
 @pytest.mark.integration
@@ -26,11 +26,11 @@ def test_repository_list(session):
 
     assert repository.list() == []
 
-    task = Task(name="One")
-    session.add(task)
+    project = Project(name="Project One")
+    session.add(project)
 
-    task = Task(name="Two")
-    session.add(task)
+    project = Project(name="Project Two")
+    session.add(project)
 
     session.commit()
 

@@ -1,55 +1,66 @@
 from datetime import date
 
 from todos.service_layer.services import complete_task, create_task, incomplete_task
-from todos.test_utils.factories import build_task
+from todos.test_utils.factories import build_project, build_task
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_create_task():
     # Given
-    fake_unit_of_work = FakeUnitOfWork([])
+    project = build_project()
+    fake_unit_of_work = FakeUnitOfWork([project])
 
     task = create_task(
         "Testing...",
+        project=project,
         uow=fake_unit_of_work,
     )
 
     assert task
-    assert task.id == 1
-    assert task.name == "Testing..."
+    assert project.tasks == [task]
 
     assert fake_unit_of_work.committed
-    assert fake_unit_of_work.repository.get(1) == task
 
 
-def test_complete():
+def test_complete_task():
     # Given
-    task = build_task(id=1, name="Test task")
-    fake_uow = FakeUnitOfWork([task])
+    project = build_project(id=1)
+    task = build_task(id=1)
+    project.tasks = [task]
+    fake_uow = FakeUnitOfWork([project])
 
     # When
     now = date(2021, 1, 8)
-    completed_task = complete_task(
-        task,
+    updated_task = complete_task(
+        task.id,
+        project=project,
         uow=fake_uow,
-        now=lambda: now,
+        now=now,
     )
 
     # Then
-    assert completed_task == task
-    assert completed_task.completed_at is now
+    assert updated_task == task
+    assert updated_task.completed_at is now
+
     assert fake_uow.committed
 
 
-def test_incomplete():
+def test_incomplete_task():
     # Given
-    task = build_task(id=1, name="Test task", completed_at=date(2021, 1, 5))
-    fake_uow = FakeUnitOfWork([task])
+    project = build_project(id=1)
+    task = build_task(id=1)
+    project.tasks = [task]
+    fake_uow = FakeUnitOfWork([project])
 
     # When
-    completed_task = incomplete_task(task, uow=fake_uow)
+    updated_task = incomplete_task(
+        task.id,
+        project=project,
+        uow=fake_uow,
+    )
 
     # Then
-    assert completed_task == task
-    assert completed_task.completed_at is None
+    assert updated_task == task
+    assert updated_task.completed_at is None
+
     assert fake_uow.committed

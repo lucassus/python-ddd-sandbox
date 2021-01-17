@@ -1,41 +1,41 @@
-from datetime import date, datetime
-from typing import Callable
+from datetime import date
 
-from todos.domain.models import Task
+from todos.domain.models import Project, Task
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 
 
 def create_task(
     name: str,
     *,
+    project: Project,
     uow: AbstractUnitOfWork,
 ) -> Task:
-    task = Task(name=name)
-
-    uow.repository.create(task)
+    task = project.add_task(name=name)
     uow.commit()
 
     return task
 
 
 def complete_task(
-    task: Task,
+    id: int,
     *,
+    project: Project,
+    now: date,
     uow: AbstractUnitOfWork,
-    now: Callable[..., date] = datetime.utcnow,
 ) -> Task:
-    task.complete(now)
+    task = project.complete_task(id, now)
     uow.commit()
 
     return task
 
 
 def incomplete_task(
-    task: Task,
+    id: int,
     *,
+    project: Project,
     uow: AbstractUnitOfWork,
 ) -> Task:
-    task.incomplete()
+    task = project.incomplete_task(id)
     uow.commit()
 
     return task

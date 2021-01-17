@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models import Task, complete_tasks
+from todos.domain.models import Task
 
 
 def test_task_is_completed_returns_false():
@@ -17,7 +17,7 @@ def test_complete_task_sets_completed_at():
     task = Task(name="Foo")
     now = date(2020, 12, 31)
 
-    task.complete(now=lambda: now)
+    task.complete(now=now)
 
     assert task.completed_at is not None
     assert task.completed_at == now
@@ -27,7 +27,7 @@ def test_complete_task_does_nothing_when_task_is_already_completed():
     completed_at = date(2020, 12, 31)
     task = Task(name="Foo", completed_at=completed_at)
 
-    task.complete()
+    task.complete(now=date(2021, 1, 17))
 
     assert task.completed_at == completed_at
 
@@ -42,16 +42,3 @@ def test_incomplete_task_does_nothing_when_task_is_already_completed():
     task = Task(name="Foo", completed_at=None)
     task.incomplete()
     assert task.completed_at is None
-
-
-def test_complete_tasks():
-    tasks = [
-        Task(name="Foo", completed_at=None),
-        Task(name="Foo", completed_at=date(2020, 12, 31)),
-        Task(name="Foo", completed_at=None),
-    ]
-
-    complete_tasks(tasks, now=lambda: date(2021, 1, 12))
-
-    for task in tasks:
-        assert task.is_completed

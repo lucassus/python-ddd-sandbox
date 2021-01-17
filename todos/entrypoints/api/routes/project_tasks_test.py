@@ -1,26 +1,33 @@
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 
-from todos.domain.models import Task
-from todos.entrypoints.api.dependencies import get_uow
-from todos.test_utils.factories import build_task
+from todos.entrypoints.api.dependencies import get_current_time, get_uow
+from todos.test_utils.factories import build_project, build_task
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_tasks_endpoint(client):
     # Given
-    fake_uow = FakeUnitOfWork(
-        tasks=[
+    project = build_project(id=1)
+    project.tasks.extend(
+        [
             build_task(id=1, name="Test task"),
             build_task(id=2, name="The other task", completed_at=date(2021, 1, 6)),
             build_task(id=3, name="Testing 123"),
         ]
     )
+
+    fake_uow = FakeUnitOfWork(
+        projects=[
+            project,
+            build_project(id=2, name="Other Project"),
+        ]
+    )
     client.app.dependency_overrides[get_uow] = lambda: fake_uow
 
     # When
-    response = client.get("/tasks")
+    response = client.get("/projects/1/tasks")
 
     # Then
     assert response.status_code == 200
@@ -34,12 +41,16 @@ def test_tasks_endpoint(client):
 @pytest.mark.integration
 def test_tasks_endpoint_integration(session, client):
     # Given
-    session.add(Task(name="Test task"))
-    session.add(Task(name="The other task", completed_at=date(2021, 1, 6)))
+    project = build_project()
+    project.tasks = [
+        build_task(name="Test task"),
+        build_task(name="The other task", completed_at=date(2021, 1, 6)),
+    ]
+    session.add(project)
     session.commit()
 
     # When
-    response = client.get("/tasks")
+    response = client.get(f"/projects/{project.id}/tasks")
 
     # Then
     assert response.status_code == 200
@@ -50,20 +61,36 @@ def test_tasks_endpoint_integration(session, client):
 
 
 @pytest.mark.integration
-def test_tasks_endpoint_creates_task(client):
-    response = client.post("/tasks", json={"name": "Some task"})
+def test_tasks_endpoint_creates_task(session, client):
+    # Given
+    project = build_project(name="Test project")
+    session.add(project)
+    session.commit()
 
+    # When
+    response = client.post(
+        f"/projects/{project.id}/tasks",
+        json={"name": "Some task"},
+    )
+
+    # Then
     assert response.status_code == 200
     assert response.json() == {"id": 1, "name": "Some task", "completedAt": None}
 
 
 @pytest.mark.integration
 def test_task_endpoint_returns_task(session, client):
-    session.add(Task(name="Test name"))
+    # Given
+    project = build_project()
+    task = build_task(name="Test name")
+    project.tasks = [task]
+    session.add(project)
     session.commit()
 
-    response = client.get("/tasks/1")
+    # When
+    response = client.get(f"/projects/{project.id}/tasks/{task.id}")
 
+    # Then
     assert response.status_code == 200
     assert response.json() == {"id": 1, "name": "Test name", "completedAt": None}
 
@@ -75,14 +102,23 @@ def test_task_endpoint_returns_404(client):
 
 @pytest.mark.integration
 def test_task_complete_endpoint(session, client):
-    task = Task(name="Test")
-    session.add(task)
+    # Given
+    project = build_project(name="Test project")
+    project.tasks = [build_task(name="Test")]
+    session.add(project)
     session.commit()
 
-    response = client.put(f"/tasks/{task.id}/complete")
+    now = datetime(2012, 1, 18, 9, 30)
+    client.app.dependency_overrides[get_current_time] = lambda: now
 
+    task = project.tasks[0]
+
+    # When
+    response = client.put(f"/projects/{project.id}/tasks/{task.id}/complete")
+
+    # Then
     assert response.status_code == 200
-    assert task.completed_at is not None
+    assert task.completed_at == now.date()
 
 
 def test_task_complete_endpoint_returns_404(client):
@@ -92,12 +128,18 @@ def test_task_complete_endpoint_returns_404(client):
 
 @pytest.mark.integration
 def test_task_incomplete_endpoint(session, client):
-    task = Task(name="Test", completed_at=date(2021, 1, 12))
-    session.add(task)
+    # Given
+    project = build_project(name="Test project")
+    project.tasks = [build_task(name="Test", completed_at=date(2021, 1, 12))]
+    session.add(project)
     session.commit()
 
-    response = client.put(f"/tasks/{task.id}/incomplete")
+    task = project.tasks[0]
 
+    # When
+    response = client.put(f"/projects/{project.id}/tasks/{task.id}/incomplete")
+
+    # Then
     assert response.status_code == 200
     assert task.completed_at is None
 

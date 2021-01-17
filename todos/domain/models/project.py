@@ -12,4 +12,7 @@ class Project:
     tasks: List[Task] = field(default_factory=list)
 
     def add_task(self, *, name):
-        self.tasks.append(Task(name=name))
+        task = Task(name=name)
+        self.tasks.append(task)
+
+        return task

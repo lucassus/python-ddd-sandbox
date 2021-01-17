@@ -13,6 +13,7 @@ class Task:
     def is_completed(self) -> bool:
         return self.completed_at is not None
 
+    # TODO: Figure out how to dry it
     def complete(self, now: Callable[..., date] = datetime.utcnow) -> None:
         if not self.is_completed:
             self.completed_at = now()

@@ -4,19 +4,22 @@ import pytest
 
 from todos.domain.models import Task
 from todos.entrypoints.api.dependencies import get_uow
-from todos.test_utils.factories import build_task
+from todos.test_utils.factories import build_project, build_task
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 
 def test_tasks_endpoint(client):
     # Given
-    fake_uow = FakeUnitOfWork(
-        tasks=[
+    project = build_project(name="Test project")
+    project.tasks.extend(
+        [
             build_task(id=1, name="Test task"),
             build_task(id=2, name="The other task", completed_at=date(2021, 1, 6)),
             build_task(id=3, name="Testing 123"),
         ]
     )
+
+    fake_uow = FakeUnitOfWork(projects=[project])
     client.app.dependency_overrides[get_uow] = lambda: fake_uow
 
     # When

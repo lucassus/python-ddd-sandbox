@@ -13,7 +13,7 @@ class Task:
 
     name: str
 
-    project: Optional["Project"] = None
+    project: Optional["Project"] = None  # TODO: More likely redundant association
     completed_at: Optional[date] = None
 
     @property

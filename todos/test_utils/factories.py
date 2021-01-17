@@ -1,7 +1,18 @@
 from datetime import date
 from typing import Optional
 
-from todos.domain.models import Task
+from todos.domain.models import Project, Task
+
+
+def build_project(
+    *,
+    name: str,
+    id: Optional[int] = None,
+) -> Project:
+    project = Project(name=name)
+    project.id = id
+
+    return project
 
 
 def build_task(

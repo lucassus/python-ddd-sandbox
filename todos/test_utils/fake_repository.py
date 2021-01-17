@@ -1,28 +1,28 @@
 from typing import List, Optional
 
-from todos.domain.models import Task
+from todos.domain.models import Project
 from todos.interfaces.abstract_repository import AbstractRepository
 
 
 class FakeRepository(AbstractRepository):
-    def __init__(self, *, tasks: List[Task]):
-        self._tasks = tasks
+    def __init__(self, *, projects: List[Project]):
+        self._projects = projects
 
-    def get(self, id: int) -> Optional[Task]:
+    def get(self, id: int) -> Optional[Project]:
         try:
-            return next(task for task in self._tasks if task.id == id)
+            return next(project for project in self._projects if project.id == id)
         except StopIteration:
             return None
 
-    def create(self, task: Task) -> None:
-        task.id = self._get_next_id()
-        self._tasks.append(task)
+    def create(self, project: Project) -> None:
+        project.id = self._get_next_id()
+        self._projects.append(project)
 
-    def list(self) -> List[Task]:
-        return self._tasks
+    def list(self) -> List[Project]:
+        return self._projects
 
     def _get_next_id(self) -> int:
-        ids = [task.id for task in self._tasks if task.id is not None]
+        ids = [project.id for project in self._projects if project.id is not None]
 
         if len(ids) == 0:
             return 1

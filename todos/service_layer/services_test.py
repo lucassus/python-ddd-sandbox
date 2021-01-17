@@ -12,6 +12,7 @@ def test_create_task():
 
     task = create_task(
         "Testing...",
+        project=project,
         uow=fake_unit_of_work,
     )
 
@@ -32,6 +33,7 @@ def test_complete_task():
     now = date(2021, 1, 8)
     updated_task = complete_task(
         task.id,
+        project=project,
         uow=fake_uow,
         now=lambda: now,
     )
@@ -53,6 +55,7 @@ def test_incomplete_task():
     # When
     updated_task = incomplete_task(
         task.id,
+        project=project,
         uow=fake_uow,
     )
 

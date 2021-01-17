@@ -19,10 +19,10 @@ def tasks_endpoint(project: Project = Depends(get_project)):
 @router.post("", response_model=schemas.Task)
 def task_create_endpoint(
     data: schemas.CreateTask,
+    project: Project = Depends(get_project),
     uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    task = services.create_task(name=data.name, uow=uow)
-    return task
+    return services.create_task(data.name, project=project, uow=uow)
 
 
 @router.get("/{id}", response_model=schemas.Task)
@@ -36,16 +36,16 @@ def task_endpoint(
 @router.put("/{id}/complete", response_model=schemas.Task)
 def task_complete_endpoint(
     id: int = Path(..., description="The ID of the task", ge=1),
+    project: Project = Depends(get_project),
     uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    task = services.complete_task(id=id, uow=uow)
-    return task
+    return services.complete_task(id, project=project, uow=uow)
 
 
 @router.put("/{id}/incomplete", response_model=schemas.Task)
 def task_incomplete_endpoint(
     id: int = Path(..., description="The ID of the task", ge=1),
+    project: Project = Depends(get_project),
     uow: AbstractUnitOfWork = Depends(get_uow),
 ):
-    task = services.incomplete_task(id=id, uow=uow)
-    return task
+    return services.incomplete_task(id, project=project, uow=uow)

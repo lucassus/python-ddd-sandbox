@@ -15,12 +15,12 @@ uow = UnitOfWork()
 
 @app.command(help="Prints the list of all tasks")
 def list():
-    project = uow.repository.get()
+    project = uow.repository.get(1)
     assert project
 
     typer.echo(
         tabulate(
-            [[task.id, task.name, task.completed_at] for task in (project.tasks)],
+            [[task.id, task.name, task.completed_at] for task in project.tasks],
             headers=["Id", "Name", "Completed At"],
         )
     )
@@ -30,14 +30,20 @@ def list():
 def create(
     name: str = typer.Option(..., help="Task name", prompt="Enter new task name")
 ):
-    create_task(name, uow=uow)
+    project = uow.repository.get(1)
+    assert project
+
+    create_task(name, project=project, uow=uow)
     list()
 
 
 @app.command(help="Completes a task with the given ID")
 def complete(id: int = typer.Option(..., help="ID of task to complete")):
+    project = uow.repository.get(1)
+    assert project
+
     try:
-        complete_task(id, uow=uow)
+        complete_task(id, project=project, uow=uow)
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)
@@ -46,8 +52,11 @@ def complete(id: int = typer.Option(..., help="ID of task to complete")):
 
 @app.command(help="Undo a task with the given ID")
 def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
+    project = uow.repository.get(1)
+    assert project
+
     try:
-        incomplete_task(id, uow=uow)
+        incomplete_task(id, project=project, uow=uow)
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)

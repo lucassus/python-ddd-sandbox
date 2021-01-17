@@ -14,6 +14,6 @@ def test_fake_repository():
 
     assert len(repository.list()) == 3
 
-    project = repository.get()
+    project = repository.get(1)
     assert project is not None
     assert project.id == 1

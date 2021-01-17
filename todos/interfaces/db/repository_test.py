@@ -11,13 +11,13 @@ def test_repository_get(session):
     session.commit()
 
     repository = Repository(session=session)
-    assert repository.get(1) == project
+    assert repository.get() == project
 
 
 @pytest.mark.integration
 def test_repository_get_returns_none(session):
     repository = Repository(session=session)
-    assert repository.get(1) is None
+    assert repository.get() is None
 
 
 @pytest.mark.integration

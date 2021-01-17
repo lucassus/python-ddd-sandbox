@@ -61,7 +61,7 @@ def client(request):
         uow = UnitOfWork(session_factory=lambda: session)
     else:
         # ...otherwise go with the fake implementation.
-        uow = FakeUnitOfWork(tasks=[])
+        uow = FakeUnitOfWork(projects=[])
 
     app.dependency_overrides[get_uow] = lambda: uow
 

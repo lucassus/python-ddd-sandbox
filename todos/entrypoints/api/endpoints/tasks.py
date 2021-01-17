@@ -13,7 +13,8 @@ router = APIRouter()
 
 @router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
 def tasks_endpoint(uow: AbstractUnitOfWork = Depends(get_uow)):
-    return uow.repository.list()
+    project = uow.repository.get()
+    return project.tasks
 
 
 @router.post("", response_model=schemas.Task)

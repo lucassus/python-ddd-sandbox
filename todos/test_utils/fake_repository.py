@@ -8,11 +8,8 @@ class FakeRepository(AbstractRepository):
     def __init__(self, *, projects: List[Project]):
         self._projects = projects
 
-    def get(self, id: int) -> Optional[Project]:
-        try:
-            return next(project for project in self._projects if project.id == id)
-        except StopIteration:
-            return None
+    def get(self) -> Optional[Project]:
+        return self._projects[0] if len(self._projects) > 0 else None
 
     def create(self, project: Project) -> None:
         project.id = self._get_next_id()

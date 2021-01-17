@@ -10,7 +10,7 @@ class Repository(AbstractRepository):
     def __init__(self, session: Session):
         self._session = session
 
-    def get(self, id: int) -> Optional[Project]:
+    def get(self) -> Optional[Project]:
         return self._session.query(Project).get(id)
 
     def list(self) -> List[Project]:

@@ -12,14 +12,8 @@ def test_fake_repository():
     repository.create(build_project(name="Foo"))
     repository.create(build_project(name="Bar"))
 
-    assert repository.list() == [
-        repository.get(1),
-        repository.get(2),
-        repository.get(3),
-    ]
+    assert len(repository.list()) == 3
 
-    project = repository.get(1)
+    project = repository.get()
     assert project is not None
     assert project.id == 1
-
-    assert repository.get(123) is None

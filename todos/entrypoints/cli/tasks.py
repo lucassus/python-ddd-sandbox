@@ -6,7 +6,7 @@ from tabulate import tabulate
 from todos.domain.errors import TaskNotFoundError
 from todos.interfaces.db.tables import start_mappers
 from todos.interfaces.db.unit_of_work import UnitOfWork
-from todos.service_layer.services import complete_task, create_task, incomplete_task
+from todos.service_layer import services
 
 app = typer.Typer()
 
@@ -35,7 +35,7 @@ def create(
     project = uow.repository.get(1)
     assert project
 
-    create_task(name, project=project, uow=uow)
+    services.create_task(name, project=project, uow=uow)
     list()
 
 
@@ -45,7 +45,7 @@ def complete(id: int = typer.Option(..., help="ID of task to complete")):
     assert project
 
     try:
-        complete_task(id, project=project, now=datetime.utcnow(), uow=uow)
+        services.complete_task(id, project=project, now=datetime.utcnow(), uow=uow)
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)
@@ -58,7 +58,7 @@ def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
     assert project
 
     try:
-        incomplete_task(id, project=project, uow=uow)
+        services.incomplete_task(id, project=project, uow=uow)
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)

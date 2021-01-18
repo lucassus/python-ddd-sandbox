@@ -1,6 +1,6 @@
 import pytest
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.interfaces.db.repository import Repository
 
 

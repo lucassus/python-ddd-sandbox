@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.interfaces.abstract_repository import AbstractRepository
 
 
@@ -10,7 +10,7 @@ class FakeRepository(AbstractRepository):
 
     def get(self, id: Optional[int] = None) -> Optional[Project]:
         return next(
-            iter(filter(lambda project: project.id == id, self._projects)),
+            filter(lambda project: project.id == id, self._projects),
             None,
         )
 

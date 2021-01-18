@@ -3,7 +3,7 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.interfaces.db.session import SessionLocal, engine
 from todos.interfaces.db.tables import metadata, start_mappers
 
@@ -16,7 +16,7 @@ def main(rebuild_db: bool = True):
         metadata.drop_all(bind=engine)
         metadata.create_all(bind=engine)
 
-    project = Project(name="Work")
+    project = Project(name="Work", max_incomplete_tasks_number=4)
 
     task = project.add_task(name="Learn Python")
     project.add_task(name="Learn Domain Driven Design")

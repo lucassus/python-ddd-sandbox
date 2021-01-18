@@ -1,6 +1,6 @@
 from typing import List
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 from todos.test_utils.fake_repository import FakeRepository
 

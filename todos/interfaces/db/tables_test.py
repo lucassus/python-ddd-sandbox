@@ -1,6 +1,6 @@
 import pytest
 
-from todos.domain.models import Project, Task
+from todos.domain.entities import Project, Task
 
 
 @pytest.mark.integration
@@ -23,8 +23,7 @@ def test_tables(session):
     assert len(session.query(Project).get(1).tasks) == 3
 
     task: Task = session.query(Task).get(1)
-    assert task.project == project
-    assert task.project.name == "Work"
+    assert task
 
     session.add(Task(name="Task without project"))
     session.commit()
@@ -32,4 +31,3 @@ def test_tables(session):
     task: Task = session.query(Task).get(4)
     assert task
     assert task.name == "Task without project"
-    assert task.project is None

@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from todos.domain.errors import TaskNotFoundError
+from todos.domain.errors import MaxIncompleteTasksNumberIfReached, TaskNotFoundError
 from todos.test_utils.factories import build_project, build_task
 
 
@@ -14,6 +14,14 @@ def test_add_task():
 
     assert len(project.tasks) == 1
     assert project.tasks == [task]
+
+
+def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
+    project = build_project(max_incomplete_tasks_number=1)
+    project.add_task(name="First")
+
+    with pytest.raises(MaxIncompleteTasksNumberIfReached):
+        project.add_task(name="Second")
 
 
 def test_complete_task():

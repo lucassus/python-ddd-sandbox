@@ -39,11 +39,11 @@ class Project:
         return task
 
     def get_task(self, id: int) -> Task:
-        try:
-            # TODO: Add python cheat sheet with list, filters, maps etc
-            return next(iter(filter(lambda t: t.id == id, self.tasks)))
-        except StopIteration:
-            raise TaskNotFoundError
+        for task in self.tasks:
+            if task.id == id:
+                return task
+
+        raise TaskNotFoundError
 
     def complete_tasks(self, now: date):
         for task in self.tasks:

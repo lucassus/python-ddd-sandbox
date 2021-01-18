@@ -10,7 +10,7 @@ projects = Table(
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("name", String(255)),
-    Column("allowed_number_of_unfinished_tasks", Integer),
+    Column("max_unfinished_tasks_number", Integer),
 )
 
 tasks = Table(
@@ -28,7 +28,7 @@ def start_mappers():
         Project,
         projects,
         properties={
-            "tasks": relationship(Task, backref="project", order_by=tasks.c.id),
+            "tasks": relationship(Task, order_by=tasks.c.id),
         },
     )
 

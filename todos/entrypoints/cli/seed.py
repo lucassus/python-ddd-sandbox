@@ -16,7 +16,7 @@ def main(rebuild_db: bool = True):
         metadata.drop_all(bind=engine)
         metadata.create_all(bind=engine)
 
-    project = Project(name="Work", allowed_number_of_unfinished_tasks=4)
+    project = Project(name="Work", max_unfinished_tasks_number=4)
 
     task = project.add_task(name="Learn Python")
     project.add_task(name="Learn Domain Driven Design")

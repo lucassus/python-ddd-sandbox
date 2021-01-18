@@ -11,11 +11,11 @@ from todos.domain.errors import TaskNotFoundError
 class Project:
     id: int = field(init=False)
     name: str
-    allowed_number_of_unfinished_tasks: Optional[int] = None
+    max_unfinished_tasks_number: Optional[int] = None
     tasks: List[Task] = field(default_factory=list)
 
     def add_task(self, *, name: str) -> Task:
-        ensure.allowed_number_of_unfinished_tasks_is_not_reached(self)
+        ensure.max_unfinished_tasks_number_is_not_reached(self)
 
         task = Task(name=name)
         self.tasks.append(task)
@@ -32,7 +32,7 @@ class Project:
         task = self.get_task(id)
         task.incomplete()
 
-        ensure.allowed_number_of_unfinished_tasks_is_not_reached(self)
+        ensure.max_unfinished_tasks_number_is_not_reached(self)
 
         return task
 

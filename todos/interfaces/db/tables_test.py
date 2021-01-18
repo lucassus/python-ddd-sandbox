@@ -1,6 +1,6 @@
 import pytest
 
-from todos.domain.models import Project, Task
+from todos.domain.entities import Project, Task
 
 
 @pytest.mark.integration

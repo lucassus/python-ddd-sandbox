@@ -3,7 +3,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, Path
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import get_current_time, get_project, get_uow
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork

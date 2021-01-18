@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.interfaces.abstract_repository import AbstractRepository
 
 

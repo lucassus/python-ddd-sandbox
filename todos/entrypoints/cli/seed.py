@@ -3,7 +3,7 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 from todos.interfaces.db.session import SessionLocal, engine
 from todos.interfaces.db.tables import metadata, start_mappers
 

@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional
 
-from todos.domain.models import Project
+from todos.domain.entities import Project
 
 
 class AbstractRepository(abc.ABC):

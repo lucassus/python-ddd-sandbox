@@ -3,8 +3,8 @@ from datetime import date
 from typing import List, Optional
 
 from todos.domain import ensure
+from todos.domain.entities.task import Task
 from todos.domain.errors import TaskNotFoundError
-from todos.domain.models.task import Task
 
 
 @dataclass

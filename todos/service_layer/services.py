@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.domain.models import Project, Task
+from todos.domain.entities import Project, Task
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 
 

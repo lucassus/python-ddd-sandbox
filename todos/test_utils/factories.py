@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from todos.domain.models import Project, Task
+from todos.domain.entities import Project, Task
 
 
 def build_project(

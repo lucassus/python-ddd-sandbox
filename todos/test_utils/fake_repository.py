@@ -10,7 +10,7 @@ class FakeRepository(AbstractRepository):
 
     def get(self, id: Optional[int] = None) -> Optional[Project]:
         return next(
-            iter([project for project in self._projects if project.id == id]),
+            filter(lambda project: project.id == id, self._projects),
             None,
         )
 

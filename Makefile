@@ -17,8 +17,11 @@ deps: deps-pre deps-compile deps-install
 
 install: deps-pre deps-install
 
-server-dev:
+api-server-dev:
 	uvicorn todos.entrypoints.api.main:app --reload
+
+graphql-server-dev:
+	uvicorn todos.entrypoints.graphql.main:app --reload
 
 # Linting
 
@@ -38,7 +41,7 @@ check-flake8:
 	flake8 .
 
 check-mypy:
-	mypy todos/entrypoints/*
+	mypy todos/entrypoints/api && mypy todos/entrypoints/cli
 
 format: format-isort format-black
 

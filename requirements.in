@@ -1,4 +1,5 @@
 fastapi
+graphene
 pydantic
 sqlalchemy
 tabulate

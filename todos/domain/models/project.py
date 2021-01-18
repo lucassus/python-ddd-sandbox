@@ -10,10 +10,9 @@ from todos.domain.models.task import Task
 @dataclass
 class Project:
     id: int = field(init=False)
-
     name: str
-    tasks: List[Task] = field(default_factory=list)
     allowed_number_of_unfinished_tasks: Optional[int] = None
+    tasks: List[Task] = field(default_factory=list)
 
     def add_task(self, *, name: str) -> Task:
         ensure.allowed_number_of_unfinished_tasks_is_not_reached(self)
@@ -23,11 +22,7 @@ class Project:
 
         return task
 
-    def complete_task(
-        self,
-        id: int,
-        now: date,
-    ) -> Task:
+    def complete_task(self, id: int, now: date) -> Task:
         task = self.get_task(id)
         task.complete(now)
 

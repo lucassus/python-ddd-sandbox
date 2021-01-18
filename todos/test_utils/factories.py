@@ -8,11 +8,11 @@ def build_project(
     *,
     name: Optional[str] = "Test project",
     id: Optional[int] = None,
-    max_unfinished_tasks_number: Optional[int] = None,
+    max_incomplete_tasks_number: Optional[int] = None,
 ) -> Project:
     project = Project(
         name=name,
-        max_unfinished_tasks_number=max_unfinished_tasks_number,
+        max_incomplete_tasks_number=max_incomplete_tasks_number,
     )
     project.id = id
 

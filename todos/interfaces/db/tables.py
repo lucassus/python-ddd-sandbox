@@ -10,7 +10,7 @@ projects = Table(
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("name", String(255)),
-    Column("max_unfinished_tasks_number", Integer),
+    Column("max_incomplete_tasks_number", Integer),
 )
 
 tasks = Table(

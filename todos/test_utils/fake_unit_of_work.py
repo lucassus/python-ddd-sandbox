@@ -7,7 +7,7 @@ from todos.test_utils.fake_repository import FakeRepository
 
 class FakeUnitOfWork(AbstractUnitOfWork):
     repository: FakeRepository
-    committed: False
+    committed = False
 
     def __init__(self, projects: List[Project]):
         self.repository = FakeRepository(projects=projects)

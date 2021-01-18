@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Optional
 
+from todos.domain import ensure
 from todos.domain.errors import TaskNotFoundError
 from todos.domain.models.task import Task
 
@@ -14,8 +15,9 @@ class Project:
     tasks: List[Task] = field(default_factory=list)
     allowed_number_of_unfinished_tasks: Optional[int] = None
 
-    # TODO: Can have max 3 incomplete tasks per project
     def add_task(self, *, name: str) -> Task:
+        ensure.allowed_number_of_unfinished_tasks_is_not_reached(self)
+
         task = Task(name=name)
         self.tasks.append(task)
 
@@ -34,6 +36,8 @@ class Project:
     def incomplete_task(self, id: int) -> Task:
         task = self.get_task(id)
         task.incomplete()
+
+        ensure.allowed_number_of_unfinished_tasks_is_not_reached(self)
 
         return task
 

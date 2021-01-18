@@ -42,10 +42,10 @@ def test_tasks_endpoint(client):
 def test_tasks_endpoint_integration(session, client):
     # Given
     project = build_project()
-    project.tasks = [
-        build_task(name="Test task"),
-        build_task(name="The other task", completed_at=date(2021, 1, 6)),
-    ]
+    project.add_task(name="Test task")
+    task = project.add_task(name="The other task")
+    task.completed_at = date(2021, 1, 6)
+
     session.add(project)
     session.commit()
 
@@ -82,8 +82,7 @@ def test_tasks_endpoint_creates_task(session, client):
 def test_task_endpoint_returns_task(session, client):
     # Given
     project = build_project()
-    task = build_task(name="Test name")
-    project.tasks = [task]
+    task = project.add_task(name="Test name")
     session.add(project)
     session.commit()
 
@@ -104,14 +103,12 @@ def test_task_endpoint_returns_404(client):
 def test_task_complete_endpoint(session, client):
     # Given
     project = build_project(name="Test project")
-    project.tasks = [build_task(name="Test")]
+    task = project.add_task(name="Test")
     session.add(project)
     session.commit()
 
     now = datetime(2012, 1, 18, 9, 30)
     client.app.dependency_overrides[get_current_time] = lambda: now
-
-    task = project.tasks[0]
 
     # When
     response = client.put(f"/projects/{project.id}/tasks/{task.id}/complete")
@@ -130,11 +127,13 @@ def test_task_complete_endpoint_returns_404(client):
 def test_task_incomplete_endpoint(session, client):
     # Given
     project = build_project(name="Test project")
-    project.tasks = [build_task(name="Test", completed_at=date(2021, 1, 12))]
+    project.add_task(name="Test")
+
+    task = project.add_task(name="Test")
+    task.completed_at = date(2021, 1, 12)
+
     session.add(project)
     session.commit()
-
-    task = project.tasks[0]
 
     # When
     response = client.put(f"/projects/{project.id}/tasks/{task.id}/incomplete")

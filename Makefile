@@ -20,6 +20,9 @@ install: deps-pre deps-install
 server-dev:
 	uvicorn todos.entrypoints.api.main:app --reload
 
+server-graphql-dev:
+	uvicorn todos.entrypoints.graphql.main:app --reload
+
 # Linting
 
 format-isort:

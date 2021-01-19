@@ -5,7 +5,11 @@ from fastapi import APIRouter, Depends, Path
 
 from todos.domain.entities import Project
 from todos.entrypoints.api import schemas
-from todos.entrypoints.api.dependencies import get_current_time, get_project, get_service
+from todos.entrypoints.api.dependencies import (
+    get_current_time,
+    get_project,
+    get_service,
+)
 from todos.service_layer.service import Service
 
 router = APIRouter()

@@ -45,7 +45,7 @@ check-mypy:
 
 format: format-isort format-black
 
-lint: check-mypy check-isort check-black check-flake8
+lint: check-mypy check-flake8 check-isort check-black
 
 # Testing
 

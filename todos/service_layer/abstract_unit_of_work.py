@@ -1,6 +1,6 @@
 import abc
 
-from todos.interfaces.abstract_repository import AbstractRepository
+from todos.service_layer.abstract_repository import AbstractRepository
 
 
 class AbstractUnitOfWork(abc.ABC):

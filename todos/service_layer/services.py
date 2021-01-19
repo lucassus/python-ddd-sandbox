@@ -1,7 +1,7 @@
 from datetime import date
 
 from todos.domain.entities import Project, Task
-from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
+from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 
 
 def create_task(

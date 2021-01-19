@@ -5,7 +5,9 @@ from sqlalchemy.orm import sessionmaker
 
 db_file = os.path.join(os.path.dirname(__file__), "../../../todos.db")
 engine = create_engine(
-    f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
+    f"sqlite:///{db_file}",
+    connect_args={"check_same_thread": False},
+    echo=True,
 )
 
 SessionLocal = sessionmaker(

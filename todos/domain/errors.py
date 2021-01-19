@@ -2,5 +2,5 @@ class TaskNotFoundError(Exception):
     pass
 
 
-class MaxIncompleteTasksNumberIfReached(Exception):
+class MaxIncompleteTasksNumberIsReached(Exception):
     pass

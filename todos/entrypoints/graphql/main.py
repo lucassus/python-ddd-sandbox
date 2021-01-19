@@ -1,10 +1,9 @@
-import graphene
 from fastapi import Depends, FastAPI, Request
 from starlette.datastructures import URL
 from starlette.graphql import GraphQLApp
 
 from todos.entrypoints.graphql.dependencies import get_uow
-from todos.entrypoints.graphql.schema import Query
+from todos.entrypoints.graphql.schema import schema
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
 from todos.interfaces.db.tables import start_mappers
 
@@ -12,7 +11,7 @@ start_mappers()
 
 
 app = FastAPI()
-graphql_app = GraphQLApp(schema=graphene.Schema(query=Query))
+graphql_app = GraphQLApp(schema=schema)
 
 
 @app.get("/")

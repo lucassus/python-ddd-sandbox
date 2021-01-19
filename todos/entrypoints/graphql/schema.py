@@ -1,6 +1,8 @@
-from graphene import ID, Boolean, Field, List, NonNull, ObjectType, String
+from graphene import ID, Boolean, Field, List, Mutation, NonNull, ObjectType, Schema, String
 
+from todos.domain.errors import MaxIncompleteTasksNumberIsReached
 from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
+from todos.service_layer.services import create_task
 
 
 class Task(ObjectType):
@@ -27,3 +29,33 @@ class Query(ObjectType):
     def resolve_project(self, info, id):
         uow: AbstractUnitOfWork = info.context["request"].state.uow
         return uow.repository.get(id)
+
+
+class CreateTask(Mutation):
+    class Arguments:
+        project_id = NonNull(ID)
+        name = NonNull(String)
+
+    ok = NonNull(Boolean)
+    task = Field(Task)
+
+    def mutate(root, info, project_id: int, name: str):
+        uow: AbstractUnitOfWork = info.context["request"].state.uow
+
+        project = uow.repository.get(project_id)
+        if project is None:
+            return CreateTask(ok=False)
+
+        try:
+            task = create_task(name, project=project, uow=uow)
+
+            return CreateTask(ok=True, task=task)
+        except MaxIncompleteTasksNumberIsReached:
+            return CreateTask(ok=False)
+
+
+class Mutations(ObjectType):
+    create_task = CreateTask.Field()
+
+
+schema = Schema(query=Query, mutation=Mutations)

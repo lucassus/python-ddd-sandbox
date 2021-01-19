@@ -3,9 +3,9 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
+from todos.adapters.db.tables import start_mappers
+from todos.adapters.db.unit_of_work import UnitOfWork
 from todos.domain.errors import TaskNotFoundError
-from todos.interfaces.db.tables import start_mappers
-from todos.interfaces.db.unit_of_work import UnitOfWork
 from todos.service_layer.service import Service
 
 app = typer.Typer()

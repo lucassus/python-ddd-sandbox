@@ -3,8 +3,8 @@ from datetime import date, datetime
 from fastapi import Depends, HTTPException
 from starlette import status
 
+from todos.adapters.db.unit_of_work import UnitOfWork
 from todos.domain.entities import Project
-from todos.interfaces.db.unit_of_work import UnitOfWork
 from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 from todos.service_layer.service import Service
 

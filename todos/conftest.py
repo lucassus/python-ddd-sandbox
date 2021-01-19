@@ -7,10 +7,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
+from todos.adapters.db.tables import metadata, start_mappers
+from todos.adapters.db.unit_of_work import UnitOfWork
 from todos.entrypoints.api.dependencies import get_uow
 from todos.entrypoints.api.routes import api_router
-from todos.interfaces.db.tables import metadata, start_mappers
-from todos.interfaces.db.unit_of_work import UnitOfWork
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 start_mappers()

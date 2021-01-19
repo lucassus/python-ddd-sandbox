@@ -1,8 +1,18 @@
-from graphene import ID, Boolean, Field, List, Mutation, NonNull, ObjectType, Schema, String
+from graphene import (
+    ID,
+    Boolean,
+    Field,
+    List,
+    Mutation,
+    NonNull,
+    ObjectType,
+    Schema,
+    String,
+)
 
 from todos.domain.errors import MaxIncompleteTasksNumberIsReached
 from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
-from todos.service_layer.services import create_task
+from todos.service_layer.service import create_task
 
 
 class Task(ObjectType):

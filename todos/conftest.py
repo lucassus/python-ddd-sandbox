@@ -42,7 +42,9 @@ def db_connection(db_engine):
 @pytest.fixture
 def session(request, db_connection):
     if "integration" not in request.keywords:
-        raise AttributeError("Fixture session can be used only with integration tests!")
+        raise AttributeError(
+            "Fixture session can be used only with tests marked as integration!"
+        )
 
     session = Session(bind=db_connection)
     yield session

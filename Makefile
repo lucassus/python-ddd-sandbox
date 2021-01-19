@@ -50,7 +50,7 @@ lint: check-mypy check-isort check-black check-flake8
 # Testing
 
 test:
-	pytest
+	pytest todos
 
 test-watch:
-	ptw .
+	ptw todos

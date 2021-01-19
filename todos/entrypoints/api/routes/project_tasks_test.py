@@ -27,7 +27,7 @@ def test_tasks_endpoint(client):
     client.app.dependency_overrides[get_uow] = lambda: fake_uow
 
     # When
-    response = client.get("/projects/1/tasks")
+    response = client.get(f"/projects/{project.id}/tasks")
 
     # Then
     assert response.status_code == 200

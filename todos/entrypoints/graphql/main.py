@@ -2,10 +2,10 @@ from fastapi import Depends, FastAPI, Request
 from starlette.datastructures import URL
 from starlette.graphql import GraphQLApp
 
+from todos.adapters.db.tables import start_mappers
 from todos.entrypoints.graphql.dependencies import get_uow
 from todos.entrypoints.graphql.schema import schema
-from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
-from todos.interfaces.db.tables import start_mappers
+from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 
 start_mappers()
 

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from todos.domain.entities import Project
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import get_project, get_uow
-from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
+from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 
 router = APIRouter()
 

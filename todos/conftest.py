@@ -7,10 +7,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
+from todos.adapters.db.tables import metadata, start_mappers
+from todos.adapters.db.unit_of_work import UnitOfWork
 from todos.entrypoints.api.dependencies import get_uow
 from todos.entrypoints.api.routes import api_router
-from todos.interfaces.db.tables import metadata, start_mappers
-from todos.interfaces.db.unit_of_work import UnitOfWork
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 start_mappers()
@@ -42,7 +42,9 @@ def db_connection(db_engine):
 @pytest.fixture
 def session(request, db_connection):
     if "integration" not in request.keywords:
-        raise AttributeError("Fixture session can be used only with integration tests!")
+        raise AttributeError(
+            "Fixture session can be used only with tests marked as integration!"
+        )
 
     session = Session(bind=db_connection)
     yield session

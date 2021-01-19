@@ -6,6 +6,7 @@ from typing import Optional
 @dataclass
 class Task:
     id: int = field(init=False)
+
     name: str
     completed_at: Optional[date] = None
 

@@ -1,4 +1,4 @@
-from todos.interfaces.db.unit_of_work import UnitOfWork
+from todos.adapters.db.unit_of_work import UnitOfWork
 
 
 def get_uow():

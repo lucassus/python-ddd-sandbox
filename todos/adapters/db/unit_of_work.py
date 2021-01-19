@@ -1,6 +1,6 @@
-from todos.interfaces.abstract_unit_of_work import AbstractUnitOfWork
-from todos.interfaces.db.repository import Repository
-from todos.interfaces.db.session import SessionLocal
+from todos.adapters.db.repository import Repository
+from todos.adapters.db.session import SessionLocal
+from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
 
 
 class UnitOfWork(AbstractUnitOfWork):

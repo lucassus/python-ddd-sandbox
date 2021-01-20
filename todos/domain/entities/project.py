@@ -17,7 +17,7 @@ class Project:
     tasks: List[Task] = field(default_factory=list)
 
     def add_task(self, *, name: str) -> Task:
-        ensure.max_incomplete_tasks_number_is_not_reached(self)
+        ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
         task = Task(name=name)
         self.tasks.append(task)
@@ -34,7 +34,7 @@ class Project:
         task = self.get_task(id)
         task.incomplete()
 
-        ensure.max_incomplete_tasks_number_is_not_reached(self)
+        ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
         return task
 

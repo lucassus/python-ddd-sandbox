@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from todos.domain.entities import Project
 
 
-def max_incomplete_tasks_number_is_not_reached(project: "Project") -> None:
+def project_has_allowed_number_of_incomplete_tasks(project: "Project") -> None:
     if project.max_incomplete_tasks_number is None:
         return
 

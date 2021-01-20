@@ -5,12 +5,12 @@ from todos.domain.errors import MaxIncompleteTasksNumberIsReached
 from todos.test_utils.factories import build_project, build_task
 
 
-class TestEnsureAllowedNumberOfUnfinishedTasksIsNotReached:
+class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:
     def test_passes_if_max_incomplete_tasks_number_is_none(self):
         project = build_project(max_incomplete_tasks_number=None)
 
         try:
-            ensure.max_incomplete_tasks_number_is_not_reached(project)
+            ensure.project_has_allowed_number_of_incomplete_tasks(project)
         except MaxIncompleteTasksNumberIsReached:
             pytest.fail()
 
@@ -19,7 +19,7 @@ class TestEnsureAllowedNumberOfUnfinishedTasksIsNotReached:
         project.tasks.append(build_task())
 
         try:
-            ensure.max_incomplete_tasks_number_is_not_reached(project)
+            ensure.project_has_allowed_number_of_incomplete_tasks(project)
         except MaxIncompleteTasksNumberIsReached:
             pytest.fail()
 
@@ -29,4 +29,4 @@ class TestEnsureAllowedNumberOfUnfinishedTasksIsNotReached:
         project.tasks.append(build_task())
 
         with pytest.raises(MaxIncompleteTasksNumberIsReached):
-            ensure.max_incomplete_tasks_number_is_not_reached(project)
+            ensure.project_has_allowed_number_of_incomplete_tasks(project)

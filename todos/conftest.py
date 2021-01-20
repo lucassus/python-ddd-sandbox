@@ -1,17 +1,11 @@
 import os
 
 import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
 from todos.adapters.db.tables import metadata, start_mappers
-from todos.adapters.db.unit_of_work import UnitOfWork
-from todos.entrypoints.api.dependencies import get_uow
-from todos.entrypoints.api.routes import api_router
-from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 start_mappers()
 
@@ -49,23 +43,3 @@ def session(request, db_connection):
     session = Session(bind=db_connection)
     yield session
     session.close()
-
-
-@pytest.fixture
-def client(request):
-    app = FastAPI()
-    app.include_router(api_router)
-
-    if "integration" in request.keywords:
-        # For tests marked as "integration" create Unit Of Work
-        # instance that uses the database...
-        session = request.getfixturevalue("session")
-        uow = UnitOfWork(session_factory=lambda: session)
-    else:
-        # ...otherwise go with the fake implementation.
-        uow = FakeUnitOfWork(projects=[])
-
-    app.dependency_overrides[get_uow] = lambda: uow
-
-    with uow:
-        yield TestClient(app)

@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
-from todos.adapters.db.tables import metadata, start_mappers
+from todos.adapters.db.tables import create_tables, start_mappers
 
 start_mappers()
 
@@ -17,7 +17,7 @@ def db_engine() -> Engine:
         f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
     )
 
-    metadata.create_all(bind=engine)
+    create_tables(engine)
 
     return engine
 

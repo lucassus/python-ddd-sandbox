@@ -1,11 +1,10 @@
-import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-db_file = os.path.join(os.path.dirname(__file__), "../../../todos.db")
+from todos.adapters.db.config import DB_URL
+
 engine = create_engine(
-    f"sqlite:///{db_file}",
+    DB_URL,
     connect_args={"check_same_thread": False},
     echo=True,
 )

@@ -3,6 +3,7 @@ from datetime import date, datetime
 from fastapi import Depends, HTTPException
 from starlette import status
 
+from todos.adapters.db.session import get_session
 from todos.adapters.db.unit_of_work import UnitOfWork
 from todos.domain.entities import Project
 from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
@@ -14,7 +15,7 @@ def get_current_time() -> date:
 
 
 def get_uow():
-    with UnitOfWork() as uow:
+    with UnitOfWork(session_factory=get_session) as uow:
         yield uow
 
 

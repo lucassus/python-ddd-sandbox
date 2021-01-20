@@ -3,12 +3,12 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
-from todos.adapters.db.session import SessionLocal, engine
+from todos.adapters.db.session import engine, get_session
 from todos.adapters.db.tables import create_tables, drop_tables, start_mappers
 from todos.domain.entities import Project
 
 start_mappers()
-session = SessionLocal()
+session = get_session()
 
 
 def main(rebuild_db: bool = True):

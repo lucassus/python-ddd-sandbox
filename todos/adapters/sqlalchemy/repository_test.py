@@ -1,6 +1,6 @@
 import pytest
 
-from todos.adapters.db.repository import Repository
+from todos.adapters.sqlalchemy.repository import Repository
 from todos.domain.entities import Project
 
 

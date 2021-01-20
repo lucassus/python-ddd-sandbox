@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from todos.adapters.db.unit_of_work import UnitOfWork
+from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
 from todos.entrypoints.api.dependencies import get_uow
 from todos.entrypoints.api.routes import api_router
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork

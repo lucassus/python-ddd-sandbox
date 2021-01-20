@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from todos.adapters.db.config import DB_URL
+from todos.adapters.sqlalchemy.config import DB_URL
 
 engine = create_engine(
     DB_URL,

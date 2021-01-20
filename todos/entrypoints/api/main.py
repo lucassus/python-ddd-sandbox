@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from todos.adapters.db.session import engine
-from todos.adapters.db.tables import create_tables, start_mappers
+from todos.adapters.sqlalchemy.session import engine
+from todos.adapters.sqlalchemy.tables import create_tables, start_mappers
 from todos.entrypoints.api.routes import api_router
 
 create_tables(engine)

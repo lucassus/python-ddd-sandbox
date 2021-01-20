@@ -1,8 +1,10 @@
 VENV_DIR=venv
 
 venv:
-	python3.9 -m venv $(VENV_DIR)
-	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
+	@if [ ! -d "$(VENV_DIR)" ]; then \
+		python3.9 -m venv $(VENV_DIR) \
+		@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate" \
+	fi
 
 deps-pre:
 	pip install pip-tools

@@ -3,8 +3,9 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
-from todos.adapters.db.tables import start_mappers
-from todos.adapters.db.unit_of_work import UnitOfWork
+from todos.adapters.sqlalchemy.session import get_session
+from todos.adapters.sqlalchemy.tables import start_mappers
+from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
 from todos.domain.errors import TaskNotFoundError
 from todos.service_layer.service import Service
 
@@ -12,7 +13,7 @@ app = typer.Typer()
 
 
 start_mappers()
-uow = UnitOfWork()
+uow = UnitOfWork(session_factory=get_session)
 service = Service(project_id=1, uow=uow)
 
 

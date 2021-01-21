@@ -1,7 +1,7 @@
 from datetime import date
 
 from todos.domain.entities import Task
-from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
+from todos.service_layer.ports import AbstractUnitOfWork
 
 
 class Service:

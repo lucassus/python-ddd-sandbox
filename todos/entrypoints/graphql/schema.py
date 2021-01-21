@@ -11,7 +11,7 @@ from graphene import (
 )
 
 from todos.domain.errors import MaxIncompleteTasksNumberIsReached
-from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
+from todos.service_layer.ports import AbstractUnitOfWork
 from todos.service_layer.service import Service
 
 

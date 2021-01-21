@@ -15,8 +15,12 @@ def get_current_time() -> date:
 
 
 def get_uow():
-    with UnitOfWork(session_factory=get_session) as uow:
-        yield uow
+    session = get_session()
+
+    try:
+        yield UnitOfWork(session=session)
+    except:  # noqa
+        session.close()
 
 
 def get_project(

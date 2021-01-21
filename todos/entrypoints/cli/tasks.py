@@ -13,7 +13,7 @@ app = typer.Typer()
 
 
 start_mappers()
-uow = UnitOfWork(session_factory=get_session)
+uow = UnitOfWork(session=get_session())
 service = Service(project_id=1, uow=uow)
 
 

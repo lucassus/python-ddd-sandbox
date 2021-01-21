@@ -17,7 +17,7 @@ def client(request):
         # For tests marked as "integration" create Unit Of Work
         # instance that uses the database...
         session = request.getfixturevalue("session")
-        uow = UnitOfWork(session_factory=lambda: session)
+        uow = UnitOfWork(session=session)
     else:
         # ...otherwise go with the fake implementation.
         uow = FakeUnitOfWork(projects=[])

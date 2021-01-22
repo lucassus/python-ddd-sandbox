@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from unittest import mock
 
-from examples.message_bus.baseevent import BaseEvent
-from examples.message_bus.message_bus import MessageBus
+from examples.message_bus.message_bus import BaseEvent, MessageBus
 
 
 @dataclass

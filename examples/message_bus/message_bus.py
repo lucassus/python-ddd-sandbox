@@ -1,7 +1,10 @@
+import abc
 from collections import defaultdict
 from typing import Callable, Dict, List
 
-from examples.message_bus.baseevent import BaseEvent
+
+class BaseEvent(abc.ABC):
+    pass
 
 
 class MessageBus:

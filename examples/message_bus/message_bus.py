@@ -1,10 +1,12 @@
-from typing import Any, Callable
+from collections import defaultdict
+from typing import Any, Callable, Dict, List
 
 from examples.message_bus.event import Event
 
 
 class MessageBus:
-    _listeners = {}
+    def __init__(self):
+        self._listeners: Dict[type, List[Callable]] = defaultdict(list)
 
     # TODO: How to type a class?
     def listen(self, event_class, handler: Callable[[Any, Event], None]):

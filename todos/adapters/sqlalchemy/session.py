@@ -6,7 +6,7 @@ from todos.adapters.sqlalchemy.config import DB_URL
 engine = create_engine(
     DB_URL,
     connect_args={"check_same_thread": False},
-    echo=True,
+    echo=False,
 )
 
 session_factory = sessionmaker(

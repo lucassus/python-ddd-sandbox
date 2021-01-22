@@ -12,7 +12,9 @@ router = APIRouter()
 
 @router.get("", response_model=List[schemas.Project], name="Returns list of projects")
 def projects_endpoint(uow: AbstractUnitOfWork = Depends(get_uow)):
-    return uow.repository.list()
+    # TODO: Refactor it
+    with uow:
+        return uow.repository.list()
 
 
 @router.get("/{project_id}", response_model=schemas.Project)

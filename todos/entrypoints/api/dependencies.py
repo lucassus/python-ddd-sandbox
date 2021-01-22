@@ -1,7 +1,6 @@
 from datetime import date, datetime
 
-from fastapi import Depends, HTTPException
-from starlette import status
+from fastapi import Depends, HTTPException, status
 
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
@@ -21,13 +20,16 @@ def get_uow():
         yield UnitOfWork(session=session)
     except:  # noqa
         session.close()
+        raise
 
 
 def get_project(
     project_id: int,
     uow: AbstractUnitOfWork = Depends(get_uow),
 ) -> Project:
-    project = uow.repository.get(project_id)
+    # TODO: Hmmmm... it does not look right
+    with uow:
+        project = uow.repository.get(project_id)
 
     if project is None:
         raise HTTPException(

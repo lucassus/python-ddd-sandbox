@@ -1,7 +1,7 @@
 from typing import List
 
 from todos.domain.entities import Project
-from todos.service_layer.ports import AbstractUnitOfWork
+from todos.domain.ports import AbstractUnitOfWork
 from todos.test_utils.fake_repository import FakeRepository
 
 

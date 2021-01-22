@@ -7,7 +7,7 @@ from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.tables import start_mappers
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
 from todos.domain.errors import TaskNotFoundError
-from todos.service_layer.service import Service
+from todos.domain.service import Service
 
 app = typer.Typer()
 

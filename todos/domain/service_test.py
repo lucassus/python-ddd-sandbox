@@ -1,6 +1,6 @@
 from datetime import date
 
-from todos.service_layer.service import Service
+from todos.domain.service import Service
 from todos.test_utils.factories import build_project, build_task
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 

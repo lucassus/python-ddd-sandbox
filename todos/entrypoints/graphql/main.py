@@ -3,9 +3,9 @@ from starlette.datastructures import URL
 from starlette.graphql import GraphQLApp
 
 from todos.adapters.sqlalchemy.tables import start_mappers
+from todos.domain.ports import AbstractUnitOfWork
 from todos.entrypoints.graphql.dependencies import get_uow
 from todos.entrypoints.graphql.schema import schema
-from todos.service_layer.ports import AbstractUnitOfWork
 
 start_mappers()
 

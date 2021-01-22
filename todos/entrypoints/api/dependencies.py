@@ -6,8 +6,8 @@ from starlette import status
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
 from todos.domain.entities import Project
-from todos.service_layer.ports import AbstractUnitOfWork
-from todos.service_layer.service import Service
+from todos.domain.ports import AbstractUnitOfWork
+from todos.domain.service import Service
 
 
 def get_current_time() -> date:

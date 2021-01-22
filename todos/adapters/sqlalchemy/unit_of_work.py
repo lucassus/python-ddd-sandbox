@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from todos.adapters.sqlalchemy.repository import Repository
-from todos.service_layer.ports import AbstractUnitOfWork
+from todos.domain.ports import AbstractUnitOfWork
 
 
 class UnitOfWork(AbstractUnitOfWork):

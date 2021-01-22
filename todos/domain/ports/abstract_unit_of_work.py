@@ -1,6 +1,6 @@
 import abc
 
-from todos.service_layer.ports import AbstractRepository
+from todos.domain.ports import AbstractRepository
 
 
 class AbstractUnitOfWork(abc.ABC):

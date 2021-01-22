@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from todos.domain.entities import Project
+from todos.domain.ports import AbstractUnitOfWork
 from todos.entrypoints.api import schemas
 from todos.entrypoints.api.dependencies import get_project, get_uow
-from todos.service_layer.ports import AbstractUnitOfWork
 
 router = APIRouter()
 

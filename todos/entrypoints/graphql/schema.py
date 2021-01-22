@@ -11,8 +11,8 @@ from graphene import (
 )
 
 from todos.domain.errors import MaxIncompleteTasksNumberIsReached
-from todos.service_layer.ports import AbstractUnitOfWork
-from todos.service_layer.service import Service
+from todos.domain.ports import AbstractUnitOfWork
+from todos.domain.service import Service
 
 
 class Task(ObjectType):

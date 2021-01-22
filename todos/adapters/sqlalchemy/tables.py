@@ -5,7 +5,7 @@ from todos.domain.entities import Project, Task
 
 metadata = MetaData()
 
-projects = Table(
+projects_table = Table(
     "projects",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
@@ -13,7 +13,7 @@ projects = Table(
     Column("max_incomplete_tasks_number", Integer),
 )
 
-tasks = Table(
+tasks_table = Table(
     "tasks",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
@@ -34,10 +34,10 @@ def create_tables(engine):
 def start_mappers():
     mapper(
         Project,
-        projects,
+        projects_table,
         properties={
-            "tasks": relationship(Task, order_by=tasks.c.id),
+            "tasks": relationship(Task, order_by=tasks_table.c.id),
         },
     )
 
-    mapper(Task, tasks)
+    mapper(Task, tasks_table)

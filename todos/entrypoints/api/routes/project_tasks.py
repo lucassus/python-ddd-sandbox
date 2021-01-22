@@ -32,14 +32,15 @@ def task_create_endpoint(
     request: Request,
     service: Service = Depends(get_service),
 ):
-    task = service.create_task(data.name)
+    task_id = service.create_task(data.name)
 
     return RedirectResponse(
-        url=request.url_for("task_endpoint", project_id=project_id, id=task.id),
+        url=request.url_for("task_endpoint", project_id=project_id, id=task_id),
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
 
+# TODO: Benchmark this endpoint
 # TODO: Consider move it to the separate module
 # TODO: Figure out how to create abstraction layer for raw sqls
 @router.get("/{id}", response_model=schemas.Task)

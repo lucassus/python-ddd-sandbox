@@ -13,14 +13,9 @@ def get_current_time() -> date:
     return datetime.utcnow()
 
 
+# TODO: Bring back the old idea with true context manager
 def get_uow():
-    session = get_session()
-
-    try:
-        yield UnitOfWork(session=session)
-    except:  # noqa
-        session.close()
-        raise
+    return UnitOfWork(session_factory=get_session)
 
 
 def get_project(

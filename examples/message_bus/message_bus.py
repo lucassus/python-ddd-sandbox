@@ -1,11 +1,20 @@
+from typing import Any, Callable
+
+from examples.message_bus.event import Event
+
+
 class MessageBus:
-    def __init__(self):
-        self._listeners = {}
+    _listeners = {}
 
-    def listen(self, event_class, handler):
-        self._listeners = {event_class: handler}
+    # TODO: How to type a class?
+    def listen(self, event_class, handler: Callable[[Any, Event], None]):
+        if event_class not in self._listeners:
+            self._listeners[event_class] = []
 
-    def dispatch(self, event) -> None:
-        for event_class, handler in self._listeners.items():
-            if isinstance(event, event_class):
-                handler(event)
+        self._listeners[event_class].append(handler)
+
+    def dispatch(self, event: Event) -> None:
+        handlers = self._listeners.get(type(event), [])
+
+        for handle in handlers:
+            handle(event)

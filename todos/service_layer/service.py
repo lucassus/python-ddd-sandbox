@@ -1,7 +1,7 @@
 from datetime import date
 
-from todos.domain.entities import Project, Task
-from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
+from todos.domain.entities import Task
+from todos.service_layer.ports import AbstractUnitOfWork
 
 
 class Service:
@@ -10,32 +10,28 @@ class Service:
         self._uow = uow
 
     def create_task(self, name: str) -> Task:
-        project = self.get_project()
-        task = project.add_task(name=name)
+        with self._uow as uow:
+            project = uow.repository.get(self._project_id)
+            task = project.add_task(name=name)
 
-        self._uow.commit()
+            uow.commit()
 
         return task
 
     def complete_task(self, id: int, *, now: date):
-        project = self.get_project()
-        task = project.complete_task(id, now)
+        with self._uow as uow:
+            project = uow.repository.get(self._project_id)
+            task = project.complete_task(id, now)
 
-        self._uow.commit()
-
-        # TODO: Send a notification
+            uow.commit()
 
         return task
 
     def incomplete_task(self, id: int):
-        project = self.get_project()
-        task = project.incomplete_task(id)
+        with self._uow as uow:
+            project = uow.repository.get(self._project_id)
+            task = project.incomplete_task(id)
 
-        self._uow.commit()
+            uow.commit()
 
         return task
-
-    def get_project(self) -> Project:
-        project = self._uow.repository.get(self._project_id)
-        assert project
-        return project

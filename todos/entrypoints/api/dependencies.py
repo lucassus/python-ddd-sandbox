@@ -6,7 +6,7 @@ from starlette import status
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
 from todos.domain.entities import Project
-from todos.service_layer.abstract_unit_of_work import AbstractUnitOfWork
+from todos.service_layer.ports import AbstractUnitOfWork
 from todos.service_layer.service import Service
 
 
@@ -15,8 +15,12 @@ def get_current_time() -> date:
 
 
 def get_uow():
-    with UnitOfWork(session_factory=get_session) as uow:
-        yield uow
+    session = get_session()
+
+    try:
+        yield UnitOfWork(session=session)
+    except:  # noqa
+        session.close()
 
 
 def get_project(

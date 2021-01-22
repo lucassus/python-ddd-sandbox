@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from todos.domain.entities import Project
-from todos.service_layer.abstract_repository import AbstractRepository
+from todos.service_layer.ports import AbstractRepository
 
 
 class FakeRepository(AbstractRepository):

@@ -40,6 +40,8 @@ def task_create_endpoint(
     )
 
 
+# TODO: Consider move it to the separate module
+# TODO: Figure out how to create abstraction layer for raw sqls
 @router.get("/{id}", response_model=schemas.Task)
 def task_endpoint(
     project_id: int,

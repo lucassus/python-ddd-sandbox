@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 from unittest import mock
 
-from examples.message_bus.event import Event
+from examples.message_bus.baseevent import BaseEvent
 from examples.message_bus.message_bus import MessageBus
 
 
 @dataclass
-class SomeEvent(Event):
+class SomeEvent(BaseEvent):
     message: str
 
 
 @dataclass
-class SomeOtherEvent(Event):
+class SomeOtherEvent(BaseEvent):
     id: int
 
 

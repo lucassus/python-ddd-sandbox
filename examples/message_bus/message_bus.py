@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import Callable, Dict, List
 
-from examples.message_bus.event import Event
+from examples.message_bus.baseevent import BaseEvent
 
 
 class MessageBus:
@@ -14,7 +14,7 @@ class MessageBus:
 
         return on(fn) if fn else on
 
-    def dispatch(self, event: Event) -> None:
+    def dispatch(self, event: BaseEvent) -> None:
         handlers = self._listeners[type(event)]
 
         for handle in handlers:

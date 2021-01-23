@@ -1,11 +1,11 @@
 from datetime import date, datetime
 
+from databases import Database
 from fastapi import Depends, HTTPException, status
 
+from todos.adapters.sqlalchemy.config import DB_URL
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
-from todos.domain.entities import Project
-from todos.domain.ports import AbstractUnitOfWork
 from todos.domain.service import Service
 
 
@@ -18,21 +18,20 @@ def get_uow():
     return UnitOfWork(session_factory=get_session)
 
 
-def get_project(
-    project_id: int,
-    uow: AbstractUnitOfWork = Depends(get_uow),
-) -> Project:
-    # TODO: Hmmmm... it does not look right
-    with uow:
-        project = uow.repository.get(project_id)
+# TODO: Rename this dependency
+async def get_project(project_id: int) -> None:
+    # TODO: Create a dependency for database?
+    async with Database(DB_URL) as database:
+        project = await database.fetch_one(
+            "SELECT id FROM projects WHERE id = :id",
+            values={"id": project_id},
+        )
 
     if project is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Unable to find a project with ID={project_id}",
         )
-
-    return project
 
 
 def get_service(

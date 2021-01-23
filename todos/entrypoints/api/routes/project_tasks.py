@@ -21,9 +21,12 @@ router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.Task], name="Returns list of tasks_table")
-def tasks_endpoint(project: Project = Depends(get_project)):
-
-    return project.tasks
+async def tasks_endpoint(project_id: int):
+    async with Database(DB_URL) as database:
+        query = select([tasks_table]).where(
+            and_(tasks_table.c.project_id == project_id)
+        )
+        return await database.fetch_all(query=query)
 
 
 @router.post("")

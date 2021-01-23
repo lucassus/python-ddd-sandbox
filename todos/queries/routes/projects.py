@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from todos.adapters.sqlalchemy.tables import projects_table
 from todos.queries import schemas
-from todos.queries.databases import database
+from todos.queries.database import database
 
 router = APIRouter()
 

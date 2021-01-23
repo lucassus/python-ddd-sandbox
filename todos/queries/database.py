@@ -1,4 +1,4 @@
-from databases import Database
+from database import Database
 
 from todos.config import DB_URL
 

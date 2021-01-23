@@ -27,16 +27,31 @@ def task_create_endpoint(
 
 @router.put("/{id}/complete")
 def task_complete_endpoint(
+    request: Request,
+    project_id: int,
     id: int = Path(..., description="The ID of the task", ge=1),
     service: Service = Depends(get_service),
     now: date = Depends(get_current_time),
 ):
-    return service.complete_task(id, now=now)
+    service.complete_task(id, project_id=project_id, now=now)
+
+    return RedirectResponse(
+        url=request.url_for("task_endpoint", project_id=project_id, id=id),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
 
 
 @router.put("/{id}/incomplete")
 def task_incomplete_endpoint(
+    request: Request,
+    project_id: int,
     id: int = Path(..., description="The ID of the task", ge=1),
     service: Service = Depends(get_service),
 ):
-    return service.incomplete_task(id)
+    service.incomplete_task(id, project_id=project_id)
+
+    # TODO: Figure out how to dry it
+    return RedirectResponse(
+        url=request.url_for("task_endpoint", project_id=project_id, id=id),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )

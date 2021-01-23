@@ -1,36 +1,32 @@
 from datetime import date
 
-from todos.domain.entities import Task
 from todos.domain.ports import AbstractUnitOfWork
 
 
 class Service:
-    def __init__(self, *, project_id: int, uow: AbstractUnitOfWork):
-        self._project_id = project_id
+    def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def create_task(self, name: str) -> id:
+    def create_task(self, *, project_id, name: str) -> id:
         with self._uow as uow:
-            project = uow.repository.get(self._project_id)
+            project = uow.repository.get(project_id)
             task = project.add_task(name=name)
 
             uow.commit()
             return task.id
 
-    def complete_task(self, id: int, *, now: date):
+    def complete_task(self, id: int, *, project_id: int, now: date) -> int:
         with self._uow as uow:
-            project = uow.repository.get(self._project_id)
+            project = uow.repository.get(project_id)
             task = project.complete_task(id, now)
 
             uow.commit()
+            return task.id
 
-        return task
-
-    def incomplete_task(self, id: int):
+    def incomplete_task(self, id: int, *, project_id: int) -> int:
         with self._uow as uow:
-            project = uow.repository.get(self._project_id)
+            project = uow.repository.get(project_id)
             task = project.incomplete_task(id)
 
             uow.commit()
-
-        return task
+            return task.id

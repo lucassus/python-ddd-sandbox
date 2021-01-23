@@ -20,7 +20,7 @@ def get_uow():
 # TODO: Rename this dependency
 async def get_project(project_id: int) -> None:
     pass
-    # TODO: Create a dependency for database?
+    # TODO: Do not use database here, since it belongs to queries app
     project = await database.fetch_one(
         "SELECT id FROM projects WHERE id = :id",
         values={"id": project_id},
@@ -33,8 +33,5 @@ async def get_project(project_id: int) -> None:
         )
 
 
-def get_service(
-    project_id: int,
-    uow=Depends(get_uow),
-) -> Service:
-    return Service(project_id=project_id, uow=uow)
+def get_service(uow=Depends(get_uow)) -> Service:
+    return Service(uow=uow)

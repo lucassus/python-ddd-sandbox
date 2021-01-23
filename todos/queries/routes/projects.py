@@ -10,6 +10,9 @@ from todos.queries.databases import database
 router = APIRouter()
 
 
+# TODO: Write test
+
+
 @router.get(
     "",
     response_model=List[schemas.Project],

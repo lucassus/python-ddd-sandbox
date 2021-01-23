@@ -1,6 +1,8 @@
 from datetime import date, datetime
 
 from fastapi import Depends, HTTPException, status
+from starlette.requests import Request
+from starlette.responses import RedirectResponse
 
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
@@ -35,3 +37,12 @@ async def get_project(project_id: int) -> None:
 
 def get_service(uow=Depends(get_uow)) -> Service:
     return Service(uow=uow)
+
+
+class SeeOtherRedirect:
+    def __init__(self, request: Request):
+        self._request = request
+
+    def __call__(self, name: str, **path_params):
+        url = self._request.url_for(name, **path_params)
+        return RedirectResponse(url, status_code=status.HTTP_303_SEE_OTHER)

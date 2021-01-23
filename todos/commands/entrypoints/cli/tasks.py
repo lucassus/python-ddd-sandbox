@@ -13,8 +13,8 @@ app = typer.Typer()
 
 
 start_mappers()
-uow = UnitOfWork(session=get_session())
-service = Service(project_id=1, uow=uow)
+uow = UnitOfWork(session_factory=get_session)
+service = Service(uow=uow)
 
 
 @app.command(help="Prints the list of all tasks")
@@ -37,7 +37,7 @@ def create(
     project = uow.repository.get(1)
     assert project
 
-    service.create_task(name)
+    service.create_task(name=name, project_id=1)
     list()
 
 
@@ -47,7 +47,7 @@ def complete(id: int = typer.Option(..., help="ID of task to complete")):
     assert project
 
     try:
-        service.complete_task(id, now=datetime.utcnow())
+        service.complete_task(project_id=1, id=id, now=datetime.utcnow())
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)
@@ -60,7 +60,7 @@ def incomplete(id: int = typer.Option(..., help="ID of task to incomplete")):
     assert project
 
     try:
-        service.incomplete_task(id)
+        service.incomplete_task(project_id=1, id=id)
         list()
     except TaskNotFoundError:
         typer.secho(f"Cannot find a task with ID={id}", fg=typer.colors.RED)

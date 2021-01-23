@@ -1,20 +1,25 @@
-from todos.commands.entrypoints.api.dependencies import get_uow
-from todos.test_utils.factories import build_project
-from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
+import pytest
+
+from todos.infrastructure.database import database
+
+# TODO: Figure out how to seed the database in a more convenient way
+# TODO: See https://www.encode.io/databases/tests_and_migrations/
 
 
-def test_projects_endpoint_returns_list_of_projects(client):
+@pytest.mark.asyncio
+async def test_projects_endpoint_returns_list_of_projects(client):
     # Given
-    fake_uow = FakeUnitOfWork(
-        projects=[
-            build_project(id=1, name="Project One"),
-            build_project(id=2, name="Project Two"),
-        ]
-    )
-    client.app.dependency_overrides[get_uow] = lambda: fake_uow
+    await database.execute("DELETE FROM projects")
+
+    query = "INSERT INTO projects(name) VALUES (:name)"
+    values = [
+        {"name": "Project One"},
+        {"name": "Project Two"},
+    ]
+    await database.execute_many(query=query, values=values)
 
     # When
-    response = client.get("/projects")
+    response = await client.get("/projects")
 
     # Then
     assert response.status_code == 200
@@ -24,30 +29,30 @@ def test_projects_endpoint_returns_list_of_projects(client):
     ]
 
 
-def test_project_endpoint_returns_the_project(client):
+@pytest.mark.asyncio
+async def test_project_endpoint_returns_the_project(client):
     # Given
-    fake_uow = FakeUnitOfWork(
-        projects=[
-            build_project(id=1, name="Project One"),
-        ]
-    )
-    client.app.dependency_overrides[get_uow] = lambda: fake_uow
+    await database.execute("DELETE FROM projects")
+
+    query = "INSERT INTO projects(name) VALUES (:name)"
+    values = [{"name": "Project One"}]
+    await database.execute_many(query=query, values=values)
 
     # When
-    response = client.get("/projects/1")
+    response = await client.get("/projects/1")
 
     # Then
     assert response.status_code == 200
     assert response.json() == {"id": 1, "name": "Project One"}
 
 
-def test_project_endpoint_responds_with_404_if_project_cannot_be_found(client):
+@pytest.mark.asyncio
+async def test_project_endpoint_responds_with_404_if_project_cannot_be_found(client):
     # Given
-    fake_uow = FakeUnitOfWork(projects=[])
-    client.app.dependency_overrides[get_uow] = lambda: fake_uow
+    await database.execute("DELETE FROM projects")
 
     # When
-    response = client.get("/projects/1")
+    response = await client.get("/projects/1")
 
     # Then
     assert response.status_code == 404

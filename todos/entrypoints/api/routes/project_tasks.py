@@ -1,11 +1,12 @@
 from datetime import date
 from typing import List
 
+from databases import Database
 from fastapi import APIRouter, Depends, Path, Request, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy import and_, select
 
-from todos.adapters.sqlalchemy.session import engine
+from todos.adapters.sqlalchemy.config import DB_URL
 from todos.adapters.sqlalchemy.tables import tasks_table
 from todos.domain.entities import Project
 from todos.domain.service import Service
@@ -40,19 +41,23 @@ def task_create_endpoint(
     )
 
 
-# TODO: Benchmark this endpoint
 # TODO: Consider move it to the separate module
 # TODO: Figure out how to create abstraction layer for raw sqls
 @router.get("/{id}", response_model=schemas.Task)
-def task_endpoint(
+async def task_endpoint(
     project_id: int,
     id: int = Path(..., description="The ID of the task", ge=1),
 ):
-    with engine.connect() as connection:
-        stmt = select([tasks_table]).where(
+    async with Database(DB_URL) as database:
+        query = select([tasks_table]).where(
             and_(tasks_table.c.id == id, tasks_table.c.project_id == project_id)
         )
-        return connection.execute(stmt).fetchone()
+        row = await database.fetch_one(query=query)
+
+        # query = "SELECT * FROM tasks WHERE project_id = :project_id AND id = :id"
+        # row = await database.fetch_one(query=query, values={"project_id": project_id, "id": id})
+
+        return row
 
 
 @router.put("/{id}/complete", response_model=schemas.Task)

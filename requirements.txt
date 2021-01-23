@@ -4,6 +4,8 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
+aiosqlite==0.16.0
+    # via -r requirements.in
 aniso8601==7.0.0
     # via graphene
 appdirs==1.4.4
@@ -25,6 +27,8 @@ colorama==0.4.4
     # via pytest-watch
 coverage==5.3.1
     # via pytest-cov
+databases==0.4.1
+    # via -r requirements.in
 docopt==0.6.2
     # via pytest-watch
 fastapi==0.63.0
@@ -109,7 +113,9 @@ six==1.15.0
 sqlalchemy-stubs==0.3
     # via -r requirements.in
 sqlalchemy==1.3.22
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   databases
 starlette==0.13.6
     # via fastapi
 tabulate==0.8.7
@@ -126,6 +132,7 @@ typer==0.3.2
     # via -r requirements.in
 typing-extensions==3.7.4.3
     # via
+    #   aiosqlite
     #   black
     #   mypy
     #   sqlalchemy-stubs

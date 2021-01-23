@@ -10,7 +10,6 @@ def create_app() -> FastAPI:
 
     @app.on_event("startup")
     async def startup():
-        # TODO: Can it be injected?
         await database.connect()
 
     @app.on_event("shutdown")

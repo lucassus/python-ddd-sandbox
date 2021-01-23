@@ -3,6 +3,7 @@ from datetime import date, datetime
 from databases import Database
 from fastapi import Depends, HTTPException, status
 
+from todos.adapters.databases import database
 from todos.adapters.sqlalchemy.config import DB_URL
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
@@ -20,12 +21,12 @@ def get_uow():
 
 # TODO: Rename this dependency
 async def get_project(project_id: int) -> None:
+    pass
     # TODO: Create a dependency for database?
-    async with Database(DB_URL) as database:
-        project = await database.fetch_one(
-            "SELECT id FROM projects WHERE id = :id",
-            values={"id": project_id},
-        )
+    project = await database.fetch_one(
+        "SELECT id FROM projects WHERE id = :id",
+        values={"id": project_id},
+    )
 
     if project is None:
         raise HTTPException(

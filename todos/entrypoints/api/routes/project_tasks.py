@@ -1,32 +1,23 @@
 from datetime import date
 from typing import List
 
-from databases import Database
 from fastapi import APIRouter, Depends, Path, Request, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy import and_, select
 
-from todos.adapters.sqlalchemy.config import DB_URL
+from todos.adapters.databases import database
 from todos.adapters.sqlalchemy.tables import tasks_table
-from todos.domain.entities import Project
 from todos.domain.service import Service
 from todos.entrypoints.api import schemas
-from todos.entrypoints.api.dependencies import (
-    get_current_time,
-    get_project,
-    get_service,
-)
+from todos.entrypoints.api.dependencies import get_current_time, get_service
 
 router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.Task], name="Returns list of tasks_table")
 async def tasks_endpoint(project_id: int):
-    async with Database(DB_URL) as database:
-        query = select([tasks_table]).where(
-            and_(tasks_table.c.project_id == project_id)
-        )
-        return await database.fetch_all(query=query)
+    query = select([tasks_table]).where(and_(tasks_table.c.project_id == project_id))
+    return await database.fetch_all(query=query)
 
 
 @router.post("")
@@ -45,22 +36,22 @@ def task_create_endpoint(
 
 
 # TODO: Consider move it to the separate module
+# TODO: Consider use fastapi sub app - https://fastapi.tiangolo.com/advanced/sub-applications/
 # TODO: Figure out how to create abstraction layer for raw sqls
 @router.get("/{id}", response_model=schemas.Task)
 async def task_endpoint(
     project_id: int,
     id: int = Path(..., description="The ID of the task", ge=1),
 ):
-    async with Database(DB_URL) as database:
-        query = select([tasks_table]).where(
-            and_(tasks_table.c.id == id, tasks_table.c.project_id == project_id)
-        )
-        row = await database.fetch_one(query=query)
+    query = select([tasks_table]).where(
+        and_(tasks_table.c.id == id, tasks_table.c.project_id == project_id)
+    )
+    row = await database.fetch_one(query=query)
 
-        # query = "SELECT * FROM tasks WHERE project_id = :project_id AND id = :id"
-        # row = await database.fetch_one(query=query, values={"project_id": project_id, "id": id})
+    # query = "SELECT * FROM tasks WHERE project_id = :project_id AND id = :id"
+    # row = await database.fetch_one(query=query, values={"project_id": project_id, "id": id})
 
-        return row
+    return row
 
 
 @router.put("/{id}/complete", response_model=schemas.Task)

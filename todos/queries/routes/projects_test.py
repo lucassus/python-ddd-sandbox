@@ -1,4 +1,4 @@
-from todos.entrypoints.api.dependencies import get_uow
+from todos.commands.entrypoints.api.dependencies import get_uow
 from todos.test_utils.factories import build_project
 from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
 

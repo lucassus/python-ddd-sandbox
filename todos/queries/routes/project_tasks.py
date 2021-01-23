@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Path
 from sqlalchemy import and_, select
 
-from todos.adapters.sqlalchemy.tables import tasks_table
+from todos.infrastructure.database import database
+from todos.infrastructure.tables import tasks_table
 from todos.queries import schemas
-from todos.queries.database import database
 
 router = APIRouter()
 

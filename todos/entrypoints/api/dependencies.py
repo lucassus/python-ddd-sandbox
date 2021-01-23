@@ -1,13 +1,11 @@
 from datetime import date, datetime
 
-from databases import Database
 from fastapi import Depends, HTTPException, status
 
-from todos.adapters.databases import database
-from todos.adapters.sqlalchemy.config import DB_URL
 from todos.adapters.sqlalchemy.session import get_session
 from todos.adapters.sqlalchemy.unit_of_work import UnitOfWork
 from todos.domain.service import Service
+from todos.queries.databases import database
 
 
 def get_current_time() -> date:

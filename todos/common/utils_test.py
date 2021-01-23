@@ -1,6 +1,6 @@
 import pytest
 
-from todos.utils import camelize
+from todos.common.utils import camelize
 
 
 @pytest.mark.parametrize(

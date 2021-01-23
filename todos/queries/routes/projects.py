@@ -1,0 +1,26 @@
+from typing import List
+
+from fastapi import APIRouter
+from sqlalchemy import select
+
+from todos.adapters.sqlalchemy.tables import projects_table
+from todos.queries import schemas
+from todos.queries.databases import database
+
+router = APIRouter()
+
+
+@router.get(
+    "",
+    response_model=List[schemas.Project],
+    name="Returns list of projects",
+)
+async def projects_endpoint():
+    query = select([projects_table])
+    return await database.fetch_all(query=query)
+
+
+@router.get("/{id}", response_model=schemas.Project)
+async def project_endpoint(id: int):
+    query = select([projects_table]).where(projects_table.c.id == id)
+    return await database.fetch_one(query=query)

@@ -1,7 +1,7 @@
 import json
 from datetime import date
 
-from todos.entrypoints.api.schemas import Task
+from todos.queries.schemas import Task
 
 
 def test_task_schema_serialize():

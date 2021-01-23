@@ -20,7 +20,7 @@ deps: deps-pre deps-compile deps-install
 install: deps-pre deps-install
 
 api-server-dev:
-	uvicorn todos.entrypoints.api.main:app --reload
+	uvicorn todos.main:app --reload
 
 graphql-server-dev:
 	uvicorn todos.entrypoints.graphql.main:app --reload

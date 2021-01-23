@@ -6,8 +6,8 @@ from todos.commands.domain.entities import Project, Task
 
 def build_project(
     *,
-    name: str = "Test project",
     id: Optional[int] = None,
+    name: str = "Test project",
     max_incomplete_tasks_number: Optional[int] = None,
 ) -> Project:
     project = Project(
@@ -23,8 +23,8 @@ def build_project(
 
 def build_task(
     *,
-    name: str = "Test task",
     id: Optional[int] = None,
+    name: str = "Test task",
     completed_at: Optional[date] = None,
 ) -> Task:
     task = Task(name=name, completed_at=completed_at)

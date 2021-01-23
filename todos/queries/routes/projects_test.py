@@ -4,19 +4,21 @@ from todos.infrastructure.database import database
 
 # TODO: Figure out how to seed the database in a more convenient way
 # TODO: See https://www.encode.io/databases/tests_and_migrations/
+from todos.infrastructure.tables import projects_table
 
 
 @pytest.mark.asyncio
 async def test_projects_endpoint_returns_list_of_projects(client):
     # Given
-    await database.execute("DELETE FROM projects")
+    await database.execute(projects_table.delete())
 
-    query = "INSERT INTO projects(name) VALUES (:name)"
-    values = [
-        {"name": "Project One"},
-        {"name": "Project Two"},
-    ]
-    await database.execute_many(query=query, values=values)
+    await database.execute_many(
+        query=projects_table.insert(),
+        values=[
+            {"name": "Project One"},
+            {"name": "Project Two"},
+        ],
+    )
 
     # When
     response = await client.get("/projects")
@@ -32,11 +34,12 @@ async def test_projects_endpoint_returns_list_of_projects(client):
 @pytest.mark.asyncio
 async def test_project_endpoint_returns_the_project(client):
     # Given
-    await database.execute("DELETE FROM projects")
+    await database.execute(projects_table.delete())
 
-    query = "INSERT INTO projects(name) VALUES (:name)"
-    values = [{"name": "Project One"}]
-    await database.execute_many(query=query, values=values)
+    await database.execute(
+        query=projects_table.insert(),
+        values={"name": "Project One"},
+    )
 
     # When
     response = await client.get("/projects/1")
@@ -49,7 +52,7 @@ async def test_project_endpoint_returns_the_project(client):
 @pytest.mark.asyncio
 async def test_project_endpoint_responds_with_404_if_project_cannot_be_found(client):
     # Given
-    await database.execute("DELETE FROM projects")
+    await database.execute(projects_table.delete())
 
     # When
     response = await client.get("/projects/1")

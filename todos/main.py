@@ -1,20 +1,14 @@
-from todos.entrypoints.api.app import app as commands_api
+from todos.entrypoints.api.app import create_app as create_commands_app
 from todos.queries.app import create_app
 
 app = create_app()
 
 
 # TODO: Bring back tests:
-# def test_hello_endpoint(client):
-#     response = client.get("/health")
-#
-#     assert response.status_code == 200
-#     assert response.json() == {"message": "I'm fine!"}
 
 
-@app.get("/health")
-def health_endpoint():
-    return {"message": "I'm fine!"}
+# TODO: Move /health to queries
 
 
-app.mount("/commands", commands_api)
+commands_app = create_commands_app()
+app.mount("/commands", commands_app)

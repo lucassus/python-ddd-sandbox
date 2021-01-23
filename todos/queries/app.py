@@ -3,8 +3,6 @@ from fastapi import FastAPI
 from todos.queries.databases import database
 from todos.queries.routes import api_router
 
-app = FastAPI()
-
 
 def create_app() -> FastAPI:
     app = FastAPI()

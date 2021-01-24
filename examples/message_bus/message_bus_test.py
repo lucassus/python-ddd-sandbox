@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from unittest import mock
 
+import pytest
+
 from examples.message_bus.message_bus import BaseEvent, MessageBus
 
 
@@ -14,42 +16,42 @@ class SomeOtherEvent(BaseEvent):
     id: int
 
 
-class TestMessageBus:
-    def test_simple_listener(self):
-        # Given
-        bus = MessageBus()
+@pytest.fixture
+def bus() -> MessageBus:
+    return MessageBus()
 
+
+class TestMessageBus:
+    def test_simple_listener(self, bus):
+        # Given
         handle_some_event = mock.Mock()
         bus.listen(SomeEvent, handle_some_event)
 
         # When
-        bus.dispatch(SomeEvent(message="Hello!"))
+        event = SomeEvent(message="Hello!")
+        bus.dispatch(event)
 
         # Then
         handle_some_event.assert_called()
-        handle_some_event.assert_called_with(SomeEvent(message="Hello!"))
+        handle_some_event.assert_called_with(event)
 
-    def test_decorator_listener(self):
+    def test_decorator_listener(self, bus):
         # Given
-        bus = MessageBus()
-
-        results = []
+        mock_handle = mock.Mock()
 
         @bus.listen(SomeEvent)
         def handle_some_event(event: SomeEvent):
-            results.append(event.message)
+            mock_handle(event)
 
         # When
-        bus.dispatch(SomeEvent(message="Hello!"))
+        event = SomeEvent(message="Hello!")
+        bus.dispatch(event)
 
         # Then
-        assert len(results) == 1
-        assert results[-1] == "Hello!"
+        mock_handle.assert_called_with(event)
 
-    def test_event_can_have_multiple_handlers(self):
+    def test_event_can_have_multiple_handlers(self, bus):
         # Given
-        bus = MessageBus()
-
         handle_event_1 = mock.Mock()
         bus.listen(SomeEvent, handle_event_1)
         bus.listen(SomeOtherEvent, handle_event_1)
@@ -65,6 +67,13 @@ class TestMessageBus:
         assert handle_event_1.call_count == 2
         assert handle_event_2.call_count == 1
 
-    def test_do_nothing_when_the_message_cannot_be_handled(self):
-        bus = MessageBus()
-        bus.dispatch(SomeEvent(message="Hello!"))
+    def test_do_nothing_when_the_message_cannot_be_handled(self, bus):
+        # Given
+        mock_handle = mock.Mock()
+        bus.listen(SomeEvent, mock_handle)
+
+        # When
+        bus.dispatch(SomeOtherEvent(id=123))
+
+        # Then
+        mock_handle.assert_not_called()

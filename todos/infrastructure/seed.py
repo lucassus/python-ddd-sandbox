@@ -12,6 +12,8 @@ start_mappers()
 session = get_session()
 
 
+# TODO: Think again about seen and bounded contexts
+# TODO: Should I use raw sqls without entities?
 def main(rebuild_db: bool = True):
     if rebuild_db:
         drop_tables(engine)

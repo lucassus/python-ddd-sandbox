@@ -6,8 +6,6 @@
 #
 aiosqlite==0.16.0
     # via -r requirements.in
-aniso8601==7.0.0
-    # via graphene
 appdirs==1.4.4
     # via black
 attrs==20.3.0
@@ -37,14 +35,6 @@ fastapi==0.63.0
     # via -r requirements.in
 flake8==3.8.4
     # via -r requirements.in
-graphene==2.1.8
-    # via -r requirements.in
-graphql-core==2.3.2
-    # via
-    #   graphene
-    #   graphql-relay
-graphql-relay==2.0.1
-    # via graphene
 h11==0.12.0
     # via
     #   httpcore
@@ -81,10 +71,6 @@ pluggy==0.13.1
     # via pytest
 pprintpp==0.4.0
     # via pytest-icdiff
-promise==2.3
-    # via
-    #   graphql-core
-    #   graphql-relay
 py==1.10.0
     # via pytest
 pycodestyle==2.6.0
@@ -118,13 +104,6 @@ requests==2.25.1
     # via -r requirements.in
 rfc3986[idna2008]==1.4.0
     # via httpx
-rx==1.6.1
-    # via graphql-core
-six==1.15.0
-    # via
-    #   graphene
-    #   graphql-core
-    #   graphql-relay
 sniffio==1.2.0
     # via
     #   httpcore

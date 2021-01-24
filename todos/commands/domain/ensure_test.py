@@ -2,7 +2,7 @@ import pytest
 
 from todos.commands.domain import ensure
 from todos.commands.domain.errors import MaxIncompleteTasksNumberIsReached
-from todos.test_utils.factories import build_project, build_task
+from todos.commands.test_utils.factories import build_project, build_task
 
 
 class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:

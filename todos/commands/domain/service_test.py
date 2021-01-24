@@ -1,8 +1,8 @@
 from datetime import date
 
 from todos.commands.domain.service import Service
-from todos.test_utils.factories import build_project, build_task
-from todos.test_utils.fake_unit_of_work import FakeUnitOfWork
+from todos.commands.test_utils.factories import build_project, build_task
+from todos.commands.test_utils.fake_unit_of_work import FakeUnitOfWork
 
 project = build_project(id=1)
 task = build_task(id=2)

@@ -19,11 +19,8 @@ deps: deps-pre deps-compile deps-install
 
 install: deps-pre deps-install
 
-api-server-dev:
+server-dev:
 	uvicorn todos.main:app --reload
-
-graphql-server-dev:
-	uvicorn todos.entrypoints.graphql.main:app --reload
 
 # Linting
 

@@ -21,9 +21,9 @@ tasks_table = Table(
 )
 
 
-def drop_tables(engine):
-    metadata.drop_all(bind=engine)
-
-
 def create_tables(engine):
     metadata.create_all(bind=engine)
+
+
+def drop_tables(engine):
+    metadata.drop_all(bind=engine)

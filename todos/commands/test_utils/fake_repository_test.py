@@ -1,5 +1,5 @@
-from todos.test_utils.factories import build_project
-from todos.test_utils.fake_repository import FakeRepository
+from todos.commands.test_utils.factories import build_project
+from todos.commands.test_utils.fake_repository import FakeRepository
 
 
 def test_fake_repository():

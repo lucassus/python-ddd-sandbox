@@ -6,7 +6,7 @@ from todos.commands.domain.errors import (
     MaxIncompleteTasksNumberIsReached,
     TaskNotFoundError,
 )
-from todos.test_utils.factories import build_project, build_task
+from todos.commands.test_utils.factories import build_project, build_task
 
 
 def test_add_task():

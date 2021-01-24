@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
-from todos.commands.adapters.sqlalchemy.unit_of_work import UnitOfWork
+from todos.commands.adapters.unit_of_work import UnitOfWork
 from todos.commands.domain.service import Service
 from todos.infrastructure.database import database
 from todos.infrastructure.session import get_session

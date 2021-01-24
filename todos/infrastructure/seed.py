@@ -3,7 +3,7 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
-from todos.commands.adapters.sqlalchemy.mappers import start_mappers
+from todos.commands.adapters.mappers import start_mappers
 from todos.commands.domain.entities import Project
 from todos.infrastructure.session import engine, get_session
 from todos.infrastructure.tables import create_tables, drop_tables

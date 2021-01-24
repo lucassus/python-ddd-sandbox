@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
-from todos.commands.adapters.sqlalchemy.mappers import start_mappers
+from todos.commands.adapters.mappers import start_mappers
 from todos.infrastructure.tables import create_tables
 
 start_mappers()

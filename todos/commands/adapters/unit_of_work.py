@@ -2,7 +2,7 @@ from typing import Callable
 
 from sqlalchemy.orm import Session
 
-from todos.commands.adapters.sqlalchemy.repository import Repository
+from todos.commands.adapters.repository import Repository
 from todos.commands.domain.ports import AbstractUnitOfWork
 
 

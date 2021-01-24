@@ -2,7 +2,7 @@ from typing import List
 
 from todos.commands.domain.entities import Project
 from todos.commands.domain.ports import AbstractUnitOfWork
-from todos.test_utils.fake_repository import FakeRepository
+from todos.commands.test_utils.fake_repository import FakeRepository
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):

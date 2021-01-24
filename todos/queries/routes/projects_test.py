@@ -1,20 +1,13 @@
 import pytest
 
-from todos.infrastructure.database import database
-
-# TODO: Figure out how to seed the database in a more convenient way
-# TODO: See https://www.encode.io/databases/tests_and_migrations/
 from todos.infrastructure.tables import projects_table
 
-# TODO: See and example how to setup the db:
-#  https://github.com/encode/databases/blob/master/tests/test_integration.py
+# TODO: Figure out how to seed the database in a more convenient way
 
 
 @pytest.mark.asyncio
-async def test_projects_endpoint_returns_list_of_projects(client):
+async def test_projects_endpoint_returns_list_of_projects(database, client):
     # Given
-    # await database.execute(projects_table.delete())
-
     await database.execute_many(
         query=projects_table.insert(),
         values=[
@@ -35,10 +28,8 @@ async def test_projects_endpoint_returns_list_of_projects(client):
 
 
 @pytest.mark.asyncio
-async def test_project_endpoint_returns_the_project(client):
+async def test_project_endpoint_returns_the_project(database, client):
     # Given
-    # await database.execute(projects_table.delete())
-
     await database.execute(
         query=projects_table.insert(),
         values={"name": "Project One"},
@@ -54,11 +45,5 @@ async def test_project_endpoint_returns_the_project(client):
 
 @pytest.mark.asyncio
 async def test_project_endpoint_responds_with_404_if_project_cannot_be_found(client):
-    # Given
-    # await database.execute(projects_table.delete())
-
-    # When
     response = await client.get("/projects/1")
-
-    # Then
     assert response.status_code == 404

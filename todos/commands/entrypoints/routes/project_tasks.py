@@ -3,8 +3,8 @@ from datetime import date
 from fastapi import APIRouter, Depends, Path
 
 from todos.commands.domain.service import Service
-from todos.commands.entrypoints.api import schemas
-from todos.commands.entrypoints.api.dependencies import (
+from todos.commands.entrypoints import schemas
+from todos.commands.entrypoints.dependencies import (
     SeeOtherRedirect,
     get_current_time,
     get_service,

@@ -4,6 +4,7 @@ from todos.infrastructure.database import database
 from todos.queries.routes import api_router
 
 
+# TODO: Probably redundant factory method
 def create_app() -> FastAPI:
     app = FastAPI()
     app.include_router(api_router)

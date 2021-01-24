@@ -2,7 +2,7 @@ from datetime import date, datetime
 
 import pytest
 
-from todos.commands.entrypoints.api.dependencies import get_current_time
+from todos.commands.entrypoints.dependencies import get_current_time
 from todos.commands.test_utils.factories import build_project
 
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from todos.commands.entrypoints.api.dependencies import get_project
-from todos.commands.entrypoints.api.routes import project_tasks
+from todos.commands.entrypoints.dependencies import get_project
+from todos.commands.entrypoints.routes import project_tasks
 
 api_router = APIRouter()
 

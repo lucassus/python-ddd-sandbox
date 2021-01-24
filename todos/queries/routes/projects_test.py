@@ -6,11 +6,14 @@ from todos.infrastructure.database import database
 # TODO: See https://www.encode.io/databases/tests_and_migrations/
 from todos.infrastructure.tables import projects_table
 
+# TODO: See and example how to setup the db:
+#  https://github.com/encode/databases/blob/master/tests/test_integration.py
+
 
 @pytest.mark.asyncio
 async def test_projects_endpoint_returns_list_of_projects(client):
     # Given
-    await database.execute(projects_table.delete())
+    # await database.execute(projects_table.delete())
 
     await database.execute_many(
         query=projects_table.insert(),
@@ -34,7 +37,7 @@ async def test_projects_endpoint_returns_list_of_projects(client):
 @pytest.mark.asyncio
 async def test_project_endpoint_returns_the_project(client):
     # Given
-    await database.execute(projects_table.delete())
+    # await database.execute(projects_table.delete())
 
     await database.execute(
         query=projects_table.insert(),
@@ -52,7 +55,7 @@ async def test_project_endpoint_returns_the_project(client):
 @pytest.mark.asyncio
 async def test_project_endpoint_responds_with_404_if_project_cannot_be_found(client):
     # Given
-    await database.execute(projects_table.delete())
+    # await database.execute(projects_table.delete())
 
     # When
     response = await client.get("/projects/1")

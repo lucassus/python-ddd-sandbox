@@ -7,7 +7,7 @@ from starlette.responses import RedirectResponse
 from todos.commands.adapters.unit_of_work import UnitOfWork
 from todos.commands.domain.service import Service
 from todos.infrastructure.database import database
-from todos.infrastructure.session import get_session
+from todos.infrastructure.session import session_factory
 
 
 def get_current_time() -> date:
@@ -16,7 +16,7 @@ def get_current_time() -> date:
 
 # TODO: Bring back the old idea with true context manager
 def get_uow():
-    return UnitOfWork(session_factory=get_session)
+    return UnitOfWork(session_factory=session_factory)
 
 
 # TODO: Rename this dependency

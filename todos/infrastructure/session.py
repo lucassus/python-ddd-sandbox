@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 from todos.config import DB_URL
 
@@ -14,7 +14,3 @@ session_factory = sessionmaker(
     autoflush=False,
     bind=engine,
 )
-
-
-def get_session() -> Session:
-    return session_factory()

@@ -5,11 +5,11 @@ from tabulate import tabulate
 
 from todos.commands.adapters.mappers import start_mappers
 from todos.commands.domain.entities import Project
-from todos.infrastructure.session import engine, get_session
+from todos.infrastructure.session import engine, session_factory
 from todos.infrastructure.tables import create_tables, drop_tables
 
 start_mappers()
-session = get_session()
+session = session_factory()
 
 
 # TODO: Think again about seen and bounded contexts

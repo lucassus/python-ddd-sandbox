@@ -8,39 +8,26 @@ project = build_project(id=1)
 task = build_task(id=2)
 project.tasks = [task]
 fake_uow = FakeUnitOfWork([project])
-service = Service(project_id=1, uow=fake_uow)
+service = Service(uow=fake_uow)
 
 
 def test_create_task():
-    new_task = service.create_task("Testing...")
+    service.create_task(project_id=project.id, name="Testing...")
 
-    assert new_task
-    assert new_task.name == "Testing..."
-    assert project.tasks[-1] == new_task
-
+    assert project.tasks[-1].name == "Testing..."
     assert fake_uow.committed
 
 
 def test_complete_task():
-    # Given
     now = date(2021, 1, 8)
+    service.complete_task(project_id=project.id, id=task.id, now=now)
 
-    # When
-    updated_task = service.complete_task(task.id, now=now)
-
-    # Then
-    assert updated_task == task
-    assert updated_task.completed_at is now
-
+    assert task.completed_at is now
     assert fake_uow.committed
 
 
 def test_incomplete_task():
-    # When
-    updated_task = service.incomplete_task(task.id)
+    service.incomplete_task(project_id=project.id, id=task.id)
 
-    # Then
-    assert updated_task == task
-    assert updated_task.completed_at is None
-
+    assert task.completed_at is None
     assert fake_uow.committed

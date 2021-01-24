@@ -1,10 +1,8 @@
 VENV_DIR=venv
 
 venv:
-	@if [ ! -d "$(VENV_DIR)" ]; then \
-		python3.9 -m venv $(VENV_DIR) \
-		@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate" \
-	fi
+	python3.9 -m venv $(VENV_DIR)
+	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:
 	pip install pip-tools
@@ -40,7 +38,7 @@ check-flake8:
 	flake8 .
 
 check-mypy:
-	mypy todos/entrypoints/api && mypy todos/entrypoints/cli
+	mypy todos
 
 format: format-isort format-black
 

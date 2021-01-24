@@ -13,9 +13,9 @@ start_mappers()
 
 @pytest.fixture(scope="session")
 def db_engine() -> Engine:
-    db_file = os.path.join(os.path.dirname(__file__), "../../todos_test.db")
+    database_path = os.path.join(os.path.dirname(__file__), "../../todos_test.db")
     engine = create_engine(
-        f"sqlite:///{db_file}", connect_args={"check_same_thread": False}
+        f"sqlite:///{database_path}", connect_args={"check_same_thread": False}
     )
 
     create_tables(engine)

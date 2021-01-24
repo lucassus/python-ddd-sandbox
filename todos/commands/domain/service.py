@@ -7,7 +7,7 @@ class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def create_task(self, *, project_id, name: str) -> id:
+    def create_task(self, *, project_id, name: str) -> int:
         with self._uow as uow:
             project = uow.repository.get(project_id)
             task = project.add_task(name=name)

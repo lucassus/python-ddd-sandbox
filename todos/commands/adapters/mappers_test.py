@@ -9,7 +9,7 @@ def test_tables(session):
     session.add(project)
     session.commit()
 
-    assert len(session.query(Project).get(1).tasks_table) == 0
+    assert len(session.query(Project).get(1).tasks) == 0
 
     project.tasks.extend(
         [
@@ -20,7 +20,7 @@ def test_tables(session):
     )
     session.commit()
 
-    assert len(session.query(Project).get(1).tasks_table) == 3
+    assert len(session.query(Project).get(1).tasks) == 3
 
     task: Task = session.query(Task).get(1)
     assert task

@@ -6,7 +6,6 @@ from starlette.responses import RedirectResponse
 
 from todos.commands.adapters.unit_of_work import UnitOfWork
 from todos.commands.domain.service import Service
-from todos.infrastructure.database import database
 from todos.infrastructure.session import session_factory
 
 
@@ -23,16 +22,16 @@ def get_uow():
 async def get_project(project_id: int) -> None:
     pass
     # TODO: Do not use database here, since it belongs to queries app
-    project = await database.fetch_one(
-        "SELECT id FROM projects WHERE id = :id",
-        values={"id": project_id},
-    )
-
-    if project is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Unable to find a project with ID={project_id}",
-        )
+    # project = await database.fetch_one(
+    #     "SELECT id FROM projects WHERE id = :id",
+    #     values={"id": project_id},
+    # )
+    #
+    # if project is None:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail=f"Unable to find a project with ID={project_id}",
+    #     )
 
 
 def get_service(uow=Depends(get_uow)) -> Service:

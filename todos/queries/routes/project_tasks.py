@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 from sqlalchemy import and_, select
 
 from todos.infrastructure.tables import tasks_table
@@ -16,7 +16,6 @@ async def tasks_endpoint(project_id: int, database=Depends(get_database)):
     return await database.fetch_all(query=query)
 
 
-# TODO: Figure out how to create an abstraction layer for raw sqls
 @router.get("/{id}", response_model=schemas.Task)
 async def task_endpoint(
     project_id: int,
@@ -29,11 +28,12 @@ async def task_endpoint(
             tasks_table.c.id == id,
         )
     )
-    return await database.fetch_one(query=query)
+    row = await database.fetch_one(query=query)
 
-    # TODO: Create a cheat sheet
-    # query = "SELECT * FROM tasks WHERE project_id = :project_id AND id = :id"
-    # return await database.fetch_one(
-    #     query=query,
-    #     values={"project_id": project_id, "id": id},
-    # )
+    if row is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Unable to find a task with ID={id}",
+        )
+
+    return row

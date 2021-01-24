@@ -1,5 +1,6 @@
 import pytest
 from fastapi import FastAPI
+from sqlalchemy.orm import Session
 from starlette.testclient import TestClient
 
 from todos.commands.adapters.unit_of_work import UnitOfWork
@@ -16,8 +17,8 @@ def client(request):
     if "integration" in request.keywords:
         # For tests marked as "integration" create Unit Of Work
         # instance that uses the database...
-        session = request.getfixturevalue("session")
-        uow = UnitOfWork(session_factory=session)
+        db_connection = request.getfixturevalue("db_connection")
+        uow = UnitOfWork(session_factory=lambda: Session(bind=db_connection))
     else:
         # ...otherwise go with the fake implementation.
         uow = FakeUnitOfWork(projects=[])

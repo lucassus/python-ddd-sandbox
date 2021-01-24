@@ -3,10 +3,10 @@ from datetime import datetime
 import typer
 from tabulate import tabulate
 
-from todos.commands.adapters.mappers import start_mappers
-from todos.commands.domain.entities import Project
 from todos.infrastructure.session import engine, session_factory
 from todos.infrastructure.tables import create_tables, drop_tables
+from todos.services.project_management.adapters.mappers import start_mappers
+from todos.services.project_management.domain.entities import Project
 
 start_mappers()
 session = session_factory()

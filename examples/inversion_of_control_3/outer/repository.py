@@ -1,4 +1,4 @@
-from examples.inversion_of_control_3.inner.abstract_repository import AbstractRepository
+from examples.inversion_of_control_3.inner.ports import AbstractRepository
 from examples.user import User
 
 

@@ -53,7 +53,7 @@ async def test_task_endpoint_returns_task(database, client):
     )
 
     # When
-    response = await client.get(f"/projects/1/tasks/1")
+    response = await client.get("/projects/1/tasks/1")
 
     # Then
     assert response.status_code == 200

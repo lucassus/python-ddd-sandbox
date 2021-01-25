@@ -1,4 +1,5 @@
 .idea
+docs
 htmlcov
 venv
 .coverage

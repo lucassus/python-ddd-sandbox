@@ -1,10 +1,8 @@
 VENV_DIR=venv
 
 venv:
-	@if [ ! -d "$(VENV_DIR)" ]; then \
-		python3.9 -m venv $(VENV_DIR) \
-		@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate" \
-	fi
+	python3.9 -m venv $(VENV_DIR)
+	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:
 	pip install pip-tools
@@ -19,11 +17,8 @@ deps: deps-pre deps-compile deps-install
 
 install: deps-pre deps-install
 
-api-server-dev:
-	uvicorn todos.entrypoints.api.main:app --reload
-
-graphql-server-dev:
-	uvicorn todos.entrypoints.graphql.main:app --reload
+server-dev:
+	uvicorn todos.main:app --reload
 
 # Linting
 
@@ -43,7 +38,7 @@ check-flake8:
 	flake8 .
 
 check-mypy:
-	mypy todos/entrypoints/api && mypy todos/entrypoints/cli
+	mypy todos
 
 format: format-isort format-black
 

@@ -3,10 +3,19 @@ from sqlalchemy.sql.sqltypes import Date, Integer, String
 
 metadata = MetaData()
 
+users_table = Table(
+    "users",
+    metadata,
+    Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("name", String(255)),
+    Column("password", String(255)),
+)
+
 projects_table = Table(
     "projects",
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
+    Column("user_id", Integer, ForeignKey("users.id")),
     Column("name", String(255)),
     Column("max_incomplete_tasks_number", Integer),
 )

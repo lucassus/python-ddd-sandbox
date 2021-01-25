@@ -11,7 +11,6 @@ def get_current_time() -> date:
     return datetime.utcnow()
 
 
-# TODO: Bring back the old idea with true context manager
 def get_uow():
     return UnitOfWork(session_factory=session_factory)
 

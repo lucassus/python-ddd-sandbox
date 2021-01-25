@@ -6,8 +6,6 @@ from todos.services.project_management.adapters.repository import Repository
 from todos.services.project_management.domain.ports import AbstractUnitOfWork
 
 
-# TODO: Flatten this module, sqlalchemy is redundant
-# TODO: Double check it with the book and cleanup
 class UnitOfWork(AbstractUnitOfWork):
     repository: Repository
 
@@ -17,11 +15,11 @@ class UnitOfWork(AbstractUnitOfWork):
     def __enter__(self):
         self._session = self._session_factory()
         self.repository = Repository(session=self._session)
+
         return super().__enter__()
 
     def __exit__(self, *args):
         super().__exit__(*args)
-        self.rollback()  # It does nothing when the session has been committed before
         self._session.close()
 
     def commit(self):

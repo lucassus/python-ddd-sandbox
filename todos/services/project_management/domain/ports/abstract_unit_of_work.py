@@ -21,7 +21,7 @@ class AbstractUnitOfWork(abc.ABC):
         return self
 
     def __exit__(self, *args):
-        pass
+        self.rollback()  # It does nothing when the session has been committed before
 
     @abc.abstractmethod
     def commit(self):

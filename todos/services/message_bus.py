@@ -7,6 +7,7 @@ from todos.services.project_management.domain.service import Service
 bus = MessageBus()
 
 
+# TODO: Perhaps it should be placed somewhere else
 @bus.listen(User.AccountCreatedEvent)
 def handle_create_example_project(event: User.AccountCreatedEvent):
     uow = UnitOfWork(session_factory=session_factory)

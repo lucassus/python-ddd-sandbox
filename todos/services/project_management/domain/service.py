@@ -17,7 +17,7 @@ class Service:
             task.complete(datetime.utcnow())
 
             project.add_task(name="Watch the tutorial")
-            project.add_task(name="Start using out awesome app")
+            project.add_task(name="Start using our awesome app")
 
             uow.repository.create(project)
             uow.commit()

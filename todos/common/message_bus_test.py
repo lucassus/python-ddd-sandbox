@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from examples.message_bus.message_bus import BaseEvent, MessageBus
+from todos.common.message_bus import BaseEvent, MessageBus
 
 
 @dataclass

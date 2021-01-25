@@ -1,7 +1,7 @@
 from sqlalchemy.orm import mapper
 
-from examples.user import User
 from todos.infrastructure.tables import users_table
+from todos.services.accounts.domain.entities import User
 
 
 def start_mappers():

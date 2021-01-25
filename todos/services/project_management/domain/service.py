@@ -15,18 +15,16 @@ class Service:
             uow.commit()
             return task.id
 
-    def complete_task(self, id: int, *, project_id: int, now: date) -> int:
+    def complete_task(self, id: int, *, project_id: int, now: date) -> None:
         with self._uow as uow:
             project = uow.repository.get(project_id)
-            task = project.complete_task(id, now)
+            project.complete_task(id, now)
 
             uow.commit()
-            return task.id
 
-    def incomplete_task(self, id: int, *, project_id: int) -> int:
+    def incomplete_task(self, id: int, *, project_id: int) -> None:
         with self._uow as uow:
             project = uow.repository.get(project_id)
-            task = project.incomplete_task(id)
+            project.incomplete_task(id)
 
             uow.commit()
-            return task.id

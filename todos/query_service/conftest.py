@@ -3,7 +3,7 @@ from databases import Database
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from todos.config import DATABASE_URL
+from todos.config import settings
 from todos.infrastructure.session import engine
 from todos.infrastructure.tables import create_tables, drop_tables
 from todos.query_service.dependencies import get_database
@@ -19,7 +19,7 @@ def create_test_database():
 
 @pytest.fixture
 async def database():
-    async with Database(DATABASE_URL, force_rollback=True) as database:
+    async with Database(settings.database_url, force_rollback=True) as database:
         yield database
 
 

@@ -2,8 +2,6 @@ import pytest
 
 from todos.infrastructure.tables import projects_table
 
-# TODO: Figure out how to seed the database in a more convenient way
-
 
 @pytest.mark.asyncio
 async def test_projects_endpoint_returns_list_of_projects(database, client):

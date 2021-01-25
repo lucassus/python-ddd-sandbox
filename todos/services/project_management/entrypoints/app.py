@@ -15,6 +15,7 @@ def create_app() -> FastAPI:
     app = FastAPI()
     app.include_router(api_router)
 
+    # TODO: Add similar error handler for MaxIncompleteTasksNumberIsReached
     @app.exception_handler(EntityNotFoundError)
     async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):
         return JSONResponse(

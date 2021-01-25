@@ -40,7 +40,7 @@ def test_task_complete_endpoint(session, client):
     # Then
     assert response.status_code == 303
 
-    # TODO: Figure out how to fix his assertion
+    # TODO: Figure out how to fix this assertion
     # assert task.completed_at == now.date()
 
 

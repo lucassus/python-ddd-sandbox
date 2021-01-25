@@ -1,3 +1,5 @@
+from importlib import import_module
+
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
@@ -8,20 +10,13 @@ from todos.services.project_management.entrypoints.routes import (
 )
 
 
-# TODO: Figure out how to refactor it
-def start_mappers():
-    from todos.services.accounts.adapters.mappers import (
-        start_mappers as start_accounts_mappers,
-    )
-    from todos.services.project_management.adapters.mappers import (
-        start_mappers as start_project_management_mappers,
-    )
-
-    start_accounts_mappers()
-    start_project_management_mappers()
+def start_all_mappers():
+    for context in ("accounts", "project_management"):
+        mappers = import_module(f"todos.services.{context}.adapters.mappers")
+        mappers.start_mappers()
 
 
-start_mappers()
+start_all_mappers()
 
 
 def create_app() -> FastAPI:

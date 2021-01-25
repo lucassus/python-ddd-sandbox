@@ -5,9 +5,11 @@ from todos.services.accounts.domain.entities import User
 bus = MessageBus()
 
 
-# TODO: Perhaps it should be placed somewhere else
+# TODO: Perhaps event handlers should be placed somewhere else
+
+
 @bus.listen(User.AccountCreatedEvent)
-def handle_create_example_project(event: User.AccountCreatedEvent):
+def create_example_project(event: User.AccountCreatedEvent):
     from todos.services.project_management.adapters.unit_of_work import UnitOfWork
     from todos.services.project_management.domain.service import Service
 
@@ -15,3 +17,12 @@ def handle_create_example_project(event: User.AccountCreatedEvent):
     service = Service(uow=uow)
 
     return service.create_example_project(user_id=event.user_id)
+
+
+@bus.listen(User.AccountCreatedEvent)
+def send_welcome_email(event: User.AccountCreatedEvent):
+    from todos.services.accounts.adapters.unit_of_work import UnitOfWork
+
+    with UnitOfWork(session_factory=session_factory) as uow:
+        user = uow.repository.get(event.user_id)
+        print(f"Sending welcome email to {user}")

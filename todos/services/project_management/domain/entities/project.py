@@ -43,7 +43,7 @@ class Project:
             if task.id == id:
                 return task
 
-        raise TaskNotFoundError
+        raise TaskNotFoundError(id)
 
     def complete_tasks(self, now: date):
         for task in self.tasks:

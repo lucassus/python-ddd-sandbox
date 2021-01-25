@@ -1,9 +1,14 @@
-# TODO: Add ProjectNotFoundError and base EntityNotFoundError
-# TODO: Add common api errors handler for such exceptions
+from todos.common.errors import EntityNotFoundError
 
 
-class TaskNotFoundError(Exception):
-    pass
+class ProjectNotFoundError(EntityNotFoundError):
+    def __init__(self, id: int):
+        self.message = f"Unable to find a project with id={id}"
+
+
+class TaskNotFoundError(EntityNotFoundError):
+    def __init__(self, id: int):
+        self.message = f"Unable to find a task with id={id}"
 
 
 class MaxIncompleteTasksNumberIsReached(Exception):

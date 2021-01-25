@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from todos.services.project_management.domain.entities import Project
+from todos.services.project_management.domain.errors import ProjectNotFoundError
 from todos.services.project_management.domain.ports import AbstractRepository
 
 
@@ -8,12 +9,12 @@ class FakeRepository(AbstractRepository):
     def __init__(self, *, projects: List[Project]):
         self._projects = projects
 
-    def get(self, id: Optional[int] = None) -> Optional[Project]:
+    def get(self, id: int) -> Optional[Project]:
         for project in self._projects:
             if project.id == id:
                 return project
 
-        return None
+        raise ProjectNotFoundError(id)
 
     def create(self, project: Project) -> None:
         project.id = self._get_next_id()

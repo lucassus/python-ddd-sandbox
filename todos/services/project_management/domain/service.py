@@ -1,11 +1,28 @@
-from datetime import date
+from datetime import date, datetime
 
+from todos.services.project_management.domain.entities import Project
 from todos.services.project_management.domain.ports import AbstractUnitOfWork
 
 
 class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
+
+    def create_example_project(self, *, user_id: int) -> int:
+        with self._uow as uow:
+            project = Project(name="My first project")
+            project.user_id = user_id
+
+            task = project.add_task(name="Sign up!")
+            task.complete(datetime.utcnow())
+
+            project.add_task(name="Watch the tutorial")
+            project.add_task(name="Start using out awesome app")
+
+            uow.repository.create(project)
+            uow.commit()
+
+            return project.id
 
     def create_task(self, *, project_id, name: str) -> int:
         with self._uow as uow:

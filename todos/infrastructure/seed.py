@@ -1,35 +1,60 @@
-from datetime import datetime
+from datetime import date
 
 import typer
 from tabulate import tabulate
 
-from todos.infrastructure.session import engine, session_factory
-from todos.infrastructure.tables import create_tables, drop_tables
-from todos.services.project_management.adapters.mappers import start_mappers
-from todos.services.project_management.domain.entities import Project
+from todos.infrastructure.session import engine
+from todos.infrastructure.tables import (
+    create_tables,
+    drop_tables,
+    projects_table,
+    tasks_table,
+)
 
-start_mappers()
-session = session_factory()
 
-
-# TODO: Think again about seen and bounded contexts
-# TODO: Should I use raw sqls without entities?
 def main(rebuild_db: bool = True):
     if rebuild_db:
         drop_tables(engine)
         create_tables(engine)
 
-    project = Project(name="Work", max_incomplete_tasks_number=4)
+    connection = engine.connect()
 
-    task = project.add_task(name="Learn Python")
-    project.add_task(name="Learn Domain Driven Design")
-    project.add_task(name="Do the shopping")
-    project.add_task(name="Clean the house")
-    session.add(project)
-    session.commit()
+    connection.execute(
+        projects_table.insert(),
+        {"id": 1, "name": "Project One"},
+    )
 
-    project.complete_task(id=task.id, now=datetime.utcnow())
-    session.commit()
+    connection.execute(
+        tasks_table.insert(),
+        [
+            {
+                "id": 1,
+                "project_id": 1,
+                "name": "Learn Python",
+                "completed_at": date(2021, 1, 6),
+            },
+            {
+                "id": 2,
+                "project_id": 1,
+                "name": "Learn Domain Driven Design",
+                "completed_at": None,
+            },
+            {
+                "id": 3,
+                "project_id": 1,
+                "name": "Do the shopping",
+                "completed_at": None,
+            },
+            {
+                "id": 4,
+                "project_id": 1,
+                "name": "Clean the house",
+                "completed_at": None,
+            },
+        ],
+    )
+
+    tasks = connection.execute(tasks_table.select())
 
     typer.echo(
         tabulate(
@@ -39,7 +64,7 @@ def main(rebuild_db: bool = True):
                     task.name,
                     task.completed_at,
                 ]
-                for task in project.tasks
+                for task in tasks
             ],
             headers=["Id", "Name", "Completed At"],
         ),

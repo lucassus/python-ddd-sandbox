@@ -11,4 +11,4 @@ def get_uow():
 
 
 def get_service(uow=Depends(get_uow)) -> Service:
-    return Service(bus=bus, uow=uow)
+    return Service(uow=uow, bus=bus)

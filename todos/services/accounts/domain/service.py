@@ -4,9 +4,9 @@ from todos.services.accounts.domain.ports import AbstractUnitOfWork
 
 
 class Service:
-    def __init__(self, *, bus: MessageBus, uow: AbstractUnitOfWork):
-        self._bus = bus
+    def __init__(self, *, uow: AbstractUnitOfWork, bus: MessageBus):
         self._uow = uow
+        self._bus = bus
 
     def register_user(self, *, email: str, password: str) -> int:
         with self._uow as uow:

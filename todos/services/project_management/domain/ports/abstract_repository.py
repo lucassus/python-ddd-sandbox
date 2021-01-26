@@ -1,12 +1,12 @@
 import abc
-from typing import List, Optional
+from typing import List
 
 from todos.services.project_management.domain.entities import Project
 
 
 class AbstractRepository(abc.ABC):
     @abc.abstractmethod
-    def get(self, id: int) -> Optional[Project]:
+    def get(self, id: int) -> Project:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -14,5 +14,5 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create(self, task: Project) -> None:
+    def create(self, project: Project) -> None:
         raise NotImplementedError

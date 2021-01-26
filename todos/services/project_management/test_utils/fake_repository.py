@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from todos.services.project_management.domain.entities import Project
 from todos.services.project_management.domain.errors import ProjectNotFoundError
@@ -9,7 +9,7 @@ class FakeRepository(AbstractRepository):
     def __init__(self, *, projects: List[Project]):
         self._projects = projects
 
-    def get(self, id: int) -> Optional[Project]:
+    def get(self, id: int) -> Project:
         for project in self._projects:
             if project.id == id:
                 return project

@@ -10,6 +10,7 @@ from todos.services.project_management.domain.errors import TaskNotFoundError
 @dataclass
 class Project:
     id: int = field(init=False)
+    user_id: int = field(init=False)
 
     name: str
     max_incomplete_tasks_number: Optional[int] = None

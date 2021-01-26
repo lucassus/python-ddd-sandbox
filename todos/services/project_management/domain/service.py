@@ -8,7 +8,7 @@ class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def create_example_project(self, *, user_id: int) -> int:
+    def create_first_project(self, *, user_id: int) -> int:
         with self._uow as uow:
             project = Project(name="My first project")
             project.user_id = user_id

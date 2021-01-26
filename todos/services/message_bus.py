@@ -9,14 +9,14 @@ bus = MessageBus()
 
 
 @bus.listen(User.AccountCreatedEvent)
-def create_example_project(event: User.AccountCreatedEvent):
+def create_first_project(event: User.AccountCreatedEvent):
     from todos.services.project_management.adapters.unit_of_work import UnitOfWork
     from todos.services.project_management.domain.service import Service
 
     uow = UnitOfWork(session_factory=session_factory)
     service = Service(uow=uow)
 
-    return service.create_example_project(user_id=event.user_id)
+    return service.create_first_project(user_id=event.user_id)
 
 
 @bus.listen(User.AccountCreatedEvent)

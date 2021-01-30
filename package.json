@@ -1,0 +1,11 @@
+{
+  "name": "python-ddd-sandbox",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:lucassus/python-ddd-sandbox.git",
+  "author": "Lukasz Bandzarewicz <lukasz.bandzarewicz@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "pyright": "1.1.106"
+  }
+}

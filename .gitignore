@@ -1,6 +1,7 @@
 .idea
 docs
 htmlcov
+node_modules
 venv
 .coverage
 coverage.xml

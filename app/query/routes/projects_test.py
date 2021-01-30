@@ -30,7 +30,7 @@ async def test_project_endpoint_returns_the_project(database, client):
     # Given
     await database.execute(
         query=projects_table.insert(),
-        values={"name": "Project One"},
+        values={"id": 1, "name": "Project One"},
     )
 
     # When

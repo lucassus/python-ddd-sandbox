@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 from app.common.errors import EntityNotFoundError
 
+# TODO: Refactor it
 BOUNDED_CONTEXTS = ("accounts", "projects")
 
 

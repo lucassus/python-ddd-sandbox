@@ -18,7 +18,7 @@ deps: deps-pre deps-compile deps-install
 install: deps-pre deps-install
 
 server-dev:
-	uvicorn todos.main:app --reload
+	uvicorn app.main:app --reload
 
 # Linting
 
@@ -38,7 +38,7 @@ check-flake8:
 	flake8 .
 
 check-mypy:
-	mypy todos
+	mypy app
 
 format: format-isort format-black
 
@@ -47,7 +47,7 @@ lint: check-mypy check-flake8 check-isort check-black
 # Testing
 
 test:
-	pytest todos
+	pytest app
 
 test-watch:
-	ptw todos
+	ptw app

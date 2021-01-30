@@ -4,9 +4,8 @@
 
 * `make venv`
 * `make install`
-* `python -m todos.entrypoints.cli.seed`
-* `make api-server-dev`
-* `make graphql-server-dev`
+* `python -m app.entrypoints.cli.seed`
+* `make server-dev`
 
 ## Linting and testing
 

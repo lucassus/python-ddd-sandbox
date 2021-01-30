@@ -5,5 +5,5 @@ venv
 .coverage
 coverage.xml
 README.local.md
-todos.db
-todos_test.db
+development.db
+test.db

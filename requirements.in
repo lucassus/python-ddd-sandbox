@@ -12,7 +12,6 @@ black
 httpx
 isort
 flake8
-mypy
 pytest
 pytest-asyncio
 pytest-cov

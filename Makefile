@@ -11,14 +11,17 @@ deps-compile:
 	pip-compile requirements.in --output-file=requirements.txt
 
 deps-install:
-	pip-sync
+	pip-sync && yarn install
 
 deps: deps-pre deps-compile deps-install
 
 install: deps-pre deps-install
 
+seed:
+	python -m app.entrypoints.cli.seed
+
 server-dev:
-	uvicorn todos.main:app --reload
+	uvicorn app.main:app --reload
 
 # Linting
 
@@ -37,17 +40,17 @@ check-black:
 check-flake8:
 	flake8 .
 
-check-mypy:
-	mypy todos
+check-types:
+	yarn pyright
 
 format: format-isort format-black
 
-lint: check-mypy check-flake8 check-isort check-black
+lint: check-types check-flake8 check-isort check-black
 
 # Testing
 
 test:
-	pytest todos
+	pytest app
 
 test-watch:
-	ptw todos
+	ptw app

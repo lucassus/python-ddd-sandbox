@@ -12,3 +12,8 @@
 * `make lint`
 * `make test`
 * `make test-watch`
+
+## Other useful commands
+
+* `pip list --outdated`
+* `pip-compile --upgrade-package pytest`

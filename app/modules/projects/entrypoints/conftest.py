@@ -5,13 +5,13 @@ from starlette.testclient import TestClient
 
 from app.modules.projects.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.entrypoints.dependencies import get_uow
-from app.modules.projects.entrypoints.routes import api_router
+from app.modules.projects.entrypoints.routes import router
 
 
 @pytest.fixture
 def client(db_connection):
     app = FastAPI()
-    app.include_router(api_router)
+    app.include_router(router)
 
     def session_factory():
         return Session(bind=db_connection)

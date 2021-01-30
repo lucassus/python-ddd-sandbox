@@ -7,7 +7,7 @@ from app.modules.projects.domain.service import Service
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.dependencies import get_current_time, get_service
 
-router = APIRouter()
+router = APIRouter(prefix="/projects/{project_id}/tasks", tags=["tasks"])
 
 
 @router.post("")

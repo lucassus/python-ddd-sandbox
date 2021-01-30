@@ -7,15 +7,15 @@ from app.common.errors import EntityNotFoundError
 def create_app() -> FastAPI:
     app = FastAPI()
 
-    from app.modules.accounts import api_router, start_mappers
+    from app.modules.accounts import router, start_mappers
 
     start_mappers()
-    app.include_router(api_router)
+    app.include_router(router)
 
-    from app.modules.projects import api_router, start_mappers
+    from app.modules.projects import router, start_mappers
 
     start_mappers()
-    app.include_router(api_router)
+    app.include_router(router)
 
     @app.exception_handler(EntityNotFoundError)
     async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):

@@ -5,7 +5,7 @@ from app.modules.accounts.domain.service import Service
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.dependencies import get_service
 
-router = APIRouter()
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("")

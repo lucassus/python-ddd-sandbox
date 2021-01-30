@@ -4,7 +4,7 @@
 
 * `make venv`
 * `make install`
-* `python -m app.entrypoints.cli.seed`
+* `make seed`
 * `make server-dev`
 
 ## Linting and testing

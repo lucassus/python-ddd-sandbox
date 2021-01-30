@@ -17,6 +17,9 @@ deps: deps-pre deps-compile deps-install
 
 install: deps-pre deps-install
 
+seed:
+	python -m app.entrypoints.cli.seed
+
 server-dev:
 	uvicorn app.main:app --reload
 

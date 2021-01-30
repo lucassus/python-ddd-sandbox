@@ -2,7 +2,6 @@ from typing import List
 
 from databases import Database
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
 
 from app.infrastructure.tables import projects_table
 from app.query_service import schemas
@@ -18,13 +17,13 @@ router = APIRouter()
     name="Returns the list of projects",
 )
 async def projects_endpoint(database: Database = Depends(get_database)):
-    query = select([projects_table])
+    query = projects_table.select()
     return await database.fetch_all(query=query)
 
 
 @router.get("/{id}", response_model=schemas.Project)
 async def project_endpoint(id: int, database: Database = Depends(get_database)):
-    query = select([projects_table]).where(projects_table.c.id == id)
+    query = projects_table.select().where(projects_table.c.id == id)
     row = await database.fetch_one(query=query)
 
     if row is None:

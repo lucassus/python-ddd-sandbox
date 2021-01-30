@@ -2,7 +2,7 @@ from typing import List
 
 from databases import Database
 from fastapi import APIRouter, Depends, Path
-from sqlalchemy import and_, select
+from sqlalchemy import and_
 
 from app.infrastructure.tables import tasks_table
 from app.query_service import schemas
@@ -17,7 +17,7 @@ async def tasks_endpoint(
     project_id: int,
     database: Database = Depends(get_database),
 ):
-    query = select([tasks_table]).where(tasks_table.c.project_id == project_id)
+    query = tasks_table.select().where(tasks_table.c.project_id == project_id)
     return await database.fetch_all(query=query)
 
 
@@ -27,7 +27,7 @@ async def task_endpoint(
     id: int = Path(..., description="The ID of the task", ge=1),
     database: Database = Depends(get_database),
 ):
-    query = select([tasks_table]).where(
+    query = tasks_table.select().where(
         and_(
             tasks_table.c.project_id == project_id,
             tasks_table.c.id == id,

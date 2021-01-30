@@ -10,8 +10,8 @@ bus = MessageBus()
 
 @bus.listen(User.AccountCreatedEvent)
 def create_first_project(event: User.AccountCreatedEvent):
-    from app.services.project_management.adapters.unit_of_work import UnitOfWork
-    from app.services.project_management.domain.service import Service
+    from app.services.projects.adapters.unit_of_work import UnitOfWork
+    from app.services.projects.domain.service import Service
 
     uow = UnitOfWork(session_factory=session_factory)
     service = Service(uow=uow)

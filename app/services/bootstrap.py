@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 
 from app.common.errors import EntityNotFoundError
 
-BOUNDED_CONTEXTS = ("accounts", "project_management")
+BOUNDED_CONTEXTS = ("accounts", "projects")
 
 
 def start_all_mappers():

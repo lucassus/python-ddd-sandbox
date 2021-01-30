@@ -4,9 +4,9 @@ from databases import Database
 from fastapi import APIRouter, Depends
 
 from app.infrastructure.tables import projects_table
-from app.query_service import schemas
-from app.query_service.dependencies import get_database
-from app.query_service.errors import EntityNotFoundError
+from app.query import schemas
+from app.query.dependencies import get_database
+from app.query.errors import EntityNotFoundError
 
 router = APIRouter()
 

@@ -1,7 +1,7 @@
 import json
 from datetime import date
 
-from app.query_service.schemas import Task
+from app.query.schemas import Task
 
 
 def test_task_schema_serialize():

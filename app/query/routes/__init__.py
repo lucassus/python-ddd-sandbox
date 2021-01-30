@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.query_service.routes import health, project_tasks, projects, users
+from app.query.routes import health, project_tasks, projects, users
 
 api_router = APIRouter()
 

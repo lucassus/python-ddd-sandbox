@@ -2,7 +2,7 @@ from databases import Database
 from fastapi import FastAPI, Request
 
 from app.config import settings
-from app.query_service.routes import api_router
+from app.query.routes import api_router
 
 
 def create_app() -> FastAPI:

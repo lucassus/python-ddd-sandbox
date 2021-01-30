@@ -6,8 +6,8 @@ from httpx import AsyncClient
 from app.config import settings
 from app.infrastructure.session import engine
 from app.infrastructure.tables import create_tables, drop_tables
-from app.query_service.dependencies import get_database
-from app.query_service.routes import api_router
+from app.query.dependencies import get_database
+from app.query.routes import api_router
 
 
 @pytest.fixture(autouse=True, scope="module")

@@ -46,10 +46,8 @@ lint: check-mypy check-flake8 check-isort check-black
 
 # Testing
 
-# TODO: This vs "pytest app"
 test:
-	python -m pytest app
+	pytest app
 
-# TODO: Broken
 test-watch:
 	ptw app

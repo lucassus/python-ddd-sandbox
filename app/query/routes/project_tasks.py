@@ -12,12 +12,12 @@ from app.query.errors import EntityNotFoundError
 router = APIRouter()
 
 
-@router.get("", response_model=List[schemas.Task], name="Returns list of tasks_table")
+@router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
 async def tasks_endpoint(
     project=Depends(get_project),
     database: Database = Depends(get_database),
 ):
-    query = tasks_table.select().where(tasks_table.c.project_id == project['id'])
+    query = tasks_table.select().where(tasks_table.c.project_id == project["id"])
     return await database.fetch_all(query=query)
 
 
@@ -29,7 +29,7 @@ async def task_endpoint(
 ):
     query = tasks_table.select().where(
         and_(
-            tasks_table.c.project_id == project['id'],
+            tasks_table.c.project_id == project["id"],
             tasks_table.c.id == id,
         )
     )

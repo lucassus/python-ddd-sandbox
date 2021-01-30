@@ -1,5 +1,5 @@
 from databases import Database
-from fastapi import Request, Depends
+from fastapi import Depends, Request
 
 from app.infrastructure.tables import projects_table
 from app.query.errors import EntityNotFoundError
@@ -14,6 +14,8 @@ async def get_project(project_id: int, database: Database = Depends(get_database
     row = await database.fetch_one(query=query)
 
     if row is None:
-        raise EntityNotFoundError(detail=f"Unable to find a project with ID={project_id}")
+        raise EntityNotFoundError(
+            detail=f"Unable to find a project with ID={project_id}"
+        )
 
     return row

@@ -1,4 +1,6 @@
-from fastapi import FastAPI, Request, status
+from importlib import import_module
+
+from fastapi import FastAPI, Request, status, APIRouter
 from fastapi.responses import JSONResponse
 
 from app.common.errors import EntityNotFoundError
@@ -7,15 +9,14 @@ from app.common.errors import EntityNotFoundError
 def create_app() -> FastAPI:
     app = FastAPI()
 
-    from app.modules.accounts import router, start_mappers
+    for name in ("accounts", "projects"):
+        module = import_module(f"app.modules.{name}")
 
-    start_mappers()
-    app.include_router(router)
+        if hasattr(module, "start_mappers") and callable(module.start_mappers):
+            module.start_mappers()
 
-    from app.modules.projects import router, start_mappers
-
-    start_mappers()
-    app.include_router(router)
+        if hasattr(module, "router") and isinstance(module.router, APIRouter):
+            app.include_router(module.router)
 
     @app.exception_handler(EntityNotFoundError)
     async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):

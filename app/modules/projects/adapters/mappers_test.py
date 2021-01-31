@@ -1,9 +1,6 @@
-import pytest
-
 from app.modules.projects.domain.entities import Project, Task
 
 
-@pytest.mark.integration
 def test_tables(session):
     project = Project(name="Work")
     session.add(project)

@@ -3,23 +3,13 @@ from databases import Database
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.config import settings
-from app.infrastructure.session import engine
-from app.infrastructure.tables import create_tables, drop_tables
 from app.query.dependencies import get_database
 from app.query.routes import api_router
 
 
-@pytest.fixture(autouse=True, scope="module")
-def create_test_database():
-    create_tables(engine)
-    yield
-    drop_tables(engine)
-
-
 @pytest.fixture
-async def database():
-    async with Database(settings.database_url, force_rollback=True) as database:
+async def database(db_url):
+    async with Database(db_url, force_rollback=True) as database:
         yield database
 
 

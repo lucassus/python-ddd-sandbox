@@ -1,12 +1,9 @@
 from datetime import date, datetime
 
-import pytest
-
 from app.modules.projects.entrypoints.dependencies import get_current_time
 from app.modules.projects.test_utils.factories import build_project
 
 
-@pytest.mark.integration
 def test_tasks_endpoint_creates_task(session, client):
     # Given
     project = build_project(name="Test project")
@@ -23,7 +20,6 @@ def test_tasks_endpoint_creates_task(session, client):
     assert response.status_code == 303
 
 
-@pytest.mark.integration
 def test_task_complete_endpoint(session, client):
     # Given
     project = build_project(name="Test project")
@@ -49,7 +45,6 @@ def test_task_complete_endpoint_returns_404(client):
     assert response.status_code == 404
 
 
-@pytest.mark.integration
 def test_task_incomplete_endpoint(session, client):
     # Given
     project = build_project(name="Test project")

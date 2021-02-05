@@ -1,5 +1,5 @@
-import abc
+from app.common.base_entity import BaseEntity
 
 
-class BaseAggregate(abc.ABC):
+class BaseAggregate(BaseEntity):
     pass

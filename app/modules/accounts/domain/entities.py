@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from app.common.base_entity import BaseEntity
+from app.common.base_aggregate import BaseAggregate
 from app.common.message_bus import BaseEvent
 
 
 @dataclass
-class User(BaseEntity):
+class User(BaseAggregate):
     @dataclass
     class AccountCreatedEvent(BaseEvent):
         user_id: int

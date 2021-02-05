@@ -2,14 +2,14 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Optional
 
+from app.common.base_entity import BaseEntity
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.entities.task import Task
 from app.modules.projects.domain.errors import TaskNotFoundError
 
 
 @dataclass
-class Project:
-    id: int = field(init=False)
+class Project(BaseEntity):
     user_id: int = field(init=False)
 
     name: str

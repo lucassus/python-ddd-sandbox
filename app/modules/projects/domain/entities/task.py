@@ -2,11 +2,11 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import Optional
 
+from app.common.base_entity import BaseEntity
+
 
 @dataclass
-class Task:
-    id: int = field(init=False)
-
+class Task(BaseEntity):
     name: str
     completed_at: Optional[date] = None
 

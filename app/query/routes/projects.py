@@ -1,11 +1,10 @@
 from typing import List
 
-from databases import Database
 from fastapi import APIRouter, Depends
 
-from app.infrastructure.tables import projects_table
 from app.query import schemas
-from app.query.dependencies import get_database, get_project
+from app.query.dependencies import get_project
+from app.query.queries.projects import FetchProjectsQuery
 
 router = APIRouter()
 
@@ -15,9 +14,8 @@ router = APIRouter()
     response_model=List[schemas.Project],
     name="Returns the list of projects",
 )
-async def projects_endpoint(database: Database = Depends(get_database)):
-    query = projects_table.select()
-    return await database.fetch_all(query=query)
+async def projects_endpoint(fetch_projects: FetchProjectsQuery = Depends()):
+    return await fetch_projects()
 
 
 @router.get("/{project_id}", response_model=schemas.Project)

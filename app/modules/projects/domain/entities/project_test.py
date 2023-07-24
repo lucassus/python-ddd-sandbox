@@ -2,10 +2,7 @@ from datetime import date
 
 import pytest
 
-from app.modules.projects.domain.errors import (
-    MaxIncompleteTasksNumberIsReached,
-    TaskNotFoundError,
-)
+from app.modules.projects.domain.errors import MaxIncompleteTasksNumberIsReached, TaskNotFoundError
 from app.modules.projects.test_utils.factories import build_project, build_task
 
 

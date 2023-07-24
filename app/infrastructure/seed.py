@@ -4,12 +4,7 @@ import typer
 from tabulate import tabulate
 
 from app.infrastructure.session import engine
-from app.infrastructure.tables import (
-    create_tables,
-    drop_tables,
-    projects_table,
-    tasks_table,
-)
+from app.infrastructure.tables import create_tables, drop_tables, projects_table, tasks_table
 
 
 def main(rebuild_db: bool = True):

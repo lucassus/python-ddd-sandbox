@@ -34,6 +34,8 @@ exceptiongroup==1.1.2
     # via
     #   anyio
     #   pytest
+faker==19.2.0
+    # via -r requirements.in
 fastapi==0.100.0
     # via -r requirements.in
 flake8==6.0.0
@@ -107,7 +109,9 @@ pytest-icdiff==0.6
 pytest-watch==4.2.0
     # via -r requirements.in
 python-dateutil==2.8.2
-    # via libyear
+    # via
+    #   faker
+    #   libyear
 requests==2.31.0
     # via
     #   -r requirements.in

@@ -10,5 +10,5 @@ class User(BaseAggregate):
     class AccountCreatedEvent(BaseEvent):
         user_id: int
 
-    email: str
+    email: str  # TODO: Create value object with validation
     password: str

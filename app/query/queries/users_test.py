@@ -1,29 +1,11 @@
-from app.infrastructure.tables import projects_table, users_table
+from app.query.factories import create_project, create_user
 from app.query.queries.users import FindUserQuery
 
 
 def test_find_user_query(connection):
-    # TODO: Figure out how to create factories for this
-    result = connection.execute(
-        users_table.insert()
-        .values(
-            {"email": "test@email.com", "password": "password"},
-        )
-        .returning(users_table.c.id),
-    )
-
-    user_id = result.fetchone().id
-
-    connection.execute(
-        projects_table.insert()
-        .values(
-            [
-                {"user_id": user_id, "name": "Project One"},
-                {"user_id": user_id, "name": "Project Two"},
-            ]
-        )
-        .returning(projects_table.c.id),
-    )
+    user_id = create_user(connection, email="test@email.com").id
+    create_project(connection, user_id=user_id, name="Project One")
+    create_project(connection, user_id=user_id, name="Project Two")
 
     find_user = FindUserQuery(connection=connection)
     user = find_user(id=user_id)

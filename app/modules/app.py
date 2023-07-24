@@ -6,6 +6,8 @@ from sqlalchemy.orm import registry
 
 from app.common.errors import EntityNotFoundError
 
+APP_MODULES = ("accounts", "projects")
+
 
 def create_app() -> FastAPI:
     app = FastAPI()
@@ -13,7 +15,7 @@ def create_app() -> FastAPI:
     # TODO: Where to put it?
     mapper_registry = registry()
 
-    for name in ("accounts", "projects"):
+    for name in APP_MODULES:
         module = import_module(f"app.modules.{name}")
 
         module.start_mappers(mapper_registry)

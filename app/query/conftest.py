@@ -7,15 +7,20 @@ from app.query.routes import api_router
 
 
 @pytest.fixture
+def app(connection):
+    app = FastAPI()
+    app.include_router(api_router)
+    app.dependency_overrides[get_connection] = lambda: connection
+
+    return app
+
+
+@pytest.fixture
 def connection(db_engine, prepare_db):
     with db_engine.begin() as connection:
         yield connection
 
 
 @pytest.fixture
-def client(connection):
-    app = FastAPI()
-    app.include_router(api_router)
-    app.dependency_overrides[get_connection] = lambda: connection
-
+def client(app):
     return AsyncClient(app=app, base_url="http://test")

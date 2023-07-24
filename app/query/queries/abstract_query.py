@@ -1,8 +1,11 @@
 import abc
+from typing import Optional
 
 from fastapi import Depends
 from sqlalchemy import Connection
 from starlette.requests import Request
+
+from app.common.base_schema import BaseSchema
 
 
 def get_connection(request: Request):
@@ -17,5 +20,5 @@ class AbstractQuery(abc.ABC):
         self._connection = connection
 
     @abc.abstractmethod
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> Optional[BaseSchema]:
         pass

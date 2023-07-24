@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, Depends, Path
 
 from app.query import schemas
@@ -9,16 +7,14 @@ from app.query.queries.tasks import FetchTasksQuery, FindTaskQuery
 
 router = APIRouter()
 
-# TODO: Unit test for the API
-# TODO: Integration tests for the queries
 
-
-@router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
+@router.get("", response_model=list[schemas.Task], name="Returns list of tasks")
 def tasks_endpoint(
     project=Depends(get_project),
     list_tasks: FetchTasksQuery = Depends(),
 ):
-    return list_tasks(project_id=project.id)
+    tasks = list_tasks(project_id=project.id)
+    return [schemas.Task.from_orm(task) for task in tasks]
 
 
 @router.get("/{id}", response_model=schemas.Task)
@@ -32,4 +28,4 @@ def task_endpoint(
     if task is None:
         raise EntityNotFoundError(detail=f"Unable to find a task with ID={id}")
 
-    return task
+    return schemas.Task.from_orm(task)

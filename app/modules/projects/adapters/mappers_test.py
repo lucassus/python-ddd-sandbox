@@ -21,10 +21,3 @@ def test_tables(session):
 
     task: Task = session.query(Task).get(1)
     assert task
-
-    session.add(Task(name="Task without project"))
-    session.commit()
-
-    task: Task = session.query(Task).get(4)
-    assert task
-    assert task.name == "Task without project"

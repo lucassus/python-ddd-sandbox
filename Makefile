@@ -11,7 +11,7 @@ deps-compile:
 	pip-compile requirements.in --output-file requirements.txt
 
 deps-install:
-	pip-sync && yarn install
+	pip-sync
 
 deps: deps-pre deps-compile deps-install
 
@@ -40,9 +40,8 @@ check-black:
 check-flake8:
 	flake8 .
 
-# TODO: Drop this once we have mypy working
 check-types:
-	yarn pyright
+	python -m mypy .
 
 format: format-isort format-black
 

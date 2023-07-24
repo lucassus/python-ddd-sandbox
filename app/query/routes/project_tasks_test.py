@@ -6,26 +6,33 @@ from app.infrastructure.tables import projects_table, tasks_table
 
 
 @pytest.mark.asyncio
-async def test_tasks_endpoint(database, client):
+async def test_tasks_endpoint(connection, client):
     # Given
-    await database.execute(
-        query=projects_table.insert(),
-        values={"id": 1, "name": "Project One"},
-    )
+    connection.execute(projects_table.insert().values([{"id": 1, "name": "Project One"}]))
 
-    await database.execute_many(
-        query=tasks_table.insert(),
-        values=[
-            {"id": 1, "project_id": 1, "name": "Task One"},
+    query = tasks_table.insert().values(
+        [
+            {
+                "id": 1,
+                "project_id": 1,
+                "name": "Task One",
+                "completed_at": None,
+            },
             {
                 "id": 2,
                 "project_id": 1,
                 "name": "Task Two",
                 "completed_at": date(2021, 1, 6),
             },
-            {"id": 3, "project_id": 1, "name": "Task Three"},
-        ],
+            {
+                "id": 3,
+                "project_id": 1,
+                "name": "Task Three",
+                "completed_at": None,
+            },
+        ]
     )
+    connection.execute(query)
 
     # When
     response = await client.get("/projects/1/tasks")
@@ -40,16 +47,16 @@ async def test_tasks_endpoint(database, client):
 
 
 @pytest.mark.asyncio
-async def test_task_endpoint_returns_task(database, client):
+async def test_task_endpoint_returns_task(connection, client):
     # Given
-    await database.execute(
-        query=projects_table.insert(),
-        values={"id": 1, "name": "Project One"},
+    connection.execute(
+        projects_table.insert(),
+        {"id": 1, "name": "Project One"},
     )
 
-    await database.execute(
-        query=tasks_table.insert(),
-        values={"id": 1, "project_id": 1, "name": "Task One"},
+    connection.execute(
+        tasks_table.insert(),
+        {"id": 1, "project_id": 1, "name": "Task One"},
     )
 
     # When

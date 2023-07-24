@@ -4,11 +4,11 @@ from app.infrastructure.tables import projects_table
 
 
 @pytest.mark.asyncio
-async def test_projects_endpoint_returns_list_of_projects(database, client):
+async def test_projects_endpoint_returns_list_of_projects(connection, client):
     # Given
-    await database.execute_many(
-        query=projects_table.insert(),
-        values=[
+    connection.execute(
+        projects_table.insert(),
+        [
             {"name": "Project One"},
             {"name": "Project Two"},
         ],
@@ -26,11 +26,11 @@ async def test_projects_endpoint_returns_list_of_projects(database, client):
 
 
 @pytest.mark.asyncio
-async def test_project_endpoint_returns_the_project(database, client):
+async def test_project_endpoint_returns_the_project(connection, client):
     # Given
-    await database.execute(
-        query=projects_table.insert(),
-        values={"id": 1, "name": "Project One"},
+    connection.execute(
+        projects_table.insert(),
+        [{"id": 1, "name": "Project One"}],
     )
 
     # When

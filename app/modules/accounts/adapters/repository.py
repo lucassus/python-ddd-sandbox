@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.orm.session import Session
 
 from app.modules.accounts.domain.entities import User
@@ -11,5 +13,5 @@ class Repository(AbstractRepository):
     def create(self, user: User) -> None:
         self._session.add(user)
 
-    def get(self, id: int) -> User:
+    def get(self, id: int) -> Optional[User]:
         return self._session.query(User).get(id)

@@ -1,14 +1,20 @@
 import abc
 
-from databases import Database
 from fastapi import Depends
+from sqlalchemy import Connection
+from starlette.requests import Request
 
-from app.query.queries.database import get_database
+
+def get_connection(request: Request):
+    engine = request.state.engine
+
+    with engine.connect() as connection:
+        yield connection
 
 
 class AbstractQuery(abc.ABC):
-    def __init__(self, database: Database = Depends(get_database)):
-        self._database = database
+    def __init__(self, connection: Connection = Depends(get_connection)):
+        self._connection = connection
 
     @abc.abstractmethod
     def __call__(self, *args, **kwargs):

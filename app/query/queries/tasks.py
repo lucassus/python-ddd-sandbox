@@ -8,7 +8,8 @@ class FetchTasksQuery(AbstractQuery):
     def __call__(self, *, project_id: int):
         query = tasks_table.select().where(tasks_table.c.project_id == project_id)
 
-        return self._database.fetch_all(query)
+        result = self._connection.execute(query)
+        return result.all()
 
 
 class FindTaskQuery(AbstractQuery):
@@ -20,4 +21,5 @@ class FindTaskQuery(AbstractQuery):
             )
         )
 
-        return self._database.fetch_one(query)
+        result = self._connection.execute(query)
+        return result.first()

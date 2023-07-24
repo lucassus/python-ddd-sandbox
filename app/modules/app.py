@@ -2,6 +2,7 @@ from importlib import import_module
 
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+from sqlalchemy.orm import registry
 
 from app.common.errors import EntityNotFoundError
 
@@ -9,10 +10,13 @@ from app.common.errors import EntityNotFoundError
 def create_app() -> FastAPI:
     app = FastAPI()
 
+    # TODO: Where to put it?
+    mapper_registry = registry()
+
     for name in ("accounts", "projects"):
         module = import_module(f"app.modules.{name}")
 
-        module.start_mappers()
+        module.start_mappers(mapper_registry)
         app.include_router(module.router)
 
     @app.exception_handler(EntityNotFoundError)

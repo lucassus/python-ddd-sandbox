@@ -14,10 +14,10 @@ router = APIRouter()
     response_model=List[schemas.Project],
     name="Returns the list of projects",
 )
-async def projects_endpoint(fetch_projects: FetchProjectsQuery = Depends()):
-    return await fetch_projects()
+def projects_endpoint(fetch_projects: FetchProjectsQuery = Depends()):
+    return fetch_projects()
 
 
 @router.get("/{project_id}", response_model=schemas.Project)
-async def project_endpoint(project=Depends(get_project)):
+def project_endpoint(project=Depends(get_project)):
     return project

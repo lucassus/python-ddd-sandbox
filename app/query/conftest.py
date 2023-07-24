@@ -1,22 +1,21 @@
 import pytest
-from databases import Database
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.query.queries.database import get_database
+from app.query.queries.abstract_query import get_connection
 from app.query.routes import api_router
 
 
 @pytest.fixture
-async def database(db_url):
-    async with Database(db_url, force_rollback=True) as database:
-        yield database
+def connection(db_engine, prepare_db):
+    with db_engine.begin() as connection:
+        yield connection
 
 
 @pytest.fixture
-def client(database):
+def client(connection):
     app = FastAPI()
     app.include_router(api_router)
-    app.dependency_overrides[get_database] = lambda: database
+    app.dependency_overrides[get_connection] = lambda: connection
 
     return AsyncClient(app=app, base_url="http://test")

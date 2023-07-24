@@ -14,20 +14,20 @@ router = APIRouter()
 
 
 @router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
-async def tasks_endpoint(
+def tasks_endpoint(
     project=Depends(get_project),
     list_tasks: FetchTasksQuery = Depends(),
 ):
-    return await list_tasks(project_id=project.id)
+    return list_tasks(project_id=project.id)
 
 
 @router.get("/{id}", response_model=schemas.Task)
-async def task_endpoint(
+def task_endpoint(
     project=Depends(get_project),
     id: int = Path(..., description="The ID of the task", ge=1),
     find_task: FindTaskQuery = Depends(),
 ):
-    task = await find_task(project_id=project.id, task_id=id)
+    task = find_task(project_id=project.id, task_id=id)
 
     if task is None:
         raise EntityNotFoundError(detail=f"Unable to find a task with ID={id}")

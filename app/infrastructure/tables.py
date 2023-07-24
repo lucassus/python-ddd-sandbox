@@ -26,7 +26,7 @@ tasks_table = Table(
     Column("id", Integer(), primary_key=True, autoincrement=True),
     Column("project_id", Integer(), ForeignKey(projects_table.c.id)),
     Column("name", String(255)),
-    Column("completed_at", Date, nullable=True),
+    Column("completed_at", Date(), nullable=True),
 )
 
 

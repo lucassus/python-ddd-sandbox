@@ -18,8 +18,8 @@ def db_engine(db_url) -> Engine:
     return create_engine(db_url, connect_args={"check_same_thread": False})
 
 
-@pytest.fixture(autouse=True, scope="module")
-def prepare_test_database(db_engine):
+@pytest.fixture
+def prepare_db(db_engine):
     create_tables(db_engine)
     yield
     drop_tables(db_engine)

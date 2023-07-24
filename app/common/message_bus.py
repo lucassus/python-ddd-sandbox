@@ -1,6 +1,6 @@
 import abc
 from collections import defaultdict
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Type
 
 
 class BaseEvent(abc.ABC):

@@ -12,10 +12,11 @@ black==23.7.0
 flake8==3.8.4
 httpx==0.16.1
 isort==5.7.0
-pytest==6.2.1
+libyear==0.2.1
 pytest-asyncio==0.14.0
 pytest-cov==2.10.1
 pytest-icdiff==0.5
 pytest-watch==4.2.0
+pytest==6.2.1
 requests==2.25.1
 sqlalchemy-stubs==0.3

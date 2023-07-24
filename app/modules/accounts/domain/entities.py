@@ -1,14 +1,14 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
+from app.common.base_aggregate import BaseAggregate
 from app.common.message_bus import BaseEvent
 
 
 @dataclass
-class User:
+class User(BaseAggregate):
     @dataclass
     class AccountCreatedEvent(BaseEvent):
         user_id: int
 
-    id: int = field(init=False)
     email: str
     password: str

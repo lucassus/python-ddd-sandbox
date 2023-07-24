@@ -1,0 +1,14 @@
+[flake8]
+jobs = auto
+show-source = True
+statistics = True
+
+exclude =
+    .git,
+    venv,
+
+# Ignore rules clashing with Black
+extend-ignore = E203,W293
+max-line-length = 120
+
+ban-relative-imports = True

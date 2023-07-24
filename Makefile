@@ -5,20 +5,20 @@ venv:
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:
-	pip install pip-tools
+	pip install --upgrade pip==23.2.1 pip-tools==7.1.0
 
 deps-compile:
-	pip-compile requirements.in --output-file=requirements.txt
+	pip-compile requirements.in --output-file requirements.txt
 
 deps-install:
-	pip-sync && yarn install
+	pip-sync
 
 deps: deps-pre deps-compile deps-install
 
 install: deps-pre deps-install
 
 seed:
-	python -m app.entrypoints.cli.seed
+	python -m app.infrastructure.seed
 
 server-dev:
 	uvicorn app.main:app --reload
@@ -41,7 +41,7 @@ check-flake8:
 	flake8 .
 
 check-types:
-	yarn pyright
+	python -m mypy .
 
 format: format-isort format-black
 

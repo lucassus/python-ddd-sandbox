@@ -3,7 +3,7 @@ from databases import Database
 from fastapi import FastAPI
 from httpx import AsyncClient
 
-from app.query.dependencies import get_database
+from app.query.queries.database import get_database
 from app.query.routes import api_router
 
 

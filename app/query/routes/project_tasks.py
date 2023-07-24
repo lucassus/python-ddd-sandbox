@@ -1,41 +1,35 @@
 from typing import List
 
-from databases import Database
 from fastapi import APIRouter, Depends, Path
-from sqlalchemy import and_
 
-from app.infrastructure.tables import tasks_table
 from app.query import schemas
-from app.query.dependencies import get_database, get_project
+from app.query.dependencies import get_project
 from app.query.errors import EntityNotFoundError
+from app.query.queries.tasks import FetchTasksQuery, FindTaskQuery
 
 router = APIRouter()
+
+# TODO: Unit test for the API
+# TODO: Integration tests for the queries
 
 
 @router.get("", response_model=List[schemas.Task], name="Returns list of tasks")
 async def tasks_endpoint(
     project=Depends(get_project),
-    database: Database = Depends(get_database),
+    list_tasks: FetchTasksQuery = Depends(),
 ):
-    query = tasks_table.select().where(tasks_table.c.project_id == project["id"])
-    return await database.fetch_all(query=query)
+    return await list_tasks(project_id=project.id)
 
 
 @router.get("/{id}", response_model=schemas.Task)
 async def task_endpoint(
     project=Depends(get_project),
     id: int = Path(..., description="The ID of the task", ge=1),
-    database: Database = Depends(get_database),
+    find_task: FindTaskQuery = Depends(),
 ):
-    query = tasks_table.select().where(
-        and_(
-            tasks_table.c.project_id == project["id"],
-            tasks_table.c.id == id,
-        )
-    )
-    row = await database.fetch_one(query=query)
+    task = await find_task(project_id=project.id, task_id=id)
 
-    if row is None:
+    if task is None:
         raise EntityNotFoundError(detail=f"Unable to find a task with ID={id}")
 
-    return row
+    return task

@@ -12,8 +12,8 @@ def create_app() -> FastAPI:
     for name in ("accounts", "projects"):
         module = import_module(f"app.modules.{name}")
 
-        module.start_mappers()  # type: ignore
-        app.include_router(module.router)  # type: ignore
+        module.start_mappers()
+        app.include_router(module.router)
 
     @app.exception_handler(EntityNotFoundError)
     async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):

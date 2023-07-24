@@ -6,6 +6,7 @@
 * `make install`
 * `make seed`
 * `make server-dev`
+* `curl http://127.0.0.1:8000/projects`
 
 ## Linting and testing
 

@@ -14,6 +14,7 @@ def test_tasks_endpoint_creates_task(session, client):
     response = client.post(
         f"/projects/{project.id}/tasks",
         json={"name": "Some task"},
+        follow_redirects=False,
     )
 
     # Then
@@ -31,7 +32,10 @@ def test_task_complete_endpoint(session, client):
     client.app.dependency_overrides[get_current_time] = lambda: now
 
     # When
-    response = client.put(f"/projects/{project.id}/tasks/{task.id}/complete")
+    response = client.put(
+        f"/projects/{project.id}/tasks/{task.id}/complete",
+        follow_redirects=False,
+    )
 
     # Then
     assert response.status_code == 303
@@ -57,7 +61,10 @@ def test_task_incomplete_endpoint(session, client):
     session.commit()
 
     # When
-    response = client.put(f"/projects/{project.id}/tasks/{task.id}/incomplete")
+    response = client.put(
+        f"/projects/{project.id}/tasks/{task.id}/incomplete",
+        follow_redirects=False,
+    )
 
     # Then
     assert response.status_code == 303

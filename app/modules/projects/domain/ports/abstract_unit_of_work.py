@@ -1,11 +1,9 @@
 import abc
 
-from typing_extensions import ContextManager
-
 from app.modules.projects.domain.ports import AbstractRepository
 
 
-class AbstractUnitOfWork(ContextManager, abc.ABC):
+class AbstractUnitOfWork(abc.ABC):
     """
     Example usage:
         class ConcreteUnitOfWork(AbstractUnitOfWork):

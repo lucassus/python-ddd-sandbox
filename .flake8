@@ -5,7 +5,7 @@ statistics = True
 
 exclude =
     .git,
-    .venv,
+    venv,
 
 # Ignore rules clashing with Black
 extend-ignore = E203,W293

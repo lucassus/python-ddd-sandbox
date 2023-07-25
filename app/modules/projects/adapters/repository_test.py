@@ -1,17 +1,19 @@
 import pytest
 
+from app.infrastructure.factories import create_project
 from app.modules.projects.adapters.repository import Repository
 from app.modules.projects.domain.entities import Project
 from app.modules.projects.domain.errors import ProjectNotFoundError
 
 
 def test_repository_get(session):
-    project = Project(name="Test project")
-    session.add(project)
-    session.commit()
+    project_id = create_project(session.connection(), name="Test project").id
 
     repository = Repository(session=session)
-    assert repository.get(1) == project
+    project = repository.get(1)
+
+    assert project.id == project_id
+    assert project.name == "Test project"
 
 
 def test_repository_get_returns_none(session):
@@ -26,12 +28,7 @@ def test_repository_list(session):
 
     assert repository.list() == []
 
-    project = Project(name="Project One")
-    session.add(project)
-
-    project = Project(name="Project Two")
-    session.add(project)
-
-    session.commit()
+    create_project(session.connection(), name="Project One")
+    create_project(session.connection(), name="Project Two")
 
     assert len(repository.list()) == 2

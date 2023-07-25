@@ -50,6 +50,9 @@ def create_project(
     user_id: Optional[int] = None,
     name: Optional[str] = None,
 ):
+    if user_id is None:
+        user_id = create_user(connection).id
+
     project = connection.execute(
         projects_table.insert().values(_build_project(user_id=user_id, name=name)).returning(projects_table)
     ).first()

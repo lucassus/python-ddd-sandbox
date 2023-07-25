@@ -1,10 +1,12 @@
+from sqlalchemy.orm import Session
+
+from app.infrastructure.factories import create_project
 from app.modules.projects.domain.entities import Project, Task
 
 
-def test_tables(session):
-    project = Project(name="Work")
-    session.add(project)
-    session.commit()
+def test_tables(session: Session):
+    project_id = create_project(session.connection()).id
+    project = session.query(Project).get(project_id)
 
     assert len(session.query(Project).get(1).tasks) == 0
 

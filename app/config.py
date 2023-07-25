@@ -2,8 +2,7 @@ from pathlib import Path
 
 from pydantic import BaseSettings
 
-# TODO: Fix it
-database_path = (Path(__file__).parent / "../db/development.db").resolve()
+database_path = (Path(__file__).parent / "infrastructure/databases/development.db").resolve()
 
 
 class Settings(BaseSettings):

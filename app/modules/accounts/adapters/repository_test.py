@@ -2,8 +2,8 @@ import pytest
 from sqlalchemy.orm.session import Session
 
 from app.modules.accounts.adapters.repository import Repository
+from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.entities import User
-from app.shared.email_address import EmailAddress
 
 
 class TestRepository:

@@ -1,7 +1,7 @@
+from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.entities import User
 from app.modules.accounts.domain.exceptions import EmailAlreadyExistsException
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
-from app.shared.email_address import EmailAddress
 from app.shared.message_bus import MessageBus
 
 

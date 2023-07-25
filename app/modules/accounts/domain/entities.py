@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
+from app.modules.accounts.domain.email_address import EmailAddress
 from app.shared.base_aggregate import BaseAggregate
-from app.shared.email_address import EmailAddress
 from app.shared.message_bus import BaseEvent
 
 

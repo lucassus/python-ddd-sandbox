@@ -2,7 +2,7 @@ from typing import Any
 
 from sqlalchemy import String, types
 
-from app.shared.email_address import EmailAddress
+from app.modules.accounts.domain.email_address import EmailAddress
 
 
 class EmailType(types.TypeDecorator[Any]):

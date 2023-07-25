@@ -7,7 +7,7 @@ users_table = Table(
     "users",
     metadata,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("email", String(255)),
+    Column("email", String(255)),  # TODO: Add unique constraint
     Column("password", String(255)),
 )
 

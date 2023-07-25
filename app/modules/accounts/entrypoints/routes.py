@@ -15,6 +15,7 @@ def user_register_endpoint(
     data: schemas.RegisterUser,
     service: Annotated[Service, Depends(get_service)],
 ):
+    # TODO: Handle EmailAlreadyExistsException
     user_id = service.register_user(email=data.email, password=data.password)
 
     return RedirectResponse(

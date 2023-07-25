@@ -1,9 +1,9 @@
-import os
+from pathlib import Path
 
 from pydantic import BaseSettings
 
-# TODO: Use pathlib
-database_path = os.path.join(os.path.dirname(__file__), "../db/development.db")
+# TODO: Fix it
+database_path = (Path(__file__).parent / "../db/development.db").resolve()
 
 
 class Settings(BaseSettings):

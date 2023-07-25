@@ -3,10 +3,14 @@ from typing import Any
 from app.shared.base_value_object import BaseValueObject
 
 
+class InvalidEmailAddressError(Exception):
+    pass
+
+
 class EmailAddress(BaseValueObject):
     def __init__(self, address: str):
         if not self.is_valid(address):
-            raise ValueError("Invalid email address")
+            raise InvalidEmailAddressError()
 
         self._address = address
 

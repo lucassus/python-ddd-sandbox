@@ -1,11 +1,11 @@
 import pytest
 
-from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.email_address import EmailAddress, InvalidEmailAddressError
 
 
 class TestEmailAddress:
     def test_when_invalid_raises_error(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(InvalidEmailAddressError):
             EmailAddress("invalid")
 
     def test_when_valid(self):

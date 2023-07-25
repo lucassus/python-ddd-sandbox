@@ -1,19 +1,20 @@
+import pytest
+
+from app.modules.projects.domain.errors import ProjectNotFoundError
 from app.modules.projects.test_utils.factories import build_project
 from app.modules.projects.test_utils.fake_repository import FakeRepository
 
 
 def test_fake_repository():
-    repository = FakeRepository(
-        projects=[
-            build_project(id=1, name="First"),
-        ]
-    )
+    repository = FakeRepository()
 
-    repository.create(build_project(name="Foo"))
-    repository.create(build_project(name="Bar"))
-
-    assert len(repository.list()) == 3
+    repository.create(build_project(name="First"))
+    repository.create(build_project(name="Second"))
 
     project = repository.get(1)
     assert project is not None
     assert project.id == 1
+    assert project.name == "First"
+
+    with pytest.raises(ProjectNotFoundError):
+        repository.get(3)

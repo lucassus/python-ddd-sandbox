@@ -13,7 +13,7 @@ class Service:
     def register_user(self, *, email: EmailAddress, password: str) -> int:
         with self._uow as uow:
             if uow.repository.exists_by_email(email):
-                raise EmailAlreadyExistsException(email.address)
+                raise EmailAlreadyExistsException(email)
 
             user = User(email=email, password=password)
             uow.repository.create(user)

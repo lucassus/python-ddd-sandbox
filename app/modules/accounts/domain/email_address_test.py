@@ -22,3 +22,7 @@ class TestEmailAddress:
     )
     def test_equals_returns(self, left: EmailAddress, right: EmailAddress, expected: bool):
         assert (left == right) == expected
+
+    def test_str(self):
+        email = EmailAddress("some@email.com")
+        assert str(email) == "some@email.com"

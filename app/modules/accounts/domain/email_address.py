@@ -27,3 +27,6 @@ class EmailAddress(BaseValueObject):
             return False
 
         return self.address == other.address
+
+    def __str__(self) -> str:
+        return self.address

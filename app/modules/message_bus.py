@@ -1,5 +1,5 @@
 from app.infrastructure.db import AppSession
-from app.modules.accounts.domain.entities import User
+from app.modules.accounts.domain.user import User
 from app.shared.message_bus import MessageBus
 
 bus = MessageBus()

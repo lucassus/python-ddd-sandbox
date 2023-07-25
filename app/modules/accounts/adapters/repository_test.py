@@ -12,13 +12,13 @@ class TestRepository:
         return Repository(session=session)
 
     def test_exists_by_email_returns_false(self, repository: Repository):
-        assert repository.exists_by_email("test@email.com") is False
+        assert repository.exists_by_email(EmailAddress("test@email.com")) is False
 
     def test_exists_by_email_returns_true(self, session: Session, repository: Repository):
         repository.create(User(email=EmailAddress("test@email.com"), password="password"))
         session.commit()
 
-        assert repository.exists_by_email("test@email.com") is True
+        assert repository.exists_by_email(EmailAddress("test@email.com")) is True
 
     def test_create(self, session: Session, repository: Repository):
         user = User(email=EmailAddress("test@email.com"), password="password")

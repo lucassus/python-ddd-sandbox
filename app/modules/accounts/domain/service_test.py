@@ -6,12 +6,13 @@ from app.modules.accounts.domain.entities import User
 from app.modules.accounts.domain.exceptions import EmailAlreadyExistsException
 from app.modules.accounts.domain.ports import AbstractRepository, AbstractUnitOfWork
 from app.modules.accounts.domain.service import Service
+from app.shared.email_address import EmailAddress
 from app.shared.message_bus import MessageBus
 
 
 class FakeRepository(AbstractRepository):
-    def exists_by_email(self, email: str) -> bool:
-        return email == "existing@email.com"
+    def exists_by_email(self, email: EmailAddress) -> bool:
+        return email == EmailAddress("existing@email.com")
 
     def create(self, user: User):
         user.id = 123
@@ -48,7 +49,7 @@ def service(uow, message_bus):
 def test_register_user_returns_user_id(service, uow):
     # When
     user_id = service.register_user(
-        email="test@email.com",
+        email=EmailAddress("test@email.com"),
         password="passwd123",
     )
 
@@ -64,7 +65,7 @@ def test_register_user_dispatches_account_created_event(uow, message_bus, servic
 
     # When
     service.register_user(
-        email="test@email.com",
+        email=EmailAddress("test@email.com"),
         password="passwd123",
     )
 
@@ -80,7 +81,7 @@ def test_register_user_validate_email_uniqueness(uow, service):
         match="A user with the email existing@email.com already exists",
     ):
         service.register_user(
-            email="existing@email.com",
+            email=EmailAddress("existing@email.com"),
             password="passwd123",
         )
 

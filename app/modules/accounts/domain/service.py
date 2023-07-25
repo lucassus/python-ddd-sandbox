@@ -10,12 +10,12 @@ class Service:
         self._uow = uow
         self._bus = bus
 
-    def register_user(self, *, email: str, password: str) -> int:
+    def register_user(self, *, email: EmailAddress, password: str) -> int:
         with self._uow as uow:
             if uow.repository.exists_by_email(email):
-                raise EmailAlreadyExistsException(email)
+                raise EmailAlreadyExistsException(email.address)
 
-            user = User(email=EmailAddress(email), password=password)
+            user = User(email=email, password=password)
             uow.repository.create(user)
             uow.commit()
 

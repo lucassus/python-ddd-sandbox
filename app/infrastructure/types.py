@@ -7,6 +7,7 @@ from app.modules.accounts.domain.email_address import EmailAddress
 
 class EmailType(types.TypeDecorator[Any]):
     impl = String(255)
+    cache_ok = True
 
     def process_bind_param(self, value, dialect):
         if isinstance(value, EmailAddress):

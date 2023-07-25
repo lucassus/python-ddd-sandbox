@@ -10,7 +10,7 @@ class Repository(AbstractRepository):
         self._session = session
 
     def get(self, id: int) -> Project:
-        project = self._session.query(Project).get(id)
+        project = self._session.get(Project, id)
 
         if project is None:
             raise ProjectNotFoundError(id)

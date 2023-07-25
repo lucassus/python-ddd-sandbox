@@ -12,3 +12,7 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def create(self, user: User):
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get(self, user_id) -> User | None:
+        raise NotImplementedError

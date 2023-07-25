@@ -17,6 +17,9 @@ class FakeRepository(AbstractRepository):
     def create(self, user: User):
         user.id = 123
 
+    def get(self, user_id) -> User | None:
+        return None
+
 
 class FakeUnitOfWork(AbstractUnitOfWork):
     committed = False

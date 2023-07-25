@@ -27,3 +27,6 @@ class Repository(AbstractRepository):
 
     def create(self, user: User) -> None:
         self._session.add(user)
+
+    def get(self, user_id) -> User | None:
+        return self._session.get(User, user_id)

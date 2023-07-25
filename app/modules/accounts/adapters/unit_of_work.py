@@ -12,7 +12,7 @@ class UnitOfWork(AbstractUnitOfWork):
     def __init__(self, session_factory: Callable[..., Session]):
         self._session_factory = session_factory
 
-    def __enter__(self):
+    def __enter__(self) -> "UnitOfWork":
         self._session = self._session_factory()
         self.repository = Repository(session=self._session)
 

@@ -1,8 +1,8 @@
 import abc
-from typing import Annotated, Optional
+from typing import Annotated, Any, Optional
 
 from fastapi import Depends
-from sqlalchemy import Connection
+from sqlalchemy import Connection, Executable
 
 from app.infrastructure.db import engine
 from app.shared.base_schema import BaseSchema
@@ -23,3 +23,9 @@ class AbstractQuery(abc.ABC):
     @abc.abstractmethod
     def __call__(self, *args, **kwargs) -> Optional[BaseSchema]:
         pass
+
+    def _first_from(self, query: Executable) -> Any:
+        return self._connection.execute(query).first()
+
+    def _all_from(self, query: Executable) -> list[Any]:
+        return list(self._connection.execute(query).all())

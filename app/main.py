@@ -9,5 +9,5 @@ create_tables(engine)
 
 app = FastAPI()
 
-app.mount("/", create_queries_app())
+app.mount("/queries", create_queries_app())
 app.mount("/commands", create_commands_app())

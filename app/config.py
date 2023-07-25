@@ -2,6 +2,7 @@ import os
 
 from pydantic import BaseSettings
 
+# TODO: Use pathlib
 database_path = os.path.join(os.path.dirname(__file__), "../db/development.db")
 
 

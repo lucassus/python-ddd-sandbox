@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, Path
 
 from app.query import schemas
@@ -10,8 +12,8 @@ router = APIRouter()
 
 @router.get("", response_model=list[schemas.Task], name="Returns list of tasks")
 def tasks_endpoint(
+    list_tasks: Annotated[FetchTasksQuery, Depends()],
     project=Depends(get_project),
-    list_tasks: FetchTasksQuery = Depends(),
 ):
     tasks = list_tasks(project_id=project.id)
     return [schemas.Task.from_orm(task) for task in tasks]
@@ -19,9 +21,9 @@ def tasks_endpoint(
 
 @router.get("/{id}", response_model=schemas.Task)
 def task_endpoint(
+    find_task: Annotated[FindTaskQuery, Depends()],
     project=Depends(get_project),
     id: int = Path(..., description="The ID of the task", ge=1),
-    find_task: FindTaskQuery = Depends(),
 ):
     task = find_task(project_id=project.id, task_id=id)
 

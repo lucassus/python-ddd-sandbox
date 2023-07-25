@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends
 
 from app.query import schemas
@@ -14,7 +16,7 @@ router = APIRouter()
 )
 def user_endpoint(
     id: int,
-    find_user: FindUserQuery = Depends(),
+    find_user: Annotated[FindUserQuery, Depends()],
 ):
     user = find_user(id=id)
 

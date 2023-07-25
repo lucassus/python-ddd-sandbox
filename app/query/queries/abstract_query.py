@@ -1,22 +1,23 @@
 import abc
-from typing import Optional
+from typing import Annotated, Optional
 
 from fastapi import Depends
 from sqlalchemy import Connection
-from starlette.requests import Request
 
+from app.infrastructure.db import engine
 from app.shared.base_schema import BaseSchema
 
 
-def get_connection(request: Request):
-    engine = request.state.engine
-
+def get_connection():
     with engine.connect() as connection:
         yield connection
 
 
 class AbstractQuery(abc.ABC):
-    def __init__(self, connection: Connection = Depends(get_connection)):
+    def __init__(
+        self,
+        connection: Annotated[Connection, Depends(get_connection)],
+    ):
         self._connection = connection
 
     @abc.abstractmethod

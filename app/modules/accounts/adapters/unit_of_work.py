@@ -6,7 +6,6 @@ from app.modules.accounts.adapters.repository import Repository
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
 
 
-# TODO: Figure out how to dry it
 class UnitOfWork(AbstractUnitOfWork):
     repository: Repository
 

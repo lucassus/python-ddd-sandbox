@@ -52,9 +52,9 @@ lint: check-types check-flake8 check-isort check-black
 test:
 	APP_ENV=test pytest app
 
-# TODO: Tune coverage settings
 test-cov:
 	APP_ENV=test pytest app --verbose \
+		--cov-config=.coveragerc \
 		--cov=app \
 		--cov-report=term:skip-covered \
 		--cov-report=html \

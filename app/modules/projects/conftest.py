@@ -8,14 +8,7 @@ start_mappers(mapper_registry)
 
 
 @pytest.fixture
-def db_connection(db_engine):
-    connection = db_engine.connect()
-    yield connection
-    connection.close()
-
-
-@pytest.fixture
-def session(request, db_connection, prepare_db):
-    session = Session(bind=db_connection)
+def session(connection, prepare_db):
+    session = Session(bind=connection)
     yield session
     session.close()

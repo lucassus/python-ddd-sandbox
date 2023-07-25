@@ -16,11 +16,5 @@ def app(connection):
 
 
 @pytest.fixture
-def connection(db_engine, prepare_db):
-    with db_engine.begin() as connection:
-        yield connection
-
-
-@pytest.fixture
 def client(app):
     return AsyncClient(app=app, base_url="http://test")

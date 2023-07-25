@@ -3,8 +3,8 @@ from datetime import date
 import typer
 from tabulate import tabulate
 
+from app.infrastructure.db import engine
 from app.infrastructure.factories import create_project, create_task, create_user
-from app.infrastructure.session import engine
 from app.infrastructure.tables import create_tables, drop_tables, tasks_table
 
 

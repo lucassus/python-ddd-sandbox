@@ -1,9 +1,10 @@
 import abc
 
 from app.modules.projects.domain.ports import AbstractRepository
+from app.shared.base_unit_of_work import BaseUnitOfWork
 
 
-class AbstractUnitOfWork(abc.ABC):
+class AbstractUnitOfWork(BaseUnitOfWork, metaclass=abc.ABCMeta):
     """
     Example usage:
         class ConcreteUnitOfWork(AbstractUnitOfWork):
@@ -16,17 +17,3 @@ class AbstractUnitOfWork(abc.ABC):
     """
 
     repository: AbstractRepository
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        self.rollback()  # It does nothing when the session has been committed before
-
-    @abc.abstractmethod
-    def commit(self):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def rollback(self):
-        raise NotImplementedError

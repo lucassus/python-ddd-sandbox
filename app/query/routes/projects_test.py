@@ -1,18 +1,13 @@
 import pytest
 
-from app.infrastructure.tables import projects_table
+from app.infrastructure.factories import create_project
 
 
 @pytest.mark.asyncio
-async def test_projects_endpoint_returns_list_of_projects(database, client):
+async def test_projects_endpoint_returns_list_of_projects(connection, client):
     # Given
-    await database.execute_many(
-        query=projects_table.insert(),
-        values=[
-            {"name": "Project One"},
-            {"name": "Project Two"},
-        ],
-    )
+    create_project(connection, name="Project One")
+    create_project(connection, name="Project Two")
 
     # When
     response = await client.get("/projects")
@@ -26,19 +21,20 @@ async def test_projects_endpoint_returns_list_of_projects(database, client):
 
 
 @pytest.mark.asyncio
-async def test_project_endpoint_returns_the_project(database, client):
+async def test_project_endpoint_returns_the_project(connection, client):
     # Given
-    await database.execute(
-        query=projects_table.insert(),
-        values={"id": 1, "name": "Project One"},
-    )
+    user_id = create_project(connection, name="Project One").id
+    project_id = create_project(connection, user_id=user_id, name="Project One").id
 
     # When
-    response = await client.get("/projects/1")
+    response = await client.get(f"/projects/{project_id}")
 
     # Then
     assert response.status_code == 200
-    assert response.json() == {"id": 1, "name": "Project One"}
+    assert response.json() == {
+        "id": project_id,
+        "name": "Project One",
+    }
 
 
 @pytest.mark.asyncio

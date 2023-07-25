@@ -8,7 +8,7 @@ class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def create_first_project(self, *, user_id: int) -> int:
+    def create_example_project(self, *, user_id: int) -> Project:
         with self._uow as uow:
             project = Project(name="My first project")
             project.user_id = user_id
@@ -22,7 +22,7 @@ class Service:
             uow.repository.create(project)
             uow.commit()
 
-            return project.id
+            return project
 
     def create_task(self, *, project_id, name: str) -> int:
         with self._uow as uow:

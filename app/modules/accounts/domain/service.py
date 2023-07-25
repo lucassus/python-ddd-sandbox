@@ -1,6 +1,7 @@
-from app.common.message_bus import MessageBus
 from app.modules.accounts.domain.entities import User
+from app.modules.accounts.domain.exceptions import EmailAlreadyExistsException
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
+from app.shared.message_bus import MessageBus
 
 
 class Service:
@@ -10,6 +11,9 @@ class Service:
 
     def register_user(self, *, email: str, password: str) -> int:
         with self._uow as uow:
+            if uow.repository.exists_by_email(email):
+                raise EmailAlreadyExistsException(email)
+
             user = User(email=email, password=password)
             uow.repository.create(user)
             uow.commit()

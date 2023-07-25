@@ -1,7 +1,7 @@
 from datetime import date
-from typing import List, Optional
+from typing import Optional
 
-from app.common.base_schema import BaseSchema
+from app.shared.base_schema import BaseSchema
 
 
 class Project(BaseSchema):
@@ -18,6 +18,5 @@ class Task(BaseSchema):
 class User(BaseSchema):
     id: int
     email: str
-    password: str
 
-    projects: List[Project]
+    projects: list[Project]

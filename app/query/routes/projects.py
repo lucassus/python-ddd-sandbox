@@ -1,4 +1,4 @@
-from typing import List
+from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
@@ -11,13 +11,13 @@ router = APIRouter()
 
 @router.get(
     "",
-    response_model=List[schemas.Project],
+    response_model=list[schemas.Project],
     name="Returns the list of projects",
 )
-async def projects_endpoint(fetch_projects: FetchProjectsQuery = Depends()):
-    return await fetch_projects()
+def projects_endpoint(fetch_projects: Annotated[FetchProjectsQuery, Depends()]):
+    return fetch_projects()
 
 
 @router.get("/{project_id}", response_model=schemas.Project)
-async def project_endpoint(project=Depends(get_project)):
+def project_endpoint(project=Depends(get_project)):
     return project

@@ -1,12 +1,26 @@
 import os
+from enum import StrEnum
 
 from pydantic import BaseSettings
+from pydantic.fields import Field
 
-database_path = os.path.join(os.path.dirname(__file__), "../db/development.db")
+
+class Environment(StrEnum):
+    DEVELOPMENT = "development"
+    PRODUCTION = "production"
+    TEST = "test"
+
+
+_environment = os.getenv("APP_ENV", Environment.DEVELOPMENT)
 
 
 class Settings(BaseSettings):
-    database_url: str = f"sqlite:///{database_path}"
+    environment: Environment = Field(..., env="APP_ENV")
+    database_url: str = Field(..., env="APP_DATABASE_URL")
+
+    class Config:
+        env_file = f".env.{_environment}"
+        env_file_encoding = "utf-8"
 
 
 settings = Settings()

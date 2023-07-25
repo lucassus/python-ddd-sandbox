@@ -7,10 +7,10 @@ if TYPE_CHECKING:
 
 
 def project_has_allowed_number_of_incomplete_tasks(project: "Project") -> None:
-    if project.max_incomplete_tasks_number is None:
+    if project.maximum_number_of_incomplete_tasks is None:
         return
 
     incomplete_tasks_number = len([task for task in project.tasks if not task.is_completed])
 
-    if incomplete_tasks_number >= project.max_incomplete_tasks_number:
+    if incomplete_tasks_number >= project.maximum_number_of_incomplete_tasks:
         raise MaxIncompleteTasksNumberIsReached

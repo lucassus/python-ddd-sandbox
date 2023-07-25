@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse
 
@@ -11,8 +13,9 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.post("")
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    service: Service = Depends(get_service),
+    service: Annotated[Service, Depends(get_service)],
 ):
+    # TODO: Handle EmailAlreadyExistsException
     user_id = service.register_user(email=data.email, password=data.password)
 
     return RedirectResponse(

@@ -9,12 +9,12 @@ from app.modules.projects.entrypoints.routes import router
 
 
 @pytest.fixture
-def client(db_connection):
+def client(connection):
     app = FastAPI()
     app.include_router(router)
 
     def session_factory():
-        return Session(bind=db_connection)
+        return Session(bind=connection)
 
     uow = UnitOfWork(session_factory=session_factory)
 

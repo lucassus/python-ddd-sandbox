@@ -1,6 +1,6 @@
 import abc
 from collections import defaultdict
-from typing import Callable, Dict, List
+from typing import Callable
 
 
 class BaseEvent(abc.ABC):
@@ -9,7 +9,7 @@ class BaseEvent(abc.ABC):
 
 class MessageBus:
     def __init__(self):
-        self._listeners: Dict[type, List[Callable]] = defaultdict(list)
+        self._listeners: dict[type, list[Callable]] = defaultdict(list)
 
     def listen(self, event_class: type, fn=None):
         def on(handler):

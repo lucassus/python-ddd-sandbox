@@ -25,6 +25,18 @@ def service(fake_uow):
     return Service(uow=fake_uow)
 
 
+def test_create_example_project(service, fake_uow):
+    project = service.create_example_project(user_id=1)
+
+    assert fake_uow.committed
+    assert project.name == "My first project"
+    assert len(project.tasks) == 3
+    assert project.tasks[0].name == "Sign up!"
+    assert project.tasks[0].completed_at is not None
+    assert project.tasks[1].name == "Watch the tutorial"
+    assert project.tasks[2].name == "Start using our awesome app"
+
+
 def test_create_task(service, project, fake_uow):
     service.create_task(project_id=project.id, name="Testing...")
 

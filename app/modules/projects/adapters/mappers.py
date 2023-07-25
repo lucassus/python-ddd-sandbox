@@ -1,11 +1,11 @@
-from sqlalchemy.orm import mapper, relationship
+from sqlalchemy.orm import relationship
 
 from app.infrastructure.tables import projects_table, tasks_table
 from app.modules.projects.domain.entities import Project, Task
 
 
-def start_mappers():
-    mapper(
+def start_mappers(mapper_registry):
+    mapper_registry.map_imperatively(
         Project,
         projects_table,
         properties={
@@ -13,4 +13,4 @@ def start_mappers():
         },
     )
 
-    mapper(Task, tasks_table)
+    mapper_registry.map_imperatively(Task, tasks_table)

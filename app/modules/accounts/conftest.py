@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.orm import Session, registry
 
-from app.modules.projects.adapters.mappers import start_mappers
+from app.modules.accounts.adapters.mappers import start_mappers
 
 mapper_registry = registry()
 start_mappers(mapper_registry)

@@ -1,13 +1,13 @@
 from fastapi import Depends
 
-from app.infrastructure.session import session_factory
+from app.infrastructure.db import AppSession
 from app.modules.accounts.adapters.unit_of_work import UnitOfWork
 from app.modules.accounts.domain.service import Service
 from app.modules.message_bus import bus
 
 
 def get_uow():
-    return UnitOfWork(session_factory=session_factory)
+    return UnitOfWork(session_factory=AppSession)
 
 
 def get_service(uow=Depends(get_uow)) -> Service:

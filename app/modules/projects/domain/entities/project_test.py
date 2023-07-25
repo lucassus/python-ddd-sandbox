@@ -17,7 +17,7 @@ def test_add_task():
 
 
 def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
-    project = build_project(max_incomplete_tasks_number=1)
+    project = build_project(maximum_number_of_incomplete_tasks=1)
     project.add_task(name="First")
 
     with pytest.raises(MaxIncompleteTasksNumberIsReached):

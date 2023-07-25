@@ -1,15 +1,25 @@
 import abc
+from typing import Annotated, Optional
 
-from databases import Database
 from fastapi import Depends
+from sqlalchemy import Connection
 
-from app.query.queries.database import get_database
+from app.infrastructure.db import engine
+from app.shared.base_schema import BaseSchema
+
+
+def get_connection():
+    with engine.connect() as connection:
+        yield connection
 
 
 class AbstractQuery(abc.ABC):
-    def __init__(self, database: Database = Depends(get_database)):
-        self._database = database
+    def __init__(
+        self,
+        connection: Annotated[Connection, Depends(get_connection)],
+    ):
+        self._connection = connection
 
     @abc.abstractmethod
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> Optional[BaseSchema]:
         pass

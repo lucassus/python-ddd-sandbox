@@ -1,5 +1,3 @@
-from typing import List
-
 from sqlalchemy.orm.session import Session
 
 from app.modules.projects.domain.entities import Project
@@ -19,8 +17,9 @@ class Repository(AbstractRepository):
 
         return project
 
-    def list(self) -> List[Project]:
+    def list(self) -> list[Project]:
         return self._session.query(Project).all()
 
-    def create(self, task: Project) -> None:
-        self._session.add(task)
+    def create(self, project: Project) -> Project:
+        self._session.add(project)
+        return project

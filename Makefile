@@ -52,5 +52,14 @@ lint: check-types check-flake8 check-isort check-black
 test:
 	pytest app
 
+test-cov: ## Run tests with coverage
+	pytest app --verbose \
+		--cov=app \
+		--cov-report=term:skip-covered \
+		--cov-report=html \
+		--cov-report=xml \
+		--cov-branch \
+		--cov-fail-under=60
+
 test-watch:
 	ptw app

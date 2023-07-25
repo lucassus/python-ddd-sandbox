@@ -20,5 +20,6 @@ class Repository(AbstractRepository):
     def list(self) -> list[Project]:
         return self._session.query(Project).all()
 
-    def create(self, task: Project) -> None:
-        self._session.add(task)
+    def create(self, project: Project) -> Project:
+        self._session.add(project)
+        return project

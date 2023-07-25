@@ -10,7 +10,7 @@ class Repository(AbstractRepository):
         self._session = session
 
     def exists_by_email(self, email: str) -> bool:
-        query = select(User.id).where(User.email == email)
+        query = select(User.id).where(User.email == email)  # type: ignore
         user_id = self._session.execute(query).scalar_one_or_none()
         return user_id is not None
 

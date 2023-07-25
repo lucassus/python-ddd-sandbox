@@ -19,9 +19,11 @@ class FakeRepository(AbstractRepository):
 
         raise ProjectNotFoundError(id)
 
-    def create(self, project: Project) -> None:
+    def create(self, project: Project) -> Project:
         project.id = self._get_next_id()
         self._projects.append(project)
+
+        return project
 
     def _get_next_id(self) -> int:
         ids = [project.id for project in self._projects if project.id is not None]

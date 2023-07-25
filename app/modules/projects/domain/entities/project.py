@@ -13,7 +13,7 @@ class Project(BaseAggregate):
     user_id: int = field(init=False)
 
     name: str
-    max_incomplete_tasks_number: Optional[int] = None
+    maximum_number_of_incomplete_tasks: Optional[int] = None
 
     tasks: list[Task] = field(default_factory=list)
 

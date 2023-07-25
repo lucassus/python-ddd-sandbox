@@ -17,7 +17,7 @@ projects_table = Table(
     Column("id", Integer(), primary_key=True, autoincrement=True),
     Column("user_id", Integer(), ForeignKey(users_table.c.id), nullable=False),
     Column("name", String(255), nullable=False),
-    Column("max_incomplete_tasks_number", Integer(), nullable=True),
+    Column("maximum_number_of_incomplete_tasks", Integer(), nullable=True),
 )
 
 tasks_table = Table(

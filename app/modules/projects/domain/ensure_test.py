@@ -6,16 +6,16 @@ from app.modules.projects.test_utils.factories import build_project, build_task
 
 
 class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:
-    def test_passes_if_max_incomplete_tasks_number_is_none(self):
-        project = build_project(max_incomplete_tasks_number=None)
+    def test_passes_if_maximum_number_of_incomplete_tasks_is_none(self):
+        project = build_project(maximum_number_of_incomplete_tasks=None)
 
         try:
             ensure.project_has_allowed_number_of_incomplete_tasks(project)
         except MaxIncompleteTasksNumberIsReached:
             pytest.fail()
 
-    def test_passes_if_max_incomplete_tasks_number_is_not_reached(self):
-        project = build_project(max_incomplete_tasks_number=2)
+    def test_passes_if_maximum_number_of_incomplete_tasks_is_not_reached(self):
+        project = build_project(maximum_number_of_incomplete_tasks=2)
         project.tasks.append(build_task())
 
         try:
@@ -23,8 +23,8 @@ class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:
         except MaxIncompleteTasksNumberIsReached:
             pytest.fail()
 
-    def test_fails_if_max_incomplete_tasks_number_is_reached(self):
-        project = build_project(max_incomplete_tasks_number=2)
+    def test_fails_if_maximum_number_of_incomplete_tasks_is_reached(self):
+        project = build_project(maximum_number_of_incomplete_tasks=2)
         project.tasks.append(build_task())
         project.tasks.append(build_task())
 

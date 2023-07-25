@@ -3,7 +3,8 @@ from sqlalchemy.orm.session import Session
 
 from app.modules.accounts.adapters.repository import Repository
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.entities import User
+from app.modules.accounts.domain.password import Password
+from app.modules.accounts.domain.user import User
 
 
 class TestRepository:
@@ -15,13 +16,13 @@ class TestRepository:
         assert repository.exists_by_email(EmailAddress("test@email.com")) is False
 
     def test_exists_by_email_returns_true(self, session: Session, repository: Repository):
-        repository.create(User(email=EmailAddress("test@email.com"), password="password"))
+        repository.create(User(email=EmailAddress("test@email.com"), password=Password("password")))
         session.commit()
 
         assert repository.exists_by_email(EmailAddress("test@email.com")) is True
 
     def test_create(self, session: Session, repository: Repository):
-        user = User(email=EmailAddress("test@email.com"), password="password")
+        user = User(email=EmailAddress("test@email.com"), password=Password("password"))
         repository.create(user)
         session.commit()
 

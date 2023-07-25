@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.password import Password
 from app.shared.base_aggregate import BaseAggregate
 from app.shared.message_bus import BaseEvent
 
@@ -12,4 +13,4 @@ class User(BaseAggregate):
         user_id: int
 
     email: EmailAddress
-    password: str
+    password: Password

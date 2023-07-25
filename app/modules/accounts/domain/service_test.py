@@ -3,10 +3,10 @@ from unittest.mock import Mock
 import pytest
 
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.entities import User
 from app.modules.accounts.domain.exceptions import EmailAlreadyExistsException
 from app.modules.accounts.domain.ports import AbstractRepository, AbstractUnitOfWork
 from app.modules.accounts.domain.service import Service
+from app.modules.accounts.domain.user import User
 from app.shared.message_bus import MessageBus
 
 

@@ -1,5 +1,5 @@
 from app.infrastructure.tables import users_table
-from app.modules.accounts.domain.entities import User
+from app.modules.accounts.domain.user import User
 
 
 def start_mappers(mapper_registry):

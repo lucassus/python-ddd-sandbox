@@ -2,8 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.orm.session import Session
 
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.entities import User
 from app.modules.accounts.domain.ports import AbstractRepository
+from app.modules.accounts.domain.user import User
 
 
 class Repository(AbstractRepository):

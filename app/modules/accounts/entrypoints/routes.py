@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.service import Service
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.dependencies import get_service
@@ -16,10 +17,10 @@ def user_register_endpoint(
     data: schemas.RegisterUser,
     service: Annotated[Service, Depends(get_service)],
 ):
-    # TODO: Handle EmailAlreadyExistsException
+    # TODO: Handle EmailAlreadyExistsException and other errors, like invalid password
     user_id = service.register_user(
         email=EmailAddress(data.email),
-        password=data.password,
+        password=Password(data.password),
     )
 
     return RedirectResponse(

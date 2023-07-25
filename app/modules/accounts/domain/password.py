@@ -7,7 +7,6 @@ class InvalidPasswordError(Exception):
     pass
 
 
-# TODO: Connect it to user entity
 class Password(BaseValueObject):
     def __init__(self, value: str) -> None:
         if not self.is_valid(value):

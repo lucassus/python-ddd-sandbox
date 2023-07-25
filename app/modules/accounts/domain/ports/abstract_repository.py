@@ -1,7 +1,7 @@
 import abc
 
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.entities import User
+from app.modules.accounts.domain.user import User
 
 
 class AbstractRepository(abc.ABC):

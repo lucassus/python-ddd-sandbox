@@ -1,13 +1,15 @@
 from sqlalchemy.sql.schema import Column, ForeignKey, MetaData, Table
 from sqlalchemy.sql.sqltypes import Date, Integer, String
 
+from app.infrastructure.types import EmailType
+
 metadata = MetaData()
 
 users_table = Table(
     "users",
     metadata,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("email", String(255), nullable=False, unique=True),
+    Column("email", EmailType(), nullable=False, unique=True),
     Column("password", String(255), nullable=False),
 )
 

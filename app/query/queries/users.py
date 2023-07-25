@@ -19,6 +19,7 @@ class FindUserQuery(AbstractQuery):
         return schemas.User(
             **{
                 **user._asdict(),
+                "email": user.email.address,  # TODO: Find a better way to convert it
                 "projects": [schemas.Project(**project._asdict()) for project in projects],
             }
         )

@@ -1,6 +1,6 @@
 import pytest
 
-from app.modules.accounts.domain.email_address import EmailAddress
+from app.shared.email_address import EmailAddress
 
 
 class TestEmailAddress:

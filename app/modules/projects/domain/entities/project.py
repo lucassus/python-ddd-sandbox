@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import date
-from typing import List, Optional
+from typing import Optional
 
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.entities.task import Task
@@ -15,7 +15,7 @@ class Project(BaseAggregate):
     name: str
     max_incomplete_tasks_number: Optional[int] = None
 
-    tasks: List[Task] = field(default_factory=list)
+    tasks: list[Task] = field(default_factory=list)
 
     def add_task(self, *, name: str) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)

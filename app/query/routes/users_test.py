@@ -2,8 +2,8 @@ from unittest.mock import Mock
 
 import pytest
 
+from app.infrastructure.factories import create_project, create_user
 from app.query import schemas
-from app.query.factories import create_project, create_user
 from app.query.queries.users import FindUserQuery
 
 

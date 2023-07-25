@@ -1,12 +1,10 @@
-from typing import List
-
 from app.modules.projects.domain.entities import Project
 from app.modules.projects.domain.errors import ProjectNotFoundError
 from app.modules.projects.domain.ports import AbstractRepository
 
 
 class FakeRepository(AbstractRepository):
-    def __init__(self, *, projects: List[Project]):
+    def __init__(self, *, projects: list[Project]):
         self._projects = projects
 
     def get(self, id: int) -> Project:
@@ -20,7 +18,7 @@ class FakeRepository(AbstractRepository):
         project.id = self._get_next_id()
         self._projects.append(project)
 
-    def list(self) -> List[Project]:
+    def list(self) -> list[Project]:
         return self._projects
 
     def _get_next_id(self) -> int:

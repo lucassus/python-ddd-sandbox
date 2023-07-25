@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, Depends
 
 from app.query import schemas
@@ -11,7 +9,7 @@ router = APIRouter()
 
 @router.get(
     "",
-    response_model=List[schemas.Project],
+    response_model=list[schemas.Project],
     name="Returns the list of projects",
 )
 def projects_endpoint(fetch_projects: FetchProjectsQuery = Depends()):

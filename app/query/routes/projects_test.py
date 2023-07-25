@@ -1,6 +1,6 @@
 import pytest
 
-from app.query.factories import create_project
+from app.infrastructure.factories import create_project
 
 
 @pytest.mark.asyncio

@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from app.query.factories import create_project, create_task
+from app.infrastructure.factories import create_project, create_task
 
 
 @pytest.mark.asyncio

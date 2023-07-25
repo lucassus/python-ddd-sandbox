@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import registry
 
-from app.common.errors import EntityNotFoundError
+from app.shared.errors import EntityNotFoundError
 
 APP_MODULES = ("accounts", "projects")
 

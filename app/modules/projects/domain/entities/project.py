@@ -2,10 +2,10 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import List, Optional
 
-from app.common.base_aggregate import BaseAggregate
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.entities.task import Task
 from app.modules.projects.domain.errors import TaskNotFoundError
+from app.shared.base_aggregate import BaseAggregate
 
 
 @dataclass

@@ -1,6 +1,6 @@
-from app.common.message_bus import MessageBus
 from app.modules.accounts.domain.entities import User
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
+from app.shared.message_bus import MessageBus
 
 
 class Service:

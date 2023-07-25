@@ -5,7 +5,7 @@ from fastapi import Depends
 from sqlalchemy import Connection
 from starlette.requests import Request
 
-from app.common.base_schema import BaseSchema
+from app.shared.base_schema import BaseSchema
 
 
 def get_connection(request: Request):

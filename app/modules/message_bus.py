@@ -1,6 +1,6 @@
-from app.common.message_bus import MessageBus
 from app.infrastructure.session import session_factory
 from app.modules.accounts.domain.entities import User
+from app.shared.message_bus import MessageBus
 
 bus = MessageBus()
 

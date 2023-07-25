@@ -31,7 +31,10 @@ async def test_project_endpoint_returns_the_project(connection, client):
 
     # Then
     assert response.status_code == 200
-    assert response.json() == {"id": project_id, "name": "Project One"}
+    assert response.json() == {
+        "id": project_id,
+        "name": "Project One",
+    }
 
 
 @pytest.mark.asyncio

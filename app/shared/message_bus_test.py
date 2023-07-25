@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from app.common.message_bus import BaseEvent, MessageBus
+from app.shared.message_bus import BaseEvent, MessageBus
 
 
 @dataclass

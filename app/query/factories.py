@@ -7,6 +7,7 @@ from sqlalchemy import Connection
 from app.infrastructure.tables import projects_table, tasks_table, users_table
 
 fake = Faker()
+fake.seed_instance(667)
 
 
 def _build_user(

@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional
 
-from app.common.base_schema import BaseSchema
+from app.shared.base_schema import BaseSchema
 
 
 class Project(BaseSchema):

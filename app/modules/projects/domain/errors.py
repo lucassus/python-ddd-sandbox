@@ -1,4 +1,4 @@
-from app.common.errors import EntityNotFoundError
+from app.shared.errors import EntityNotFoundError
 
 
 class ProjectNotFoundError(EntityNotFoundError):

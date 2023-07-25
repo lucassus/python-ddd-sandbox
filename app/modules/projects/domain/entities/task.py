@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Optional
 
-from app.common.base_entity import BaseEntity
+from app.shared.base_entity import BaseEntity
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from app.common.base_aggregate import BaseAggregate
-from app.common.message_bus import BaseEvent
+from app.shared.base_aggregate import BaseAggregate
+from app.shared.message_bus import BaseEvent
 
 
 @dataclass

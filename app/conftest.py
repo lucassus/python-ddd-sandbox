@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import pytest
 from sqlalchemy.engine import create_engine
@@ -9,8 +9,7 @@ from app.infrastructure.tables import create_tables, drop_tables
 
 @pytest.fixture(scope="session")
 def db_url():
-    # TODO: Use pathlib
-    database_path = os.path.join(os.path.dirname(__file__), "../db/test.db")
+    database_path = (Path(__file__).parent / "infrastructure/databases/test.db").resolve()
     return f"sqlite:///{database_path}"
 
 

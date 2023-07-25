@@ -18,10 +18,10 @@ deps: deps-pre deps-compile deps-install
 install: deps-pre deps-install
 
 seed:
-	python -m app.infrastructure.seed
+	APP_ENV=development python -m app.infrastructure.seed
 
 server-dev:
-	uvicorn app.main:app --reload
+	APP_ENV=development uvicorn app.main:app --reload
 
 # Linting
 
@@ -50,10 +50,11 @@ lint: check-types check-flake8 check-isort check-black
 # Testing
 
 test:
-	pytest app
+	APP_ENV=test pytest app
 
-test-cov: ## Run tests with coverage
-	pytest app --verbose \
+# TODO: Tune coverage settings
+test-cov:
+	APP_ENV=test pytest app --verbose \
 		--cov=app \
 		--cov-report=term:skip-covered \
 		--cov-report=html \
@@ -62,4 +63,4 @@ test-cov: ## Run tests with coverage
 		--cov-fail-under=60
 
 test-watch:
-	ptw app
+	APP_ENV=test ptw app

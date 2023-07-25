@@ -3,7 +3,6 @@ from datetime import date, datetime
 from app.infrastructure.factories import create_project, create_task
 from app.modules.projects.domain.entities import Task
 from app.modules.projects.entrypoints.dependencies import get_current_time
-from app.modules.projects.test_utils.factories import build_project
 
 
 def test_tasks_endpoint_creates_task(session, client):

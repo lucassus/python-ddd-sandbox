@@ -2,7 +2,6 @@ import pytest
 
 from app.infrastructure.factories import create_project
 from app.modules.projects.adapters.repository import Repository
-from app.modules.projects.domain.entities import Project
 from app.modules.projects.domain.errors import ProjectNotFoundError
 
 

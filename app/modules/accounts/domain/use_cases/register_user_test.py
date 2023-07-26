@@ -5,7 +5,7 @@ import pytest
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.testing import FakeUnitOfWork
+from app.modules.accounts.domain.testing import FakeUnitOfWork, build_user
 from app.modules.accounts.domain.use_cases import EmailAlreadyExistsException, RegisterUser
 from app.modules.accounts.domain.user import User
 
@@ -20,7 +20,6 @@ def test_register_user_returns_user_id(
     register_user: RegisterUser,
 ):
     # When
-    # TODO: Implement the builder patter for user instance
     user_id = register_user(email=EmailAddress("test@email.com"), password=Password("passwd123"))
 
     # Then
@@ -51,7 +50,7 @@ def test_register_user_validate_email_uniqueness(
     repository: AbstractRepository,
     register_user: RegisterUser,
 ):
-    repository.create(User(email=EmailAddress("existing@email.com"), password=Password("password")))
+    repository.create(build_user(email=EmailAddress("existing@email.com")))
 
     # Then
     with pytest.raises(

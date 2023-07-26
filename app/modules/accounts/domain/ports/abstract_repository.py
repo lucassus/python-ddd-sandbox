@@ -4,7 +4,7 @@ from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.user import User
 
 
-class AbstractRepository(abc.ABC):
+class AbstractRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def exists_by_email(self, email: EmailAddress) -> bool:
         pass

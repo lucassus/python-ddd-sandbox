@@ -2,11 +2,9 @@ import pytest
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import UserNotFoundError
-from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.testing import FakeUnitOfWork
+from app.modules.accounts.domain.testing import FakeUnitOfWork, build_user
 from app.modules.accounts.domain.use_cases import ChangeUserEmailAddress
-from app.modules.accounts.domain.user import User
 
 
 @pytest.fixture
@@ -22,7 +20,7 @@ class TestChangeUserEmailAddressUseCase:
         change_user_email_address: ChangeUserEmailAddress,
     ):
         # Given
-        user = repository.create(User(email=EmailAddress("old@email.com"), password=Password("password")))
+        user = repository.create(build_user(email=EmailAddress("old@email.com")))
 
         # When
         change_user_email_address(
@@ -56,7 +54,7 @@ class TestChangeUserEmailAddressUseCase:
         change_user_email_address: ChangeUserEmailAddress,
     ):
         # Given
-        repository.create(User(email=EmailAddress("taken@email.com"), password=Password("password")))
+        repository.create(build_user(email=EmailAddress("taken@email.com")))
 
         with pytest.raises(Exception):
             change_user_email_address(

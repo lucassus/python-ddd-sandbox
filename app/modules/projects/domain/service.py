@@ -1,7 +1,8 @@
 from datetime import date, datetime
 
-from app.modules.projects.domain.entities import Project, ProjectID
+from app.modules.projects.domain.entities import Project, ProjectID, TaskID
 from app.modules.projects.domain.ports import AbstractUnitOfWork
+from app.shared_kernel.user_id import UserID
 
 
 # TODO: Split it into smaller services / use cases
@@ -9,8 +10,7 @@ class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    # TODO: user_id is leaking into the project domain
-    def create_example_project(self, *, user_id: int) -> Project:
+    def create_example_project(self, *, user_id: UserID) -> Project:
         with self._uow as uow:
             project = Project(name="My first project")
             project.user_id = user_id
@@ -34,14 +34,14 @@ class Service:
             uow.commit()
             return task.id
 
-    def complete_task(self, id: int, *, project_id: ProjectID, now: date) -> None:
+    def complete_task(self, id: TaskID, *, project_id: ProjectID, now: date) -> None:
         with self._uow as uow:
             project = uow.repository.get(project_id)
             project.complete_task(id, now)
 
             uow.commit()
 
-    def incomplete_task(self, id: int, *, project_id: ProjectID) -> None:
+    def incomplete_task(self, id: TaskID, *, project_id: ProjectID) -> None:
         with self._uow as uow:
             project = uow.repository.get(project_id)
             project.incomplete_task(id)

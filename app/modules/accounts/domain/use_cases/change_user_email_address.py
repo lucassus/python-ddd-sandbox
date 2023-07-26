@@ -1,7 +1,7 @@
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
-from app.modules.accounts.domain.user import UserID
+from app.shared_kernel.user_id import UserID
 
 
 class ChangeUserEmailAddress:

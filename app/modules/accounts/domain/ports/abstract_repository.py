@@ -1,7 +1,8 @@
 import abc
 
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.user import User, UserID
+from app.modules.accounts.domain.user import User
+from app.shared_kernel.user_id import UserID
 
 
 class AbstractRepository(metaclass=abc.ABCMeta):

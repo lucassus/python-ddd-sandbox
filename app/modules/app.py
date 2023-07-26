@@ -34,7 +34,7 @@ def create_app() -> FastAPI:
     async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
-            content={"message": exc.message},
+            content={"message": str(exc)},
         )
 
     return app

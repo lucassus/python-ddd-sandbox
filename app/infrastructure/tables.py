@@ -1,7 +1,7 @@
 from sqlalchemy.sql.schema import Column, ForeignKey, MetaData, Table
 from sqlalchemy.sql.sqltypes import Date, Integer, String
 
-from app.infrastructure.types import EmailType, PasswordType
+from app.infrastructure.type_decorators import EmailType, PasswordType
 
 metadata = MetaData()
 

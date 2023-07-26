@@ -1,5 +1,7 @@
 from typing import Any
 
+from email_validator import EmailNotValidError, validate_email
+
 from app.shared_kernel.base_value_object import BaseValueObject
 
 
@@ -16,7 +18,11 @@ class EmailAddress(BaseValueObject):
 
     @staticmethod
     def is_valid(email: str) -> bool:
-        return "@" in email
+        try:
+            validate_email(email, check_deliverability=False)
+            return True
+        except EmailNotValidError:
+            return False
 
     @property
     def address(self) -> str:

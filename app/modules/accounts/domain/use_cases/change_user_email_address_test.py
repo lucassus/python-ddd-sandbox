@@ -13,7 +13,7 @@ def change_user_email_address(uow: FakeUnitOfWork):
 
 
 class TestChangeUserEmailAddressUseCase:
-    def test_success(
+    def test_successfully_updates_user_email_address(
         self,
         repository: AbstractRepository,
         uow: FakeUnitOfWork,
@@ -46,7 +46,6 @@ class TestChangeUserEmailAddressUseCase:
 
         assert uow.committed is False
 
-    # TODO: What if the new email address is the same as the old one?
     def test_raises_error_when_new_email_address_is_taken(
         self,
         repository: AbstractRepository,
@@ -55,11 +54,33 @@ class TestChangeUserEmailAddressUseCase:
     ):
         # Given
         repository.create(build_user(email=EmailAddress("taken@email.com")))
+        user = repository.create(build_user(email=EmailAddress("old@email.com")))
 
+        # When
         with pytest.raises(Exception):
             change_user_email_address(
-                user_id=123,
+                user_id=user.id,
                 new_email=EmailAddress("taken@email.com"),
             )
 
+        # Then
         assert uow.committed is False
+
+    def test_does_nothing_when_new_email_address_is_the_same_as_the_old_one(
+        self,
+        repository: AbstractRepository,
+        uow: FakeUnitOfWork,
+        change_user_email_address: ChangeUserEmailAddress,
+    ):
+        # Given
+        user = repository.create(build_user(email=EmailAddress("old@email.com")))
+
+        # When
+        change_user_email_address(
+            user_id=user.id,
+            new_email=EmailAddress("old@email.com"),
+        )
+
+        # Then
+        assert uow.committed is False
+        assert user.email == EmailAddress("old@email.com")

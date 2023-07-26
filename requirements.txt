@@ -96,7 +96,7 @@ pytest==7.4.0
     #   pytest-cov
     #   pytest-icdiff
     #   pytest-watch
-pytest-asyncio==0.14.0
+pytest-asyncio==0.21.1
     # via -r requirements.in
 pytest-cov==4.1.0
     # via -r requirements.in

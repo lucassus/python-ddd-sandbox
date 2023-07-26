@@ -10,7 +10,7 @@ class AbstractRepository(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def create(self, user: User):
+    def create(self, user: User) -> User:
         raise NotImplementedError
 
     @abc.abstractmethod

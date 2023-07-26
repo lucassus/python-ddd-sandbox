@@ -1,5 +1,3 @@
-from typing import reveal_type
-
 from app.infrastructure.db import AppSession
 from app.modules.accounts.domain.user import User
 from app.shared.message_bus import MessageBus
@@ -26,6 +24,5 @@ def send_welcome_email_handler(event: User.AccountCreatedEvent):
     from app.modules.accounts.adapters.unit_of_work import UnitOfWork
 
     with UnitOfWork(session_factory=AppSession) as uow:
-        reveal_type(uow)
         user = uow.repository.get(event.user_id)
         print(f"Sending welcome email to {user}")

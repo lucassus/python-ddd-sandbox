@@ -10,7 +10,7 @@ class EmailAlreadyExistsException(Exception):
         super().__init__(f"A user with the email {email} already exists")
 
 
-class RegisterUserUseCase:
+class RegisterUser:
     def __init__(self, *, uow: AbstractUnitOfWork, bus: MessageBus):
         self._uow = uow
         self._bus = bus

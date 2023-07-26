@@ -1,7 +1,8 @@
 from app.modules.accounts.domain.email_address import EmailAddress
+from app.shared_kernel.errors import EntityNotFoundError
 
 
-class UserNotFoundError(Exception):
+class UserNotFoundError(EntityNotFoundError):
     pass
 
 

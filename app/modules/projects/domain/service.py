@@ -4,6 +4,7 @@ from app.modules.projects.domain.entities import Project
 from app.modules.projects.domain.ports import AbstractUnitOfWork
 
 
+# TODO: Split it into smaller services / use cases
 class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow

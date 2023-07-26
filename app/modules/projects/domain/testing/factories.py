@@ -1,12 +1,12 @@
 from datetime import date
 from typing import Optional
 
-from app.modules.projects.domain.entities import Project, Task
+from app.modules.projects.domain.entities import Project, ProjectID, Task, TaskID
 
 
 def build_project(
     *,
-    id: Optional[int] = None,
+    id: Optional[ProjectID] = None,
     name: str = "Test project",
     maximum_number_of_incomplete_tasks: Optional[int] = None,
 ) -> Project:
@@ -23,7 +23,7 @@ def build_project(
 
 def build_task(
     *,
-    id: Optional[int] = None,
+    id: Optional[TaskID] = None,
     name: str = "Test task",
     completed_at: Optional[date] = None,
 ) -> Task:

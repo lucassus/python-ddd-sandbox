@@ -6,14 +6,13 @@ from app.modules.accounts.adapters.repository import Repository
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
 
 
-# TODO: Figure out how to dry it
 class UnitOfWork(AbstractUnitOfWork):
     repository: Repository
 
     def __init__(self, session_factory: Callable[..., Session]):
         self._session_factory = session_factory
 
-    def __enter__(self):
+    def __enter__(self) -> "UnitOfWork":
         self._session = self._session_factory()
         self.repository = Repository(session=self._session)
 

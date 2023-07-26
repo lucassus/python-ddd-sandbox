@@ -1,11 +1,12 @@
 from app.infrastructure.db import AppSession
-from app.modules.accounts.domain.entities import User
-from app.shared.message_bus import MessageBus
+from app.modules.accounts.domain.user import User
+from app.shared_kernel.message_bus import MessageBus
 
 bus = MessageBus()
 
 
 # TODO: Perhaps event handlers should be placed somewhere else
+# TODO: Figure out how to test it
 
 
 @bus.listen(User.AccountCreatedEvent)

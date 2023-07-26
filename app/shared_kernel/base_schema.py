@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from app.shared.utils import camelize
+from app.shared_kernel.utils import camelize
 
 
 class BaseSchema(BaseModel):

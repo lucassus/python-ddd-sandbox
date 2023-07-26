@@ -1,16 +1,19 @@
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Optional
+from typing import NewType, Optional
 
 from app.modules.projects.domain import ensure
-from app.modules.projects.domain.entities.task import Task
+from app.modules.projects.domain.entities.task import Task, TaskID
 from app.modules.projects.domain.errors import TaskNotFoundError
-from app.shared.base_aggregate import BaseAggregate
+from app.shared_kernel.base_aggregate import BaseAggregate
+from app.shared_kernel.user_id import UserID
+
+ProjectID = NewType("ProjectID", int)
 
 
 @dataclass
-class Project(BaseAggregate):
-    user_id: int = field(init=False)
+class Project(BaseAggregate[ProjectID]):
+    user_id: UserID = field(init=False)
 
     name: str
     maximum_number_of_incomplete_tasks: Optional[int] = None
@@ -25,13 +28,13 @@ class Project(BaseAggregate):
 
         return task
 
-    def complete_task(self, id: int, now: date) -> Task:
+    def complete_task(self, id: TaskID, now: date) -> Task:
         task = self.get_task(id)
         task.complete(now)
 
         return task
 
-    def incomplete_task(self, id: int) -> Task:
+    def incomplete_task(self, id: TaskID) -> Task:
         task = self.get_task(id)
         task.incomplete()
 
@@ -39,7 +42,7 @@ class Project(BaseAggregate):
 
         return task
 
-    def get_task(self, id: int) -> Task:
+    def get_task(self, id: TaskID) -> Task:
         for task in self.tasks:
             if task.id == id:
                 return task

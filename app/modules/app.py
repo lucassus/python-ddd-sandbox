@@ -4,8 +4,9 @@ from fastapi import APIRouter, FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import registry
 
-from app.modules import accounts, projects
-from app.shared.errors import EntityNotFoundError
+from app.modules.accounts import module as accounts_module
+from app.modules.projects import module as projects_module
+from app.shared_kernel.errors import EntityNotFoundError
 
 
 class AppModule(Protocol):
@@ -26,14 +27,14 @@ def _register_module(app: FastAPI, module: AppModule) -> None:
 def create_app() -> FastAPI:
     app = FastAPI()
 
-    _register_module(app, accounts)
-    _register_module(app, projects)
+    _register_module(app, accounts_module)
+    _register_module(app, projects_module)
 
     @app.exception_handler(EntityNotFoundError)
     async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
-            content={"message": exc.message},
+            content={"message": str(exc)},
         )
 
     return app

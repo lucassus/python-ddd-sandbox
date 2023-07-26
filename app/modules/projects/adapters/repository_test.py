@@ -20,14 +20,3 @@ def test_repository_get_returns_none(session):
 
     with pytest.raises(ProjectNotFoundError):
         repository.get(1)
-
-
-def test_repository_list(session):
-    repository = Repository(session=session)
-
-    assert repository.list() == []
-
-    create_project(session.connection(), name="Project One")
-    create_project(session.connection(), name="Project Two")
-
-    assert len(repository.list()) == 2

@@ -6,7 +6,7 @@ from app.modules.projects.domain.entities import Project, Task
 
 def test_tables(session: Session):
     project_id = create_project(session.connection()).id
-    project = session.query(Project).get(project_id)
+    project = session.get(Project, project_id)
     assert project is not None
 
     assert len(project.tasks) == 0
@@ -22,5 +22,5 @@ def test_tables(session: Session):
 
     assert len(project.tasks) == 3
 
-    task = session.query(Task).get(1)
+    task = session.get(Task, 1)
     assert task

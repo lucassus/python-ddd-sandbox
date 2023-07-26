@@ -2,7 +2,7 @@ import pytest
 
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.errors import MaxIncompleteTasksNumberIsReached
-from app.modules.projects.test_utils.factories import build_project, build_task
+from app.modules.projects.domain.testing import build_project, build_task
 
 
 class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:

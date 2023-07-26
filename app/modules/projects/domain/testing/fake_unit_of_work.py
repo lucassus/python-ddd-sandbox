@@ -1,6 +1,6 @@
 from app.modules.projects.domain.entities import Project
 from app.modules.projects.domain.ports import AbstractUnitOfWork
-from app.modules.projects.test_utils.fake_repository import FakeRepository
+from app.modules.projects.domain.testing.fake_repository import FakeRepository
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):

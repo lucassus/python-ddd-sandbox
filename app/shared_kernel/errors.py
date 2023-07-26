@@ -1,2 +1,2 @@
 class EntityNotFoundError(Exception):
-    message: str
+    pass

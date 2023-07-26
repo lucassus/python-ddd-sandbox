@@ -1,7 +1,7 @@
 import abc
 
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.user import User
+from app.modules.accounts.domain.user import User, UserID
 
 
 class AbstractRepository(metaclass=abc.ABCMeta):
@@ -14,5 +14,5 @@ class AbstractRepository(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get(self, user_id) -> User | None:
+    def get(self, user_id: UserID) -> User | None:
         raise NotImplementedError

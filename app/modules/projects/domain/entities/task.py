@@ -6,7 +6,7 @@ from app.shared.base_entity import BaseEntity
 
 
 @dataclass
-class Task(BaseEntity):
+class Task(BaseEntity[int]):
     name: str
     completed_at: Optional[date] = None
 

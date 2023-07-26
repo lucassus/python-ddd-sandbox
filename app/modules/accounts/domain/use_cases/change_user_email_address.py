@@ -1,6 +1,7 @@
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
+from app.modules.accounts.domain.user import UserID
 
 
 class ChangeUserEmailAddress:
@@ -9,7 +10,7 @@ class ChangeUserEmailAddress:
 
     # TODO: This is wrong but unit test does not catch it,
     #  consult it with the book
-    def __call__(self, user_id: int, new_email: EmailAddress):
+    def __call__(self, user_id: UserID, new_email: EmailAddress):
         user = self._uow.repository.get(user_id)
 
         if user is None:

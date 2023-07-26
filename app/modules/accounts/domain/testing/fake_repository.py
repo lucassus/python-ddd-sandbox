@@ -1,10 +1,10 @@
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.user import User
+from app.modules.accounts.domain.user import User, UserID
 
 
 class FakeRepository(AbstractRepository):
-    _users_by_id: dict[int, User]
+    _users_by_id: dict[UserID, User]
 
     def __init__(self):
         self._users_by_id = {}
@@ -18,8 +18,8 @@ class FakeRepository(AbstractRepository):
     def exists_by_email(self, email: EmailAddress) -> bool:
         return any(user.email == email for user in self._users_by_id.values())
 
-    def get(self, user_id: int) -> User | None:
+    def get(self, user_id: UserID) -> User | None:
         return self._users_by_id.get(user_id)
 
-    def _get_next_id(self) -> int:
-        return max(self._users_by_id.keys(), default=0) + 1
+    def _get_next_id(self) -> UserID:
+        return UserID(max(self._users_by_id.keys(), default=0) + 1)

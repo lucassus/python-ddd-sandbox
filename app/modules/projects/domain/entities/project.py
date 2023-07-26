@@ -9,7 +9,7 @@ from app.shared.base_aggregate import BaseAggregate
 
 
 @dataclass
-class Project(BaseAggregate):
+class Project(BaseAggregate[int]):
     user_id: int = field(init=False)
 
     name: str

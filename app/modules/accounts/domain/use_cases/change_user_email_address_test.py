@@ -5,6 +5,7 @@ from app.modules.accounts.domain.errors import EmailAlreadyExistsException, User
 from app.modules.accounts.domain.ports import AbstractRepository
 from app.modules.accounts.domain.testing import FakeUnitOfWork, build_user
 from app.modules.accounts.domain.use_cases import ChangeUserEmailAddress
+from app.modules.accounts.domain.user import UserID
 
 
 @pytest.fixture
@@ -40,7 +41,7 @@ class TestChangeUserEmailAddressUseCase:
     ):
         with pytest.raises(UserNotFoundError):
             change_user_email_address(
-                user_id=123,
+                user_id=UserID(123),
                 new_email=EmailAddress("new@email.com"),
             )
 

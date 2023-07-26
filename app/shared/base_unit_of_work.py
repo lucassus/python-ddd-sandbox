@@ -1,6 +1,7 @@
 import abc
 
 
+# TODO: Use AbstractContextManager
 class BaseUnitOfWork(metaclass=abc.ABCMeta):
     def __enter__(self):
         return self

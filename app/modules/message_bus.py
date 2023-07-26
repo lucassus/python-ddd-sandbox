@@ -6,6 +6,7 @@ bus = MessageBus()
 
 
 # TODO: Perhaps event handlers should be placed somewhere else
+# TODO: Figure out how to test it
 
 
 @bus.listen(User.AccountCreatedEvent)

@@ -5,9 +5,9 @@ from starlette.responses import RedirectResponse
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
-from app.modules.accounts.domain.service import Service
+from app.modules.accounts.domain.register_user_use_case import RegisterUserUseCase
 from app.modules.accounts.entrypoints import schemas
-from app.modules.accounts.entrypoints.dependencies import get_service
+from app.modules.accounts.entrypoints.dependencies import get_register_user_use_case
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -15,10 +15,10 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.post("")
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    service: Annotated[Service, Depends(get_service)],
+    register_user: Annotated[RegisterUserUseCase, Depends(get_register_user_use_case)],
 ):
     # TODO: Handle EmailAlreadyExistsException and other errors, like invalid password
-    user_id = service.register_user(
+    user_id = register_user(
         email=EmailAddress(data.email),
         password=Password(data.password),
     )

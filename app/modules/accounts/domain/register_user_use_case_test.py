@@ -3,9 +3,9 @@ from unittest.mock import Mock
 import pytest
 
 from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.exceptions import EmailAlreadyExistsException
+from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.ports import AbstractRepository, AbstractUnitOfWork
-from app.modules.accounts.domain.service import Service
+from app.modules.accounts.domain.register_user_use_case import EmailAlreadyExistsException, RegisterUserUseCase
 from app.modules.accounts.domain.user import User
 from app.shared.message_bus import MessageBus
 
@@ -45,15 +45,15 @@ def message_bus():
 
 
 @pytest.fixture()
-def service(uow, message_bus):
-    return Service(uow=uow, bus=message_bus)
+def register_user(uow, message_bus):
+    return RegisterUserUseCase(uow=uow, bus=message_bus)
 
 
-def test_register_user_returns_user_id(service, uow):
+def test_register_user_returns_user_id(register_user: RegisterUserUseCase, uow):
     # When
-    user_id = service.register_user(
+    user_id = register_user(
         email=EmailAddress("test@email.com"),
-        password="passwd123",
+        password=Password("passwd123"),
     )
 
     # Then
@@ -61,15 +61,15 @@ def test_register_user_returns_user_id(service, uow):
     assert uow.committed
 
 
-def test_register_user_dispatches_account_created_event(uow, message_bus, service):
+def test_register_user_dispatches_account_created_event(uow, message_bus, register_user: RegisterUserUseCase):
     # Given
     listener_mock = Mock()
     message_bus.listen(User.AccountCreatedEvent, listener_mock)
 
     # When
-    service.register_user(
+    register_user(
         email=EmailAddress("test@email.com"),
-        password="passwd123",
+        password=Password("passwd123"),
     )
 
     # Then
@@ -77,15 +77,15 @@ def test_register_user_dispatches_account_created_event(uow, message_bus, servic
     assert uow.committed
 
 
-def test_register_user_validate_email_uniqueness(uow, service):
+def test_register_user_validate_email_uniqueness(uow, register_user: RegisterUserUseCase):
     # Then
     with pytest.raises(
         EmailAlreadyExistsException,
         match="A user with the email existing@email.com already exists",
     ):
-        service.register_user(
+        register_user(
             email=EmailAddress("existing@email.com"),
-            password="passwd123",
+            password=Password("passwd123"),
         )
 
     assert not uow.committed

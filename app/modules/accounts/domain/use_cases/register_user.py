@@ -1,13 +1,9 @@
 from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
 from app.modules.accounts.domain.user import User
 from app.shared.message_bus import MessageBus
-
-
-class EmailAlreadyExistsException(Exception):
-    def __init__(self, email: EmailAddress):
-        super().__init__(f"A user with the email {email} already exists")
 
 
 class RegisterUser:

@@ -3,10 +3,11 @@ from unittest.mock import Mock
 import pytest
 
 from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.ports import AbstractRepository
 from app.modules.accounts.domain.testing import FakeUnitOfWork, build_user
-from app.modules.accounts.domain.use_cases import EmailAlreadyExistsException, RegisterUser
+from app.modules.accounts.domain.use_cases import RegisterUser
 from app.modules.accounts.domain.user import User
 
 

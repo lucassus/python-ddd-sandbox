@@ -14,7 +14,7 @@ def build_user(
     if email is None:
         email = EmailAddress("test@email.com")
 
-    if email is None:
+    if password is None:
         password = Password("password")
 
     return User(email=email, password=password)

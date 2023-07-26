@@ -1,6 +1,6 @@
 from typing import Optional
 
-from app.modules.projects.domain.entities import Project
+from app.modules.projects.domain.entities import Project, ProjectID
 from app.modules.projects.domain.errors import ProjectNotFoundError
 from app.modules.projects.domain.ports import AbstractRepository
 
@@ -26,10 +26,6 @@ class FakeRepository(AbstractRepository):
 
         return project
 
-    def _get_next_id(self) -> int:
+    def _get_next_id(self) -> ProjectID:
         ids = [project.id for project in self._projects if project.id is not None]
-
-        if len(ids) == 0:
-            return 1
-
-        return max(ids) + 1
+        return ProjectID(max(ids, default=0) + 1)

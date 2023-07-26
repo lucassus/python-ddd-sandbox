@@ -1,15 +1,18 @@
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Optional
+from typing import NewType, Optional
 
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.entities.task import Task
 from app.modules.projects.domain.errors import TaskNotFoundError
 from app.shared.base_aggregate import BaseAggregate
 
+ProjectID = NewType("ProjectID", int)
+
 
 @dataclass
-class Project(BaseAggregate[int]):
+class Project(BaseAggregate[ProjectID]):
+    # TODO: Should I use here UserID value object? Move it to shared kernel?
     user_id: int = field(init=False)
 
     name: str

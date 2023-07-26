@@ -17,8 +17,7 @@ class RegisterUser:
             if uow.repository.exists_by_email(email):
                 raise EmailAlreadyExistsException(email)
 
-            user = User(email=email, password=password)
-            uow.repository.create(user)
+            user = uow.repository.create(User(email=email, password=password))
             uow.commit()
 
             self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))

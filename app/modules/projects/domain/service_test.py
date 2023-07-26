@@ -2,16 +2,16 @@ from datetime import date
 
 import pytest
 
+from app.modules.projects.domain.entities import Project, ProjectID, TaskID
 from app.modules.projects.domain.service import Service
-from app.modules.projects.test_utils.factories import build_project, build_task
-from app.modules.projects.test_utils.fake_unit_of_work import FakeUnitOfWork
+from app.modules.projects.domain.testing import FakeUnitOfWork, build_project, build_task
 from app.shared_kernel.user_id import UserID
 
 
 @pytest.fixture
-def project():
-    project = build_project(id=1)
-    project.tasks = [build_task(id=2)]
+def project() -> Project:
+    project = build_project(id=ProjectID(1))
+    project.tasks = [build_task(id=TaskID(1))]
 
     return project
 

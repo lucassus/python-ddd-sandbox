@@ -5,7 +5,6 @@ from app.modules.projects.domain.errors import ProjectNotFoundError
 from app.modules.projects.domain.ports import AbstractRepository
 
 
-# TODO: Move to domain/testing
 class FakeRepository(AbstractRepository):
     def __init__(self, *, projects: Optional[list[Project]] = None):
         if projects is None:

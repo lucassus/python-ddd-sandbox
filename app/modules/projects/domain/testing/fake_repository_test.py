@@ -1,8 +1,8 @@
 import pytest
 
 from app.modules.projects.domain.errors import ProjectNotFoundError
-from app.modules.projects.test_utils.factories import build_project
-from app.modules.projects.test_utils.fake_repository import FakeRepository
+from app.modules.projects.domain.testing.factories import build_project
+from app.modules.projects.domain.testing.fake_repository import FakeRepository
 
 
 def test_fake_repository():

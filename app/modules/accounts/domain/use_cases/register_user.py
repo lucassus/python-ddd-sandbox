@@ -3,7 +3,7 @@ from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.ports import AbstractUnitOfWork
 from app.modules.accounts.domain.user import User, UserID
-from app.shared.message_bus import MessageBus
+from app.shared_kernel.message_bus import MessageBus
 
 
 class RegisterUser:

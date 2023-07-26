@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from app.shared.base_schema import BaseSchema
+from app.shared_kernel.base_schema import BaseSchema
 
 
 class RegisterUser(BaseSchema):

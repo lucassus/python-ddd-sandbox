@@ -6,7 +6,7 @@ from sqlalchemy.orm import registry
 
 from app.modules.accounts import module as accounts_module
 from app.modules.projects import module as projects_module
-from app.shared.errors import EntityNotFoundError
+from app.shared_kernel.errors import EntityNotFoundError
 
 
 class AppModule(Protocol):

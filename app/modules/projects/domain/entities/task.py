@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import NewType, Optional
 
-from app.shared.base_entity import BaseEntity
+from app.shared_kernel.base_entity import BaseEntity
 
 TaskID = NewType("TaskID", int)
 

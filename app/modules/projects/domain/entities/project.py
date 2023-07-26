@@ -5,7 +5,7 @@ from typing import NewType, Optional
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.entities.task import Task
 from app.modules.projects.domain.errors import TaskNotFoundError
-from app.shared.base_aggregate import BaseAggregate
+from app.shared_kernel.base_aggregate import BaseAggregate
 
 ProjectID = NewType("ProjectID", int)
 

@@ -3,8 +3,8 @@ from typing import NewType
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
-from app.shared.base_aggregate import BaseAggregate
-from app.shared.message_bus import BaseEvent
+from app.shared_kernel.base_aggregate import BaseAggregate
+from app.shared_kernel.message_bus import BaseEvent
 
 UserID = NewType("UserID", int)
 

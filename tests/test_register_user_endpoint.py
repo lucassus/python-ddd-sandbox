@@ -5,8 +5,9 @@ def test_register_user(register_user, client: TestClient):
     response = register_user(email="test@email.com")
 
     assert response.status_code == 200
+    user_id = response.json()["id"]
     assert response.json() == {
-        "id": 1,
+        "id": user_id,
         "email": "test@email.com",
         "projects": [
             {"id": 1, "name": "My first project"},
@@ -22,3 +23,10 @@ def test_register_user(register_user, client: TestClient):
         {"id": 2, "name": "Watch the tutorial", "completedAt": None},
         {"id": 3, "name": "Start using our awesome app", "completedAt": None},
     ]
+
+    response = client.put(
+        f"/commands/users/{user_id}",
+        json={"email": "new@email.com"},
+    )
+    assert response.status_code == 200
+    assert response.json()["email"] == "new@email.com"

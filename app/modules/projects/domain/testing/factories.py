@@ -9,10 +9,15 @@ def build_project(
     id: Optional[ProjectID] = None,
     name: str = "Test project",
     maximum_number_of_incomplete_tasks: Optional[int] = None,
+    tasks: Optional[list[Task]] = None,
 ) -> Project:
+    if tasks is None:
+        tasks = []
+
     project = Project(
         name=name,
         maximum_number_of_incomplete_tasks=maximum_number_of_incomplete_tasks,
+        tasks=tasks,
     )
 
     if id is not None:

@@ -5,13 +5,13 @@ from starlette.testclient import TestClient
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
-from app.modules.accounts.entrypoints.dependencies import get_register_user_use_case
+from app.modules.accounts.entrypoints.dependencies import get_register_user
 
 
 def test_register_user_endpoint(app: FastAPI, client: TestClient):
     # Given
     register_user_mock = Mock(return_value=123)
-    app.dependency_overrides[get_register_user_use_case] = lambda: register_user_mock
+    app.dependency_overrides[get_register_user] = lambda: register_user_mock
 
     # When
     response = client.post(

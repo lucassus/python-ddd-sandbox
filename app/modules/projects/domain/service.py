@@ -10,16 +10,6 @@ class Service:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def create_project(self, name: str, user_id: UserID) -> ProjectID:
-        with self._uow as uow:
-            project = Project(name=name)
-            project.user_id = user_id
-
-            uow.repository.create(project)
-            uow.commit()
-
-            return project.id
-
     def create_example_project(self, *, user_id: UserID) -> ProjectID:
         with self._uow as uow:
             project = Project(name="My first project")

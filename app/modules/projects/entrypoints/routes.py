@@ -7,8 +7,9 @@ from starlette.responses import RedirectResponse
 from app.modules.projects.domain.entities import TaskID
 from app.modules.projects.domain.entities.project import ProjectID
 from app.modules.projects.domain.service import Service
+from app.modules.projects.domain.use_cases import CreateProject
 from app.modules.projects.entrypoints import schemas
-from app.modules.projects.entrypoints.dependencies import get_current_time, get_service
+from app.modules.projects.entrypoints.dependencies import get_create_project, get_current_time, get_service
 from app.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -17,9 +18,9 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 @router.post("")
 def project_create_endpoint(
     data: schemas.CreateProject,
-    service: Annotated[Service, Depends(get_service)],
+    create_project: Annotated[CreateProject, Depends(get_create_project)],
 ):
-    project_id = service.create_project(
+    project_id = create_project(
         user_id=UserID(data.user_id),
         name=data.name,
     )

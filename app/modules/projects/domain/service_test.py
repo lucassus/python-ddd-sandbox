@@ -2,39 +2,15 @@ from datetime import date
 
 import pytest
 
-from app.modules.projects.domain.entities import Project, ProjectID, TaskID
+from app.modules.projects.domain.entities import ProjectID, TaskID
 from app.modules.projects.domain.service import Service
-from app.modules.projects.domain.testing import FakeUnitOfWork, build_project, build_task
+from app.modules.projects.domain.testing import build_project, build_task
 from app.shared_kernel.user_id import UserID
-
-
-@pytest.fixture
-def project() -> Project:
-    project = build_project(id=ProjectID(1))
-    project.tasks = [build_task(id=TaskID(1))]
-
-    return project
-
-
-@pytest.fixture
-def fake_uow(project):
-    return FakeUnitOfWork([project])
 
 
 @pytest.fixture
 def service(fake_uow):
     return Service(uow=fake_uow)
-
-
-def test_create_project(service: Service, fake_uow):
-    project_id = service.create_project(name="Project X", user_id=UserID(1))
-
-    assert fake_uow.committed
-
-    project = fake_uow.repository.get(project_id)
-    assert project.name == "Project X"
-    assert project.user_id == UserID(1)
-    assert len(project.tasks) == 0
 
 
 def test_create_example_project(service: Service, fake_uow):
@@ -52,15 +28,22 @@ def test_create_example_project(service: Service, fake_uow):
     assert project.tasks[2].name == "Start using our awesome app"
 
 
-def test_create_task(service: Service, project, fake_uow):
+def test_create_task(service: Service, repository, fake_uow):
+    project = repository.create(build_project(id=ProjectID(1)))
     service.create_task(project_id=project.id, name="Testing...")
 
     assert project.tasks[-1].name == "Testing..."
     assert fake_uow.committed
 
 
-def test_complete_task(service: Service, project, fake_uow):
-    task = project.tasks[-1]
+def test_complete_task(service: Service, repository, fake_uow):
+    project = repository.create(
+        build_project(
+            id=ProjectID(1),
+            tasks=[build_task(id=TaskID(1)), build_task(id=TaskID(2))],
+        )
+    )
+    task = project.tasks[0]
     now = date(2021, 1, 8)
     service.complete_task(project_id=project.id, id=task.id, now=now)
 
@@ -68,8 +51,14 @@ def test_complete_task(service: Service, project, fake_uow):
     assert fake_uow.committed
 
 
-def test_incomplete_task(service: Service, project, fake_uow):
-    task = project.tasks[-1]
+def test_incomplete_task(service: Service, repository, fake_uow):
+    project = repository.create(
+        build_project(
+            id=ProjectID(1),
+            tasks=[build_task(id=TaskID(1), completed_at=date(2021, 1, 8))],
+        )
+    )
+    task = project.tasks[0]
     service.incomplete_task(project_id=project.id, id=task.id)
 
     assert task.completed_at is None

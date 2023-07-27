@@ -1,9 +1,11 @@
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.testing import build_user
+from app.modules.accounts.domain.testing import FakeRepository, build_user
 
 
-def test_fake_repository(repository: AbstractRepository):
+def test_fake_repository():
+    repository: AbstractRepository = FakeRepository()
+
     user = repository.create(build_user())
     assert user.id == 1
 

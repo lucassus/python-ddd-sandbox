@@ -11,10 +11,11 @@ class UnitOfWork(AbstractUnitOfWork):
 
     def __init__(self, session_factory: Callable[..., Session]):
         self._session_factory = session_factory
+        self._repository_factory = lambda: Repository(session=self._session)
 
     def __enter__(self) -> "UnitOfWork":
         self._session = self._session_factory()
-        self.repository = Repository(session=self._session)
+        self.repository = self._repository_factory()
 
         return super().__enter__()
 

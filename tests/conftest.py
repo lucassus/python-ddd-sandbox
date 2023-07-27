@@ -30,3 +30,14 @@ def register_user(client: TestClient):
         )
 
     return _register_user
+
+
+@pytest.fixture
+def create_project(client: TestClient):
+    def _create_project(user_id: int, name: str) -> httpx.Response:
+        return client.post(
+            "/commands/projects",
+            json={"user_id": user_id, "name": name},
+        )
+
+    return _create_project

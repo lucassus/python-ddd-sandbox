@@ -26,4 +26,4 @@ def test_register_user_endpoint(app: FastAPI, client: TestClient):
         password=Password("password"),
     )
     assert response.status_code == 303
-    assert response.headers["location"] == "/users/123"
+    assert response.headers["location"] == "/queries/users/123"

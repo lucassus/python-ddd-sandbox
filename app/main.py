@@ -5,9 +5,13 @@ from app.infrastructure.tables import create_tables
 from app.modules.app import create_app as create_commands_app
 from app.query.app import create_app as create_queries_app
 
-create_tables(engine)
 
-app = FastAPI()
+def create_app():
+    create_tables(engine)
 
-app.mount("/queries", create_queries_app())
-app.mount("/commands", create_commands_app())
+    app = FastAPI()
+
+    app.mount("/queries", create_queries_app())
+    app.mount("/commands", create_commands_app())
+
+    return app

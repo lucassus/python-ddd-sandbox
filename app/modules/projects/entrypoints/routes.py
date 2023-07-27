@@ -36,10 +36,13 @@ def task_create_endpoint(
     data: schemas.CreateTask,
     service: Annotated[Service, Depends(get_service)],
 ):
-    task_id = service.create_task(name=data.name, project_id=ProjectID(project_id))
+    task_id = service.create_task(
+        project_id=ProjectID(project_id),
+        name=data.name,
+    )
 
     return RedirectResponse(
-        f"/projects/{project_id}/tasks/{task_id}",
+        f"/queries/projects/{project_id}/tasks/{task_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
@@ -54,7 +57,7 @@ def task_complete_endpoint(
     service.complete_task(TaskID(id), project_id=ProjectID(project_id), now=now)
 
     return RedirectResponse(
-        f"/projects/{project_id}/tasks/{id}",
+        f"/queries/projects/{project_id}/tasks/{id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
@@ -68,6 +71,6 @@ def task_incomplete_endpoint(
     service.incomplete_task(TaskID(id), project_id=ProjectID(project_id))
 
     return RedirectResponse(
-        f"/projects/{project_id}/tasks/{id}",
+        f"/queries/projects/{project_id}/tasks/{id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )

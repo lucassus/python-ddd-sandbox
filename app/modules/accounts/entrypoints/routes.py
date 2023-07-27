@@ -24,6 +24,6 @@ def user_register_endpoint(
     )
 
     return RedirectResponse(
-        f"/users/{user_id}",
+        f"/queries/users/{user_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )

@@ -9,11 +9,28 @@ from app.modules.projects.domain.entities.project import ProjectID
 from app.modules.projects.domain.service import Service
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.dependencies import get_current_time, get_service
+from app.shared_kernel.user_id import UserID
 
-router = APIRouter(prefix="/projects/{project_id}/tasks", tags=["tasks"])
+router = APIRouter(prefix="/projects", tags=["projects"])
 
 
 @router.post("")
+def project_create_endpoint(
+    data: schemas.CreateProject,
+    service: Annotated[Service, Depends(get_service)],
+):
+    project_id = service.create_project(
+        user_id=UserID(data.user_id),
+        name=data.name,
+    )
+
+    return RedirectResponse(
+        f"/queries/projects/{project_id}",
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+
+@router.post("/{project_id}/tasks")
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
@@ -27,7 +44,7 @@ def task_create_endpoint(
     )
 
 
-@router.put("/{id}/complete")
+@router.put("/{project_id}/tasks/{id}/complete")
 def task_complete_endpoint(
     project_id: int,
     service: Annotated[Service, Depends(get_service)],
@@ -42,7 +59,7 @@ def task_complete_endpoint(
     )
 
 
-@router.put("/{id}/incomplete")
+@router.put("/{project_id}/tasks/{id}/incomplete")
 def task_incomplete_endpoint(
     project_id: int,
     service: Annotated[Service, Depends(get_service)],

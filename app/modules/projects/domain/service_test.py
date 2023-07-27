@@ -26,10 +26,23 @@ def service(fake_uow):
     return Service(uow=fake_uow)
 
 
-def test_create_example_project(service: Service, fake_uow):
-    project = service.create_example_project(user_id=UserID(1))
+def test_create_project(service: Service, fake_uow):
+    project_id = service.create_project(name="Project X", user_id=UserID(1))
 
     assert fake_uow.committed
+
+    project = fake_uow.repository.get(project_id)
+    assert project.name == "Project X"
+    assert project.user_id == UserID(1)
+    assert len(project.tasks) == 0
+
+
+def test_create_example_project(service: Service, fake_uow):
+    project_id = service.create_example_project(user_id=UserID(1))
+
+    assert fake_uow.committed
+
+    project = fake_uow.repository.get(project_id)
     assert project.name == "My first project"
     assert project.user_id == UserID(1)
     assert len(project.tasks) == 3

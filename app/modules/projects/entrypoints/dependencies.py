@@ -12,7 +12,7 @@ def get_current_time() -> date:
 
 
 def get_uow():
-    return UnitOfWork(session_factory=AppSession())
+    return UnitOfWork(session_factory=AppSession)
 
 
 def get_service(uow=Depends(get_uow)) -> Service:

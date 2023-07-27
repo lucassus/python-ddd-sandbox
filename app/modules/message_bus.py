@@ -17,7 +17,7 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
     uow = UnitOfWork(session_factory=AppSession)
     service = Service(uow=uow)
 
-    return service.create_example_project(user_id=event.user_id)
+    service.create_example_project(user_id=event.user_id)
 
 
 @bus.listen(User.AccountCreatedEvent)

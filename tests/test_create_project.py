@@ -1,13 +1,8 @@
 from starlette.testclient import TestClient
 
 
-def test_create_project(client: TestClient):
-    # TODO: Create a helper function to register a user
-    response = client.post(
-        "/commands/users",
-        json={"email": "test@email.com", "password": "password"},
-        follow_redirects=True,
-    )
+def test_create_project(register_user, client: TestClient):
+    response = register_user(email="test@email.com")
 
     assert response.status_code == 200
     user_id = response.json()["id"]

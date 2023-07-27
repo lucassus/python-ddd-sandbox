@@ -1,3 +1,4 @@
+import httpx
 import pytest
 from starlette.testclient import TestClient
 
@@ -17,3 +18,15 @@ def prepare_db():
 def client():
     app = create_app()
     return TestClient(app)
+
+
+@pytest.fixture
+def register_user(client: TestClient):
+    def _register_user(email: str) -> httpx.Response:
+        return client.post(
+            "/commands/users",
+            json={"email": email, "password": "password"},
+            follow_redirects=True,
+        )
+
+    return _register_user

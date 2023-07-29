@@ -18,7 +18,7 @@ def test_create_example_project(service: Service, fake_uow):
 
     assert fake_uow.committed
 
-    project = fake_uow.repository.get(project_id)
+    project = fake_uow.project.get(project_id)
     assert project.name == "My first project"
     assert project.user_id == UserID(1)
     assert len(project.tasks) == 3

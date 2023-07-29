@@ -1,9 +1,8 @@
 import abc
+from contextlib import AbstractContextManager
 
 
-# TODO: Is is a good idea to have a base class?
-# TODO: Use AbstractContextManager
-class BaseUnitOfWork(metaclass=abc.ABCMeta):
+class BaseUnitOfWork(AbstractContextManager["BaseUnitOfWork"]):
     def __enter__(self):
         return self
 

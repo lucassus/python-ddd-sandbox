@@ -5,7 +5,7 @@ from app.shared_kernel.user_id import UserID
 
 def test_create_project_use_case(fake_uow, repository: AbstractRepository):
     create_project = CreateProject(uow=fake_uow)
-    project_id = create_project(name="Project X", user_id=UserID(1))
+    project_id = create_project(user_id=UserID(1), project_name="Project X")
 
     assert fake_uow.committed
 

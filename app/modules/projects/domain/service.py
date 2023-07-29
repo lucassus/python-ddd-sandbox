@@ -12,23 +12,23 @@ class Service:
 
     def create_example_project(self, *, user_id: UserID) -> ProjectID:
         with self._uow as uow:
-            project = Project(name="My first project")
-            project.user_id = user_id
+            entity = Project(name="My first project")
+            entity.user_id = user_id
 
-            task = project.add_task(name="Sign up!")
-            task.complete(datetime.utcnow())
+            task = entity.add_task(name="Sign up!")
+            task.complete(datetime.utcnow())  # TODO: Inject datetime and write tests
 
-            project.add_task(name="Watch the tutorial")
-            project.add_task(name="Start using our awesome app")
+            entity.add_task(name="Watch the tutorial")
+            entity.add_task(name="Start using our awesome app")
 
-            uow.repository.create(project)
+            uow.project.create(entity)
             uow.commit()
 
-            return project.id
+            return entity.id
 
     def create_task(self, *, project_id: ProjectID, name: str) -> TaskID:
         with self._uow as uow:
-            project = uow.repository.get(project_id)
+            project = uow.project.get(project_id)
             task = project.add_task(name=name)
 
             uow.commit()
@@ -36,14 +36,14 @@ class Service:
 
     def complete_task(self, id: TaskID, *, project_id: ProjectID, now: date) -> None:
         with self._uow as uow:
-            project = uow.repository.get(project_id)
+            project = uow.project.get(project_id)
             project.complete_task(id, now)
 
             uow.commit()
 
     def incomplete_task(self, id: TaskID, *, project_id: ProjectID) -> None:
         with self._uow as uow:
-            project = uow.repository.get(project_id)
+            project = uow.project.get(project_id)
             project.incomplete_task(id)
 
             uow.commit()

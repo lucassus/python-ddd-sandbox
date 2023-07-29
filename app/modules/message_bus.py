@@ -25,5 +25,5 @@ def send_welcome_email_handler(event: User.AccountCreatedEvent):
     from app.modules.accounts.adapters.unit_of_work import UnitOfWork
 
     with UnitOfWork(session_factory=AppSession) as uow:
-        user = uow.repository.get(event.user_id)
+        user = uow.user.get(event.user_id)
         print(f"Sending welcome email to {user}")

@@ -2,13 +2,13 @@ from dataclasses import dataclass
 from datetime import date
 from typing import NewType, Optional
 
-from app.shared_kernel.base_entity import BaseEntity
+from app.shared_kernel.entity import Entity
 
 TaskID = NewType("TaskID", int)
 
 
 @dataclass
-class Task(BaseEntity[TaskID]):
+class Task(Entity[TaskID]):
     name: str
     completed_at: Optional[date] = None
 

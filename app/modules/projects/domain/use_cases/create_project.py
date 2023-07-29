@@ -7,12 +7,12 @@ class CreateProject:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def __call__(self, user_id: UserID, name: str) -> ProjectID:
+    def __call__(self, user_id: UserID, project_name: str) -> ProjectID:
         with self._uow as uow:
-            project = Project(name=name)
-            project.user_id = user_id
+            new_project = Project(name=project_name)
+            new_project.user_id = user_id
 
-            project = uow.repository.create(project)
+            new_project = uow.project.create(new_project)
             uow.commit()
 
-            return project.id
+            return new_project.id

@@ -5,14 +5,14 @@ from typing import NewType, Optional
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.entities.task import Task, TaskID
 from app.modules.projects.domain.errors import TaskNotFoundError
-from app.shared_kernel.base_aggregate import BaseAggregate
+from app.shared_kernel.aggregate_root import AggregateRoot
 from app.shared_kernel.user_id import UserID
 
 ProjectID = NewType("ProjectID", int)
 
 
 @dataclass
-class Project(BaseAggregate[ProjectID]):
+class Project(AggregateRoot[ProjectID]):
     user_id: UserID = field(init=False)
 
     name: str

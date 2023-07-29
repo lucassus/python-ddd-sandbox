@@ -14,10 +14,10 @@ class RegisterUser:
 
     def __call__(self, *, email: EmailAddress, password: Password) -> UserID:
         with self._uow as uow:
-            if uow.repository.exists_by_email(email):
+            if uow.user.exists_by_email(email):
                 raise EmailAlreadyExistsException(email)
 
-            user = uow.repository.create(User(email=email, password=password))
+            user = uow.user.create(User(email=email, password=password))
             uow.commit()
 
             self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))

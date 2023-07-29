@@ -7,14 +7,14 @@ from app.modules.projects.domain.ports import AbstractUnitOfWork
 
 
 class UnitOfWork(AbstractUnitOfWork):
-    repository: Repository
+    project: Repository
 
     def __init__(self, session_factory: Callable[..., Session]):
         self._session_factory = session_factory
 
     def __enter__(self) -> "UnitOfWork":
         self._session = self._session_factory()
-        self.repository = Repository(session=self._session)
+        self.project = Repository(session=self._session)
 
         return super().__enter__()
 

@@ -22,7 +22,7 @@ def project_create_endpoint(
 ):
     project_id = create_project(
         user_id=UserID(data.user_id),
-        name=data.name,
+        project_name=data.name,
     )
 
     return RedirectResponse(

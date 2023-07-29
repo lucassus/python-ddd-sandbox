@@ -16,4 +16,4 @@ class AbstractUnitOfWork(BaseUnitOfWork, metaclass=abc.ABCMeta):
             uow.commit()
     """
 
-    repository: AbstractRepository
+    project: AbstractRepository

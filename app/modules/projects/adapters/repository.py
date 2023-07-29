@@ -1,6 +1,6 @@
 from sqlalchemy.orm.session import Session
 
-from app.modules.projects.domain.entities import Project
+from app.modules.projects.domain.entities import Project, ProjectID
 from app.modules.projects.domain.errors import ProjectNotFoundError
 from app.modules.projects.domain.ports import AbstractRepository
 
@@ -9,7 +9,7 @@ class Repository(AbstractRepository):
     def __init__(self, session: Session):
         self._session = session
 
-    def get(self, id: int) -> Project:
+    def get(self, id: ProjectID) -> Project:
         project = self._session.get(Project, id)
 
         if project is None:

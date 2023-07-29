@@ -17,7 +17,7 @@ class FakeRepository(AbstractRepository):
         self._project_id = _project_id_generator()
         self._projects = []
 
-    def get(self, id: int) -> Project:
+    def get(self, id: ProjectID) -> Project:
         for project in self._projects:
             if project.id == id:
                 return project

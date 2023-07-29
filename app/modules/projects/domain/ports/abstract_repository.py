@@ -1,6 +1,6 @@
 import abc
 
-from app.modules.projects.domain.entities import Project
+from app.modules.projects.domain.entities import Project, ProjectID
 
 
 class AbstractRepository(abc.ABC):
@@ -9,5 +9,5 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get(self, id: int) -> Project:
+    def get(self, id: ProjectID) -> Project:
         raise NotImplementedError

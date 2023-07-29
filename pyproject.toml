@@ -20,6 +20,7 @@ color_output = true
 
 exclude = [".venv"]
 
+check_untyped_defs = true
 disallow_untyped_defs = false
 disallow_incomplete_defs = false
 disallow_any_generics = true

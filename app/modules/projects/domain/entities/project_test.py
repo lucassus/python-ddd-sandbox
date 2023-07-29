@@ -2,6 +2,7 @@ from datetime import date
 
 import pytest
 
+from app.modules.projects.domain.entities import TaskID
 from app.modules.projects.domain.errors import MaxIncompleteTasksNumberIsReached, TaskNotFoundError
 from app.modules.projects.domain.testing.factories import build_project, build_task
 
@@ -26,10 +27,10 @@ def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
 
 def test_complete_task():
     project = build_project(name="Test Project")
-    task = build_task(id=1, name="One")
+    task = build_task(id=TaskID(1), name="One")
     project.tasks = [task]
 
-    task = project.complete_task(id=1, now=date(2021, 1, 17))
+    task = project.complete_task(id=TaskID(1), now=date(2021, 1, 17))
 
     assert task.completed_at is not None
     assert task.completed_at == date(2021, 1, 17)
@@ -37,29 +38,29 @@ def test_complete_task():
 
 def test_incomplete_task():
     project = build_project(name="Test Project")
-    task = build_task(id=1, name="One", completed_at=date(2021, 1, 17))
+    task = build_task(id=TaskID(1), name="One", completed_at=date(2021, 1, 17))
     project.tasks = [task]
 
-    task = project.incomplete_task(id=1)
+    task = project.incomplete_task(id=TaskID(1))
 
     assert task.completed_at is None
 
 
 def test_get_task_returns_task():
     project = build_project(name="Test Project")
-    task = build_task(id=1, name="One")
-    project.tasks = [task, build_task(id=2, name="Two")]
+    task = build_task(id=TaskID(1), name="One")
+    project.tasks = [task, build_task(id=TaskID(2), name="Two")]
 
-    assert project.get_task(1) == task
+    assert project.get_task(TaskID(1)) == task
 
 
 def test_get_task_raises_error():
     project = build_project(name="Test Project")
-    task = build_task(id=1, name="One")
-    project.tasks = [task, build_task(id=2, name="Two")]
+    task = build_task(id=TaskID(1), name="One")
+    project.tasks = [task, build_task(id=TaskID(2), name="Two")]
 
     with pytest.raises(TaskNotFoundError):
-        project.get_task(3)
+        project.get_task(TaskID(3))
 
 
 def test_complete_tasks_completes_all_tasks():

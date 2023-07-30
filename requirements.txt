@@ -22,6 +22,7 @@ charset-normalizer==3.2.0
 click==8.1.6
     # via
     #   black
+    #   import-linter
     #   typer
     #   uvicorn
 colorama==0.4.6
@@ -42,6 +43,8 @@ flake8==6.0.0
     # via -r requirements.in
 greenlet==2.0.2
     # via sqlalchemy
+grimp==2.5
+    # via import-linter
 h11==0.14.0
     # via
     #   httpcore
@@ -60,6 +63,8 @@ idna==2.10
     #   email-validator
     #   httpx
     #   requests
+import-linter==1.10.0
+    # via -r requirements.in
 iniconfig==2.0.0
     # via pytest
 isort==5.12.0
@@ -142,6 +147,8 @@ types-tabulate==0.9.0.3
 typing-extensions==4.7.1
     # via
     #   fastapi
+    #   grimp
+    #   import-linter
     #   mypy
     #   pydantic
     #   sqlalchemy

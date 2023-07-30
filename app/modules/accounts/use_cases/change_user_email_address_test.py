@@ -1,10 +1,9 @@
 import pytest
 
-from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError
-from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.testing import FakeUnitOfWork, build_user
-from app.modules.accounts.domain.use_cases import ChangeUserEmailAddress
+from app.modules.accounts.domain import EmailAddress, EmailAlreadyExistsException, UserNotFoundError
+from app.modules.accounts.use_cases import ChangeUserEmailAddress
+from app.modules.accounts.use_cases.ports import AbstractRepository
+from app.modules.accounts.use_cases.testing import FakeUnitOfWork, build_user
 from app.shared_kernel.user_id import UserID
 
 

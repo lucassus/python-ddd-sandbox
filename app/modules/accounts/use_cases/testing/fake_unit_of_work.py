@@ -1,4 +1,4 @@
-from app.modules.accounts.domain.ports import AbstractRepository, AbstractUnitOfWork
+from app.modules.accounts.use_cases.ports import AbstractRepository, AbstractUnitOfWork
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):

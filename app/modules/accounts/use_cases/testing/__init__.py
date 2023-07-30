@@ -2,9 +2,9 @@ from typing import Optional
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
-from app.modules.accounts.domain.testing.fake_repository import FakeRepository  # noqa
-from app.modules.accounts.domain.testing.fake_unit_of_work import FakeUnitOfWork  # noqa
 from app.modules.accounts.domain.user import User
+from app.modules.accounts.use_cases.testing.fake_repository import FakeRepository  # noqa
+from app.modules.accounts.use_cases.testing.fake_unit_of_work import FakeUnitOfWork  # noqa
 
 
 def build_user(

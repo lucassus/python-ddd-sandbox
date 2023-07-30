@@ -5,9 +5,9 @@ from starlette.responses import RedirectResponse
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
-from app.modules.accounts.domain.use_cases import ChangeUserEmailAddress, RegisterUser
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.dependencies import get_change_user_email_address, get_register_user
+from app.modules.accounts.use_cases import ChangeUserEmailAddress, RegisterUser
 from app.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])

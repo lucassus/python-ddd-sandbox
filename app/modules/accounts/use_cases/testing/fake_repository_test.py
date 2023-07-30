@@ -1,6 +1,6 @@
-from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.testing import FakeRepository, build_user
+from app.modules.accounts.domain import EmailAddress
+from app.modules.accounts.use_cases.ports import AbstractRepository
+from app.modules.accounts.use_cases.testing import FakeRepository, build_user
 
 
 def test_fake_repository():

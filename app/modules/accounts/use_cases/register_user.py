@@ -1,8 +1,5 @@
-from app.modules.accounts.domain.email_address import EmailAddress
-from app.modules.accounts.domain.errors import EmailAlreadyExistsException
-from app.modules.accounts.domain.password import Password
-from app.modules.accounts.domain.ports import AbstractUnitOfWork
-from app.modules.accounts.domain.user import User
+from app.modules.accounts.domain import EmailAddress, EmailAlreadyExistsException, Password, User
+from app.modules.accounts.use_cases.ports import AbstractUnitOfWork
 from app.shared_kernel.message_bus import MessageBus
 from app.shared_kernel.user_id import UserID
 

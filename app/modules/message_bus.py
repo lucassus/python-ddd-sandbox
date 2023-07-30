@@ -11,8 +11,7 @@ bus = MessageBus()
 
 @bus.listen(User.AccountCreatedEvent)
 def create_example_project_handler(event: User.AccountCreatedEvent):
-    from app.modules.projects.adapters.unit_of_work import UnitOfWork
-    from app.modules.projects.domain.use_cases.create_example_project import CreateExampleProject
+    from app.modules.projects import CreateExampleProject, UnitOfWork
 
     uow = UnitOfWork(session_factory=AppSession)
 
@@ -22,7 +21,7 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
 
 @bus.listen(User.AccountCreatedEvent)
 def send_welcome_email_handler(event: User.AccountCreatedEvent):
-    from app.modules.accounts.adapters.unit_of_work import UnitOfWork
+    from app.modules.accounts import UnitOfWork
 
     with UnitOfWork(session_factory=AppSession) as uow:
         user = uow.user.get(event.user_id)

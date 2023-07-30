@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from app.infrastructure.db import AppSession
 from app.modules.accounts.adapters.unit_of_work import UnitOfWork
-from app.modules.accounts.domain.use_cases import ChangeUserEmailAddress, RegisterUser
+from app.modules.accounts.use_cases import ChangeUserEmailAddress, RegisterUser
 from app.modules.message_bus import bus
 
 

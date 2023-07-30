@@ -1,7 +1,7 @@
 import pytest
 
-from app.modules.accounts.domain.ports import AbstractRepository
-from app.modules.accounts.domain.testing import FakeRepository, FakeUnitOfWork
+from app.modules.accounts.use_cases.ports import AbstractRepository
+from app.modules.accounts.use_cases.testing import FakeRepository, FakeUnitOfWork
 from app.shared_kernel.message_bus import MessageBus
 
 

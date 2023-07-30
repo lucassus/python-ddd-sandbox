@@ -6,10 +6,10 @@ from starlette.responses import RedirectResponse
 
 from app.modules.projects.domain.entities import TaskNumber
 from app.modules.projects.domain.entities.project import ProjectID
-from app.modules.projects.domain.service import Service
 from app.modules.projects.domain.use_cases import CreateProject
+from app.modules.projects.domain.use_cases.tasks_service import TasksService
 from app.modules.projects.entrypoints import schemas
-from app.modules.projects.entrypoints.dependencies import get_create_project, get_current_time, get_service
+from app.modules.projects.entrypoints.dependencies import get_create_project, get_current_time, get_tasks_service
 from app.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -22,7 +22,7 @@ def project_create_endpoint(
 ):
     project_id = create_project(
         user_id=UserID(data.user_id),
-        project_name=data.name,
+        name=data.name,
     )
 
     return RedirectResponse(
@@ -35,7 +35,7 @@ def project_create_endpoint(
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
-    service: Annotated[Service, Depends(get_service)],
+    service: Annotated[TasksService, Depends(get_tasks_service)],
 ):
     task_number = service.create_task(
         project_id=ProjectID(project_id),
@@ -51,7 +51,7 @@ def task_create_endpoint(
 @router.put("/{project_id}/tasks/{number}/complete")
 def task_complete_endpoint(
     project_id: int,
-    service: Annotated[Service, Depends(get_service)],
+    service: Annotated[TasksService, Depends(get_tasks_service)],
     now: Annotated[date, Depends(get_current_time)],
     number: int = Path(..., description="The number of the task to complete", ge=1),
 ):
@@ -66,7 +66,7 @@ def task_complete_endpoint(
 @router.put("/{project_id}/tasks/{number}/incomplete")
 def task_incomplete_endpoint(
     project_id: int,
-    service: Annotated[Service, Depends(get_service)],
+    service: Annotated[TasksService, Depends(get_tasks_service)],
     number: int = Path(..., description="The number of the task to incomplete", ge=1),
 ):
     service.incomplete_task(TaskNumber(number), project_id=ProjectID(project_id))

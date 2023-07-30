@@ -3,16 +3,15 @@ from datetime import date
 import pytest
 
 from app.modules.projects.domain.factories import build_project
-from app.modules.projects.domain.service import Service
-from app.shared_kernel.user_id import UserID
+from app.modules.projects.domain.use_cases.tasks_service import TasksService
 
 
 @pytest.fixture
 def service(fake_uow):
-    return Service(uow=fake_uow)
+    return TasksService(uow=fake_uow)
 
 
-def test_create_task(service: Service, repository, fake_uow):
+def test_create_task(service: TasksService, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
     service.create_task(project_id=project.id, name="Testing...")
 
@@ -20,7 +19,7 @@ def test_create_task(service: Service, repository, fake_uow):
     assert fake_uow.committed
 
 
-def test_complete_task(service: Service, repository, fake_uow):
+def test_complete_task(service: TasksService, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
     task = project.add_task(name="Testing...")
 
@@ -31,7 +30,7 @@ def test_complete_task(service: Service, repository, fake_uow):
     assert fake_uow.committed
 
 
-def test_incomplete_task(service: Service, repository, fake_uow):
+def test_incomplete_task(service: TasksService, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
     task = project.add_task(name="Testing...", completed_at=date(2021, 1, 8))
 

@@ -9,10 +9,14 @@ from app.modules.projects.entrypoints.routes import router
 
 
 @pytest.fixture
-def client(connection):
+def app():
     app = FastAPI()
     app.include_router(router)
+    return app
 
+
+@pytest.fixture
+def client(connection, app: FastAPI):
     def session_factory():
         return Session(bind=connection)
 

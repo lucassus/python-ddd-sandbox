@@ -8,9 +8,9 @@ class CreateProject:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def __call__(self, user_id: UserID, project_name: str) -> ProjectID:
+    def __call__(self, user_id: UserID, name: str) -> ProjectID:
         with self._uow as uow:
-            new_project = build_project(user_id=user_id, name=project_name)
+            new_project = build_project(user_id=user_id, name=name)
             new_project = uow.project.create(new_project)
             uow.commit()
 

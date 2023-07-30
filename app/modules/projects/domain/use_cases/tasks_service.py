@@ -4,8 +4,7 @@ from app.modules.projects.domain.entities import ProjectID, TaskNumber
 from app.modules.projects.domain.ports import AbstractUnitOfWork
 
 
-# TODO: Split it into smaller services / use cases
-class Service:
+class TasksService:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 

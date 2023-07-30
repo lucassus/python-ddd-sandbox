@@ -9,7 +9,7 @@ from app.shared_kernel.user_id import UserID
 
 @dataclass
 class User(AggregateRoot[UserID]):
-    @dataclass
+    @dataclass(frozen=True)
     class AccountCreatedEvent(BaseEvent):
         user_id: UserID
 

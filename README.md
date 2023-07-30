@@ -62,5 +62,17 @@ curl http://localhost:8000/queries/projects/1/tasks --silent | jq
         * `incomplete_task.py`
     * `entrypoints`
       * ...
+  * `projects`
+    * `domain`
+      * `project`
+        * __init__.py
+        * aggregate_root.py
+        * task.py
+        * factories.py
+        * repository.py
 * `query`
 * `shared_kernel`
+
+## Resources
+
+* https://www.youtube.com/watch?v=Ru2T4fu3bGQ

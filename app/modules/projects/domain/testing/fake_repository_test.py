@@ -2,7 +2,7 @@ import pytest
 
 from app.modules.projects.domain.entities import ProjectID
 from app.modules.projects.domain.errors import ProjectNotFoundError
-from app.modules.projects.domain.testing.factories import build_project
+from app.modules.projects.domain.factories import build_project
 from app.modules.projects.domain.testing.fake_repository import FakeRepository
 
 

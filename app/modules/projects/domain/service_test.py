@@ -2,9 +2,10 @@ from datetime import date
 
 import pytest
 
-from app.modules.projects.domain.entities import ProjectID, TaskID
+from app.modules.projects.domain.entities import TaskID
+from app.modules.projects.domain.factories import build_project
 from app.modules.projects.domain.service import Service
-from app.modules.projects.domain.testing import build_project, build_task
+from app.modules.projects.domain.testing import build_test_task
 from app.shared_kernel.user_id import UserID
 
 
@@ -29,7 +30,7 @@ def test_create_example_project(service: Service, fake_uow):
 
 
 def test_create_task(service: Service, repository, fake_uow):
-    project = repository.create(build_project(id=ProjectID(1)))
+    project = repository.create(build_project(name="Test Project"))
     service.create_task(project_id=project.id, name="Testing...")
 
     assert project.tasks[-1].name == "Testing..."
@@ -37,12 +38,12 @@ def test_create_task(service: Service, repository, fake_uow):
 
 
 def test_complete_task(service: Service, repository, fake_uow):
-    project = repository.create(
-        build_project(
-            id=ProjectID(1),
-            tasks=[build_task(id=TaskID(1)), build_task(id=TaskID(2))],
-        )
-    )
+    project = repository.create(build_project(name="Test Project"))
+    project.tasks = [
+        build_test_task(id=TaskID(1)),
+        build_test_task(id=TaskID(2)),
+    ]
+
     task = project.tasks[0]
     now = date(2021, 1, 8)
     service.complete_task(project_id=project.id, id=task.id, now=now)
@@ -52,12 +53,11 @@ def test_complete_task(service: Service, repository, fake_uow):
 
 
 def test_incomplete_task(service: Service, repository, fake_uow):
-    project = repository.create(
-        build_project(
-            id=ProjectID(1),
-            tasks=[build_task(id=TaskID(1), completed_at=date(2021, 1, 8))],
-        )
-    )
+    project = repository.create(build_project(name="Test Project"))
+    project.tasks = [
+        build_test_task(id=TaskID(1), completed_at=date(2021, 1, 8)),
+    ]
+
     task = project.tasks[0]
     service.incomplete_task(project_id=project.id, id=task.id)
 

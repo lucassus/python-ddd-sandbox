@@ -4,7 +4,8 @@ import pytest
 
 from app.modules.projects.domain.entities import TaskID
 from app.modules.projects.domain.errors import MaxIncompleteTasksNumberIsReached, TaskNotFoundError
-from app.modules.projects.domain.testing.factories import build_project, build_task
+from app.modules.projects.domain.factories import build_project
+from app.modules.projects.domain.testing.factories import build_test_task
 
 
 def test_add_task():
@@ -18,7 +19,7 @@ def test_add_task():
 
 
 def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
-    project = build_project(maximum_number_of_incomplete_tasks=1)
+    project = build_project(name="Test Project", maximum_number_of_incomplete_tasks=1)
     project.add_task(name="First")
 
     with pytest.raises(MaxIncompleteTasksNumberIsReached):
@@ -27,7 +28,7 @@ def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
 
 def test_complete_task():
     project = build_project(name="Test Project")
-    task = build_task(id=TaskID(1), name="One")
+    task = build_test_task(id=TaskID(1), name="One")
     project.tasks = [task]
 
     task = project.complete_task(id=TaskID(1), now=date(2021, 1, 17))
@@ -38,7 +39,7 @@ def test_complete_task():
 
 def test_incomplete_task():
     project = build_project(name="Test Project")
-    task = build_task(id=TaskID(1), name="One", completed_at=date(2021, 1, 17))
+    task = build_test_task(id=TaskID(1), name="One", completed_at=date(2021, 1, 17))
     project.tasks = [task]
 
     task = project.incomplete_task(id=TaskID(1))
@@ -48,32 +49,31 @@ def test_incomplete_task():
 
 def test_get_task_returns_task():
     project = build_project(name="Test Project")
-    task = build_task(id=TaskID(1), name="One")
-    project.tasks = [task, build_task(id=TaskID(2), name="Two")]
+    task = build_test_task(id=TaskID(1), name="One")
+    project.tasks = [task, build_test_task(id=TaskID(2), name="Two")]
 
     assert project.get_task(TaskID(1)) == task
 
 
 def test_get_task_raises_error():
     project = build_project(name="Test Project")
-    task = build_task(id=TaskID(1), name="One")
-    project.tasks = [task, build_task(id=TaskID(2), name="Two")]
+    project.tasks = []
 
     with pytest.raises(
         TaskNotFoundError,
-        match="Unable to find Task with id=3",
+        match="Unable to find Task with id=1",
     ):
-        project.get_task(TaskID(3))
+        project.get_task(TaskID(1))
 
 
 def test_complete_tasks_completes_all_tasks():
     # Given
     tasks = [
-        build_task(name="Foo", completed_at=None),
-        build_task(name="Foo", completed_at=date(2020, 12, 31)),
-        build_task(name="Foo", completed_at=None),
+        build_test_task(name="Foo", completed_at=None),
+        build_test_task(name="Foo", completed_at=date(2020, 12, 31)),
+        build_test_task(name="Foo", completed_at=None),
     ]
-    project = build_project()
+    project = build_project(name="Test Project")
     project.tasks = tasks
 
     # When

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy.dialects import registry
 
 from app.modules.projects.adapters.unit_of_work import UnitOfWork  # noqa
-from app.modules.projects.domain.use_cases.create_example_project import CreateExampleProject  # noqa
+from app.modules.projects.use_cases import CreateExampleProject  # noqa
 
 
 def register_module(app: FastAPI, mappers: registry) -> None:

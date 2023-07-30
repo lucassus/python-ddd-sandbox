@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from app.modules.projects.domain.errors import MaxIncompleteTasksNumberIsReached
 
 if TYPE_CHECKING:
-    from app.modules.projects.domain.entities import Project
+    from app.modules.projects.domain.project import Project
 
 
 def project_has_allowed_number_of_incomplete_tasks(project: "Project") -> None:

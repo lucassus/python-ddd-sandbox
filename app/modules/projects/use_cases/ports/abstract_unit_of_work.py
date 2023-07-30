@@ -1,6 +1,6 @@
 import abc
 
-from app.modules.projects.domain.ports import AbstractRepository
+from app.modules.projects.use_cases.ports import AbstractRepository
 from app.shared_kernel.base_unit_of_work import BaseUnitOfWork
 
 

@@ -1,5 +1,5 @@
-from app.modules.projects.domain.testing import FakeUnitOfWork
-from app.modules.projects.domain.use_cases.create_example_project import CreateExampleProject
+from app.modules.projects.use_cases.create_example_project import CreateExampleProject
+from app.modules.projects.use_cases.testing import FakeUnitOfWork
 from app.shared_kernel.user_id import UserID
 
 

@@ -3,7 +3,7 @@ from datetime import date
 import pytest
 
 from app.modules.projects.domain.factories import build_project
-from app.modules.projects.domain.use_cases.tasks_service import TasksService
+from app.modules.projects.use_cases.tasks_service import TasksService
 
 
 @pytest.fixture

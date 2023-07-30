@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.infrastructure.factories import create_project
-from app.modules.projects.domain.entities import Project, Task, TaskNumber
+from app.modules.projects.domain.project import Project
+from app.modules.projects.domain.task import Task, TaskNumber
 
 
 def test_tables(session: Session):

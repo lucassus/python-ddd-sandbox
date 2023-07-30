@@ -4,12 +4,11 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
-from app.modules.projects.domain.entities import TaskNumber
-from app.modules.projects.domain.entities.project import ProjectID
-from app.modules.projects.domain.use_cases import CreateProject
-from app.modules.projects.domain.use_cases.tasks_service import TasksService
+from app.modules.projects.domain.project import ProjectID
+from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.dependencies import get_create_project, get_current_time, get_tasks_service
+from app.modules.projects.use_cases import CreateProject, TasksService
 from app.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/projects", tags=["projects"])

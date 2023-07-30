@@ -1,7 +1,8 @@
 from datetime import date
 
-from app.modules.projects.domain.entities import ProjectID, TaskNumber
-from app.modules.projects.domain.ports import AbstractUnitOfWork
+from app.modules.projects.domain.project import ProjectID
+from app.modules.projects.domain.task import TaskNumber
+from app.modules.projects.use_cases.ports import AbstractUnitOfWork
 
 
 class TasksService:

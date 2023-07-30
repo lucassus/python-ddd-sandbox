@@ -1,6 +1,6 @@
 import pytest
 
-from app.modules.projects.domain.testing import FakeRepository, FakeUnitOfWork
+from app.modules.projects.use_cases.testing import FakeRepository, FakeUnitOfWork
 
 
 @pytest.fixture

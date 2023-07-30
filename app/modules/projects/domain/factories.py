@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from app.modules.projects.domain.entities import Project
+from app.modules.projects.domain.project import Project
 from app.shared_kernel.user_id import UserID
 
 

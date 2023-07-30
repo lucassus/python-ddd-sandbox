@@ -2,8 +2,8 @@ import pytest
 
 from app.infrastructure.factories import create_project
 from app.modules.projects.adapters.repository import Repository
-from app.modules.projects.domain.entities import ProjectID
 from app.modules.projects.domain.errors import ProjectNotFoundError
+from app.modules.projects.domain.project import ProjectID
 
 
 def test_repository_get(session):

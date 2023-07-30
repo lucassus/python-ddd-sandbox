@@ -1,6 +1,6 @@
-from app.modules.projects.domain.entities import ProjectID
 from app.modules.projects.domain.factories import build_example_project
-from app.modules.projects.domain.ports import AbstractUnitOfWork
+from app.modules.projects.domain.project import ProjectID
+from app.modules.projects.use_cases.ports import AbstractUnitOfWork
 from app.shared_kernel.user_id import UserID
 
 

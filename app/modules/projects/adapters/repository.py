@@ -1,8 +1,8 @@
 from sqlalchemy.orm.session import Session
 
-from app.modules.projects.domain.entities import Project, ProjectID
 from app.modules.projects.domain.errors import ProjectNotFoundError
-from app.modules.projects.domain.ports import AbstractRepository
+from app.modules.projects.domain.project import Project, ProjectID
+from app.modules.projects.use_cases.ports import AbstractRepository
 
 
 class Repository(AbstractRepository):

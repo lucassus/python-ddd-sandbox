@@ -3,7 +3,7 @@ from typing import Callable
 from sqlalchemy.orm import Session
 
 from app.modules.projects.adapters.repository import Repository
-from app.modules.projects.domain.ports import AbstractUnitOfWork
+from app.modules.projects.use_cases.ports import AbstractUnitOfWork
 
 
 class UnitOfWork(AbstractUnitOfWork):

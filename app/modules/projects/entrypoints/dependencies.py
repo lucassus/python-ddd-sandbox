@@ -5,9 +5,8 @@ from fastapi import Depends
 
 from app.infrastructure.db import AppSession
 from app.modules.projects.adapters.unit_of_work import UnitOfWork
-from app.modules.projects.domain.ports import AbstractUnitOfWork
-from app.modules.projects.domain.use_cases import CreateProject
-from app.modules.projects.domain.use_cases.tasks_service import TasksService
+from app.modules.projects.use_cases import CreateProject, TasksService
+from app.modules.projects.use_cases.ports import AbstractUnitOfWork
 
 
 def get_current_time() -> date:

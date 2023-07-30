@@ -3,8 +3,8 @@ from datetime import date
 from typing import NewType, Optional
 
 from app.modules.projects.domain import ensure
-from app.modules.projects.domain.entities.task import Task, TaskNumber
 from app.modules.projects.domain.errors import TaskNotFoundError
+from app.modules.projects.domain.task import Task, TaskNumber
 from app.shared_kernel.aggregate_root import AggregateRoot
 from app.shared_kernel.user_id import UserID
 

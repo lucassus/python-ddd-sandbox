@@ -1,6 +1,6 @@
 from datetime import date
 
-from app.modules.projects.domain.entities import Task
+from app.modules.projects.domain.task import Task
 
 
 def test_task_is_completed_returns_false():

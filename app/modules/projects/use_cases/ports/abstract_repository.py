@@ -1,6 +1,6 @@
 import abc
 
-from app.modules.projects.domain.entities import Project, ProjectID
+from app.modules.projects.domain.project import Project, ProjectID
 
 
 class AbstractRepository(abc.ABC):

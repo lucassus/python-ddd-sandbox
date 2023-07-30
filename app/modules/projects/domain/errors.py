@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from app.shared_kernel.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
-    from app.modules.projects.domain.entities import ProjectID, TaskNumber
+    from app.modules.projects.domain.project import ProjectID, TaskNumber
 
 
 class ProjectNotFoundError(EntityNotFoundError):

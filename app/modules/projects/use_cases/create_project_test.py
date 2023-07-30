@@ -1,5 +1,5 @@
-from app.modules.projects.domain.ports import AbstractRepository
-from app.modules.projects.domain.use_cases.create_project import CreateProject
+from app.modules.projects.use_cases.create_project import CreateProject
+from app.modules.projects.use_cases.ports import AbstractRepository
 from app.shared_kernel.user_id import UserID
 
 

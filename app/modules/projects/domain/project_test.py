@@ -2,9 +2,9 @@ from datetime import date
 
 import pytest
 
-from app.modules.projects.domain.entities.task import TaskNumber
 from app.modules.projects.domain.errors import MaxIncompleteTasksNumberIsReached, TaskNotFoundError
 from app.modules.projects.domain.factories import build_project
+from app.modules.projects.domain.task import TaskNumber
 
 
 def test_add_task():

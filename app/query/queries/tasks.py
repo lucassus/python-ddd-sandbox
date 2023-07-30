@@ -12,11 +12,11 @@ class FetchTasksQuery(AbstractQuery):
 
 
 class FindTaskQuery(AbstractQuery):
-    def __call__(self, *, project_id: int, task_id: int):
+    def __call__(self, *, project_id: int, number: int):
         query = select(tasks_table).where(
             and_(
                 tasks_table.c.project_id == project_id,
-                tasks_table.c.id == task_id,
+                tasks_table.c.number == number,
             )
         )
 

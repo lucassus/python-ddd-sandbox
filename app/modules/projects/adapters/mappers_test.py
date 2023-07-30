@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.infrastructure.factories import create_project
-from app.modules.projects.domain.entities import Project, Task
+from app.modules.projects.domain.entities import Project, Task, TaskNumber
 
 
 def test_tables(session: Session):
@@ -11,16 +11,14 @@ def test_tables(session: Session):
 
     assert len(project.tasks) == 0
 
-    project.tasks.extend(
-        [
-            Task(name="Learn python"),
-            Task(name="Learn DSS"),
-            Task(name="Clean the house"),
-        ]
-    )
+    project.add_task(name="Learn python")
+    project.add_task(name="Learn DDD")
+    project.add_task(name="Clean the house")
     session.commit()
 
+    session.refresh(project)
     assert len(project.tasks) == 3
+    assert project.last_task_number == TaskNumber(3)
 
     task = session.get(Task, 1)
     assert task

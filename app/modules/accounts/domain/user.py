@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
@@ -8,10 +8,11 @@ from app.shared_kernel.user_id import UserID
 
 
 @dataclass
-class User(AggregateRoot[UserID]):
+class User(AggregateRoot):
     @dataclass(frozen=True)
     class AccountCreatedEvent(BaseEvent):
         user_id: UserID
 
+    id: UserID = field(init=False)
     email: EmailAddress
     password: Password

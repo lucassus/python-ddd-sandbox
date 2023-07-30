@@ -10,7 +10,7 @@ class Project(BaseSchema):
 
 
 class Task(BaseSchema):
-    id: int
+    number: int
     name: str
     completed_at: Optional[date]
 

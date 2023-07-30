@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from app.shared_kernel.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
-    from app.modules.projects.domain.entities import ProjectID, TaskID
+    from app.modules.projects.domain.entities import ProjectID, TaskNumber
 
 
 class ProjectNotFoundError(EntityNotFoundError):
@@ -12,8 +12,8 @@ class ProjectNotFoundError(EntityNotFoundError):
 
 
 class TaskNotFoundError(EntityNotFoundError):
-    def __init__(self, id: "TaskID"):
-        super().__init__(f"Unable to find Task with {id=}")
+    def __init__(self, number: "TaskNumber"):
+        super().__init__(f"Unable to find Task with {number=}")
 
 
 class MaxIncompleteTasksNumberIsReached(Exception):

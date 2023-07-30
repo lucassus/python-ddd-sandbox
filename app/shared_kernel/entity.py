@@ -1,10 +1,7 @@
 import abc
-from dataclasses import dataclass, field
-from typing import Generic, TypeVar
-
-_T_ENTITY_ID = TypeVar("_T_ENTITY_ID", bound=int)
+from dataclasses import dataclass
 
 
 @dataclass
-class Entity(Generic[_T_ENTITY_ID], metaclass=abc.ABCMeta):
-    id: _T_ENTITY_ID = field(init=False)
+class Entity(metaclass=abc.ABCMeta):
+    pass

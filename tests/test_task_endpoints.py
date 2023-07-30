@@ -12,19 +12,29 @@ def test_create_task(register_user, create_project, client: TestClient):
 
     response = client.post(
         f"/commands/projects/{project_id}/tasks",
-        json={"name": "Testing..."},
+        json={"name": "First task"},
         follow_redirects=True,
     )
 
     assert response.status_code == 200
-    task_id = response.json()["id"]
-    assert response.json()["name"] == "Testing..."
+
+    response = client.post(
+        f"/commands/projects/{project_id}/tasks",
+        json={"name": "Second task"},
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
+
+    task_number = response.json()["number"]
+    assert response.json()["name"] == "Second task"
     assert response.json()["completedAt"] is None
 
-    response = client.put(f"/commands/projects/{project_id}/tasks/{task_id}/complete")
+    # TODO: Move it to the separate scenario
+    response = client.put(f"/commands/projects/{project_id}/tasks/{task_number}/complete")
     assert response.status_code == 200
     assert response.json()["completedAt"] is not None
 
-    response = client.put(f"/commands/projects/{project_id}/tasks/{task_id}/incomplete")
+    response = client.put(f"/commands/projects/{project_id}/tasks/{task_number}/incomplete")
     assert response.status_code == 200
     assert response.json()["completedAt"] is None

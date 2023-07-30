@@ -2,10 +2,8 @@ from datetime import date
 
 import pytest
 
-from app.modules.projects.domain.entities import TaskID
 from app.modules.projects.domain.factories import build_project
 from app.modules.projects.domain.service import Service
-from app.modules.projects.domain.testing import build_test_task
 from app.shared_kernel.user_id import UserID
 
 
@@ -39,14 +37,10 @@ def test_create_task(service: Service, repository, fake_uow):
 
 def test_complete_task(service: Service, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
-    project.tasks = [
-        build_test_task(id=TaskID(1)),
-        build_test_task(id=TaskID(2)),
-    ]
+    task = project.add_task(name="Testing...")
 
-    task = project.tasks[0]
     now = date(2021, 1, 8)
-    service.complete_task(project_id=project.id, id=task.id, now=now)
+    service.complete_task(task.number, project_id=project.id, now=now)
 
     assert task.completed_at is now
     assert fake_uow.committed
@@ -54,12 +48,9 @@ def test_complete_task(service: Service, repository, fake_uow):
 
 def test_incomplete_task(service: Service, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
-    project.tasks = [
-        build_test_task(id=TaskID(1), completed_at=date(2021, 1, 8)),
-    ]
+    task = project.add_task(name="Testing...", completed_at=date(2021, 1, 8))
 
-    task = project.tasks[0]
-    service.incomplete_task(project_id=project.id, id=task.id)
+    service.incomplete_task(task.number, project_id=project.id)
 
     assert task.completed_at is None
     assert fake_uow.committed

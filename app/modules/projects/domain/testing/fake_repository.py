@@ -9,8 +9,8 @@ def _project_id_generator() -> Iterator[ProjectID]:
     last_id = 1
 
     while True:
-        last_id += 1
         yield ProjectID(last_id)
+        last_id += 1
 
 
 class FakeRepository(AbstractRepository):

@@ -12,12 +12,12 @@ bus = MessageBus()
 @bus.listen(User.AccountCreatedEvent)
 def create_example_project_handler(event: User.AccountCreatedEvent):
     from app.modules.projects.adapters.unit_of_work import UnitOfWork
-    from app.modules.projects.domain.service import Service
+    from app.modules.projects.domain.use_cases.create_example_project import CreateExampleProject
 
     uow = UnitOfWork(session_factory=AppSession)
-    service = Service(uow=uow)
 
-    service.create_example_project(user_id=event.user_id)
+    create_example_project = CreateExampleProject(uow=uow)
+    create_example_project(user_id=event.user_id)
 
 
 @bus.listen(User.AccountCreatedEvent)

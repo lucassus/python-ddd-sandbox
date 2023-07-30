@@ -12,21 +12,6 @@ def service(fake_uow):
     return Service(uow=fake_uow)
 
 
-def test_create_example_project(service: Service, fake_uow):
-    project_id = service.create_example_project(user_id=UserID(1))
-
-    assert fake_uow.committed
-
-    project = fake_uow.project.get(project_id)
-    assert project.name == "My first project"
-    assert project.user_id == UserID(1)
-    assert len(project.tasks) == 3
-    assert project.tasks[0].name == "Sign up!"
-    assert project.tasks[0].completed_at is not None
-    assert project.tasks[1].name == "Watch the tutorial"
-    assert project.tasks[2].name == "Start using our awesome app"
-
-
 def test_create_task(service: Service, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
     service.create_task(project_id=project.id, name="Testing...")

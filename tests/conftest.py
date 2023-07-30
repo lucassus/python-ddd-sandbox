@@ -41,3 +41,14 @@ def create_project(client: TestClient):
         )
 
     return _create_project
+
+
+@pytest.fixture
+def create_task(client: TestClient):
+    def _create_task(project_id: int, name: str) -> httpx.Response:
+        return client.post(
+            f"/commands/projects/{project_id}/tasks",
+            json={"name": name},
+        )
+
+    return _create_task

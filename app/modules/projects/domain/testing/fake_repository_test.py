@@ -17,5 +17,8 @@ def test_fake_repository():
     assert project.id == 1
     assert project.name == "First"
 
-    with pytest.raises(ProjectNotFoundError):
+    with pytest.raises(
+        ProjectNotFoundError,
+        match="Unable to find Project with id=3",
+    ):
         repository.get(ProjectID(3))

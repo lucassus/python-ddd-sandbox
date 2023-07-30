@@ -59,7 +59,10 @@ def test_get_task_raises_error():
     task = build_task(id=TaskID(1), name="One")
     project.tasks = [task, build_task(id=TaskID(2), name="Two")]
 
-    with pytest.raises(TaskNotFoundError):
+    with pytest.raises(
+        TaskNotFoundError,
+        match="Unable to find Task with id=3",
+    ):
         project.get_task(TaskID(3))
 
 

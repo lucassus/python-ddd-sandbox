@@ -8,12 +8,12 @@ if TYPE_CHECKING:
 
 class ProjectNotFoundError(EntityNotFoundError):
     def __init__(self, id: "ProjectID"):
-        self.message = f"Unable to find a project with {id=}"
+        super().__init__(f"Unable to find Project with {id=}")
 
 
 class TaskNotFoundError(EntityNotFoundError):
     def __init__(self, id: "TaskID"):
-        self.message = f"Unable to find a task with {id=}"
+        super().__init__(f"Unable to find Task with {id=}")
 
 
 class MaxIncompleteTasksNumberIsReached(Exception):

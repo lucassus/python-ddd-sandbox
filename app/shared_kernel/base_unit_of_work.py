@@ -1,8 +1,11 @@
 import abc
 from contextlib import AbstractContextManager
+from typing import TypeVar
+
+_T = TypeVar("_T")
 
 
-class BaseUnitOfWork(AbstractContextManager["BaseUnitOfWork"]):
+class BaseUnitOfWork(AbstractContextManager[_T]):
     def __enter__(self):
         return self
 

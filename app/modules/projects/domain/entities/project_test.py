@@ -72,7 +72,7 @@ def test_incomplete_task_raises_error_when_task_not_found():
         project.incomplete_task(number=TaskNumber(1))
 
 
-def test_complete_tasks_completes_all_tasks():
+def test_complete_all_tasks():
     # Given
     project = build_project(name="Test Project")
     project.add_task(name="Foo", completed_at=None)
@@ -80,7 +80,7 @@ def test_complete_tasks_completes_all_tasks():
     project.add_task(name="Foo", completed_at=None)
 
     # When
-    project.complete_tasks(now=date(2021, 1, 12))
+    project.complete_all_tasks(now=date(2021, 1, 12))
 
     # Then
     for task in project.tasks:

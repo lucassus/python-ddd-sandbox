@@ -55,6 +55,6 @@ class Project(AggregateRoot):
 
         raise TaskNotFoundError(number)
 
-    def complete_tasks(self, now: date):
+    def complete_all_tasks(self, now: date):
         for task in self.tasks:
             task.complete(now)

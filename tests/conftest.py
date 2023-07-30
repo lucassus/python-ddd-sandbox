@@ -33,8 +33,13 @@ def register_user(client: TestClient):
 
 
 @pytest.fixture
-def create_project(client: TestClient):
-    def _create_project(user_id: int, name: str) -> httpx.Response:
+def create_project(register_user, client: TestClient):
+    def _create_project(name: str, user_id: int | None = None) -> httpx.Response:
+        if user_id is None:
+            response = register_user("test@email.com")
+            assert response.status_code == 200
+            user_id = response.json()["id"]
+
         return client.post(
             "/commands/projects",
             json={"user_id": user_id, "name": name},

@@ -1,12 +1,8 @@
 from starlette.testclient import TestClient
 
 
-def test_create_task(register_user, create_project, create_task, client: TestClient):
-    response = register_user(email="test@email.com")
-    assert response.status_code == 200
-    user_id = response.json()["id"]
-
-    response = create_project(user_id=user_id, name="Project X")
+def test_create_task(create_project, create_task, client: TestClient):
+    response = create_project(name="Project X")
     assert response.status_code == 200
     project_id = response.json()["id"]
 
@@ -17,11 +13,9 @@ def test_create_task(register_user, create_project, create_task, client: TestCli
     assert response.status_code == 200
 
 
-def test_complete_task(register_user, create_project, create_task, client: TestClient):
-    response = register_user(email="test@email.com")
-    user_id = response.json()["id"]
-
-    response = create_project(user_id=user_id, name="Project X")
+def test_complete_task(create_project, create_task, client: TestClient):
+    response = create_project(name="Project X")
+    assert response.status_code == 200
     project_id = response.json()["id"]
 
     response = create_task(project_id=project_id, name="First task")

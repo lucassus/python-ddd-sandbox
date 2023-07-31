@@ -1,5 +1,5 @@
 .idea
-db/*.db
+app/infrastructure/databases/*.db
 docs
 htmlcov
 node_modules

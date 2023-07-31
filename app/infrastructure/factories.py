@@ -38,23 +38,31 @@ def create_user(
 def _build_project(
     user_id: Optional[int] = None,
     name: Optional[str] = None,
+    archived_at: Optional[date] = None,
 ) -> dict[str, Any]:
     if name is None:
         name = fake.word()
 
-    return {"user_id": user_id, "name": name}
+    return {
+        "user_id": user_id,
+        "name": name,
+        "archived_at": archived_at,
+    }
 
 
 def create_project(
     connection: Connection,
     user_id: Optional[int] = None,
     name: Optional[str] = None,
+    archived_at: Optional[date] = None,
 ):
     if user_id is None:
         user_id = create_user(connection).id
 
     project = connection.execute(
-        projects_table.insert().values(_build_project(user_id=user_id, name=name)).returning(projects_table)
+        projects_table.insert()
+        .values(_build_project(user_id=user_id, name=name, archived_at=archived_at))
+        .returning(projects_table)
     ).first()
 
     return project

@@ -20,15 +20,23 @@ class FakeProjectRepository(AbstractProjectRepository):
         self._project_id = _project_id_generator()
         self._projects = []
 
-    def get(self, id: ProjectID) -> Project:
-        for project in self._projects:
-            if project.id == id:
-                return project
-
-        raise ProjectNotFoundError(id)
-
     def create(self, project: Project) -> Project:
         project.id = next(self._project_id)
         self._projects.append(project)
 
         return project
+
+    def get(self, id: ProjectID) -> Project:
+        for project in self._projects:
+            if project.id == id and not project.archived:
+                return project
+
+        raise ProjectNotFoundError(id)
+
+    def get_archived(self, id: ProjectID) -> Project:
+        # TODO: Dry it
+        for project in self._projects:
+            if project.id == id and project.archived:
+                return project
+
+        raise ProjectNotFoundError(id)

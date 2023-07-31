@@ -9,14 +9,17 @@ class SQLAProjectRepository(AbstractProjectRepository):
     def __init__(self, session: Session):
         self._session = session
 
+    def create(self, project: Project) -> Project:
+        self._session.add(project)
+        return project
+
     def get(self, id: ProjectID) -> Project:
         project = self._session.get(Project, id)
 
-        if project is None:
+        if project is None or project.archived:
             raise ProjectNotFoundError(id)
 
         return project
 
-    def create(self, project: Project) -> Project:
-        self._session.add(project)
-        return project
+    def get_archived(self, id: ProjectID) -> Project:
+        pass

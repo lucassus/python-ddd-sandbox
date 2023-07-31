@@ -8,8 +8,10 @@ class BaseEvent(abc.ABC):
 
 
 class MessageBus:
+    _listeners: dict[type, list[Callable[[BaseEvent], None]]]
+
     def __init__(self):
-        self._listeners: dict[type, list[Callable]] = defaultdict(list)
+        self._listeners = defaultdict(list)
 
     def listen(self, event_class: type, fn=None):
         def on(handler):

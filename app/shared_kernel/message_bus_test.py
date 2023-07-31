@@ -6,12 +6,12 @@ import pytest
 from app.shared_kernel.message_bus import BaseEvent, MessageBus
 
 
-@dataclass
+@dataclass(frozen=True)
 class SomeEvent(BaseEvent):
     message: str
 
 
-@dataclass
+@dataclass(frozen=True)
 class SomeOtherEvent(BaseEvent):
     id: int
 

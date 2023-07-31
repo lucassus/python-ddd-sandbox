@@ -62,6 +62,7 @@ def create_project(
 
 def _build_task(
     project_id: int,
+    number: int,
     name: Optional[str] = None,
     completed_at: Optional[date] = None,
 ) -> dict[str, Any]:
@@ -70,6 +71,7 @@ def _build_task(
 
     return {
         "project_id": project_id,
+        "number": number,
         "name": name,
         "completed_at": completed_at,
     }
@@ -77,18 +79,20 @@ def _build_task(
 
 def create_task(
     connection: Connection,
-    project_id: Optional[int] = None,
+    number: int,
+    project: Optional[Any] = None,
     name: Optional[str] = None,
     completed_at: Optional[date] = None,
 ):
-    if project_id is None:
-        project_id = create_project(connection).id
+    if project is None:
+        project = create_project(connection)
 
     task = connection.execute(
         tasks_table.insert()
         .values(
             _build_task(
-                project_id=project_id,
+                project_id=project.id,
+                number=number,
                 name=name,
                 completed_at=completed_at,
             )

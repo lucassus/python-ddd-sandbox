@@ -19,15 +19,15 @@ def tasks_endpoint(
     return [schemas.Task.from_orm(task) for task in tasks]
 
 
-@router.get("/{id}", response_model=schemas.Task)
+@router.get("/{number}", response_model=schemas.Task)
 def task_endpoint(
     find_task: Annotated[FindTaskQuery, Depends()],
     project=Depends(get_project),
-    id: int = Path(..., description="The ID of the task", ge=1),
+    number: int = Path(..., description="The number of the task", ge=1),
 ):
-    task = find_task(project_id=project.id, task_id=id)
+    task = find_task(project_id=project.id, number=number)
 
     if task is None:
-        raise EntityNotFoundError(detail=f"Unable to find a task with ID={id}")
+        raise EntityNotFoundError(detail=f"Unable to find a task with {number=}")
 
     return schemas.Task.from_orm(task)

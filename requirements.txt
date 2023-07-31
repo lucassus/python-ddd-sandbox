@@ -36,9 +36,9 @@ email-validator==2.0.0.post2
     # via -r requirements.in
 faker==19.2.0
     # via -r requirements.in
-fastapi==0.100.0
+fastapi==0.100.1
     # via -r requirements.in
-flake8==6.0.0
+flake8==6.1.0
     # via -r requirements.in
 greenlet==2.0.2
     # via sqlalchemy
@@ -88,13 +88,13 @@ pprintpp==0.4.0
     # via pytest-icdiff
 prettytable==3.8.0
     # via libyear
-pycodestyle==2.10.0
+pycodestyle==2.11.0
     # via flake8
 pydantic[dotenv]==1.10.11
     # via
     #   -r requirements.in
     #   fastapi
-pyflakes==3.0.1
+pyflakes==3.1.0
     # via flake8
 pytest==7.4.0
     # via
@@ -148,7 +148,7 @@ typing-extensions==4.7.1
     #   typer
 urllib3==1.26.16
     # via requests
-uvicorn==0.23.1
+uvicorn==0.23.2
     # via -r requirements.in
 watchdog==3.0.0
     # via pytest-watch

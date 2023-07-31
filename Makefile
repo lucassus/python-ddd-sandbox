@@ -21,7 +21,7 @@ seed:
 	APP_ENV=development python -m app.infrastructure.seed
 
 server-dev:
-	APP_ENV=development uvicorn app.main:app --reload
+	APP_ENV=development uvicorn app.main:create_app --reload
 
 # Linting
 

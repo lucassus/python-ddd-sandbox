@@ -24,6 +24,10 @@ class Project(AggregateRoot):
     tasks: list[Task] = field(default_factory=list)
     archived_at: None | date = field(init=False, default=None)
 
+    @property
+    def archived(self) -> bool:
+        return self.archived_at is not None
+
     def add_task(self, *, name: str, completed_at: Optional[date] = None) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 

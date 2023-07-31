@@ -128,6 +128,7 @@ def test_archive_project_set_archived_at():
 
     # Then
     assert project.archived_at == now
+    assert project.archived is True
 
 
 def test_unarchive_project():
@@ -141,3 +142,4 @@ def test_unarchive_project():
 
     # Then
     assert project.archived_at is None
+    assert project.archived is False

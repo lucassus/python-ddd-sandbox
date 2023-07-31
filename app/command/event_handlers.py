@@ -1,4 +1,4 @@
-from app.command.accounts.domain.user import User
+from app.command.accounts.entities.user import User
 from app.infrastructure.db import AppSession
 from app.shared_kernel.message_bus import MessageBus
 
@@ -19,9 +19,8 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
 
 @bus.listen(User.AccountCreatedEvent)
 def send_welcome_email_handler(event: User.AccountCreatedEvent):
-    from app.command.accounts.adapters.unit_of_work import UnitOfWork
+    from app.command.accounts.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
 
-    with UnitOfWork(session_factory=AppSession) as uow:
+    with SQLAUnitOfWork(session_factory=AppSession) as uow:
         user = uow.user.get(event.user_id)
-
-    print(f"Sending welcome email to {user.email}")
+        print(f"Sending welcome email to {user.email}")

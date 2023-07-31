@@ -1,9 +1,10 @@
-from app.command.accounts.domain import EmailAddress, User
-from app.command.accounts.use_cases.ports import AbstractRepository
+from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.user import User
 from app.shared_kernel.user_id import UserID
 
 
-class FakeRepository(AbstractRepository):
+class FakeUserRepository(AbstractUserRepository):
     _users_by_id: dict[UserID, User]
 
     def __init__(self):

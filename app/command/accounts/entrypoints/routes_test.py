@@ -3,8 +3,8 @@ from unittest.mock import Mock
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from app.command.accounts.domain.email_address import EmailAddress
-from app.command.accounts.domain.password import Password
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.password import Password
 from app.command.accounts.entrypoints.dependencies import get_register_user
 
 

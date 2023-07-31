@@ -1,12 +1,12 @@
 from sqlalchemy import select
 from sqlalchemy.orm.session import Session
 
-from app.command.accounts.domain.email_address import EmailAddress
-from app.command.accounts.domain.user import User
-from app.command.accounts.use_cases.ports import AbstractRepository
+from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.user import User
 
 
-class Repository(AbstractRepository):
+class SQLAUserRepository(AbstractUserRepository):
     def __init__(self, session: Session):
         self._session = session
 

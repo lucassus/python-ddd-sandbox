@@ -1,9 +1,11 @@
 import pytest
 
-from app.command.accounts.domain import EmailAddress, EmailAlreadyExistsException, UserNotFoundError
-from app.command.accounts.use_cases import ChangeUserEmailAddress
-from app.command.accounts.use_cases.ports import AbstractRepository
-from app.command.accounts.use_cases.testing import FakeUnitOfWork, build_user
+from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
+from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.command.accounts.application.testing import build_user
+from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.errors import EmailAlreadyExistsException, UserNotFoundError
 from app.shared_kernel.user_id import UserID
 
 
@@ -15,7 +17,7 @@ def change_user_email_address(uow: FakeUnitOfWork):
 class TestChangeUserEmailAddressUseCase:
     def test_successfully_updates_user_email_address(
         self,
-        repository: AbstractRepository,
+        repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
         change_user_email_address: ChangeUserEmailAddress,
     ):
@@ -34,7 +36,7 @@ class TestChangeUserEmailAddressUseCase:
 
     def test_raises_error_when_user_does_not_exist(
         self,
-        repository: AbstractRepository,
+        repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
         change_user_email_address: ChangeUserEmailAddress,
     ):
@@ -48,7 +50,7 @@ class TestChangeUserEmailAddressUseCase:
 
     def test_raises_error_when_new_email_address_is_taken(
         self,
-        repository: AbstractRepository,
+        repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
         change_user_email_address: ChangeUserEmailAddress,
     ):
@@ -68,7 +70,7 @@ class TestChangeUserEmailAddressUseCase:
 
     def test_does_nothing_when_new_email_address_is_the_same_as_the_old_one(
         self,
-        repository: AbstractRepository,
+        repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
         change_user_email_address: ChangeUserEmailAddress,
     ):

@@ -1,6 +1,6 @@
 import pytest
 
-from app.command.accounts.domain.email_address import EmailAddress, InvalidEmailAddressError
+from app.command.accounts.entities.email_address import EmailAddress, InvalidEmailAddressError
 
 
 class TestEmailAddress:

@@ -2,9 +2,9 @@ import httpx
 import pytest
 from starlette.testclient import TestClient
 
+from app import create_app
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
-from app.main import create_app
 
 
 @pytest.fixture(scope="function", autouse=True)

@@ -1,5 +1,6 @@
-from app.command.accounts.domain import EmailAddress, EmailAlreadyExistsException, UserNotFoundError
-from app.command.accounts.use_cases.ports import AbstractUnitOfWork
+from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.errors import EmailAlreadyExistsException, UserNotFoundError
 from app.shared_kernel.user_id import UserID
 
 

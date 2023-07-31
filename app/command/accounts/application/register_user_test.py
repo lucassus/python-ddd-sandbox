@@ -2,10 +2,14 @@ from unittest.mock import Mock
 
 import pytest
 
-from app.command.accounts.domain import EmailAddress, EmailAlreadyExistsException, Password, User
-from app.command.accounts.use_cases import RegisterUser
-from app.command.accounts.use_cases.ports import AbstractRepository
-from app.command.accounts.use_cases.testing import FakeUnitOfWork, build_user
+from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.command.accounts.application.register_user import RegisterUser
+from app.command.accounts.application.testing import build_user
+from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.errors import EmailAlreadyExistsException
+from app.command.accounts.entities.password import Password
+from app.command.accounts.entities.user import User
 
 
 @pytest.fixture
@@ -45,7 +49,7 @@ def test_register_user_dispatches_account_created_event(
 
 def test_register_user_validate_email_uniqueness(
     uow,
-    repository: AbstractRepository,
+    repository: AbstractUserRepository,
     register_user: RegisterUser,
 ):
     repository.create(build_user(email=EmailAddress("existing@email.com")))

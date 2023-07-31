@@ -3,11 +3,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse
 
-from app.command.accounts.domain.email_address import EmailAddress
-from app.command.accounts.domain.password import Password
+from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
+from app.command.accounts.application.register_user import RegisterUser
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.password import Password
 from app.command.accounts.entrypoints import schemas
 from app.command.accounts.entrypoints.dependencies import get_change_user_email_address, get_register_user
-from app.command.accounts.use_cases import ChangeUserEmailAddress, RegisterUser
 from app.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])

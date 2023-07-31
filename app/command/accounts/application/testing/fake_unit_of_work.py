@@ -1,11 +1,12 @@
-from app.command.accounts.use_cases.ports import AbstractRepository, AbstractUnitOfWork
+from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):
-    user: AbstractRepository
+    user: AbstractUserRepository
     committed = False
 
-    def __init__(self, repository: AbstractRepository):
+    def __init__(self, repository: AbstractUserRepository):
         self._repository_factory = lambda: repository
 
     def __enter__(self):

@@ -1,5 +1,8 @@
-from app.command.accounts.domain import EmailAddress, EmailAlreadyExistsException, Password, User
-from app.command.accounts.use_cases.ports import AbstractUnitOfWork
+from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.errors import EmailAlreadyExistsException
+from app.command.accounts.entities.password import Password
+from app.command.accounts.entities.user import User
 from app.shared_kernel.message_bus import MessageBus
 from app.shared_kernel.user_id import UserID
 

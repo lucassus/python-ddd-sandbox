@@ -1,4 +1,4 @@
-from app.command.accounts.domain import User
+from app.command.accounts.entities.user import User
 from app.infrastructure.tables import users_table
 
 

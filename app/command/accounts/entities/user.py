@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from app.command.accounts.domain.email_address import EmailAddress
-from app.command.accounts.domain.password import Password
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.password import Password
 from app.shared_kernel.aggregate_root import AggregateRoot
 from app.shared_kernel.message_bus import BaseEvent
 from app.shared_kernel.user_id import UserID

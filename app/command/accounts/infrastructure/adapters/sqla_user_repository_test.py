@@ -4,7 +4,7 @@ from sqlalchemy.orm.session import Session
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.password import Password
 from app.command.accounts.entities.user import User
-from app.command.accounts.entrypoints.adapters.sqla_user_repository import SQLAUserRepository
+from app.command.accounts.infrastructure.adapters.sqla_user_repository import SQLAUserRepository
 
 
 class TestRepository:

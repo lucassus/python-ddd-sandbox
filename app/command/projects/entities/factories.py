@@ -7,7 +7,7 @@ from app.shared_kernel.user_id import UserID
 
 def build_project(
     name: str,
-    user_id: Optional[UserID] = None,
+    user_id: Optional[UserID] = None,  # TODO: But actually, user_id is required
     maximum_number_of_incomplete_tasks: Optional[int] = None,
 ) -> Project:
     project = Project(name=name)

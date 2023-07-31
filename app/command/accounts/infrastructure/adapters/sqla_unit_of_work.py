@@ -3,7 +3,7 @@ from typing import Callable
 from sqlalchemy.orm import Session
 
 from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.accounts.entrypoints.adapters.sqla_user_repository import SQLAUserRepository
+from app.command.accounts.infrastructure.adapters.sqla_user_repository import SQLAUserRepository
 
 
 class SQLAUnitOfWork(AbstractUnitOfWork):

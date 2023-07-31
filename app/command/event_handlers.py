@@ -9,7 +9,7 @@ bus = MessageBus()
 @bus.listen(User.AccountCreatedEvent)
 def create_example_project_handler(event: User.AccountCreatedEvent):
     from app.command.projects.application.create_example_project import CreateExampleProject
-    from app.command.projects.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
+    from app.command.projects.infrastructure.adapters.sqla_unit_of_work import SQLAUnitOfWork
 
     uow = SQLAUnitOfWork(session_factory=AppSession)
     create_example_project = CreateExampleProject(uow=uow)
@@ -19,7 +19,7 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
 
 @bus.listen(User.AccountCreatedEvent)
 def send_welcome_email_handler(event: User.AccountCreatedEvent):
-    from app.command.accounts.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
+    from app.command.accounts.infrastructure.adapters.sqla_unit_of_work import SQLAUnitOfWork
 
     with SQLAUnitOfWork(session_factory=AppSession) as uow:
         user = uow.user.get(event.user_id)

@@ -3,9 +3,9 @@ from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from starlette.testclient import TestClient
 
-from app.command.projects.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
 from app.command.projects.entrypoints.dependencies import get_uow
 from app.command.projects.entrypoints.routes.projects import router
+from app.command.projects.infrastructure.adapters.sqla_unit_of_work import SQLAUnitOfWork
 
 
 @pytest.fixture

@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.command.accounts.application.register_user import RegisterUser
-from app.command.accounts.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
+from app.command.accounts.infrastructure.adapters.sqla_unit_of_work import SQLAUnitOfWork
 from app.command.event_handlers import bus
 from app.infrastructure.db import AppSession
 

@@ -23,4 +23,6 @@ def send_welcome_email_handler(event: User.AccountCreatedEvent):
 
     with SQLAUnitOfWork(session_factory=AppSession) as uow:
         user = uow.user.get(event.user_id)
-        print(f"Sending welcome email to {user.email}")
+
+        if user is not None:
+            print(f"Sending welcome email to {user.email}")

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from sqlalchemy.dialects import registry
+from sqlalchemy.orm import registry
 
 
 def register_module(app: FastAPI, mappers: registry) -> None:

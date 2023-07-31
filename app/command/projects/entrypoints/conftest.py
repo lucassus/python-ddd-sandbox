@@ -5,7 +5,7 @@ from starlette.testclient import TestClient
 
 from app.command.projects.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
 from app.command.projects.entrypoints.dependencies import get_uow
-from app.command.projects.entrypoints.routes import router
+from app.command.projects.entrypoints.routes.projects import router
 
 
 @pytest.fixture

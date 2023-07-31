@@ -1,5 +1,5 @@
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.command.accounts.application.testing import build_user
+from app.command.accounts.application.testing.factories import build_test_user
 from app.command.accounts.application.testing.fake_user_repository import FakeUserRepository
 from app.command.accounts.entities.email_address import EmailAddress
 
@@ -7,7 +7,7 @@ from app.command.accounts.entities.email_address import EmailAddress
 def test_fake_repository():
     repository: AbstractUserRepository = FakeUserRepository()
 
-    user = repository.create(build_user())
+    user = repository.create(build_test_user())
     assert user.id == 1
 
     loaded = repository.get(user.id)

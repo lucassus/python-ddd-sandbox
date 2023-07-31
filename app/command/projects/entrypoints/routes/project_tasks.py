@@ -4,35 +4,16 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
-from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.entities.task import TaskNumber
 from app.command.projects.entrypoints import schemas
-from app.command.projects.entrypoints.dependencies import get_create_project, get_current_time, get_tasks_service
-from app.shared_kernel.user_id import UserID
+from app.command.projects.entrypoints.dependencies import get_current_time, get_tasks_service
 
-# TODO: Split there routes into separate files, projects, for example project_tasks
-router = APIRouter(prefix="/projects", tags=["projects"])
+router = APIRouter(prefix="/projects/{project_id}/tasks")
 
 
 @router.post("")
-def project_create_endpoint(
-    data: schemas.CreateProject,
-    create_project: Annotated[CreateProject, Depends(get_create_project)],
-):
-    project_id = create_project(
-        user_id=UserID(data.user_id),
-        name=data.name,
-    )
-
-    return RedirectResponse(
-        f"/queries/projects/{project_id}",
-        status_code=status.HTTP_303_SEE_OTHER,
-    )
-
-
-@router.post("/{project_id}/tasks")
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
@@ -49,7 +30,7 @@ def task_create_endpoint(
     )
 
 
-@router.put("/{project_id}/tasks/{task_number}/complete")
+@router.put("/{task_number}/complete")
 def task_complete_endpoint(
     project_id: int,
     service: Annotated[TasksService, Depends(get_tasks_service)],
@@ -68,7 +49,7 @@ def task_complete_endpoint(
     )
 
 
-@router.put("/{project_id}/tasks/{task_number}/incomplete")
+@router.put("/{task_number}/incomplete")
 def task_incomplete_endpoint(
     project_id: int,
     service: Annotated[TasksService, Depends(get_tasks_service)],

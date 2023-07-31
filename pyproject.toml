@@ -31,7 +31,7 @@ strict_equality = true
 ignore_missing_imports = true
 explicit_package_bases = true
 
-# This allows discovery of imported packages that don’t have an __init__.py
+# This allows discovery of imported packages that don’t have an factories.py
 #namespace_packages = true
 
 [tool.pytest.ini_options]

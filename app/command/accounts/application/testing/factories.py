@@ -5,8 +5,7 @@ from app.command.accounts.entities.password import Password
 from app.command.accounts.entities.user import User
 
 
-# TODO: Drop this
-def build_user(
+def build_test_user(
     email: Optional[EmailAddress] = None,
     password: Optional[Password] = None,
 ) -> User:

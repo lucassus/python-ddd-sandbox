@@ -4,7 +4,7 @@ import pytest
 
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.command.accounts.application.register_user import RegisterUser
-from app.command.accounts.application.testing import build_user
+from app.command.accounts.application.testing.factories import build_test_user
 from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException
@@ -52,7 +52,7 @@ def test_register_user_validate_email_uniqueness(
     repository: AbstractUserRepository,
     register_user: RegisterUser,
 ):
-    repository.create(build_user(email=EmailAddress("existing@email.com")))
+    repository.create(build_test_user(email=EmailAddress("existing@email.com")))
 
     # Then
     with pytest.raises(

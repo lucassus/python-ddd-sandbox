@@ -18,3 +18,7 @@ class TaskNotFoundError(EntityNotFoundError):
 
 class MaxIncompleteTasksNumberIsReached(Exception):
     pass
+
+
+class ArchiveProjectError(Exception):
+    pass

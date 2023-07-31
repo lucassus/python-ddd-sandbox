@@ -22,6 +22,7 @@ class Project(AggregateRoot):
     # TODO: It can be a private field
     last_task_number: TaskNumber = field(init=False, default_factory=lambda: TaskNumber(0))
     tasks: list[Task] = field(default_factory=list)
+    archived_at: None | date = field(init=False, default=None)
 
     def add_task(self, *, name: str, completed_at: Optional[date] = None) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
@@ -58,3 +59,14 @@ class Project(AggregateRoot):
     def complete_all_tasks(self, now: date):
         for task in self.tasks:
             task.complete(now)
+
+    @property
+    def incomplete_tasks_count(self) -> int:
+        return len([task for task in self.tasks if not task.is_completed])
+
+    def archive(self, now) -> None:
+        ensure.can_archive(self)
+        self.archived_at = now
+
+    def unarchive(self) -> None:
+        self.archived_at = None

@@ -2,8 +2,13 @@ from datetime import date
 
 import pytest
 
-from app.command.projects.entities.errors import MaxIncompleteTasksNumberIsReached, TaskNotFoundError
+from app.command.projects.entities.errors import (
+    ArchiveProjectError,
+    MaxIncompleteTasksNumberIsReached,
+    TaskNotFoundError,
+)
 from app.command.projects.entities.factories import build_project
+from app.command.projects.entities.project import ProjectID
 from app.command.projects.entities.task import TaskNumber
 
 
@@ -85,3 +90,54 @@ def test_complete_all_tasks():
     # Then
     for task in project.tasks:
         assert task.is_completed
+
+
+def test_incomplete_tasks_count():
+    project = build_project(name="Test Project")
+    assert project.incomplete_tasks_count == 0
+
+    project.add_task(name="Foo", completed_at=None)
+    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
+    project.add_task(name="Foo", completed_at=None)
+    assert project.incomplete_tasks_count == 2
+
+
+def test_archive_project_raises_error_when_not_all_tasks_are_completed():
+    # Given
+    project = build_project(name="Test Project")
+    project.id = ProjectID(1)
+    project.add_task(name="Foo", completed_at=None)
+
+    # When
+    with pytest.raises(
+        ArchiveProjectError,
+        match="Unable to archive project id=1, because it has 1 incomplete tasks",
+    ):
+        project.archive(now=date(2021, 1, 12))
+
+
+def test_archive_project_set_archived_at():
+    # Given
+    project = build_project(name="Test Project")
+    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
+
+    now = date(2021, 1, 12)
+
+    # When
+    project.archive(now=now)
+
+    # Then
+    assert project.archived_at == now
+
+
+def test_unarchive_project():
+    # Given
+    project = build_project(name="Test Project")
+    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
+    project.archive(now=date(2021, 1, 12))
+
+    # When
+    project.unarchive()
+
+    # Then
+    assert project.archived_at is None

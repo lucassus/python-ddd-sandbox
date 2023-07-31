@@ -5,7 +5,7 @@ import pytest
 from fastapi import FastAPI
 
 from app.infrastructure.factories import create_project, create_task
-from app.modules.projects.domain.task import Task
+from app.modules.projects.entities.task import Task
 from app.modules.projects.entrypoints.dependencies import get_create_project, get_current_time
 from app.shared_kernel.user_id import UserID
 

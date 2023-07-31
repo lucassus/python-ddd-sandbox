@@ -4,13 +4,15 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
-from app.modules.projects.domain.project import ProjectID
-from app.modules.projects.domain.task import TaskNumber
+from app.modules.projects.application.create_project import CreateProject
+from app.modules.projects.application.tasks_service import TasksService
+from app.modules.projects.entities.project import ProjectID
+from app.modules.projects.entities.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.dependencies import get_create_project, get_current_time, get_tasks_service
-from app.modules.projects.use_cases import CreateProject, TasksService
 from app.shared_kernel.user_id import UserID
 
+# TODO: Split there routes into separate files, projects, for example project_tasks
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
@@ -47,30 +49,37 @@ def task_create_endpoint(
     )
 
 
-@router.put("/{project_id}/tasks/{number}/complete")
+@router.put("/{project_id}/tasks/{task_number}/complete")
 def task_complete_endpoint(
     project_id: int,
     service: Annotated[TasksService, Depends(get_tasks_service)],
     now: Annotated[date, Depends(get_current_time)],
-    number: int = Path(..., description="The number of the task to complete", ge=1),
+    task_number: int = Path(..., description="The number of the task to complete", ge=1),
 ):
-    service.complete_task(TaskNumber(number), project_id=ProjectID(project_id), now=now)
+    service.complete_task(
+        TaskNumber(task_number),
+        project_id=ProjectID(project_id),
+        now=now,
+    )
 
     return RedirectResponse(
-        f"/queries/projects/{project_id}/tasks/{number}",
+        f"/queries/projects/{project_id}/tasks/{task_number}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
 
-@router.put("/{project_id}/tasks/{number}/incomplete")
+@router.put("/{project_id}/tasks/{task_number}/incomplete")
 def task_incomplete_endpoint(
     project_id: int,
     service: Annotated[TasksService, Depends(get_tasks_service)],
-    number: int = Path(..., description="The number of the task to incomplete", ge=1),
+    task_number: int = Path(..., description="The number of the task to incomplete", ge=1),
 ):
-    service.incomplete_task(TaskNumber(number), project_id=ProjectID(project_id))
+    service.incomplete_task(
+        TaskNumber(task_number),
+        project_id=ProjectID(project_id),
+    )
 
     return RedirectResponse(
-        f"/queries/projects/{project_id}/tasks/{number}",
+        f"/queries/projects/{project_id}/tasks/{task_number}",
         status_code=status.HTTP_303_SEE_OTHER,
     )

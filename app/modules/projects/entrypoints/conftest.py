@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from starlette.testclient import TestClient
 
-from app.modules.projects.adapters.unit_of_work import UnitOfWork
+from app.modules.projects.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
 from app.modules.projects.entrypoints.dependencies import get_uow
 from app.modules.projects.entrypoints.routes import router
 
@@ -20,7 +20,7 @@ def client(connection, app: FastAPI):
     def session_factory():
         return Session(bind=connection)
 
-    uow = UnitOfWork(session_factory=session_factory)
+    uow = SQLAUnitOfWork(session_factory=session_factory)
 
     app.dependency_overrides[get_uow] = lambda: uow
 

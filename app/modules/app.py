@@ -16,7 +16,7 @@ def create_app() -> FastAPI:
     register_projects_module(app, mapper_registry)
 
     @app.exception_handler(EntityNotFoundError)
-    async def unicorn_exception_handler(request: Request, exc: EntityNotFoundError):
+    async def handle_entity_not_found_error(request: Request, exc: EntityNotFoundError):
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND,
             content={"message": str(exc)},

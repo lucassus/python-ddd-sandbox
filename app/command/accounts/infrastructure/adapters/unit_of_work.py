@@ -3,18 +3,18 @@ from typing import Callable
 from sqlalchemy.orm import Session
 
 from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.accounts.infrastructure.adapters.sqla_user_repository import SQLAUserRepository
+from app.command.accounts.infrastructure.adapters.user_repository import UserRepository
 
 
-class SQLAUnitOfWork(AbstractUnitOfWork):
-    repository: SQLAUserRepository
+class UnitOfWork(AbstractUnitOfWork):
+    repository: UserRepository
 
     def __init__(self, session_factory: Callable[..., Session]):
         self._session_factory = session_factory
 
-    def __enter__(self) -> "SQLAUnitOfWork":
+    def __enter__(self) -> "UnitOfWork":
         self._session = self._session_factory()
-        self.user = SQLAUserRepository(session=self._session)
+        self.user = UserRepository(session=self._session)
 
         return super().__enter__()
 

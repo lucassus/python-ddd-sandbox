@@ -5,7 +5,7 @@ from app.command.projects.entities.errors import ProjectNotFoundError
 from app.command.projects.entities.project import Project, ProjectID
 
 
-class SQLAProjectRepository(AbstractProjectRepository):
+class ProjectRepository(AbstractProjectRepository):
     def __init__(self, session: Session):
         self._session = session
 
@@ -22,4 +22,9 @@ class SQLAProjectRepository(AbstractProjectRepository):
         return project
 
     def get_archived(self, id: ProjectID) -> Project:
-        pass
+        project = self._session.get(Project, id)
+
+        if project is None or not project.archived:
+            raise ProjectNotFoundError(id)
+
+        return project

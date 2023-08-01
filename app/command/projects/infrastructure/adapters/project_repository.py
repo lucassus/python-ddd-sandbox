@@ -1,3 +1,7 @@
+from typing import Any
+
+from sqlalchemy import Select, select
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
@@ -13,18 +17,25 @@ class ProjectRepository(AbstractProjectRepository):
         self._session.add(project)
         return project
 
-    def get(self, id: ProjectID) -> Project:
-        project = self._session.get(Project, id)
+    def _project_query(self, id: ProjectID) -> Select[Any]:
+        return select(Project).where(Project.id == id)  # type: ignore
 
-        if project is None or project.archived:
+    def get(self, id: ProjectID) -> Project:
+        query = self._project_query(id).where(Project.archived_at.is_(None))  # type: ignore
+
+        try:
+            project = self._session.execute(query).scalar_one()
+        except NoResultFound:
             raise ProjectNotFoundError(id)
 
         return project
 
     def get_archived(self, id: ProjectID) -> Project:
-        project = self._session.get(Project, id)
+        query = self._project_query(id).where(Project.archived_at.isnot(None))  # type: ignore
 
-        if project is None or not project.archived:
+        try:
+            project = self._session.execute(query).scalar_one()
+        except NoResultFound:
             raise ProjectNotFoundError(id)
 
         return project

@@ -20,7 +20,7 @@ class ArchivizationService:
 
     def unarchive(self, project_id: ProjectID) -> None:
         with self._uow as ouw:
-            project = ouw.project.get(project_id)
+            project = ouw.project.get_archived(project_id)
             project.unarchive()
 
             ouw.commit()

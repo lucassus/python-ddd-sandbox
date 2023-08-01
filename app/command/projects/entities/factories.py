@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from app.command.projects.entities.project import Project
@@ -9,6 +9,7 @@ def build_project(
     name: str,
     user_id: Optional[UserID] = None,  # TODO: But actually, user_id is required
     maximum_number_of_incomplete_tasks: Optional[int] = None,
+    archived_at: Optional[date] = None,
 ) -> Project:
     project = Project(name=name)
 
@@ -17,6 +18,8 @@ def build_project(
 
     if maximum_number_of_incomplete_tasks is not None:
         project.maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
+
+    project.archived_at = archived_at
 
     return project
 

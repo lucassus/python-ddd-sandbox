@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 
 from app.command.projects.application.archivization_service import ArchivizationService
@@ -42,7 +44,7 @@ class TestArchiveService:
         fake_unit_of_work: FakeUnitOfWork,
     ):
         # Given
-        project = fake_project_repository.create(build_project(name="Project 1"))
+        project = fake_project_repository.create(build_project(name="Project 1", archived_at=date.today()))
 
         # When
         service.unarchive(project.id)

@@ -16,9 +16,7 @@ def build_project(
     if user_id is not None:
         project.user_id = user_id
 
-    if maximum_number_of_incomplete_tasks is not None:
-        project.maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
-
+    project.maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
     project.archived_at = archived_at
 
     return project

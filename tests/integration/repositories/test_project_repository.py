@@ -3,7 +3,6 @@ from datetime import date
 import pytest
 
 from app.command.projects.entities.errors import ProjectNotFoundError
-from app.command.projects.entities.factories import build_project
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.infrastructure.adapters.project_repository import ProjectRepository
 
@@ -13,10 +12,9 @@ class TestProjectRepository:
     def repository(self, session):
         return ProjectRepository(session=session)
 
-    def test_get(self, session, create_user, repository: ProjectRepository):
+    def test_get(self, session, create_project, repository: ProjectRepository):
         # Given
-        user = create_user()
-        project = repository.create(build_project(user_id=user.id, name="Test project"))
+        project = create_project(name="Test project")
         session.commit()
 
         # When
@@ -29,24 +27,19 @@ class TestProjectRepository:
         with pytest.raises(ProjectNotFoundError):
             repository.get(ProjectID(1))
 
-    def test_get_raises_error_when_archived(self, session, create_user, repository: ProjectRepository):
+    def test_get_raises_error_when_archived(self, session, create_project, repository: ProjectRepository):
         # Given
-        user = create_user()
-        project = build_project(user_id=user.id, name="Test project")
-        project.archive(date.today())
-        project = repository.create(project)
+        project = create_project(archived_at=date.today())
         session.commit()
 
         # Then
         with pytest.raises(ProjectNotFoundError):
             repository.get(project.id)
 
-    def test_get_archived(self, session, create_user, repository: ProjectRepository):
+    def test_get_archived(self, session, create_project, repository: ProjectRepository):
         # Given
-        user = create_user()
-        project = build_project(user_id=user.id, name="Test project")
-        project.archive(date.today())
-        project = repository.create(project)
+        project = create_project(archived_at=date.today())
+        session.commit()
         session.commit()
 
         # When
@@ -59,11 +52,9 @@ class TestProjectRepository:
         with pytest.raises(ProjectNotFoundError):
             repository.get_archived(ProjectID(1))
 
-    def test_get_archived_raises_error_when_not_archived(self, session, create_user, repository: ProjectRepository):
+    def test_get_archived_raises_error_when_not_archived(self, session, create_project, repository: ProjectRepository):
         # Given
-        user = create_user()
-        project = build_project(user_id=user.id, name="Test project")
-        project = repository.create(project)
+        project = create_project(archived_at=None)
         session.commit()
 
         # Then

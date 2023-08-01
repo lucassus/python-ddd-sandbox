@@ -14,26 +14,30 @@ def _project_id_generator() -> Iterator[ProjectID]:
 
 
 class FakeProjectRepository(AbstractProjectRepository):
-    _projects: list[Project]
+    _projects_by_id: dict[ProjectID, Project]
 
     def __init__(self):
         self._project_id = _project_id_generator()
-        self._projects = []
+        self._projects_by_id = {}
 
     def create(self, project: Project) -> Project:
         project.id = next(self._project_id)
-        self._projects.append(project)
+        self._projects_by_id[project.id] = project
 
         return project
 
     def get(self, id: ProjectID) -> Project:
-        try:
-            return next(project for project in self._projects if project.id == id and not project.archived)
-        except StopIteration:
+        project = self._projects_by_id.get(id)
+
+        if project is None or project.archived:
             raise ProjectNotFoundError(id)
 
+        return project
+
     def get_archived(self, id: ProjectID) -> Project:
-        try:
-            return next(project for project in self._projects if project.id == id and project.archived)
-        except StopIteration:
+        project = self._projects_by_id.get(id)
+
+        if project is None or not project.archived:
             raise ProjectNotFoundError(id)
+
+        return project

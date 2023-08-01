@@ -1,4 +1,3 @@
-from datetime import date, datetime
 from typing import Annotated
 
 from fastapi import Depends
@@ -8,10 +7,6 @@ from app.command.projects.application.ports.abstract_unit_of_work import Abstrac
 from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.infrastructure.db import AppSession
-
-
-def get_current_time() -> date:
-    return datetime.utcnow()
 
 
 def get_uow() -> UnitOfWork:

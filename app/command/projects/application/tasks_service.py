@@ -17,14 +17,28 @@ class TasksService:
             uow.commit()
             return task.number
 
-    def complete_task(self, number: TaskNumber, *, project_id: ProjectID, now: date) -> None:
+    def complete_task(
+        self,
+        number: TaskNumber,
+        *,
+        project_id: ProjectID,
+        now: None | date = None,
+    ) -> None:
+        if now is None:
+            now = date.today()
+
         with self._uow as uow:
             project = uow.project.get(project_id)
             project.complete_task(number, now)
 
             uow.commit()
 
-    def incomplete_task(self, number: TaskNumber, *, project_id: ProjectID) -> None:
+    def incomplete_task(
+        self,
+        number: TaskNumber,
+        *,
+        project_id: ProjectID,
+    ) -> None:
         with self._uow as uow:
             project = uow.project.get(project_id)
             project.incomplete_task(number)

@@ -8,7 +8,7 @@ from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.entities.task import TaskNumber
 from app.command.projects.entrypoints import schemas
-from app.command.projects.entrypoints.dependencies import get_current_time, get_tasks_service
+from app.command.projects.entrypoints.dependencies import get_tasks_service
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
 
@@ -34,13 +34,11 @@ def task_create_endpoint(
 def task_complete_endpoint(
     project_id: int,
     service: Annotated[TasksService, Depends(get_tasks_service)],
-    now: Annotated[date, Depends(get_current_time)],
     task_number: int = Path(..., description="The number of the task to complete", ge=1),
 ):
     service.complete_task(
         TaskNumber(task_number),
         project_id=ProjectID(project_id),
-        now=now,
     )
 
     return RedirectResponse(

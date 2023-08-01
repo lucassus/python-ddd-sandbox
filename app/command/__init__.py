@@ -15,6 +15,7 @@ def create_app() -> FastAPI:
     register_accounts_module(app, mapper_registry)
     register_projects_module(app, mapper_registry)
 
+    # TODO: Figure out how to test these handlers
     @app.exception_handler(EntityNotFoundError)
     async def handle_entity_not_found_error(request: Request, exc: EntityNotFoundError):
         return JSONResponse(

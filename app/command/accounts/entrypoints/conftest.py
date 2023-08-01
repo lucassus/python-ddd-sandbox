@@ -6,13 +6,8 @@ from app.command.accounts.entrypoints.routes import router
 
 
 @pytest.fixture
-def app():
+def client():
     app = FastAPI()
     app.include_router(router)
 
-    return app
-
-
-@pytest.fixture
-def client(app):
     return TestClient(app)

@@ -9,7 +9,7 @@ from app.command.event_handlers import bus
 from app.infrastructure.db import AppSession
 
 
-def get_uow():
+def get_uow() -> SQLAUnitOfWork:
     return SQLAUnitOfWork(session_factory=AppSession)
 
 

@@ -14,7 +14,7 @@ def get_current_time() -> date:
     return datetime.utcnow()
 
 
-def get_uow():
+def get_uow() -> SQLAUnitOfWork:
     return SQLAUnitOfWork(session_factory=AppSession)
 
 

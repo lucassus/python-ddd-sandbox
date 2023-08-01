@@ -64,3 +64,9 @@ test-cov:
 
 test-watch:
 	APP_ENV=test ptw app
+
+test-integration:
+	APP_ENV=test pytest tests/integration
+
+test-e2e-to-end:
+	APP_ENV=test pytest tests/end-to-end

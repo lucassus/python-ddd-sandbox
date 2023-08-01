@@ -7,7 +7,7 @@ from app.command.accounts.entities.user import User
 from app.command.accounts.infrastructure.adapters.sqla_user_repository import SQLAUserRepository
 
 
-class TestRepository:
+class TestUserRepository:
     @pytest.fixture
     def repository(self, session: Session):
         return SQLAUserRepository(session=session)

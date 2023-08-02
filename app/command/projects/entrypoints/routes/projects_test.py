@@ -1,13 +1,16 @@
 from unittest.mock import Mock
 
+from fastapi import FastAPI
+from starlette.testclient import TestClient
+
 from app.command.projects.entrypoints.dependencies import get_create_project
 from app.shared_kernel.user_id import UserID
 
 
-def test_create_project_endpoint(client):
+def test_create_project_endpoint(app: FastAPI, client: TestClient):
     # Given
     create_project_mock = Mock(return_value=1)
-    client.app.dependency_overrides[get_create_project] = lambda: create_project_mock
+    app.dependency_overrides[get_create_project] = lambda: create_project_mock
 
     # When
     response = client.post(

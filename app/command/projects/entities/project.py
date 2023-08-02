@@ -19,9 +19,9 @@ class Project(AggregateRoot):
     name: str
     maximum_number_of_incomplete_tasks: Optional[int] = None
 
-    last_task_number: TaskNumber = field(init=False, default_factory=lambda: TaskNumber(0))
+    last_task_number: TaskNumber = TaskNumber(0)
     tasks: list[Task] = field(default_factory=list)
-    archived_at: None | datetime = field(init=False, default=None)
+    archived_at: None | datetime = None
 
     @property
     def archived(self) -> bool:

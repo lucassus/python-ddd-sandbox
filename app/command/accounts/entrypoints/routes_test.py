@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+from fastapi import FastAPI
 from starlette.testclient import TestClient
 
 from app.command.accounts.entities.email_address import EmailAddress
@@ -7,11 +8,10 @@ from app.command.accounts.entities.password import Password
 from app.command.accounts.entrypoints.dependencies import get_register_user
 
 
-def test_register_user_endpoint(client: TestClient):
+def test_register_user_endpoint(app: FastAPI, client: TestClient):
     # Given
     register_user_mock = Mock(return_value=123)
-    # TODO: Bring back typing
-    client.app.dependency_overrides[get_register_user] = lambda: register_user_mock  # type: ignore
+    app.dependency_overrides[get_register_user] = lambda: register_user_mock
 
     # When
     response = client.post(

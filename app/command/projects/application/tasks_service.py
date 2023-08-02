@@ -9,7 +9,11 @@ class TasksService:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def create_task(self, *, project_id: ProjectID, name: str) -> TaskNumber:
+    def create_task(
+        self,
+        project_id: ProjectID,
+        name: str,
+    ) -> TaskNumber:
         with self._uow as uow:
             project = uow.project.get(project_id)
             task = project.add_task(name=name)
@@ -19,9 +23,8 @@ class TasksService:
 
     def complete_task(
         self,
-        number: TaskNumber,
-        *,
         project_id: ProjectID,
+        number: TaskNumber,
         now: None | datetime = None,
     ) -> None:
         if now is None:
@@ -35,9 +38,8 @@ class TasksService:
 
     def incomplete_task(
         self,
-        number: TaskNumber,
-        *,
         project_id: ProjectID,
+        number: TaskNumber,
     ) -> None:
         with self._uow as uow:
             project = uow.project.get(project_id)

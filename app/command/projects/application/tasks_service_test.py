@@ -24,7 +24,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
     task = project.add_task(name="Testing...")
 
     now = datetime(2021, 1, 8)
-    service.complete_task(task.number, project_id=project.id, now=now)
+    service.complete_task(project.id, task.number, now=now)
 
     assert task.completed_at is now
     assert fake_uow.committed
@@ -35,7 +35,7 @@ def test_incomplete_task(service: TasksService, repository, fake_uow):
     task = project.add_task(name="Testing...")
     project.complete_task(task.number, now=datetime(2021, 1, 8))
 
-    service.incomplete_task(task.number, project_id=project.id)
+    service.incomplete_task(project.id, task.number)
 
     assert task.completed_at is None
     assert fake_uow.committed

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException
@@ -8,7 +10,12 @@ from app.shared_kernel.user_id import UserID
 
 
 class RegisterUser:
-    def __init__(self, *, uow: AbstractUnitOfWork, bus: MessageBus):
+    def __init__(
+        self,
+        *,
+        uow: AbstractUnitOfWork,
+        bus: Optional[MessageBus] = None,
+    ):
         self._uow = uow
         self._bus = bus
 
@@ -20,6 +27,7 @@ class RegisterUser:
             user = uow.user.create(User(email=email, password=password))
             uow.commit()
 
-            self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))
+            if self._bus is not None:
+                self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))
 
             return user.id

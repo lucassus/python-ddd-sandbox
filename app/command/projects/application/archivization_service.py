@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.entities.project import ProjectID
@@ -8,9 +8,9 @@ class ArchivizationService:
     def __init__(self, uow: AbstractUnitOfWork):
         self._uow = uow
 
-    def archive(self, project_id: ProjectID, now: None | date = None) -> None:
+    def archive(self, project_id: ProjectID, now: None | datetime = None) -> None:
         if now is None:
-            now = date.today()
+            now = datetime.now()  # TODO: Do not use naive time
 
         with self._uow as ouw:
             project = ouw.project.get(project_id)

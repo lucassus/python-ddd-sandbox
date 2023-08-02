@@ -19,7 +19,7 @@ def test_register_user(register_user, client: TestClient):
 
     assert response.status_code == 200
     assert response.json() == [
-        {"number": 1, "name": "Sign up!", "completedAt": "2023-08-01"},  # TODO: Figure out how to mock the time
+        {"number": 1, "name": "Sign up!", "completedAt": "2023-08-02"},  # TODO: Figure out how to mock the time
         {"number": 2, "name": "Watch the tutorial", "completedAt": None},
         {"number": 3, "name": "Start using our awesome app", "completedAt": None},
     ]

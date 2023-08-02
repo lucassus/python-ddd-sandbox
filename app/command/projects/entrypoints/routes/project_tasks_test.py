@@ -1,11 +1,9 @@
-from datetime import date
 from unittest.mock import Mock
 
 from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project import ProjectID
-from app.command.projects.entities.task import Task, TaskNumber
+from app.command.projects.entities.task import TaskNumber
 from app.command.projects.entrypoints.dependencies import get_tasks_service
-from app.infrastructure.factories import create_project, create_task
 
 
 def test_task_create_endpoint(client):
@@ -35,7 +33,7 @@ def test_task_complete_endpoint(client):
 
     # When
     response = client.put(
-        f"/projects/665/tasks/667/complete",
+        "/projects/665/tasks/667/complete",
         follow_redirects=False,
     )
 
@@ -53,7 +51,7 @@ def test_task_incomplete_endpoint(client):
 
     # When
     response = client.put(
-        f"/projects/665/tasks/668/incomplete",
+        "/projects/665/tasks/668/incomplete",
         follow_redirects=False,
     )
 

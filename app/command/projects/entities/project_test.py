@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 import pytest
 
@@ -42,10 +42,10 @@ def test_complete_task():
     project = build_project(name="Test Project")
     task = project.add_task(name="One")
 
-    task = project.complete_task(number=task.number, now=date(2021, 1, 17))
+    task = project.complete_task(number=task.number, now=datetime(2021, 1, 17))
 
     assert task.completed_at is not None
-    assert task.completed_at == date(2021, 1, 17)
+    assert task.completed_at == datetime(2021, 1, 17)
 
 
 def test_complete_task_raises_error_when_task_not_found():
@@ -55,13 +55,13 @@ def test_complete_task_raises_error_when_task_not_found():
         TaskNotFoundError,
         match="Unable to find Task with number=1",
     ):
-        project.complete_task(number=TaskNumber(1), now=date(2021, 1, 17))
+        project.complete_task(number=TaskNumber(1), now=datetime(2021, 1, 17))
 
 
 def test_incomplete_task():
     project = build_project(name="Test Project")
     task = project.add_task(name="One")
-    project.complete_task(task.number, now=date(2021, 1, 17))
+    project.complete_task(task.number, now=datetime(2021, 1, 17))
 
     task = project.incomplete_task(number=task.number)
 
@@ -83,11 +83,11 @@ def test_complete_all_tasks():
     project = build_project(name="Test Project")
     project.add_task(name="Foo")
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=date(2020, 12, 31))
+    project.complete_task(task.number, now=datetime(2020, 12, 31))
     project.add_task(name="Foo")
 
     # When
-    project.complete_all_tasks(now=date(2021, 1, 12))
+    project.complete_all_tasks(now=datetime(2021, 1, 12))
 
     # Then
     for task in project.tasks:
@@ -100,7 +100,7 @@ def test_incomplete_tasks_count():
 
     project.add_task(name="Foo")
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=date(2020, 12, 31))
+    project.complete_task(task.number, now=datetime(2020, 12, 31))
     project.add_task(name="Foo")
     assert project.incomplete_tasks_count == 2
 
@@ -116,16 +116,16 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
         ArchiveProjectError,
         match="Unable to archive project id=1, because it has 1 incomplete tasks",
     ):
-        project.archive(now=date(2021, 1, 12))
+        project.archive(now=datetime(2021, 1, 12))
 
 
 def test_archive_project_set_archived_at():
     # Given
     project = build_project(name="Test Project")
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=date(2020, 12, 31))
+    project.complete_task(task.number, now=datetime(2020, 12, 31))
 
-    now = date(2021, 1, 12)
+    now = datetime(2021, 1, 12)
 
     # When
     project.archive(now=now)
@@ -139,8 +139,8 @@ def test_unarchive_project():
     # Given
     project = build_project(name="Test Project")
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=date(2020, 12, 31))
-    project.archive(now=date(2021, 1, 12))
+    project.complete_task(task.number, now=datetime(2020, 12, 31))
+    project.archive(now=datetime(2021, 1, 12))
 
     # When
     project.unarchive()

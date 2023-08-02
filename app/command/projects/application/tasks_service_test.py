@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 import pytest
 
@@ -23,7 +23,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
     task = project.add_task(name="Testing...")
 
-    now = date(2021, 1, 8)
+    now = datetime(2021, 1, 8)
     service.complete_task(task.number, project_id=project.id, now=now)
 
     assert task.completed_at is now
@@ -33,7 +33,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
 def test_incomplete_task(service: TasksService, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
     task = project.add_task(name="Testing...")
-    project.complete_task(task.number, now=date(2021, 1, 8))
+    project.complete_task(task.number, now=datetime(2021, 1, 8))
 
     service.incomplete_task(task.number, project_id=project.id)
 

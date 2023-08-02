@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.entities.project import ProjectID
@@ -22,10 +22,10 @@ class TasksService:
         number: TaskNumber,
         *,
         project_id: ProjectID,
-        now: None | date = None,
+        now: None | datetime = None,
     ) -> None:
         if now is None:
-            now = date.today()
+            now = datetime.now()
 
         with self._uow as uow:
             project = uow.project.get(project_id)

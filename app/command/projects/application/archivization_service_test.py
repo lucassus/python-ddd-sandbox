@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 import pytest
 
@@ -44,7 +44,7 @@ class TestArchiveService:
         fake_unit_of_work: FakeUnitOfWork,
     ):
         # Given
-        project = fake_project_repository.create(build_project(name="Project 1", archived_at=date.today()))
+        project = fake_project_repository.create(build_project(name="Project 1", archived_at=datetime.now()))
 
         # When
         service.unarchive(project.id)

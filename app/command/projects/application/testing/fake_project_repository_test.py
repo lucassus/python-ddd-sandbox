@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 import pytest
 
@@ -26,6 +26,6 @@ def test_fake_project_repository():
         repository.get(ProjectID(3))
 
     archived_project = build_project(name="Third")
-    archived_project.archived_at = date.today()
+    archived_project.archived_at = datetime.now()
     repository.create(archived_project)
     assert repository.get_archived(archived_project.id) is not None

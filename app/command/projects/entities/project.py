@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import datetime
 from typing import NewType, Optional
 
 from app.command.projects.entities import ensure
@@ -21,7 +21,7 @@ class Project(AggregateRoot):
 
     last_task_number: TaskNumber = field(init=False, default_factory=lambda: TaskNumber(0))
     tasks: list[Task] = field(default_factory=list)
-    archived_at: None | date = field(init=False, default=None)
+    archived_at: None | datetime = field(init=False, default=None)  # TODO: Optional vs union?
 
     @property
     def archived(self) -> bool:
@@ -38,7 +38,7 @@ class Project(AggregateRoot):
 
         return task
 
-    def complete_task(self, number: TaskNumber, now: date) -> Task:
+    def complete_task(self, number: TaskNumber, now: datetime) -> Task:
         task = self._get_task(number)
         task.complete(now)
 
@@ -59,7 +59,7 @@ class Project(AggregateRoot):
 
         raise TaskNotFoundError(number)
 
-    def complete_all_tasks(self, now: date):
+    def complete_all_tasks(self, now: datetime):
         for task in self.tasks:
             task.complete(now)
 
@@ -67,7 +67,7 @@ class Project(AggregateRoot):
     def incomplete_tasks_count(self) -> int:
         return len([task for task in self.tasks if not task.is_completed])
 
-    def archive(self, now) -> None:
+    def archive(self, now: datetime) -> None:
         ensure.can_archive(self)
         self.archived_at = now
 

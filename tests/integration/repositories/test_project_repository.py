@@ -29,7 +29,8 @@ class TestProjectRepository:
 
     def test_get_raises_error_when_archived(self, session, create_project, repository: ProjectRepository):
         # Given
-        project = create_project(archived_at=date.today())
+        project = create_project()
+        project.archive(now=date.today())
         session.commit()
 
         # Then
@@ -38,8 +39,8 @@ class TestProjectRepository:
 
     def test_get_archived(self, session, create_project, repository: ProjectRepository):
         # Given
-        project = create_project(archived_at=date.today())
-        session.commit()
+        project = create_project()
+        project.archive(now=date.today())
         session.commit()
 
         # When
@@ -54,7 +55,7 @@ class TestProjectRepository:
 
     def test_get_archived_raises_error_when_not_archived(self, session, create_project, repository: ProjectRepository):
         # Given
-        project = create_project(archived_at=None)
+        project = create_project()
         session.commit()
 
         # Then

@@ -36,14 +36,12 @@ def create_project(session: Session, create_user):
     def _create_project(
         user: User | None = None,
         name: str | None = None,
-        archived_at: date | None = None,
     ):
         if user is None:
             user = create_user()
 
         project = Project(name=name or "Test project")
         project.user_id = user.id
-        project.archived_at = archived_at
 
         repository.create(project)
         session.commit()

@@ -1,11 +1,18 @@
-from datetime import date
-
 import typer
-from tabulate import tabulate
 
-from app.infrastructure.db import engine
-from app.infrastructure.factories import create_project, create_task, create_user
-from app.infrastructure.tables import create_tables, drop_tables, tasks_table
+from app.command import mapper_registry
+from app.command.accounts.application.register_user import RegisterUser
+from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.entities.password import Password
+from app.command.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
+from app.command.accounts.infrastructure.mappers import start_mappers as start_account_mappers
+from app.command.projects.application.create_example_project import CreateExampleProject
+from app.command.projects.application.create_project import CreateProject
+from app.command.projects.application.tasks_service import TasksService
+from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
+from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
+from app.infrastructure.db import AppSession, engine
+from app.infrastructure.tables import create_tables, drop_tables
 
 
 def main(rebuild_db: bool = True):
@@ -13,33 +20,29 @@ def main(rebuild_db: bool = True):
         drop_tables(engine)
         create_tables(engine)
 
-    with engine.connect() as connection:
-        user_id = create_user(connection, email="test@email.com").id
-        project = create_project(connection, user_id, name="Project One")
-        create_project(connection)
+    start_account_mappers(mapper_registry)
+    start_project_mappers(mapper_registry)
 
-        create_task(connection, project.id, name="Learn Python", completed_at=date(2021, 1, 6))
-        create_task(connection, project.id, name="Learn Domain Driven Design")
-        create_task(connection, project.id, name="Do the shopping")
-        create_task(connection, project.id, name="Clean the house")
-
-        tasks = connection.execute(tasks_table.select()).all()
-        connection.commit()
-
-    typer.echo(
-        tabulate(
-            [
-                [
-                    task.id,
-                    task.project_id,
-                    task.name,
-                    task.completed_at,
-                ]
-                for task in tasks
-            ],
-            headers=["Id", "ProjectId", "Name", "Completed At"],
-        ),
+    register_user = RegisterUser(uow=AccountsUnitOfWork(session_factory=AppSession))
+    user_id = register_user(
+        email=EmailAddress("test@email.com"),
+        password=Password("password"),
     )
+
+    projects_uow = ProjectsUnitOfWork(session_factory=AppSession)
+    create_example_project = CreateExampleProject(uow=projects_uow)
+    create_example_project(user_id)
+
+    create_project = CreateProject(uow=projects_uow)
+    project_id = create_project(user_id, "Software Engineering")
+
+    tasks_service = TasksService(uow=projects_uow)
+    task_number = tasks_service.create_task(project_id, name="Learn Python")
+    tasks_service.complete_task(project_id, task_number)
+    tasks_service.create_task(project_id, name="Learn Domain Driven Design")
+    tasks_service.create_task(project_id, name="Do the shopping")
+    tasks_service.create_task(project_id, name="Clean the house")
+
     typer.echo("\nSeeding completed 🚀")
 
 

@@ -14,7 +14,7 @@ ProjectID = NewType("ProjectID", int)
 @dataclass
 class Project(AggregateRoot):
     id: ProjectID = field(init=False)
-    user_id: UserID = field(init=False)
+    user_id: UserID
 
     name: str
     maximum_number_of_incomplete_tasks: Optional[int] = None

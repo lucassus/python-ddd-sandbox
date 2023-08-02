@@ -38,8 +38,10 @@ def create_project(session: Session, create_user):
         if user is None:
             user = create_user()
 
-        project = Project(name=name or "Test project")
-        project.user_id = user.id
+        project = Project(
+            user_id=user.id,
+            name=name or "Test project",
+        )
 
         repository.create(project)
         session.commit()

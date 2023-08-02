@@ -27,10 +27,10 @@ class Project(AggregateRoot):
     def archived(self) -> bool:
         return self.archived_at is not None
 
-    def add_task(self, *, name: str, completed_at: Optional[date] = None) -> Task:
+    def add_task(self, *, name: str) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
-        task = Task(name=name, completed_at=completed_at)
+        task = Task(name=name)
         self.last_task_number = TaskNumber(self.last_task_number + 1)
         task.number = self.last_task_number
 

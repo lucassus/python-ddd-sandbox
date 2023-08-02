@@ -60,7 +60,8 @@ def test_complete_task_raises_error_when_task_not_found():
 
 def test_incomplete_task():
     project = build_project(name="Test Project")
-    task = project.add_task(name="One", completed_at=date(2021, 1, 17))
+    task = project.add_task(name="One")
+    project.complete_task(task.number, now=date(2021, 1, 17))
 
     task = project.incomplete_task(number=task.number)
 
@@ -80,9 +81,10 @@ def test_incomplete_task_raises_error_when_task_not_found():
 def test_complete_all_tasks():
     # Given
     project = build_project(name="Test Project")
-    project.add_task(name="Foo", completed_at=None)
-    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
-    project.add_task(name="Foo", completed_at=None)
+    project.add_task(name="Foo")
+    task = project.add_task(name="Foo")
+    project.complete_task(task.number, now=date(2020, 12, 31))
+    project.add_task(name="Foo")
 
     # When
     project.complete_all_tasks(now=date(2021, 1, 12))
@@ -96,9 +98,10 @@ def test_incomplete_tasks_count():
     project = build_project(name="Test Project")
     assert project.incomplete_tasks_count == 0
 
-    project.add_task(name="Foo", completed_at=None)
-    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
-    project.add_task(name="Foo", completed_at=None)
+    project.add_task(name="Foo")
+    task = project.add_task(name="Foo")
+    project.complete_task(task.number, now=date(2020, 12, 31))
+    project.add_task(name="Foo")
     assert project.incomplete_tasks_count == 2
 
 
@@ -106,7 +109,7 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
     # Given
     project = build_project(name="Test Project")
     project.id = ProjectID(1)
-    project.add_task(name="Foo", completed_at=None)
+    project.add_task(name="Foo")
 
     # When
     with pytest.raises(
@@ -119,7 +122,8 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
 def test_archive_project_set_archived_at():
     # Given
     project = build_project(name="Test Project")
-    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
+    task = project.add_task(name="Foo")
+    project.complete_task(task.number, now=date(2020, 12, 31))
 
     now = date(2021, 1, 12)
 
@@ -134,7 +138,8 @@ def test_archive_project_set_archived_at():
 def test_unarchive_project():
     # Given
     project = build_project(name="Test Project")
-    project.add_task(name="Foo", completed_at=date(2020, 12, 31))
+    task = project.add_task(name="Foo")
+    project.complete_task(task.number, now=date(2020, 12, 31))
     project.archive(now=date(2021, 1, 12))
 
     # When

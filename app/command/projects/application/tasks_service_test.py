@@ -32,7 +32,8 @@ def test_complete_task(service: TasksService, repository, fake_uow):
 
 def test_incomplete_task(service: TasksService, repository, fake_uow):
     project = repository.create(build_project(name="Test Project"))
-    task = project.add_task(name="Testing...", completed_at=date(2021, 1, 8))
+    task = project.add_task(name="Testing...")
+    project.complete_task(task.number, now=date(2021, 1, 8))
 
     service.incomplete_task(task.number, project_id=project.id)
 

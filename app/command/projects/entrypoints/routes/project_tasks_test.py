@@ -40,7 +40,7 @@ def test_task_complete_endpoint(client):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/queries/projects/665/tasks/667"
-    mock_tasks_service.complete_task.assert_called_once_with(TaskNumber(667), project_id=ProjectID(665))
+    mock_tasks_service.complete_task.assert_called_once_with(ProjectID(665), TaskNumber(667))
 
 
 def test_task_incomplete_endpoint(client):
@@ -58,4 +58,4 @@ def test_task_incomplete_endpoint(client):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/queries/projects/665/tasks/668"
-    mock_tasks_service.incomplete_task.assert_called_once_with(TaskNumber(668), project_id=ProjectID(665))
+    mock_tasks_service.incomplete_task.assert_called_once_with(ProjectID(665), TaskNumber(668))

@@ -21,7 +21,7 @@ class Project(AggregateRoot):
 
     last_task_number: TaskNumber = field(init=False, default_factory=lambda: TaskNumber(0))
     tasks: list[Task] = field(default_factory=list)
-    archived_at: None | datetime = field(init=False, default=None)  # TODO: Optional vs union?
+    archived_at: None | datetime = field(init=False, default=None)
 
     @property
     def archived(self) -> bool:

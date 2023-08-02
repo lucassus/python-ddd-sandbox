@@ -32,7 +32,7 @@ tasks_table = Table(
     Column("number", Integer(), nullable=False),
     Column("name", String(255), nullable=False),
     Column("completed_at", DateTime(), nullable=True, default=None),
-    UniqueConstraint("project_id", "number"),  # TODO: Figure out how to test it
+    UniqueConstraint("project_id", "number"),
 )
 
 

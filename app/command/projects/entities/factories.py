@@ -27,7 +27,7 @@ def build_example_project(
     completed_at: Optional[datetime] = None,
 ) -> Project:
     if completed_at is None:
-        completed_at = datetime.utcnow()  # TODO: Do not use naive dates
+        completed_at = datetime.utcnow()
 
     project = build_project(user_id=user_id, name="My first project")
 

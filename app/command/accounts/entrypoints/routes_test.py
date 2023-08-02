@@ -10,7 +10,8 @@ from app.command.accounts.entrypoints.dependencies import get_register_user
 def test_register_user_endpoint(client: TestClient):
     # Given
     register_user_mock = Mock(return_value=123)
-    client.app.dependency_overrides[get_register_user] = lambda: register_user_mock
+    # TODO: Bring back typing
+    client.app.dependency_overrides[get_register_user] = lambda: register_user_mock  # type: ignore
 
     # When
     response = client.post(

@@ -10,7 +10,7 @@ class ArchivizationService:
 
     def archive(self, project_id: ProjectID, now: None | datetime = None) -> None:
         if now is None:
-            now = datetime.now()  # TODO: Do not use naive time
+            now = datetime.now()
 
         with self._uow as ouw:
             project = ouw.project.get(project_id)

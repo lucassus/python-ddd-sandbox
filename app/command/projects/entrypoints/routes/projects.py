@@ -6,7 +6,7 @@ from starlette.responses import RedirectResponse
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.entrypoints import schemas
 from app.command.projects.entrypoints.dependencies import get_create_project
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/projects")
 

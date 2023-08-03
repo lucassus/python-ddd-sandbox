@@ -1,7 +1,7 @@
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.user import User
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 class FakeUserRepository(AbstractUserRepository):

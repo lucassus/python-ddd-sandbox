@@ -4,7 +4,7 @@ from sqlalchemy.orm import registry
 
 from app.command.accounts import register_module as register_accounts_module
 from app.command.projects import register_module as register_projects_module
-from app.shared_kernel.errors import EntityNotFoundError
+from app.command.shared_kernel.errors import EntityNotFoundError
 
 mapper_registry = registry()
 

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from starlette.testclient import TestClient
 
 from app.command.projects.entrypoints.dependencies import get_create_project
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 def test_create_project_endpoint(app: FastAPI, client: TestClient):

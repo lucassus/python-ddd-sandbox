@@ -1,13 +1,13 @@
 from typing import Any
 
-from app.shared_kernel.base_value_object import BaseValueObject
+from app.command.shared_kernel.value_object import ValueObject
 
 
 class InvalidPasswordError(Exception):
     pass
 
 
-class Password(BaseValueObject):
+class Password(ValueObject):
     def __init__(self, value: str) -> None:
         if not self.is_valid(value):
             raise InvalidPasswordError()

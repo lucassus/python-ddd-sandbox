@@ -5,7 +5,7 @@ import pytest
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.command.projects.entities.errors import ProjectNotFoundError
 from app.command.projects.entities.project import Project, ProjectID
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 def test_fake_project_repository():

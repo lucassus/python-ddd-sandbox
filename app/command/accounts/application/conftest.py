@@ -3,7 +3,7 @@ import pytest
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.command.accounts.application.testing.fake_user_repository import FakeUserRepository
-from app.shared_kernel.message_bus import MessageBus
+from app.command.shared_kernel.message_bus import MessageBus
 
 
 @pytest.fixture

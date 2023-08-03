@@ -1,6 +1,6 @@
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.entities.project import Project, ProjectID
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 class CreateProject:

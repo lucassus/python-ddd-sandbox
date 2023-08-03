@@ -6,7 +6,7 @@ from app.command.accounts.application.testing.factories import build_test_user
 from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException, UserNotFoundError
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 @pytest.fixture

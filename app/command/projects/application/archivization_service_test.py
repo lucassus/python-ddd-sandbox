@@ -6,7 +6,7 @@ from app.command.projects.application.archivization_service import Archivization
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.command.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.command.projects.entities.project import Project
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 class TestArchiveService:

@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from app.command.projects.entities.project import Project
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 def build_example_project(

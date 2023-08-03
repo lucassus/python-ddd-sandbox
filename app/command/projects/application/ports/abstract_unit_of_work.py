@@ -1,7 +1,7 @@
 import abc
 
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.shared_kernel.base_unit_of_work import BaseUnitOfWork
+from app.command.shared_kernel.base_unit_of_work import BaseUnitOfWork
 
 
 class AbstractUnitOfWork(BaseUnitOfWork["AbstractUnitOfWork"], metaclass=abc.ABCMeta):

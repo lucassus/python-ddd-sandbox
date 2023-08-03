@@ -5,8 +5,8 @@ from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException
 from app.command.accounts.entities.password import Password
 from app.command.accounts.entities.user import User
-from app.shared_kernel.message_bus import BaseEvent, MessageBus
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.message_bus import BaseEvent, MessageBus
+from app.command.shared_kernel.user_id import UserID
 
 
 class NoopMessageBus(MessageBus):

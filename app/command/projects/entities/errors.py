@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from app.shared_kernel.errors import EntityNotFoundError
+from app.command.shared_kernel.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
     from app.command.projects.entities.project import ProjectID, TaskNumber

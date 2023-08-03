@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import NewType, Optional
 
-from app.shared_kernel.entity import Entity
+from app.command.shared_kernel.entity import Entity
 
 TaskNumber = NewType("TaskNumber", int)
 

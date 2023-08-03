@@ -5,8 +5,8 @@ from typing import NewType, Optional
 from app.command.projects.entities import ensure
 from app.command.projects.entities.errors import TaskNotFoundError
 from app.command.projects.entities.task import Task, TaskNumber
-from app.shared_kernel.aggregate_root import AggregateRoot
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.aggregate_root import AggregateRoot
+from app.command.shared_kernel.user_id import UserID
 
 ProjectID = NewType("ProjectID", int)
 

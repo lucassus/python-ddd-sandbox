@@ -4,7 +4,7 @@ import pytest
 
 from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project import Project
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 
 @pytest.fixture

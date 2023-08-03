@@ -2,14 +2,14 @@ from typing import Any
 
 from email_validator import EmailNotValidError, validate_email
 
-from app.shared_kernel.base_value_object import BaseValueObject
+from app.command.shared_kernel.value_object import ValueObject
 
 
 class InvalidEmailAddressError(Exception):
     pass
 
 
-class EmailAddress(BaseValueObject):
+class EmailAddress(ValueObject):
     def __init__(self, address: str):
         if not self.is_valid(address):
             raise InvalidEmailAddressError()

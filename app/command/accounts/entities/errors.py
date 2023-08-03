@@ -1,5 +1,5 @@
 from app.command.accounts.entities.email_address import EmailAddress
-from app.shared_kernel.errors import EntityNotFoundError
+from app.command.shared_kernel.errors import EntityNotFoundError
 
 
 class UserNotFoundError(EntityNotFoundError):

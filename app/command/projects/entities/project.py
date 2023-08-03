@@ -69,12 +69,12 @@ class Project(AggregateRoot):
         return len([task for task in self.tasks if not task.is_completed])
 
     def archive(self, now: datetime) -> None:
-        ensure.can_archive(self)
+        ensure.all_project_tasks_are_completed(self)
         self.archived_at = now
 
     def unarchive(self) -> None:
         self.archived_at = None
 
     def delete(self, now: datetime) -> None:
-        ensure.can_delete(self)
+        ensure.project_is_archived(self)
         self.deleted_at = now

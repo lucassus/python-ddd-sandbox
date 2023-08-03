@@ -16,13 +16,17 @@ class TaskNotFoundError(EntityNotFoundError):
         super().__init__(f"Unable to find Task with {number=}")
 
 
-class MaxIncompleteTasksNumberIsReached(Exception):
+class ProjectStateError(Exception):
     pass
 
 
-class ArchiveProjectError(Exception):
+class MaxIncompleteTasksNumberIsReachedError(ProjectStateError):
     pass
 
 
-class DeleteProjectError(Exception):
+class ProjectIsNotCompletedError(ProjectStateError):
+    pass
+
+
+class ProjectNotArchivedError(ProjectStateError):
     pass

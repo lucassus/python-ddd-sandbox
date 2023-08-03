@@ -3,9 +3,9 @@ from datetime import datetime
 import pytest
 
 from app.command.projects.entities.errors import (
-    ArchiveProjectError,
-    DeleteProjectError,
-    MaxIncompleteTasksNumberIsReached,
+    MaxIncompleteTasksNumberIsReachedError,
+    ProjectIsNotCompletedError,
+    ProjectNotArchivedError,
     TaskNotFoundError,
 )
 from app.command.projects.entities.project import Project, ProjectID
@@ -35,7 +35,7 @@ def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
     project = Project(user_id=UserID(1), name="Test Project", maximum_number_of_incomplete_tasks=1)
     project.add_task(name="First")
 
-    with pytest.raises(MaxIncompleteTasksNumberIsReached):
+    with pytest.raises(MaxIncompleteTasksNumberIsReachedError):
         project.add_task(name="Second")
 
 
@@ -114,8 +114,8 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
 
     # When
     with pytest.raises(
-        ArchiveProjectError,
-        match="Unable to archive project id=1, because it has 1 incomplete tasks",
+        ProjectIsNotCompletedError,
+        match="Project has 1 incomplete tasks",
     ):
         project.archive(now=datetime(2021, 1, 12))
 
@@ -169,8 +169,5 @@ def test_delete_project_raises_error_whe_not_archived():
     project.id = ProjectID(1)
 
     # When
-    with pytest.raises(
-        DeleteProjectError,
-        match="Unable to delete project id=1, because it is not archived",
-    ):
+    with pytest.raises(ProjectNotArchivedError):
         project.delete(now=datetime(2022, 1, 12))

@@ -7,7 +7,7 @@ from app.command.shared_kernel.message_bus import BaseEvent
 from app.command.shared_kernel.user_id import UserID
 
 
-@dataclass(kw_only=False)
+@dataclass(kw_only=True)
 class User(AggregateRoot):
     @dataclass(frozen=True)
     class AccountCreatedEvent(BaseEvent):

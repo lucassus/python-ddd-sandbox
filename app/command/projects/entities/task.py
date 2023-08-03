@@ -7,7 +7,7 @@ from app.command.shared_kernel.entity import Entity
 TaskNumber = NewType("TaskNumber", int)
 
 
-@dataclass(kw_only=False)
+@dataclass(kw_only=True)
 class Task(Entity):
     number: TaskNumber = field(init=False)
     name: str

@@ -11,7 +11,7 @@ from app.command.shared_kernel.user_id import UserID
 ProjectID = NewType("ProjectID", int)
 
 
-@dataclass(kw_only=False)
+@dataclass(kw_only=True)
 class Project(AggregateRoot):
     id: ProjectID = field(init=False)
     user_id: UserID

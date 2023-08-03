@@ -8,7 +8,7 @@ from app.command.projects.entities.errors import (
     ProjectNotArchivedError,
     TaskNotFoundError,
 )
-from app.command.projects.entities.project import Project, ProjectID
+from app.command.projects.entities.project import Project
 from app.command.projects.entities.task import TaskNumber
 from app.command.shared_kernel.user_id import UserID
 
@@ -109,7 +109,6 @@ def test_incomplete_tasks_count():
 def test_archive_project_raises_error_when_not_all_tasks_are_completed():
     # Given
     project = Project(user_id=UserID(1), name="Test Project")
-    project.id = ProjectID(1)
     project.add_task(name="Foo")
 
     # When
@@ -166,7 +165,6 @@ def test_delete_project():
 def test_delete_project_raises_error_whe_not_archived():
     # Given
     project = Project(user_id=UserID(1), name="Test Project")
-    project.id = ProjectID(1)
 
     # When
     with pytest.raises(ProjectNotArchivedError):

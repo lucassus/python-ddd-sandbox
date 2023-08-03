@@ -9,7 +9,7 @@ def start_mappers(mapper_registry):
         Project,
         projects_table,
         properties={
-            "tasks": relationship(Task, order_by=tasks_table.c.id),
+            "_tasks": relationship(Task, order_by=tasks_table.c.id),
         },
     )
 

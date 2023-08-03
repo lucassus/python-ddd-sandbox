@@ -21,7 +21,7 @@ class FakeProjectRepository(AbstractProjectRepository):
         self._projects_by_id = {}
 
     def create(self, project: Project) -> Project:
-        project.id = next(self._project_id)
+        project._id = next(self._project_id)
         self._projects_by_id[project.id] = project
 
         return project

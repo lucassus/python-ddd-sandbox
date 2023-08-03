@@ -1,6 +1,10 @@
 from typing import TYPE_CHECKING
 
-from app.command.projects.entities.errors import ArchiveProjectError, MaxIncompleteTasksNumberIsReached
+from app.command.projects.entities.errors import (
+    ArchiveProjectError,
+    DeleteProjectError,
+    MaxIncompleteTasksNumberIsReached,
+)
 
 if TYPE_CHECKING:
     from app.command.projects.entities.project import Project
@@ -22,3 +26,8 @@ def can_archive(project: "Project") -> None:
             f"Unable to archive project id={project.id}, "
             f"because it has {project.incomplete_tasks_count} incomplete tasks"
         )
+
+
+def can_delete(project: "Project") -> None:
+    if not project.archived:
+        raise DeleteProjectError(f"Unable to delete project id={project.id}, because it is not archived")

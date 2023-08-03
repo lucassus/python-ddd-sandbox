@@ -22,6 +22,7 @@ class Project(AggregateRoot):
     last_task_number: TaskNumber = TaskNumber(0)
     tasks: list[Task] = field(default_factory=list)
     archived_at: None | datetime = None
+    deleted_at: None | datetime = None
 
     @property
     def archived(self) -> bool:
@@ -73,3 +74,7 @@ class Project(AggregateRoot):
 
     def unarchive(self) -> None:
         self.archived_at = None
+
+    def delete(self, now: datetime) -> None:
+        ensure.can_delete(self)
+        self.deleted_at = now

@@ -22,3 +22,7 @@ class MaxIncompleteTasksNumberIsReached(Exception):
 
 class ArchiveProjectError(Exception):
     pass
+
+
+class DeleteProjectError(Exception):
+    pass

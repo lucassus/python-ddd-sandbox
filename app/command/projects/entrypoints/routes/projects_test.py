@@ -51,3 +51,16 @@ def test_unarchive_project_endpoint(app: FastAPI, client: TestClient):
     # Then
     assert response.status_code == 200
     archivization_service_mock.unarchive.assert_called_with(ProjectID(124))
+
+
+def test_delete_project_endpoint(app: FastAPI, client: TestClient):
+    # Given
+    archivization_service_mock = Mock(spec=ArchivizationService)
+    app.dependency_overrides[get_archivization_service] = lambda: archivization_service_mock
+
+    # When
+    response = client.delete("/projects/124")
+
+    # Then
+    assert response.status_code == 200
+    archivization_service_mock.delete.assert_called_with(ProjectID(124))

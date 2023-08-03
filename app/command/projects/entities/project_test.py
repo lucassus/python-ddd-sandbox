@@ -4,6 +4,7 @@ import pytest
 
 from app.command.projects.entities.errors import (
     ArchiveProjectError,
+    DeleteProjectError,
     MaxIncompleteTasksNumberIsReached,
     TaskNotFoundError,
 )
@@ -135,9 +136,7 @@ def test_archive_project_set_archived_at():
     assert project.archived is True
 
 
-def test_unarchive_Project(
-    user_id=UserID(1),
-):
+def test_unarchive_project():
     # Given
     project = Project(user_id=UserID(1), name="Test Project")
     task = project.add_task(name="Foo")
@@ -150,3 +149,28 @@ def test_unarchive_Project(
     # Then
     assert project.archived_at is None
     assert project.archived is False
+
+
+def test_delete_project():
+    # Given
+    project = Project(user_id=UserID(1), name="Test Project")
+    project.archive(now=datetime(2021, 1, 12))
+
+    # When
+    project.delete(now=datetime(2022, 1, 12))
+
+    # Then
+    assert project.deleted_at == datetime(2022, 1, 12)
+
+
+def test_delete_project_raises_error_whe_not_archived():
+    # Given
+    project = Project(user_id=UserID(1), name="Test Project")
+    project.id = ProjectID(1)
+
+    # When
+    with pytest.raises(
+        DeleteProjectError,
+        match="Unable to delete project id=1, because it is not archived",
+    ):
+        project.delete(now=datetime(2022, 1, 12))

@@ -18,7 +18,7 @@ class Project(AggregateRoot):
     _maximum_number_of_incomplete_tasks: None | int
 
     _last_task_number: TaskNumber
-    _tasks: list[Task]  # TODO: Figure out how to map it to Dict[TaskNumber, Task]
+    _tasks_by_number: dict[TaskNumber, Task]
 
     _archived_at: None | datetime
     _deleted_at: None | datetime
@@ -34,7 +34,7 @@ class Project(AggregateRoot):
         self._maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
 
         self._last_task_number = TaskNumber(0)
-        self._tasks = []
+        self._tasks_by_number = {}
 
         self._archived_at = None
         self._deleted_at = None
@@ -57,7 +57,7 @@ class Project(AggregateRoot):
 
     @property
     def tasks(self) -> tuple[Task, ...]:
-        return tuple(self._tasks)
+        return tuple(self._tasks_by_number.values())
 
     @property
     def archived_at(self) -> None | datetime:
@@ -77,7 +77,7 @@ class Project(AggregateRoot):
         self._last_task_number = TaskNumber(self._last_task_number + 1)
         task = Task(name=name, number=self._last_task_number)
 
-        self._tasks.append(task)
+        self._tasks_by_number[task.number] = task
 
         return task
 
@@ -96,19 +96,18 @@ class Project(AggregateRoot):
         return task
 
     def _get_task(self, number: TaskNumber) -> Task:
-        for task in self._tasks:
-            if task.number == number:
-                return task
+        if number not in self._tasks_by_number:
+            raise TaskNotFoundError(number)
 
-        raise TaskNotFoundError(number)
+        return self._tasks_by_number[number]
 
     def complete_all_tasks(self, now: datetime):
-        for task in self._tasks:
+        for task in self.tasks:
             task.complete(now)
 
     @property
     def incomplete_tasks_count(self) -> int:
-        return len([task for task in self._tasks if not task.is_completed])
+        return len([task for task in self.tasks if not task.is_completed])
 
     def archive(self, now: datetime) -> None:
         ensure.all_project_tasks_are_completed(self)

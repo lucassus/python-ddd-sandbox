@@ -7,6 +7,7 @@ from sqlalchemy.orm.session import Session
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.command.projects.entities.errors import ProjectNotFoundError
 from app.command.projects.entities.project import Project, ProjectID
+from app.infrastructure.tables import projects_table
 
 
 class ProjectRepository(AbstractProjectRepository):
@@ -18,10 +19,14 @@ class ProjectRepository(AbstractProjectRepository):
         return project
 
     def _project_query(self, id: ProjectID) -> Select[Any]:
-        return select(Project).where(Project._id == id)  # type: ignore
+        return select(Project).where(
+            projects_table.c.id == id,
+        )
 
     def get(self, id: ProjectID) -> Project:
-        query = self._project_query(id).where(Project._archived_at.is_(None))  # type: ignore
+        query = self._project_query(id).where(
+            projects_table.c.archived_at.is_(None),
+        )
 
         try:
             project = self._session.execute(query).scalar_one()
@@ -33,8 +38,8 @@ class ProjectRepository(AbstractProjectRepository):
     def get_archived(self, id: ProjectID) -> Project:
         query = self._project_query(id).where(
             and_(
-                Project._archived_at.isnot(None),  # type: ignore
-                Project._deleted_at.is_(None),  # type: ignore
+                projects_table.c.archived_at.isnot(None),
+                projects_table.c.deleted_at.is_(None),
             )
         )
 

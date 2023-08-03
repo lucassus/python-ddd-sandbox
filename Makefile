@@ -68,5 +68,5 @@ test-watch:
 test-integration:
 	APP_ENV=test pytest tests/integration
 
-test-e2e-to-end:
+test-end-to-end:
 	APP_ENV=test pytest tests/end-to-end

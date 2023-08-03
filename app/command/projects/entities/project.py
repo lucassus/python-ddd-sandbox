@@ -96,10 +96,10 @@ class Project(AggregateRoot):
         return task
 
     def _get_task(self, number: TaskNumber) -> Task:
-        if number not in self._tasks_by_number:
+        try:
+            return self._tasks_by_number[number]
+        except KeyError:
             raise TaskNotFoundError(number)
-
-        return self._tasks_by_number[number]
 
     def complete_all_tasks(self, now: datetime):
         for task in self.tasks:

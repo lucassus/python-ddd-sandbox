@@ -22,13 +22,14 @@ def test_add_task():
     assert task.number == TaskNumber(1)
     assert task.name == "First"
     assert len(project.tasks) == 1
-    assert project.tasks == [task]
+    assert project.tasks == (task,)
 
-    second = project.add_task(name="Second")
+    second_task = project.add_task(name="Second")
 
-    assert second.number == TaskNumber(2)
-    assert second.name == "Second"
+    assert second_task.number == TaskNumber(2)
+    assert second_task.name == "Second"
     assert len(project.tasks) == 2
+    assert project.tasks == (task, second_task)
 
 
 def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():

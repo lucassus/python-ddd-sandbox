@@ -9,7 +9,14 @@ def start_mappers(mapper_registry):
         Project,
         projects_table,
         properties={
+            "_id": projects_table.c.id,
+            "_user_id": projects_table.c.user_id,
+            "_name": projects_table.c.name,
+            "_maximum_number_of_incomplete_tasks": projects_table.c.maximum_number_of_incomplete_tasks,
+            "_last_task_number": projects_table.c.last_task_number,
             "_tasks": relationship(Task, order_by=tasks_table.c.id),
+            "_archived_at": projects_table.c.archived_at,
+            "_deleted_at": projects_table.c.deleted_at,
         },
     )
 

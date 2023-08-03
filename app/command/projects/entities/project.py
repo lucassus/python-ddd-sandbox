@@ -10,6 +10,7 @@ from app.command.shared_kernel.user_id import UserID
 ProjectID = NewType("ProjectID", int)
 
 
+# TODO: Write ADR for removing dataclasses
 class Project(AggregateRoot):
     _id: ProjectID
     _user_id: UserID
@@ -18,7 +19,7 @@ class Project(AggregateRoot):
     _maximum_number_of_incomplete_tasks: None | int
 
     _last_task_number: TaskNumber
-    _tasks: list[Task]
+    _tasks: list[Task]  # TODO: Figure out how to map it to Dict[TaskNumber, Task]
 
     _archived_at: None | datetime
     _deleted_at: None | datetime
@@ -55,10 +56,9 @@ class Project(AggregateRoot):
     def maximum_number_of_incomplete_tasks(self) -> None | int:
         return self._maximum_number_of_incomplete_tasks
 
-    # TODO: How to make it more hermetic, still it will be able to do project.tasks.append(task)
     @property
-    def tasks(self) -> list[Task]:
-        return self._tasks
+    def tasks(self) -> tuple[Task, ...]:
+        return tuple(self._tasks)
 
     @property
     def archived_at(self) -> None | datetime:

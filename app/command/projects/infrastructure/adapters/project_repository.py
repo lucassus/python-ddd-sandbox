@@ -18,10 +18,10 @@ class ProjectRepository(AbstractProjectRepository):
         return project
 
     def _project_query(self, id: ProjectID) -> Select[Any]:
-        return select(Project).where(Project.id == id)  # type: ignore
+        return select(Project).where(Project._id == id)  # type: ignore
 
     def get(self, id: ProjectID) -> Project:
-        query = self._project_query(id).where(Project.archived_at.is_(None))  # type: ignore
+        query = self._project_query(id).where(Project._archived_at.is_(None))  # type: ignore
 
         try:
             project = self._session.execute(query).scalar_one()
@@ -33,8 +33,8 @@ class ProjectRepository(AbstractProjectRepository):
     def get_archived(self, id: ProjectID) -> Project:
         query = self._project_query(id).where(
             and_(
-                Project.archived_at.isnot(None),  # type: ignore
-                Project.deleted_at.is_(None),  # type: ignore
+                Project._archived_at.isnot(None),  # type: ignore
+                Project._deleted_at.is_(None),  # type: ignore
             )
         )
 

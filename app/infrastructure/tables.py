@@ -22,6 +22,7 @@ projects_table = Table(
     Column("last_task_number", Integer(), nullable=False, default=0),
     Column("maximum_number_of_incomplete_tasks", Integer(), nullable=True, default=None),
     Column("archived_at", DateTime(), nullable=True, default=None),
+    Column("deleted_at", DateTime(), nullable=True, default=None),
 )
 
 tasks_table = Table(

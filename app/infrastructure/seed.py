@@ -6,6 +6,7 @@ from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.password import Password
 from app.command.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
 from app.command.accounts.infrastructure.mappers import start_mappers as start_account_mappers
+from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.create_example_project import CreateExampleProject
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.tasks_service import TasksService
@@ -42,6 +43,11 @@ def main(rebuild_db: bool = True):
     tasks_service.create_task(project_id, name="Learn Domain Driven Design")
     tasks_service.create_task(project_id, name="Do the shopping")
     tasks_service.create_task(project_id, name="Clean the house")
+
+    project_id = create_project(user_id, "Clean the house")
+    archivization = ArchivizationService(uow=projects_uow)
+    archivization.archive(project_id)
+    archivization.delete(project_id)
 
     typer.echo("\nSeeding completed 🚀")
 

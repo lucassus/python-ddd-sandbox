@@ -53,6 +53,17 @@ class TestProjectRepository:
         with pytest.raises(ProjectNotFoundError):
             repository.get_archived(ProjectID(1))
 
+    def test_get_archived_raises_error_when_deleted(self, session, create_project, repository: ProjectRepository):
+        # Given
+        project = create_project()
+        project.archive(now=date.today())
+        project.delete(now=date.today())
+        session.commit()
+
+        # Then
+        with pytest.raises(ProjectNotFoundError):
+            repository.get_archived(project.id)
+
     def test_get_archived_raises_error_when_not_archived(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()

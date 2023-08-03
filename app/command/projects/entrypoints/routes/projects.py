@@ -46,3 +46,12 @@ def unarchive_project_endpoint(
 ):
     archivization_service.unarchive(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)
+
+
+@router.delete("/{project_id}")
+def delete_project_endpoint(
+    project_id: int,
+    archivization_service: Annotated[ArchivizationService, Depends(get_archivization_service)],
+):
+    archivization_service.delete(ProjectID(project_id))
+    return Response(status_code=HTTP_200_OK)

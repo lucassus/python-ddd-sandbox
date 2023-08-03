@@ -24,3 +24,13 @@ class ArchivizationService:
             project.unarchive()
 
             ouw.commit()
+
+    def delete(self, project_id: ProjectID, now: None | datetime = None) -> None:
+        if now is None:
+            now = datetime.now()
+
+        with self._uow as ouw:
+            project = ouw.project.get_archived(project_id)
+            project.delete(now)
+
+            ouw.commit()

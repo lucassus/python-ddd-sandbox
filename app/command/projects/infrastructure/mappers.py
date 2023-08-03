@@ -13,4 +13,12 @@ def start_mappers(mapper_registry):
         },
     )
 
-    mapper_registry.map_imperatively(Task, tasks_table)
+    mapper_registry.map_imperatively(
+        Task,
+        tasks_table,
+        properties={
+            "_number": tasks_table.c.number,
+            "_name": tasks_table.c.name,
+            "_completed_at": tasks_table.c.completed_at,
+        },
+    )

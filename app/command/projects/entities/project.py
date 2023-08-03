@@ -11,6 +11,7 @@ from app.command.shared_kernel.user_id import UserID
 ProjectID = NewType("ProjectID", int)
 
 
+# TODO: How to make it private?
 @dataclass(kw_only=True)
 class Project(AggregateRoot):
     id: ProjectID = field(init=False)
@@ -31,9 +32,8 @@ class Project(AggregateRoot):
     def add_task(self, *, name: str) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
-        task = Task(name=name)
         self.last_task_number = TaskNumber(self.last_task_number + 1)
-        task.number = self.last_task_number
+        task = Task(name=name, number=self.last_task_number)
 
         self.tasks.append(task)
 

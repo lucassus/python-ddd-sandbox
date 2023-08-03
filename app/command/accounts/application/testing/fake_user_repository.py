@@ -11,7 +11,7 @@ class FakeUserRepository(AbstractUserRepository):
         self._users_by_id = {}
 
     def create(self, user: User) -> User:
-        user.id = self._get_next_id()
+        user._id = self._get_next_id()
         self._users_by_id[user.id] = user
 
         return user

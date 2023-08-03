@@ -3,7 +3,8 @@ from datetime import datetime
 import pytest
 
 from app.command.projects.application.tasks_service import TasksService
-from app.command.projects.entities.factories import build_project
+from app.command.projects.entities.project import Project
+from app.shared_kernel.user_id import UserID
 
 
 @pytest.fixture
@@ -12,7 +13,7 @@ def service(fake_uow):
 
 
 def test_create_task(service: TasksService, repository, fake_uow):
-    project = repository.create(build_project(name="Test Project"))
+    project = repository.create(Project(user_id=UserID(1), name="Test Project"))
     service.create_task(project_id=project.id, name="Testing...")
 
     assert project.tasks[-1].name == "Testing..."
@@ -20,7 +21,7 @@ def test_create_task(service: TasksService, repository, fake_uow):
 
 
 def test_complete_task(service: TasksService, repository, fake_uow):
-    project = repository.create(build_project(name="Test Project"))
+    project = repository.create(Project(user_id=UserID(1), name="Test Project"))
     task = project.add_task(name="Testing...")
 
     now = datetime(2021, 1, 8)
@@ -31,7 +32,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
 
 
 def test_incomplete_task(service: TasksService, repository, fake_uow):
-    project = repository.create(build_project(name="Test Project"))
+    project = repository.create(Project(user_id=UserID(1), name="Test Project"))
     task = project.add_task(name="Testing...")
     project.complete_task(task.number, now=datetime(2021, 1, 8))
 

@@ -5,7 +5,8 @@ import pytest
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.command.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.command.projects.entities.factories import build_project
+from app.command.projects.entities.project import Project
+from app.shared_kernel.user_id import UserID
 
 
 class TestArchiveService:
@@ -28,7 +29,7 @@ class TestArchiveService:
         fake_unit_of_work: FakeUnitOfWork,
     ):
         # Given
-        project = fake_project_repository.create(build_project(name="Project 1"))
+        project = fake_project_repository.create(Project(user_id=UserID(1), name="Project 1"))
 
         # When
         service.archive(project.id)
@@ -44,7 +45,9 @@ class TestArchiveService:
         fake_unit_of_work: FakeUnitOfWork,
     ):
         # Given
-        project = fake_project_repository.create(build_project(name="Project 1", archived_at=datetime.now()))
+        project = fake_project_repository.create(
+            Project(user_id=UserID(1), name="Project 1", archived_at=datetime.now())
+        )
 
         # When
         service.unarchive(project.id)

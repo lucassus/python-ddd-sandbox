@@ -7,13 +7,13 @@ from app.command.projects.entities.errors import (
     MaxIncompleteTasksNumberIsReached,
     TaskNotFoundError,
 )
-from app.command.projects.entities.factories import build_project
-from app.command.projects.entities.project import ProjectID
+from app.command.projects.entities.project import Project, ProjectID
 from app.command.projects.entities.task import TaskNumber
+from app.shared_kernel.user_id import UserID
 
 
 def test_add_task():
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     assert len(project.tasks) == 0
 
     task = project.add_task(name="First")
@@ -31,7 +31,7 @@ def test_add_task():
 
 
 def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
-    project = build_project(name="Test Project", maximum_number_of_incomplete_tasks=1)
+    project = Project(user_id=UserID(1), name="Test Project", maximum_number_of_incomplete_tasks=1)
     project.add_task(name="First")
 
     with pytest.raises(MaxIncompleteTasksNumberIsReached):
@@ -39,7 +39,7 @@ def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
 
 
 def test_complete_task():
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     task = project.add_task(name="One")
 
     task = project.complete_task(number=task.number, now=datetime(2021, 1, 17))
@@ -49,7 +49,7 @@ def test_complete_task():
 
 
 def test_complete_task_raises_error_when_task_not_found():
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
 
     with pytest.raises(
         TaskNotFoundError,
@@ -59,7 +59,7 @@ def test_complete_task_raises_error_when_task_not_found():
 
 
 def test_incomplete_task():
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     task = project.add_task(name="One")
     project.complete_task(task.number, now=datetime(2021, 1, 17))
 
@@ -69,7 +69,7 @@ def test_incomplete_task():
 
 
 def test_incomplete_task_raises_error_when_task_not_found():
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
 
     with pytest.raises(
         TaskNotFoundError,
@@ -80,7 +80,7 @@ def test_incomplete_task_raises_error_when_task_not_found():
 
 def test_complete_all_tasks():
     # Given
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     project.add_task(name="Foo")
     task = project.add_task(name="Foo")
     project.complete_task(task.number, now=datetime(2020, 12, 31))
@@ -95,7 +95,7 @@ def test_complete_all_tasks():
 
 
 def test_incomplete_tasks_count():
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     assert project.incomplete_tasks_count == 0
 
     project.add_task(name="Foo")
@@ -107,7 +107,7 @@ def test_incomplete_tasks_count():
 
 def test_archive_project_raises_error_when_not_all_tasks_are_completed():
     # Given
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     project.id = ProjectID(1)
     project.add_task(name="Foo")
 
@@ -121,7 +121,7 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
 
 def test_archive_project_set_archived_at():
     # Given
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     task = project.add_task(name="Foo")
     project.complete_task(task.number, now=datetime(2020, 12, 31))
 
@@ -135,9 +135,11 @@ def test_archive_project_set_archived_at():
     assert project.archived is True
 
 
-def test_unarchive_project():
+def test_unarchive_Project(
+    user_id=UserID(1),
+):
     # Given
-    project = build_project(name="Test Project")
+    project = Project(user_id=UserID(1), name="Test Project")
     task = project.add_task(name="Foo")
     project.complete_task(task.number, now=datetime(2020, 12, 31))
     project.archive(now=datetime(2021, 1, 12))

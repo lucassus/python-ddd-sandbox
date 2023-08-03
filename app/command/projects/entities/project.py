@@ -10,7 +10,6 @@ from app.command.shared_kernel.user_id import UserID
 ProjectID = NewType("ProjectID", int)
 
 
-# TODO: Write ADR for removing dataclasses
 class Project(AggregateRoot):
     _id: ProjectID
     _user_id: UserID

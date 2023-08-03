@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import datetime
 
 from app.query.schemas import Task
 
@@ -20,7 +20,7 @@ def test_task_schema_deserialize():
             dict(
                 number=2,
                 name="Test 2",
-                completedAt="2021-01-18",
+                completedAt="2021-01-18T23:58:00",
             )
         )
     )
@@ -28,4 +28,4 @@ def test_task_schema_deserialize():
     assert task
     assert task.number == 2
     assert task.name == "Test 2"
-    assert task.completed_at == date(2021, 1, 18)
+    assert task.completed_at == datetime(2021, 1, 18, 23, 58, 0)

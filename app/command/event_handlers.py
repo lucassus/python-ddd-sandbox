@@ -1,17 +1,16 @@
 from app.command.accounts.entities.user import User
+from app.command.shared_kernel.message_bus import MessageBus
 from app.infrastructure.db import AppSession
-from app.shared_kernel.message_bus import MessageBus
 
-# TODO: Maybe move it to infrastructure?
 bus = MessageBus()
 
 
 @bus.listen(User.AccountCreatedEvent)
 def create_example_project_handler(event: User.AccountCreatedEvent):
     from app.command.projects.application.create_example_project import CreateExampleProject
-    from app.command.projects.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
+    from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 
-    uow = SQLAUnitOfWork(session_factory=AppSession)
+    uow = UnitOfWork(session_factory=AppSession)
     create_example_project = CreateExampleProject(uow=uow)
 
     create_example_project(user_id=event.user_id)
@@ -19,9 +18,9 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
 
 @bus.listen(User.AccountCreatedEvent)
 def send_welcome_email_handler(event: User.AccountCreatedEvent):
-    from app.command.accounts.entrypoints.adapters.sqla_unit_of_work import SQLAUnitOfWork
+    from app.command.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 
-    with SQLAUnitOfWork(session_factory=AppSession) as uow:
+    with UnitOfWork(session_factory=AppSession) as uow:
         user = uow.user.get(event.user_id)
 
         if user is not None:

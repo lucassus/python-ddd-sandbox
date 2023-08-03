@@ -6,7 +6,7 @@ from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.user import User
 
 
-class SQLAUserRepository(AbstractUserRepository):
+class UserRepository(AbstractUserRepository):
     def __init__(self, session: Session):
         self._session = session
 

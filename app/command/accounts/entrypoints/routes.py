@@ -9,7 +9,7 @@ from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.password import Password
 from app.command.accounts.entrypoints import schemas
 from app.command.accounts.entrypoints.dependencies import get_change_user_email_address, get_register_user
-from app.shared_kernel.user_id import UserID
+from app.command.shared_kernel.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])
 

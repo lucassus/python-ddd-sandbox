@@ -1,7 +1,7 @@
-from datetime import date
+from datetime import datetime
 from typing import Optional
 
-from app.shared_kernel.base_schema import BaseSchema
+from app.base_schema import BaseSchema
 
 
 class Project(BaseSchema):
@@ -12,7 +12,7 @@ class Project(BaseSchema):
 class Task(BaseSchema):
     number: int
     name: str
-    completed_at: Optional[date]
+    completed_at: Optional[datetime]
 
 
 class User(BaseSchema):

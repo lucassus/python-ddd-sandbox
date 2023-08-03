@@ -15,7 +15,7 @@ class FindUserQuery(AbstractQuery):
         if user is None:
             return None
 
-        query = select(projects_table).where(projects_table.c.user_id == id)
+        query = select(projects_table).where(projects_table.c.user_id == user.id)
         projects = self._all_from(query)
 
         return schemas.User(

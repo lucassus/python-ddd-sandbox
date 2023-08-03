@@ -1,59 +1,35 @@
-import httpx
 import pytest
-from starlette.testclient import TestClient
+from sqlalchemy.orm import clear_mappers
 
-from app import create_app
-from app.infrastructure.db import engine
+from app.command import mapper_registry
+from app.command.accounts.infrastructure.mappers import start_mappers as start_account_mappers
+from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
+from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
 
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture
 def prepare_db():
     create_tables(engine)
+
+    clear_mappers()
+    start_account_mappers(mapper_registry)
+    start_project_mappers(mapper_registry)
+
     yield
+
+    clear_mappers()
     drop_tables(engine)
 
 
-@pytest.fixture(scope="session")
-def client():
-    app = create_app()
-    return TestClient(app)
+@pytest.fixture
+def connection(prepare_db):
+    with engine.begin() as connection:
+        yield connection
 
 
 @pytest.fixture
-def register_user(client: TestClient):
-    def _register_user(email: str) -> httpx.Response:
-        return client.post(
-            "/commands/users",
-            json={"email": email, "password": "password"},
-            follow_redirects=True,
-        )
-
-    return _register_user
-
-
-@pytest.fixture
-def create_project(register_user, client: TestClient):
-    def _create_project(name: str, user_id: int | None = None) -> httpx.Response:
-        if user_id is None:
-            response = register_user("test@email.com")
-            assert response.status_code == 200
-            user_id = response.json()["id"]
-
-        return client.post(
-            "/commands/projects",
-            json={"user_id": user_id, "name": name},
-        )
-
-    return _create_project
-
-
-@pytest.fixture
-def create_task(client: TestClient):
-    def _create_task(project_id: int, name: str) -> httpx.Response:
-        return client.post(
-            f"/commands/projects/{project_id}/tasks",
-            json={"name": name},
-        )
-
-    return _create_task
+def session(connection):
+    session = AppSession(bind=connection)
+    yield session
+    session.close()

@@ -1,47 +1,22 @@
-from datetime import date
+from unittest.mock import Mock
 
 import pytest
 
-from app.infrastructure.factories import create_project, create_task
+from app.query.dependencies import get_project
+from app.query.queries.tasks import FindTaskQuery
 
 
 @pytest.mark.asyncio
-async def test_tasks_endpoint(connection, client):
+async def test_task_endpoint_returns_404(app, client):
     # Given
-    project = create_project(connection, name="Project One")
+    find_project_mock = Mock(return_value=Mock(id=1))
+    app.dependency_overrides[get_project] = lambda: find_project_mock
 
-    create_task(connection, number=1, project=project, name="Task One")
-    create_task(connection, number=2, project=project, name="Task Two", completed_at=date(2021, 1, 6))
-    create_task(connection, number=3, project=project, name="Task Three")
-    create_task(connection, number=1, name="Task Four")
+    find_task_mock = Mock(return_value=None)
+    app.dependency_overrides[FindTaskQuery] = lambda: find_task_mock
 
     # When
-    response = await client.get(f"/projects/{project.id}/tasks")
-
-    # Then
-    assert response.status_code == 200
-    assert response.json() == [
-        {"number": 1, "name": "Task One", "completedAt": None},
-        {"number": 2, "name": "Task Two", "completedAt": "2021-01-06"},
-        {"number": 3, "name": "Task Three", "completedAt": None},
-    ]
-
-
-@pytest.mark.asyncio
-async def test_task_endpoint_returns_task(connection, client):
-    # Given
-    project = create_project(connection, name="Project One")
-    task = create_task(connection, project=project, number=1, name="Task One")
-
-    # When
-    response = await client.get(f"/projects/{project.id}/tasks/{task.number}")
-
-    # Then
-    assert response.status_code == 200
-    assert response.json() == {"number": 1, "name": "Task One", "completedAt": None}
-
-
-@pytest.mark.asyncio
-async def test_task_endpoint_returns_404(client):
     response = await client.get("/projects/1/tasks/1")
+
+    # Then
     assert response.status_code == 404

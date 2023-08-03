@@ -1,80 +1,64 @@
-from datetime import date, datetime
+from unittest.mock import Mock
 
-import pytest
+from fastapi import FastAPI
+from starlette.testclient import TestClient
 
-from app.command.projects.entities.task import Task
-from app.command.projects.entrypoints.dependencies import get_current_time
-from app.infrastructure.factories import create_project, create_task
+from app.command.projects.application.tasks_service import TasksService
+from app.command.projects.entities.project import ProjectID
+from app.command.projects.entities.task import TaskNumber
+from app.command.projects.entrypoints.dependencies import get_tasks_service
 
-# TODO: Use mock services in these tests
 
-
-@pytest.mark.skip
-def test_tasks_endpoint_creates_task(session, client):
+def test_task_create_endpoint(app: FastAPI, client: TestClient):
     # Given
-    project_id = create_project(session.connection(), name="Test project").id
+    mock_tasks_service = Mock(spec=TasksService)
+    mock_tasks_service.create_task.return_value = TaskNumber(1)
+    app.dependency_overrides[get_tasks_service] = lambda: mock_tasks_service
 
     # When
     response = client.post(
-        f"/projects/{project_id}/tasks",
+        "/projects/123/tasks",
         json={"name": "Some task"},
         follow_redirects=False,
     )
 
     # Then
     assert response.status_code == 303
+    assert response.headers["Location"] == "/queries/projects/123/tasks/1"
+    mock_tasks_service.create_task.assert_called_once_with(project_id=ProjectID(123), name="Some task")
 
 
-@pytest.mark.skip
-def test_task_complete_endpoint(session, client):
+def test_task_complete_endpoint(app: FastAPI, client: TestClient):
     # Given
-    project_id = create_project(session.connection(), name="Test project").id
-    task_number = create_task(session.connection(), project_id, name="Test task").number
-
-    now = datetime(2012, 1, 18, 9, 30)
-    client.app.dependency_overrides[get_current_time] = lambda: now
+    mock_tasks_service = Mock(spec=TasksService)
+    mock_tasks_service.create_task.return_value = TaskNumber(667)
+    app.dependency_overrides[get_tasks_service] = lambda: mock_tasks_service
 
     # When
     response = client.put(
-        f"/projects/{project_id}/tasks/{task_number}/complete",
+        "/projects/665/tasks/667/complete",
         follow_redirects=False,
     )
 
     # Then
     assert response.status_code == 303
-
-    task = session.get(Task, task_number)
-    assert task.completed_at == now.date()
-
-
-@pytest.mark.skip
-def test_task_complete_endpoint_returns_404(client):
-    response = client.put("/tasks/123/complete")
-    assert response.status_code == 404
+    assert response.headers["Location"] == "/queries/projects/665/tasks/667"
+    mock_tasks_service.complete_task.assert_called_once_with(ProjectID(665), TaskNumber(667))
 
 
-@pytest.mark.skip
-def test_task_incomplete_endpoint(session, client):
+def test_task_incomplete_endpoint(app: FastAPI, client: TestClient):
     # Given
-    project_id = create_project(session.connection(), name="Test project").id
-    task_number = create_task(
-        session.connection(),
-        project_id,
-        name="Test task",
-        completed_at=date(2023, 1, 12),
-    ).number
+    mock_tasks_service = Mock(spec=TasksService)
+    mock_tasks_service.create_task.return_value = TaskNumber(668)
+    app.dependency_overrides[get_tasks_service] = lambda: mock_tasks_service
 
     # When
     response = client.put(
-        f"/projects/{project_id}/tasks/{task_number}/incomplete",
+        "/projects/665/tasks/668/incomplete",
         follow_redirects=False,
     )
 
     # Then
     assert response.status_code == 303
-
-
-@pytest.mark.skip
-def test_task_incomplete_endpoint_returns_404(client):
-    response = client.put(f"/tasks/{123}/incomplete")
-    assert response.status_code == 404
+    assert response.headers["Location"] == "/queries/projects/665/tasks/668"
+    mock_tasks_service.incomplete_task.assert_called_once_with(ProjectID(665), TaskNumber(668))

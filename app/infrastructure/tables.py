@@ -1,5 +1,5 @@
 from sqlalchemy.sql.schema import Column, ForeignKey, MetaData, Table, UniqueConstraint
-from sqlalchemy.sql.sqltypes import Date, Integer, String
+from sqlalchemy.sql.sqltypes import DateTime, Integer, String
 
 from app.infrastructure.type_decorators import EmailType, PasswordType
 
@@ -20,7 +20,8 @@ projects_table = Table(
     Column("user_id", Integer(), ForeignKey(users_table.c.id), nullable=False),
     Column("name", String(255), nullable=False),
     Column("last_task_number", Integer(), nullable=False, default=0),
-    Column("maximum_number_of_incomplete_tasks", Integer(), nullable=True),
+    Column("maximum_number_of_incomplete_tasks", Integer(), nullable=True, default=None),
+    Column("archived_at", DateTime(), nullable=True, default=None),
 )
 
 tasks_table = Table(
@@ -30,8 +31,8 @@ tasks_table = Table(
     Column("project_id", Integer(), ForeignKey(projects_table.c.id), nullable=False),
     Column("number", Integer(), nullable=False),
     Column("name", String(255), nullable=False),
-    Column("completed_at", Date(), nullable=True),
-    UniqueConstraint("project_id", "number"),  # TODO: Figure out how to test it
+    Column("completed_at", DateTime(), nullable=True, default=None),
+    UniqueConstraint("project_id", "number"),
 )
 
 

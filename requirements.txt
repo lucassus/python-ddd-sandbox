@@ -40,6 +40,8 @@ fastapi==0.100.1
     # via -r requirements.in
 flake8==6.1.0
     # via -r requirements.in
+freezegun==1.2.2
+    # via -r requirements.in
 greenlet==2.0.2
     # via sqlalchemy
 h11==0.14.0
@@ -114,6 +116,7 @@ pytest-watch==4.2.0
 python-dateutil==2.8.2
     # via
     #   faker
+    #   freezegun
     #   libyear
 python-dotenv==1.0.0
     # via pydantic
@@ -133,8 +136,6 @@ sqlalchemy[asyncio]==2.0.19
     # via -r requirements.in
 starlette==0.27.0
     # via fastapi
-tabulate==0.9.0
-    # via -r requirements.in
 typer==0.9.0
     # via -r requirements.in
 types-tabulate==0.9.0.3

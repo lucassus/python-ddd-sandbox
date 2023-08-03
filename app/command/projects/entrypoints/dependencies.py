@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.application.tasks_service import TasksService
@@ -19,3 +20,7 @@ def get_tasks_service(uow: Annotated[AbstractUnitOfWork, Depends(get_uow)]) -> T
 
 def get_create_project(uow: Annotated[AbstractUnitOfWork, Depends(get_uow)]) -> CreateProject:
     return CreateProject(uow=uow)
+
+
+def get_archivization_service(uow: Annotated[AbstractUnitOfWork, Depends(get_uow)]) -> ArchivizationService:
+    return ArchivizationService(uow=uow)

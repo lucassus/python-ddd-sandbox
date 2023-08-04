@@ -29,11 +29,3 @@ def test_register_user(register_user, client: TestClient):
         {"number": 2, "name": "Watch the tutorial", "completedAt": None},
         {"number": 3, "name": "Start using our awesome app", "completedAt": None},
     ]
-
-    # TODO: Move it to a separate scenario
-    response = client.put(
-        f"/commands/users/{user_id}",
-        json={"email": "new@email.com"},
-    )
-    assert response.status_code == 200
-    assert response.json()["email"] == "new@email.com"

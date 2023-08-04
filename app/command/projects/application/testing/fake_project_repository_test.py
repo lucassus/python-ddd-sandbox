@@ -26,6 +26,7 @@ def test_fake_project_repository():
         repository.get(ProjectID(3))
 
     archived_project = Project(user_id=UserID(1), name="Third")
-    archived_project.archived_at = datetime.now()
+    archived_project.archive(now=datetime.now())
+
     repository.create(archived_project)
     assert repository.get_archived(archived_project.id) is not None

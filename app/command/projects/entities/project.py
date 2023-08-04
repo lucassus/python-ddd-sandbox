@@ -1,6 +1,5 @@
-from dataclasses import dataclass, field
 from datetime import datetime
-from typing import NewType, Optional
+from typing import NewType
 
 from app.command.projects.entities import ensure
 from app.command.projects.entities.errors import TaskNotFoundError
@@ -11,31 +10,74 @@ from app.command.shared_kernel.user_id import UserID
 ProjectID = NewType("ProjectID", int)
 
 
-@dataclass(kw_only=False)
 class Project(AggregateRoot):
-    id: ProjectID = field(init=False)
-    user_id: UserID
+    _id: ProjectID
+    _user_id: UserID
 
-    name: str
-    maximum_number_of_incomplete_tasks: Optional[int] = None
+    _name: str
+    _maximum_number_of_incomplete_tasks: None | int
 
-    last_task_number: TaskNumber = TaskNumber(0)
-    tasks: list[Task] = field(default_factory=list)
-    archived_at: None | datetime = None
-    deleted_at: None | datetime = None
+    _last_task_number: TaskNumber
+    _tasks_by_number: dict[TaskNumber, Task]
+
+    _archived_at: None | datetime
+    _deleted_at: None | datetime
+
+    def __init__(
+        self,
+        user_id: UserID,
+        name: str,
+        maximum_number_of_incomplete_tasks: None | int = None,
+    ):
+        self._user_id = user_id
+        self._name = name
+        self._maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
+
+        self._last_task_number = TaskNumber(0)
+        self._tasks_by_number = {}
+
+        self._archived_at = None
+        self._deleted_at = None
+
+    @property
+    def id(self) -> ProjectID:
+        return self._id
+
+    @property
+    def user_id(self) -> UserID:
+        return self._user_id
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def maximum_number_of_incomplete_tasks(self) -> None | int:
+        return self._maximum_number_of_incomplete_tasks
+
+    @property
+    def tasks(self) -> tuple[Task, ...]:
+        return tuple(self._tasks_by_number.values())
+
+    @property
+    def archived_at(self) -> None | datetime:
+        return self._archived_at
 
     @property
     def archived(self) -> bool:
-        return self.archived_at is not None
+        return self._archived_at is not None
+
+    @property
+    def deleted_at(self) -> None | datetime:
+        return self._deleted_at
 
     def add_task(self, *, name: str) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
-        task = Task(name=name)
-        self.last_task_number = TaskNumber(self.last_task_number + 1)
-        task.number = self.last_task_number
+        self._last_task_number = TaskNumber(self._last_task_number + 1)
+        task = Task(name=name, number=self._last_task_number)
 
-        self.tasks.append(task)
+        self._tasks_by_number[task.number] = task
 
         return task
 
@@ -54,11 +96,10 @@ class Project(AggregateRoot):
         return task
 
     def _get_task(self, number: TaskNumber) -> Task:
-        for task in self.tasks:
-            if task.number == number:
-                return task
-
-        raise TaskNotFoundError(number)
+        try:
+            return self._tasks_by_number[number]
+        except KeyError:
+            raise TaskNotFoundError(number)
 
     def complete_all_tasks(self, now: datetime):
         for task in self.tasks:
@@ -70,11 +111,11 @@ class Project(AggregateRoot):
 
     def archive(self, now: datetime) -> None:
         ensure.all_project_tasks_are_completed(self)
-        self.archived_at = now
+        self._archived_at = now
 
     def unarchive(self) -> None:
-        self.archived_at = None
+        self._archived_at = None
 
     def delete(self, now: datetime) -> None:
         ensure.project_is_archived(self)
-        self.deleted_at = now
+        self._deleted_at = now

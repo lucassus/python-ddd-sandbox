@@ -45,9 +45,8 @@ class TestArchiveService:
         fake_unit_of_work: FakeUnitOfWork,
     ):
         # Given
-        project = fake_project_repository.create(
-            Project(user_id=UserID(1), name="Project 1", archived_at=datetime.now())
-        )
+        project = fake_project_repository.create(Project(user_id=UserID(1), name="Project 1"))
+        project.archive(now=datetime.now())
 
         # When
         service.unarchive(project.id)

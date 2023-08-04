@@ -4,6 +4,7 @@ from sqlalchemy.orm.session import Session
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.user import User
+from app.infrastructure.tables import users_table
 
 
 class UserRepository(AbstractUserRepository):
@@ -13,17 +14,9 @@ class UserRepository(AbstractUserRepository):
     # Repositories are part of domain layer, therefore it is more appropriate
     # to use value object not just a string.
     def exists_by_email(self, email: EmailAddress) -> bool:
-        query = select(User.id).where(User.email == email)  # type: ignore
+        query = select(users_table.c.id).where(users_table.c.email == email)
         user_id = self._session.execute(query).scalar_one_or_none()
         return user_id is not None
-
-    # Or a bit more efficient with inoperative style
-    # def exists_by_email(self, email: EmailAddress) -> bool:
-    #     connection = self._session.connection()
-    #     query = select(users_table.c.id).where(users_table.c.email == email)
-    #     result = connection.execute(query).scalar_one_or_none()
-    #
-    #     return result is not None
 
     def create(self, user: User) -> User:
         self._session.add(user)

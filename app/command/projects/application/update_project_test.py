@@ -1,6 +1,6 @@
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.command.projects.application.update_project import UpdateProject
-from app.command.projects.entities.project import ProjectID, ProjectName
+from app.command.projects.entities.project import ProjectName
 from app.command.projects.entities.project_builder import ProjectBuilder
 
 

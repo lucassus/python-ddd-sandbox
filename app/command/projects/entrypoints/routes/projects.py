@@ -6,9 +6,14 @@ from starlette.status import HTTP_200_OK
 
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.create_project import CreateProject
+from app.command.projects.application.update_project import UpdateProject
 from app.command.projects.entities.project import ProjectID, ProjectName
 from app.command.projects.entrypoints import schemas
-from app.command.projects.entrypoints.dependencies import get_archivization_service, get_create_project
+from app.command.projects.entrypoints.dependencies import (
+    get_archivization_service,
+    get_create_project,
+    get_update_project,
+)
 from app.command.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
@@ -23,6 +28,20 @@ def project_create_endpoint(
         user_id=UserID(data.user_id),
         name=ProjectName(data.name),
     )
+
+    return RedirectResponse(
+        f"/queries/projects/{project_id}",
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+
+@router.put("/{project_id}")
+def update_project_endpoint(
+    project_id: int,
+    data: schemas.UpdateProject,
+    update_project: Annotated[UpdateProject, Depends(get_update_project)],
+):
+    update_project(ProjectID(project_id), ProjectName(data.name))
 
     return RedirectResponse(
         f"/queries/projects/{project_id}",

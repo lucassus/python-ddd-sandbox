@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from app.command.projects.entrypoints.routes import router
+from app.command.projects.entrypoints.endpoints import router
 
 
 @pytest.fixture

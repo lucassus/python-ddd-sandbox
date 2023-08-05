@@ -13,6 +13,7 @@ router = APIRouter()
     "/{id}",
     response_model=schemas.User,
     name="Returns user along with projects",
+    # TODO: Use response_model
 )
 def user_endpoint(
     id: int,

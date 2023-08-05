@@ -5,20 +5,19 @@ from starlette.testclient import TestClient
 
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.password import Password
-from app.command.accounts.entrypoints.dependencies import get_register_user
 
 
 def test_register_user_endpoint(app: FastAPI, client: TestClient):
     # Given
     register_user_mock = Mock(return_value=123)
-    app.dependency_overrides[get_register_user] = lambda: register_user_mock
 
     # When
-    response = client.post(
-        "/users",
-        json={"email": "test@email.com", "password": "password"},
-        follow_redirects=False,
-    )
+    with app.container.register_user.override(register_user_mock):
+        response = client.post(
+            "/users",
+            json={"email": "test@email.com", "password": "password"},
+            follow_redirects=False,
+        )
 
     # Then
     register_user_mock.assert_called_with(

@@ -2,10 +2,10 @@ import pytest
 
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.command.accounts.application.testing.factories import build_test_user
 from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException, UserNotFoundError
+from app.command.accounts.entities.user_builder import UserBuilder
 from app.command.shared_kernel.entities.user_id import UserID
 
 
@@ -22,7 +22,7 @@ class TestChangeUserEmailAddressUseCase:
         change_user_email_address: ChangeUserEmailAddress,
     ):
         # Given
-        user = repository.create(build_test_user(email=EmailAddress("old@email.com")))
+        user = repository.create(UserBuilder().with_email("old@email.com").build())
 
         # When
         change_user_email_address(
@@ -55,8 +55,8 @@ class TestChangeUserEmailAddressUseCase:
         change_user_email_address: ChangeUserEmailAddress,
     ):
         # Given
-        repository.create(build_test_user(email=EmailAddress("taken@email.com")))
-        user = repository.create(build_test_user(email=EmailAddress("old@email.com")))
+        repository.create(UserBuilder().with_email("taken@email.com").build())
+        user = repository.create(UserBuilder().with_email("old@email.com").build())
 
         # When
         with pytest.raises(EmailAlreadyExistsException):
@@ -75,7 +75,7 @@ class TestChangeUserEmailAddressUseCase:
         change_user_email_address: ChangeUserEmailAddress,
     ):
         # Given
-        user = repository.create(build_test_user(email=EmailAddress("old@email.com")))
+        user = repository.create(UserBuilder().with_email("old@email.com").build())
 
         # When
         change_user_email_address(

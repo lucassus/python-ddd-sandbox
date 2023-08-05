@@ -5,7 +5,6 @@ from app.command.accounts.entities.password import Password
 from app.command.accounts.entities.user import User
 
 
-# TODO: How to limit usage of this class to tests only?
 class UserBuilder:
     # Provide some sane defaults
     _email = EmailAddress("test@email.com")

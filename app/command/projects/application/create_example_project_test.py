@@ -1,6 +1,6 @@
 from app.command.projects.application.create_example_project import CreateExampleProject
 from app.command.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 def test_create_example_project(fake_uow: FakeUnitOfWork):

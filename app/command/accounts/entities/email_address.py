@@ -2,7 +2,7 @@ from typing import Any
 
 from email_validator import EmailNotValidError, validate_email
 
-from app.command.shared_kernel.value_object import ValueObject
+from app.command.shared_kernel.entities.value_object import ValueObject
 
 
 class InvalidEmailAddressError(Exception):

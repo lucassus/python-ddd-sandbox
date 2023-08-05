@@ -9,7 +9,7 @@ from app.command.projects.application.create_project import CreateProject
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.entrypoints import schemas
 from app.command.projects.entrypoints.dependencies import get_archivization_service, get_create_project
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
 

@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.password import Password
-from app.command.shared_kernel.aggregate_root import AggregateRoot
+from app.command.shared_kernel.entities.aggregate_root import AggregateRoot
+from app.command.shared_kernel.entities.user_id import UserID
 from app.command.shared_kernel.message_bus import BaseEvent
-from app.command.shared_kernel.user_id import UserID
 
 
 class User(AggregateRoot):

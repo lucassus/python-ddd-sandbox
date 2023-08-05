@@ -2,7 +2,7 @@ import abc
 
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.user import User
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 class AbstractUserRepository(metaclass=abc.ABCMeta):

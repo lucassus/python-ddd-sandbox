@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import NewType, Optional
 
-from app.command.shared_kernel.entity import Entity
+from app.command.shared_kernel.entities.entity import Entity
 
 TaskNumber = NewType("TaskNumber", int)
 

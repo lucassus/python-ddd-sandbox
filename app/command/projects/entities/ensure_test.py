@@ -3,7 +3,7 @@ import pytest
 from app.command.projects.entities import ensure
 from app.command.projects.entities.errors import MaxIncompleteTasksNumberIsReachedError
 from app.command.projects.entities.project import Project
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:

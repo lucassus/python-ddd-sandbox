@@ -1,7 +1,7 @@
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.entities.factories import build_example_project
 from app.command.projects.entities.project import ProjectID
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 class CreateExampleProject:

@@ -1,6 +1,6 @@
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 def test_create_project_use_case(fake_uow, repository: AbstractProjectRepository):

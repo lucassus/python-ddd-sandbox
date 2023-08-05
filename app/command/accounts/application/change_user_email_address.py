@@ -1,7 +1,7 @@
 from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException, UserNotFoundError
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 class ChangeUserEmailAddress:

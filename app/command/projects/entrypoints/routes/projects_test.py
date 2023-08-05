@@ -6,7 +6,7 @@ from starlette.testclient import TestClient
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.entrypoints.dependencies import get_archivization_service, get_create_project
-from app.command.shared_kernel.user_id import UserID
+from app.command.shared_kernel.entities.user_id import UserID
 
 
 def test_create_project_endpoint(app: FastAPI, client: TestClient):

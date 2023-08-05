@@ -1,6 +1,6 @@
 from typing import Any
 
-from app.command.shared_kernel.value_object import ValueObject
+from app.command.shared_kernel.entities.value_object import ValueObject
 
 
 class InvalidPasswordError(Exception):

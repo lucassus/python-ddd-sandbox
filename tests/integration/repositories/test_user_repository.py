@@ -2,8 +2,6 @@ import pytest
 from sqlalchemy.orm.session import Session
 
 from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.password import Password
-from app.command.accounts.entities.user import User
 from app.command.accounts.entities.user_builder import UserBuilder
 from app.command.accounts.infrastructure.adapters.user_repository import UserRepository
 from app.command.shared_kernel.entities.user_id import UserID

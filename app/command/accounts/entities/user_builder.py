@@ -7,11 +7,12 @@ from app.command.accounts.entities.user import User
 
 # TODO: How to limit usage of this class to tests only?
 class UserBuilder:
+    # Provide some sane defaults
     _email = EmailAddress("test@email.com")
     _password = Password("password")
 
     def with_email(self, email: str | EmailAddress) -> Self:
-        self._email = EmailAddress(email)
+        self._email = EmailAddress(str(email))
         return self
 
     def build(self) -> User:

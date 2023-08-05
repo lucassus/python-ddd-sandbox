@@ -4,15 +4,15 @@ import pytest
 
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.command.projects.entities.errors import ProjectNotFoundError
-from app.command.projects.entities.project import Project, ProjectID
-from app.command.shared_kernel.entities.user_id import UserID
+from app.command.projects.entities.project import ProjectID
+from app.command.projects.entities.project_builder import ProjectBuilder
 
 
 def test_fake_project_repository():
     repository = FakeProjectRepository()
 
-    repository.create(Project(user_id=UserID(1), name="First"))
-    repository.create(Project(user_id=UserID(1), name="Second"))
+    repository.create(ProjectBuilder().with_name("First").build())
+    repository.create(ProjectBuilder().with_name("Second").build())
 
     project = repository.get(ProjectID(1))
     assert project is not None
@@ -25,7 +25,7 @@ def test_fake_project_repository():
     ):
         repository.get(ProjectID(3))
 
-    archived_project = Project(user_id=UserID(1), name="Third")
+    archived_project = ProjectBuilder().with_name("Archived").build()
     archived_project.archive(now=datetime.now())
 
     repository.create(archived_project)

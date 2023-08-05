@@ -5,7 +5,11 @@ from starlette.testclient import TestClient
 
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.entities.project import ProjectID
-from app.command.projects.entrypoints.dependencies import get_archivization_service, get_create_project
+from app.command.projects.entrypoints.dependencies import (
+    get_archivization_service,
+    get_create_project,
+    get_update_project,
+)
 from app.command.shared_kernel.entities.user_id import UserID
 
 
@@ -25,6 +29,24 @@ def test_create_project_endpoint(app: FastAPI, client: TestClient):
     create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
     assert response.status_code == 303
     assert response.headers["location"] == "/queries/projects/1"
+
+
+def test_update_project_endpoint(app: FastAPI, client: TestClient):
+    # Given
+    update_project_mock = Mock()
+    app.dependency_overrides[get_update_project] = lambda: update_project_mock
+
+    # When
+    response = client.put(
+        "/projects/123",
+        json={"name": "Test project"},
+        follow_redirects=False,
+    )
+
+    # Then
+    update_project_mock.assert_called_with(ProjectID(123), "Test project")
+    assert response.status_code == 303
+    assert response.headers["location"] == "/queries/projects/123"
 
 
 def test_archive_project_endpoint(app: FastAPI, client: TestClient):

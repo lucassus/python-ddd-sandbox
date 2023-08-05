@@ -8,8 +8,15 @@ from app.command.projects.entities.errors import (
     ProjectNotArchivedError,
     TaskNotFoundError,
 )
+from app.command.projects.entities.project import ProjectName
 from app.command.projects.entities.project_builder import ProjectBuilder
 from app.command.projects.entities.task import TaskNumber
+
+
+def test_set_name():
+    project = ProjectBuilder().build()
+    project.name = ProjectName("New name")
+    assert project.name == ProjectName("New name")
 
 
 def test_add_task():

@@ -55,6 +55,10 @@ class Project(AggregateRoot):
     def name(self) -> str:
         return self._name
 
+    @name.setter
+    def name(self, name: ProjectName):
+        self._name = name
+
     @property
     def maximum_number_of_incomplete_tasks(self) -> None | int:
         return self._maximum_number_of_incomplete_tasks

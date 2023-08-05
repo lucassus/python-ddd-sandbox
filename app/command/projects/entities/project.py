@@ -9,13 +9,17 @@ from app.command.shared_kernel.entities.user_id import UserID
 
 ProjectID = NewType("ProjectID", int)
 
+ProjectName = NewType("ProjectName", str)
+
+MaximumNumberOfIncompleteTasks = NewType("MaximumNumberOfIncompleteTasks", int)
+
 
 class Project(AggregateRoot):
     _id: ProjectID
     _user_id: UserID
 
-    _name: str
-    _maximum_number_of_incomplete_tasks: None | int
+    _name: ProjectName
+    _maximum_number_of_incomplete_tasks: None | MaximumNumberOfIncompleteTasks
 
     _last_task_number: TaskNumber
     _tasks_by_number: dict[TaskNumber, Task]
@@ -26,8 +30,8 @@ class Project(AggregateRoot):
     def __init__(
         self,
         user_id: UserID,
-        name: str,
-        maximum_number_of_incomplete_tasks: None | int = None,
+        name: ProjectName,
+        maximum_number_of_incomplete_tasks: None | MaximumNumberOfIncompleteTasks = None,
     ):
         self._user_id = user_id
         self._name = name

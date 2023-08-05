@@ -6,7 +6,7 @@ from starlette.status import HTTP_200_OK
 
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.create_project import CreateProject
-from app.command.projects.entities.project import ProjectID
+from app.command.projects.entities.project import ProjectID, ProjectName
 from app.command.projects.entrypoints import schemas
 from app.command.projects.entrypoints.dependencies import get_archivization_service, get_create_project
 from app.command.shared_kernel.entities.user_id import UserID
@@ -21,7 +21,7 @@ def project_create_endpoint(
 ):
     project_id = create_project(
         user_id=UserID(data.user_id),
-        name=data.name,
+        name=ProjectName(data.name),
     )
 
     return RedirectResponse(

@@ -2,13 +2,12 @@ import pytest
 
 from app.command.projects.entities import ensure
 from app.command.projects.entities.errors import MaxIncompleteTasksNumberIsReachedError
-from app.command.projects.entities.project import Project
-from app.command.shared_kernel.entities.user_id import UserID
+from app.command.projects.entities.project_builder import ProjectBuilder
 
 
 class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:
     def test_passes_if_maximum_number_of_incomplete_tasks_is_none(self):
-        project = Project(user_id=UserID(1), name="Test Project", maximum_number_of_incomplete_tasks=None)
+        project = ProjectBuilder().with_maximum_number_of_incomplete_tasks(None).build()
 
         try:
             ensure.project_has_allowed_number_of_incomplete_tasks(project)
@@ -16,7 +15,7 @@ class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:
             pytest.fail()
 
     def test_passes_if_maximum_number_of_incomplete_tasks_is_not_reached(self):
-        project = Project(user_id=UserID(1), name="Test Project", maximum_number_of_incomplete_tasks=2)
+        project = ProjectBuilder().with_maximum_number_of_incomplete_tasks(2).build()
         project.add_task(name="First")
 
         try:
@@ -25,7 +24,7 @@ class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:
             pytest.fail()
 
     def test_fails_if_maximum_number_of_incomplete_tasks_is_reached(self):
-        project = Project(user_id=UserID(1), name="Test Project", maximum_number_of_incomplete_tasks=2)
+        project = ProjectBuilder().with_maximum_number_of_incomplete_tasks(2).build()
         project.add_task(name="First")
         project.add_task(name="Second")
 

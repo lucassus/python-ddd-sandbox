@@ -5,7 +5,7 @@ from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.password import Password
 from app.command.accounts.entities.user import User
 from app.command.accounts.infrastructure.adapters.user_repository import UserRepository
-from app.command.projects.entities.project import Project
+from app.command.projects.entities.project import Project, ProjectName
 from app.command.projects.infrastructure.adapters.project_repository import ProjectRepository
 
 
@@ -33,14 +33,14 @@ def create_project(session: Session, create_user):
 
     def _create_project(
         user: User | None = None,
-        name: str | None = None,
+        name: ProjectName | None = None,
     ):
         if user is None:
             user = create_user()
 
         project = Project(
             user_id=user.id,
-            name=name or "Test project",
+            name=name or ProjectName("Test project"),
         )
 
         repository.create(project)

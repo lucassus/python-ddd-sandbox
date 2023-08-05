@@ -8,13 +8,12 @@ from app.command.projects.entities.errors import (
     ProjectNotArchivedError,
     TaskNotFoundError,
 )
-from app.command.projects.entities.project import Project
+from app.command.projects.entities.project_builder import ProjectBuilder
 from app.command.projects.entities.task import TaskNumber
-from app.command.shared_kernel.entities.user_id import UserID
 
 
 def test_add_task():
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     assert len(project.tasks) == 0
 
     task = project.add_task(name="First")
@@ -33,7 +32,7 @@ def test_add_task():
 
 
 def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
-    project = Project(user_id=UserID(1), name="Test Project", maximum_number_of_incomplete_tasks=1)
+    project = ProjectBuilder().with_maximum_number_of_incomplete_tasks(1).build()
     project.add_task(name="First")
 
     with pytest.raises(MaxIncompleteTasksNumberIsReachedError):
@@ -41,7 +40,7 @@ def test_add_task_fails_when_allowed_number_of_incomplete_tasks_is_reached():
 
 
 def test_complete_task():
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     task = project.add_task(name="One")
 
     task = project.complete_task(number=task.number, now=datetime(2021, 1, 17))
@@ -51,7 +50,7 @@ def test_complete_task():
 
 
 def test_complete_task_raises_error_when_task_not_found():
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
 
     with pytest.raises(
         TaskNotFoundError,
@@ -61,7 +60,7 @@ def test_complete_task_raises_error_when_task_not_found():
 
 
 def test_incomplete_task():
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     task = project.add_task(name="One")
     project.complete_task(task.number, now=datetime(2021, 1, 17))
 
@@ -71,7 +70,7 @@ def test_incomplete_task():
 
 
 def test_incomplete_task_raises_error_when_task_not_found():
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
 
     with pytest.raises(
         TaskNotFoundError,
@@ -82,7 +81,7 @@ def test_incomplete_task_raises_error_when_task_not_found():
 
 def test_complete_all_tasks():
     # Given
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     project.add_task(name="Foo")
     task = project.add_task(name="Foo")
     project.complete_task(task.number, now=datetime(2020, 12, 31))
@@ -97,7 +96,7 @@ def test_complete_all_tasks():
 
 
 def test_incomplete_tasks_count():
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     assert project.incomplete_tasks_count == 0
 
     project.add_task(name="Foo")
@@ -109,7 +108,7 @@ def test_incomplete_tasks_count():
 
 def test_archive_project_raises_error_when_not_all_tasks_are_completed():
     # Given
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     project.add_task(name="Foo")
 
     # When
@@ -122,7 +121,7 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
 
 def test_archive_project_set_archived_at():
     # Given
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     task = project.add_task(name="Foo")
     project.complete_task(task.number, now=datetime(2020, 12, 31))
 
@@ -138,7 +137,7 @@ def test_archive_project_set_archived_at():
 
 def test_unarchive_project():
     # Given
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     task = project.add_task(name="Foo")
     project.complete_task(task.number, now=datetime(2020, 12, 31))
     project.archive(now=datetime(2021, 1, 12))
@@ -153,7 +152,7 @@ def test_unarchive_project():
 
 def test_delete_project():
     # Given
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
     project.archive(now=datetime(2021, 1, 12))
 
     # When
@@ -165,7 +164,7 @@ def test_delete_project():
 
 def test_delete_project_raises_error_whe_not_archived():
     # Given
-    project = Project(user_id=UserID(1), name="Test Project")
+    project = ProjectBuilder().build()
 
     # When
     with pytest.raises(ProjectNotArchivedError):

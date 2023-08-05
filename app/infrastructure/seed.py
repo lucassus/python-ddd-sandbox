@@ -10,6 +10,7 @@ from app.command.projects.application.archivization_service import Archivization
 from app.command.projects.application.create_example_project import CreateExampleProject
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.tasks_service import TasksService
+from app.command.projects.entities.project import ProjectName
 from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.infrastructure.db import AppSession, engine
@@ -35,7 +36,7 @@ def main(rebuild_db: bool = True):
     create_example_project(user_id)
 
     create_project = CreateProject(uow=projects_uow)
-    project_id = create_project(user_id, "Software Engineering")
+    project_id = create_project(user_id, ProjectName("Software Engineering"))
 
     tasks_service = TasksService(uow=projects_uow)
     task_number = tasks_service.create_task(project_id, name="Learn Python")
@@ -44,7 +45,7 @@ def main(rebuild_db: bool = True):
     tasks_service.create_task(project_id, name="Do the shopping")
     tasks_service.create_task(project_id, name="Clean the house")
 
-    project_id = create_project(user_id, "Clean the house")
+    project_id = create_project(user_id, ProjectName("Clean the house"))
     archivization = ArchivizationService(uow=projects_uow)
     archivization.archive(project_id)
     archivization.delete(project_id)

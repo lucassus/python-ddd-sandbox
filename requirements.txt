@@ -57,6 +57,7 @@ flake8==6.1.0
     #   flake8-datetimez
     #   flake8-debugger
     #   flake8-use-pathlib
+    #   yesqa
 flake8-bandit==4.1.1
     # via -r requirements.in
 flake8-bugbear==23.7.10
@@ -195,6 +196,8 @@ starlette==0.27.0
     # via fastapi
 stevedore==5.1.0
     # via bandit
+tokenize-rt==5.2.0
+    # via yesqa
 toml==0.10.2
     # via tryceratops
 tryceratops==2.3.2
@@ -218,3 +221,5 @@ watchdog==3.0.0
     # via pytest-watch
 wcwidth==0.2.6
     # via prettytable
+yesqa==1.5.0
+    # via -r requirements.in

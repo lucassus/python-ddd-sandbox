@@ -43,7 +43,10 @@ check-flake8:
 check-types:
 	python -m mypy .
 
-format: format-isort format-black
+format-yesqa:
+	yesqa app/**/*.py tests/**/*.py
+
+format: format-yesqa format-isort format-black
 
 lint: check-types check-flake8 check-isort check-black
 

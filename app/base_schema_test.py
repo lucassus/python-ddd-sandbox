@@ -4,7 +4,7 @@ from app.base_schema import camelize
 
 
 @pytest.mark.parametrize(
-    "str,expected",
+    ("str", "expected"),
     [
         ("foo", "foo"),
         ("foo_bar", "fooBar"),

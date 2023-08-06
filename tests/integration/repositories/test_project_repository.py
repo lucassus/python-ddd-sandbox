@@ -8,7 +8,7 @@ from app.command.projects.infrastructure.adapters.project_repository import Proj
 
 
 class TestProjectRepository:
-    @pytest.fixture
+    @pytest.fixture()
     def repository(self, session):
         return ProjectRepository(session=session)
 
@@ -30,7 +30,7 @@ class TestProjectRepository:
     def test_get_raises_error_when_archived(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()
-        project.archive(now=date.today())
+        project.archive(now=date.now().date())
         session.commit()
 
         # Then
@@ -40,7 +40,7 @@ class TestProjectRepository:
     def test_get_archived(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()
-        project.archive(now=date.today())
+        project.archive(now=date.now().date())
         session.commit()
 
         # When
@@ -56,8 +56,8 @@ class TestProjectRepository:
     def test_get_archived_raises_error_when_deleted(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()
-        project.archive(now=date.today())
-        project.delete(now=date.today())
+        project.archive(now=date.now().date())
+        project.delete(now=date.now().date())
         session.commit()
 
         # Then

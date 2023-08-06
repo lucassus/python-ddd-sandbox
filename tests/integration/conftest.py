@@ -9,7 +9,7 @@ from app.command.projects.entities.project import Project, ProjectName
 from app.command.projects.infrastructure.adapters.project_repository import ProjectRepository
 
 
-@pytest.fixture
+@pytest.fixture()
 def create_user(session: Session):
     repository = UserRepository(session=session)
 
@@ -27,7 +27,7 @@ def create_user(session: Session):
     return _create_user
 
 
-@pytest.fixture
+@pytest.fixture()
 def create_project(session: Session, create_user):
     repository = ProjectRepository(session=session)
 

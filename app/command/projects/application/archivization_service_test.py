@@ -9,15 +9,15 @@ from app.command.projects.entities.project_builder import ProjectBuilder
 
 
 class TestArchiveService:
-    @pytest.fixture
+    @pytest.fixture()
     def fake_project_repository(self):
         return FakeProjectRepository()
 
-    @pytest.fixture
+    @pytest.fixture()
     def fake_unit_of_work(self, fake_project_repository):
         return FakeUnitOfWork(repository=fake_project_repository)
 
-    @pytest.fixture
+    @pytest.fixture()
     def service(self, fake_unit_of_work):
         return ArchivizationService(uow=fake_unit_of_work)
 

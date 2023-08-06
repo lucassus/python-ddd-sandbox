@@ -9,7 +9,7 @@ from app.command.accounts.entities.user_builder import UserBuilder
 from app.command.shared_kernel.entities.user_id import UserID
 
 
-@pytest.fixture
+@pytest.fixture()
 def change_user_email_address(uow: FakeUnitOfWork):
     return ChangeUserEmailAddress(uow=uow)
 

@@ -6,7 +6,7 @@ from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project_builder import ProjectBuilder
 
 
-@pytest.fixture
+@pytest.fixture()
 def service(fake_uow):
     return TasksService(uow=fake_uow)
 

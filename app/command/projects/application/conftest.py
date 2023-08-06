@@ -4,11 +4,11 @@ from app.command.projects.application.testing.fake_project_repository import Fak
 from app.command.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 
 
-@pytest.fixture
+@pytest.fixture()
 def repository():
     return FakeProjectRepository()
 
 
-@pytest.fixture
+@pytest.fixture()
 def fake_uow(repository):
     return FakeUnitOfWork(repository)

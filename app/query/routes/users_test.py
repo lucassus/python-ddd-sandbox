@@ -6,7 +6,7 @@ from app.query import schemas
 from app.query.queries.users import FindUserQuery
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_get_user(app, client):
     # Given
     find_user_mock = Mock(
@@ -37,7 +37,7 @@ async def test_get_user(app, client):
     }
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_get_user_404(app, client):
     # Given
     find_user_mock = Mock(return_value=None)

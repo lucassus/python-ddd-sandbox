@@ -18,7 +18,7 @@ class TestPassword:
         assert str(password) == "password"
 
     @pytest.mark.parametrize(
-        "left,right,expected",
+        ("left", "right", "expected"),
         [
             (Password("password"), Password("password"), True),
             (Password("password"), Password("password1"), False),

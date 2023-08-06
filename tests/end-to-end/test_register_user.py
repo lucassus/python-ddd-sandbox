@@ -1,4 +1,5 @@
 from freezegun import freeze_time
+from starlette import status
 from starlette.testclient import TestClient
 
 
@@ -6,7 +7,7 @@ from starlette.testclient import TestClient
 def test_register_user(register_user, client: TestClient):
     response = register_user(email="test@email.com")
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     user_id = response.json()["id"]
     assert response.json() == {
         "id": user_id,
@@ -19,7 +20,7 @@ def test_register_user(register_user, client: TestClient):
     project_id = response.json()["projects"][0]["id"]
     response = client.get(f"/queries/projects/{project_id}/tasks")
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == [
         {
             "number": 1,
@@ -29,3 +30,11 @@ def test_register_user(register_user, client: TestClient):
         {"number": 2, "name": "Watch the tutorial", "completedAt": None},
         {"number": 3, "name": "Start using our awesome app", "completedAt": None},
     ]
+
+
+def test_register_user_fail(register_user, client: TestClient):
+    response = register_user(email="taken@email.com")
+    assert response.status_code == status.HTTP_200_OK
+
+    response = register_user(email="taken@email.com")
+    assert response.status_code == status.HTTP_409_CONFLICT

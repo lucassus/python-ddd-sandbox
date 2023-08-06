@@ -30,8 +30,8 @@ class ProjectRepository(AbstractProjectRepository):
 
         try:
             project = self._session.execute(query).scalar_one()
-        except NoResultFound:
-            raise ProjectNotFoundError(id)
+        except NoResultFound as e:
+            raise ProjectNotFoundError(id) from e
 
         return project
 
@@ -45,7 +45,7 @@ class ProjectRepository(AbstractProjectRepository):
 
         try:
             project = self._session.execute(query).scalar_one()
-        except NoResultFound:
-            raise ProjectNotFoundError(id)
+        except NoResultFound as e:
+            raise ProjectNotFoundError(id) from e
 
         return project

@@ -5,7 +5,7 @@ import pytest
 from app.query.queries.projects import FindProjectQuery
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_project_endpoint_responds_with_404_if_project_cannot_be_found(app, client):
     # Given
     find_project_mock = Mock(return_value=None)

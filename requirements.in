@@ -1,7 +1,8 @@
 aiosqlite==0.19.0
 email-validator==2.0.0.post2
 fastapi==0.101.0
-pydantic[dotenv]==1.10.11
+pydantic[dotenv]==2.1.1
+pydantic-settings==2.0.2
 sqlalchemy[asyncio]==2.0.19
 typer==0.9.0
 uvicorn==0.23.2
@@ -9,7 +10,16 @@ uvicorn==0.23.2
 # Development
 Faker==19.2.0
 adr-tools-python==1.0.3
+autoflake==2.2.0
 black==23.7.0
+flake8-bandit==4.1.1
+flake8-bugbear==23.7.10
+flake8-builtins==2.1.0
+flake8-comprehensions==3.14.0
+flake8-datetimez==20.10.0
+flake8-debugger==4.1.2
+flake8-pytest-style==1.7.2
+flake8-use-pathlib==0.3.0
 flake8==6.1.0
 freezegun==1.2.2
 httpx==0.24.1
@@ -22,4 +32,6 @@ pytest-icdiff==0.6
 pytest-watch==4.2.0
 pytest==7.4.0
 requests==2.31.0
+tryceratops==2.3.2
 types-tabulate==0.9.0.3
+yesqa==1.5.0

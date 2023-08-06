@@ -1,12 +1,11 @@
-from datetime import datetime
-
 import pytest
 
 from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project_builder import ProjectBuilder
+from app.utc_datetime import utc_datetime
 
 
-@pytest.fixture
+@pytest.fixture()
 def service(fake_uow):
     return TasksService(uow=fake_uow)
 
@@ -23,7 +22,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
     project = repository.create(ProjectBuilder().build())
     task = project.add_task(name="Testing...")
 
-    now = datetime(2021, 1, 8)
+    now = utc_datetime(2021, 1, 8)
     service.complete_task(project.id, task.number, now=now)
 
     assert task.completed_at is now
@@ -33,7 +32,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
 def test_incomplete_task(service: TasksService, repository, fake_uow):
     project = repository.create(ProjectBuilder().build())
     task = project.add_task(name="Testing...")
-    project.complete_task(task.number, now=datetime(2021, 1, 8))
+    project.complete_task(task.number, now=utc_datetime(2021, 1, 8))
 
     service.incomplete_task(project.id, task.number)
 

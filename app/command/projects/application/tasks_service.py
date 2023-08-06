@@ -3,6 +3,7 @@ from datetime import datetime
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.entities.task import TaskNumber
+from app.utc_datetime import utc_now
 
 
 class TasksService:
@@ -28,7 +29,7 @@ class TasksService:
         now: None | datetime = None,
     ) -> None:
         if now is None:
-            now = datetime.now()
+            now = utc_now()
 
         with self._uow as uow:
             project = uow.project.get(project_id)

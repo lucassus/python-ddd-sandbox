@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytest
 
 from app.command.projects.entities.errors import (
@@ -11,6 +9,7 @@ from app.command.projects.entities.errors import (
 from app.command.projects.entities.project import ProjectName
 from app.command.projects.entities.project_builder import ProjectBuilder
 from app.command.projects.entities.task import TaskNumber
+from app.utc_datetime import utc_datetime
 
 
 def test_set_name():
@@ -50,10 +49,10 @@ def test_complete_task():
     project = ProjectBuilder().build()
     task = project.add_task(name="One")
 
-    task = project.complete_task(number=task.number, now=datetime(2021, 1, 17))
+    task = project.complete_task(number=task.number, now=utc_datetime(2021, 1, 17))
 
     assert task.completed_at is not None
-    assert task.completed_at == datetime(2021, 1, 17)
+    assert task.completed_at == utc_datetime(2021, 1, 17)
 
 
 def test_complete_task_raises_error_when_task_not_found():
@@ -63,13 +62,13 @@ def test_complete_task_raises_error_when_task_not_found():
         TaskNotFoundError,
         match="Unable to find Task with number=1",
     ):
-        project.complete_task(number=TaskNumber(1), now=datetime(2021, 1, 17))
+        project.complete_task(number=TaskNumber(1), now=utc_datetime(2021, 1, 17))
 
 
 def test_incomplete_task():
     project = ProjectBuilder().build()
     task = project.add_task(name="One")
-    project.complete_task(task.number, now=datetime(2021, 1, 17))
+    project.complete_task(task.number, now=utc_datetime(2021, 1, 17))
 
     task = project.incomplete_task(number=task.number)
 
@@ -91,11 +90,11 @@ def test_complete_all_tasks():
     project = ProjectBuilder().build()
     project.add_task(name="Foo")
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=datetime(2020, 12, 31))
+    project.complete_task(task.number, now=utc_datetime(2020, 12, 31))
     project.add_task(name="Foo")
 
     # When
-    project.complete_all_tasks(now=datetime(2021, 1, 12))
+    project.complete_all_tasks(now=utc_datetime(2021, 1, 12))
 
     # Then
     for task in project.tasks:
@@ -108,7 +107,7 @@ def test_incomplete_tasks_count():
 
     project.add_task(name="Foo")
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=datetime(2020, 12, 31))
+    project.complete_task(task.number, now=utc_datetime(2020, 12, 31))
     project.add_task(name="Foo")
     assert project.incomplete_tasks_count == 2
 
@@ -123,16 +122,16 @@ def test_archive_project_raises_error_when_not_all_tasks_are_completed():
         ProjectIsNotCompletedError,
         match="Project has 1 incomplete tasks",
     ):
-        project.archive(now=datetime(2021, 1, 12))
+        project.archive(now=utc_datetime(2021, 1, 12))
 
 
 def test_archive_project_set_archived_at():
     # Given
     project = ProjectBuilder().build()
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=datetime(2020, 12, 31))
+    project.complete_task(task.number, now=utc_datetime(2020, 12, 31))
 
-    now = datetime(2021, 1, 12)
+    now = utc_datetime(2021, 1, 12)
 
     # When
     project.archive(now=now)
@@ -146,8 +145,8 @@ def test_unarchive_project():
     # Given
     project = ProjectBuilder().build()
     task = project.add_task(name="Foo")
-    project.complete_task(task.number, now=datetime(2020, 12, 31))
-    project.archive(now=datetime(2021, 1, 12))
+    project.complete_task(task.number, now=utc_datetime(2020, 12, 31))
+    project.archive(now=utc_datetime(2021, 1, 12))
 
     # When
     project.unarchive()
@@ -160,13 +159,13 @@ def test_unarchive_project():
 def test_delete_project():
     # Given
     project = ProjectBuilder().build()
-    project.archive(now=datetime(2021, 1, 12))
+    project.archive(now=utc_datetime(2021, 1, 12))
 
     # When
-    project.delete(now=datetime(2022, 1, 12))
+    project.delete(now=utc_datetime(2022, 1, 12))
 
     # Then
-    assert project.deleted_at == datetime(2022, 1, 12)
+    assert project.deleted_at == utc_datetime(2022, 1, 12)
 
 
 def test_delete_project_raises_error_whe_not_archived():
@@ -175,4 +174,4 @@ def test_delete_project_raises_error_whe_not_archived():
 
     # When
     with pytest.raises(ProjectNotArchivedError):
-        project.delete(now=datetime(2022, 1, 12))
+        project.delete(now=utc_datetime(2022, 1, 12))

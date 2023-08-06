@@ -6,11 +6,11 @@ def utc_now():
 
 
 def utc_datetime(
-    year: int,
-    month: None | int = None,
-    day: None | int = None,
-    hour: int = 0,
-    minute: int = 0,
-    second: int = 0,
+    year,
+    month=None,
+    day=None,
+    hour=0,
+    minute=0,
+    second=0,
 ):
     return datetime(year, month, day, hour, minute, second, tzinfo=timezone.utc)

@@ -1,20 +1,20 @@
 from unittest.mock import Mock
 
-from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException
 from app.command.accounts.entities.password import Password
+from app.command.accounts.entrypoints.containers import Container
 
 
-def test_register_user_endpoint(app: FastAPI, client: TestClient):
+def test_register_user_endpoint(container: Container, client: TestClient):
     # Given
     register_user_mock = Mock(return_value=123)
 
     # When
-    with app.container.register_user.override(register_user_mock):
+    with container.register_user.override(register_user_mock):
         response = client.post(
             "/users",
             json={"email": "test@email.com", "password": "password"},
@@ -30,12 +30,12 @@ def test_register_user_endpoint(app: FastAPI, client: TestClient):
     assert response.headers["location"] == "/queries/users/123"
 
 
-def test_register_user_endpoint_errors_handling(app: FastAPI, client: TestClient):
+def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):
     # Given
     register_user_mock = Mock(side_effect=EmailAlreadyExistsException(EmailAddress("taken@email.com")))
 
     # When
-    with app.container.register_user.override(register_user_mock):
+    with container.register_user.override(register_user_mock):
         response = client.post(
             "/users",
             json={"email": "taken@email.com", "password": "password"},

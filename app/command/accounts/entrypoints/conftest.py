@@ -7,17 +7,15 @@ from app.command.accounts.entrypoints.containers import Container
 
 
 @pytest.fixture()
-def app():
+def container():
     container = Container()
     container.wire(modules=[endpoints])
-
-    app = FastAPI()
-    app.container = container
-    app.include_router(endpoints.router)
-
-    return app
+    return container
 
 
 @pytest.fixture()
-def client(app):
+def client(container):
+    app = FastAPI()
+    app.include_router(endpoints.router)
+
     return TestClient(app)

@@ -1,5 +1,4 @@
-from typing import Annotated
-
+from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
@@ -9,20 +8,17 @@ from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.update_project import UpdateProject
 from app.command.projects.entities.project import ProjectID, ProjectName
 from app.command.projects.entrypoints import schemas
-from app.command.projects.entrypoints.dependencies import (
-    get_archivization_service,
-    get_create_project,
-    get_update_project,
-)
+from app.command.projects.entrypoints.containers import Container
 from app.command.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
 
 
 @router.post("")
+@inject
 def project_create_endpoint(
     data: schemas.CreateProject,
-    create_project: Annotated[CreateProject, Depends(get_create_project)],
+    create_project: CreateProject = Depends(Provide[Container.create_project]),
 ):
     project_id = create_project(
         user_id=UserID(data.user_id),
@@ -36,10 +32,11 @@ def project_create_endpoint(
 
 
 @router.put("/{project_id}")
+@inject
 def update_project_endpoint(
     project_id: int,
     data: schemas.UpdateProject,
-    update_project: Annotated[UpdateProject, Depends(get_update_project)],
+    update_project: UpdateProject = Depends(Provide[Container.update_project]),
 ):
     update_project(ProjectID(project_id), ProjectName(data.name))
 
@@ -50,27 +47,28 @@ def update_project_endpoint(
 
 
 @router.put("/{project_id}/archive")
+@inject
 def archive_project_endpoint(
     project_id: int,
-    archivization_service: Annotated[ArchivizationService, Depends(get_archivization_service)],
+    archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service]),
 ):
     archivization_service.archive(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)
 
 
 @router.put("/{project_id}/unarchive")
+@inject
 def unarchive_project_endpoint(
-    project_id: int,
-    archivization_service: Annotated[ArchivizationService, Depends(get_archivization_service)],
+    project_id: int, archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service])
 ):
     archivization_service.unarchive(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)
 
 
 @router.delete("/{project_id}")
+@inject
 def delete_project_endpoint(
-    project_id: int,
-    archivization_service: Annotated[ArchivizationService, Depends(get_archivization_service)],
+    project_id: int, archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service])
 ):
     archivization_service.delete(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)

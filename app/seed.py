@@ -13,8 +13,25 @@ from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project import ProjectName
 from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
+from app.command.shared_kernel.message_bus import BaseEvent, MessageBus
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
+
+
+class NoopMessageBus(MessageBus):
+    def dispatch(self, event: BaseEvent) -> None:
+        pass
+
+
+register_user = RegisterUser(
+    uow=AccountsUnitOfWork(session_factory=AppSession),
+    bus=NoopMessageBus(),
+)
+projects_uow = ProjectsUnitOfWork(session_factory=AppSession)
+create_example_project = CreateExampleProject(uow=projects_uow)
+create_project = CreateProject(uow=projects_uow)
+archivization = ArchivizationService(uow=projects_uow)
+tasks_service = TasksService(uow=projects_uow)
 
 
 def main(rebuild_db: bool = True):
@@ -25,20 +42,14 @@ def main(rebuild_db: bool = True):
     start_account_mappers(mapper_registry)
     start_project_mappers(mapper_registry)
 
-    register_user = RegisterUser(uow=AccountsUnitOfWork(session_factory=AppSession))
     user_id = register_user(
         email=EmailAddress("test@email.com"),
         password=Password("password"),
     )
 
-    projects_uow = ProjectsUnitOfWork(session_factory=AppSession)
-    create_example_project = CreateExampleProject(uow=projects_uow)
     create_example_project(user_id)
 
-    create_project = CreateProject(uow=projects_uow)
     project_id = create_project(user_id, ProjectName("Software Engineering"))
-
-    tasks_service = TasksService(uow=projects_uow)
     task_number = tasks_service.create_task(project_id, name="Learn Python")
     tasks_service.complete_task(project_id, task_number)
     tasks_service.create_task(project_id, name="Learn Domain Driven Design")
@@ -46,7 +57,6 @@ def main(rebuild_db: bool = True):
     tasks_service.create_task(project_id, name="Clean the house")
 
     project_id = create_project(user_id, ProjectName("Clean the house"))
-    archivization = ArchivizationService(uow=projects_uow)
     archivization.archive(project_id)
     archivization.delete(project_id)
 

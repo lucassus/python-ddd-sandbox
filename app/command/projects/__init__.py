@@ -3,8 +3,12 @@ from sqlalchemy.orm import registry
 
 
 def register_module(app: FastAPI, mappers: registry) -> None:
-    from app.command.projects.entrypoints.routes import router
+    from app.command.projects.entrypoints import endpoints
+    from app.command.projects.entrypoints.containers import Container
     from app.command.projects.infrastructure.mappers import start_mappers
 
+    container = Container()
+    container.wire()
+
     start_mappers(mappers)
-    app.include_router(router)
+    app.include_router(endpoints.router)

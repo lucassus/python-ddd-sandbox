@@ -1,5 +1,4 @@
-from typing import Annotated
-
+from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
@@ -9,16 +8,17 @@ from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException
 from app.command.accounts.entities.password import Password
 from app.command.accounts.entrypoints import schemas
-from app.command.accounts.entrypoints.dependencies import get_change_user_email_address, get_register_user
+from app.command.accounts.entrypoints.containers import Container
 from app.command.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("")
+@inject
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    register_user: Annotated[RegisterUser, Depends(get_register_user)],
+    register_user: RegisterUser = Depends(Provide[Container.register_user]),
 ):
     try:
         user_id = register_user(
@@ -35,10 +35,11 @@ def user_register_endpoint(
 
 
 @router.put("/{user_id}")
+@inject
 def user_update_endpoint(
     user_id: int,
     data: schemas.UpdateUser,
-    change_user_email_address: Annotated[ChangeUserEmailAddress, Depends(get_change_user_email_address)],
+    change_user_email_address: ChangeUserEmailAddress = Depends(Provide[Container.change_user_email_address]),
 ):
     change_user_email_address(
         user_id=UserID(user_id),

@@ -15,7 +15,8 @@ def container():
             ".endpoints.projects",
         ]
     )
-    return container
+    yield container
+    container.unwire()
 
 
 @pytest.fixture()

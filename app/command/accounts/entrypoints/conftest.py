@@ -10,7 +10,8 @@ from app.command.accounts.entrypoints.containers import Container
 def container():
     container = Container()
     container.wire(modules=[endpoints])
-    return container
+    yield container
+    container.unwire()
 
 
 @pytest.fixture()

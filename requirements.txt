@@ -16,6 +16,8 @@ argparse==1.4.0
     # via adr-tools-python
 attrs==23.1.0
     # via flake8-bugbear
+autoflake==2.2.0
+    # via -r requirements.in
 bandit==1.7.5
     # via flake8-bandit
 black==23.7.0
@@ -145,7 +147,9 @@ pydantic[dotenv]==1.10.11
     #   -r requirements.in
     #   fastapi
 pyflakes==3.1.0
-    # via flake8
+    # via
+    #   autoflake
+    #   flake8
 pygments==2.15.1
     # via rich
 pytest==7.4.0

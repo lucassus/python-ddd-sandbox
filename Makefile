@@ -43,10 +43,16 @@ check-flake8:
 check-types:
 	python -m mypy .
 
+format-autoflake:
+	autoflake --in-place --recursive \
+		--remove-all-unused-imports \
+		--remove-unused-variables \
+		app tests
+
 format-yesqa:
 	yesqa app/**/*.py tests/**/*.py
 
-format: format-yesqa format-isort format-black
+format: format-yesqa format-autoflake format-isort format-black
 
 lint: check-types check-flake8 check-isort check-black
 

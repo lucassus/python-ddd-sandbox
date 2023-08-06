@@ -26,7 +26,7 @@ def user_register_endpoint(
             password=Password(data.password),
         )
     except EmailAlreadyExistsException as e:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e)) from e
 
     return RedirectResponse(
         f"/queries/users/{user_id}",

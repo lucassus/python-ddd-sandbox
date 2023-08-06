@@ -20,9 +20,10 @@ class EmailAddress(ValueObject):
     def is_valid(email: str) -> bool:
         try:
             validate_email(email, check_deliverability=False)
-            return True
         except EmailNotValidError:
             return False
+        else:
+            return True
 
     @property
     def address(self) -> str:

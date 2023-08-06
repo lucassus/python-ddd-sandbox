@@ -13,8 +13,14 @@ from app.command.projects.application.tasks_service import TasksService
 from app.command.projects.entities.project import ProjectName
 from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
+from app.command.shared_kernel.message_bus import BaseEvent, MessageBus
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
+
+
+class NoopMessageBus(MessageBus):
+    def dispatch(self, event: BaseEvent) -> None:
+        pass
 
 
 def main(rebuild_db: bool = True):
@@ -25,7 +31,10 @@ def main(rebuild_db: bool = True):
     start_account_mappers(mapper_registry)
     start_project_mappers(mapper_registry)
 
-    register_user = RegisterUser(uow=AccountsUnitOfWork(session_factory=AppSession))
+    register_user = RegisterUser(
+        uow=AccountsUnitOfWork(session_factory=AppSession),
+        bus=NoopMessageBus(),
+    )
     user_id = register_user(
         email=EmailAddress("test@email.com"),
         password=Password("password"),

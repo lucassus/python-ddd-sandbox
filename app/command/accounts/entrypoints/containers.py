@@ -8,6 +8,11 @@ from app.infrastructure.db import AppSession
 
 
 class Container(containers.DeclarativeContainer):
+    wiring_config = containers.WiringConfiguration(
+        modules=[".endpoints"],
+        auto_wire=False,
+    )
+
     bus = providers.Dependency(instance_of=MessageBus)
     uow = providers.Factory(UnitOfWork, session_factory=lambda: AppSession())
 

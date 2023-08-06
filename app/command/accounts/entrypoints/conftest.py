@@ -9,7 +9,7 @@ from app.command.accounts.entrypoints.containers import Container
 @pytest.fixture()
 def container():
     container = Container()
-    container.wire(modules=[endpoints])
+    container.wire()
     yield container
     container.unwire()
 

@@ -9,12 +9,7 @@ from app.command.projects.entrypoints.containers import Container
 @pytest.fixture()
 def container():
     container = Container()
-    container.wire(
-        modules=[
-            ".endpoints.project_tasks",
-            ".endpoints.projects",
-        ]
-    )
+    container.wire()
     yield container
     container.unwire()
 

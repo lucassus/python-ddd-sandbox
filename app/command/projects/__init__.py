@@ -8,12 +8,7 @@ def register_module(app: FastAPI, mappers: registry) -> None:
     from app.command.projects.infrastructure.mappers import start_mappers
 
     container = Container()
-    container.wire(
-        modules=[
-            ".entrypoints.endpoints.project_tasks",
-            ".entrypoints.endpoints.projects",
-        ]
-    )
+    container.wire()
 
     start_mappers(mappers)
     app.include_router(endpoints.router)

@@ -9,6 +9,14 @@ from app.infrastructure.db import AppSession
 
 
 class Container(containers.DeclarativeContainer):
+    wiring_config = containers.WiringConfiguration(
+        modules=[
+            ".endpoints.project_tasks",
+            ".endpoints.projects",
+        ],
+        auto_wire=False,
+    )
+
     uow = providers.Factory(UnitOfWork, session_factory=lambda: AppSession())
 
     create_project = providers.Factory(CreateProject, uow=uow)

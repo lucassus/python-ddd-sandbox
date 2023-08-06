@@ -11,7 +11,7 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> None:
     from app.command.accounts.infrastructure.mappers import start_mappers
 
     container = Container(bus=providers.Object(bus))
-    container.wire(modules=[endpoints])
+    container.wire()
 
     start_mappers(mappers)
     app.include_router(endpoints.router)

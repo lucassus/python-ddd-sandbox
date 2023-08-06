@@ -1,7 +1,5 @@
-from typing import Annotated
-
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress

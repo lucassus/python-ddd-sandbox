@@ -33,14 +33,14 @@ def test_register_user_endpoint(app: FastAPI, client: TestClient):
 def test_register_user_endpoint_errors_handling(app: FastAPI, client: TestClient):
     # Given
     register_user_mock = Mock(side_effect=EmailAlreadyExistsException(EmailAddress("taken@email.com")))
-    app.dependency_overrides[get_register_user] = lambda: register_user_mock
 
     # When
-    response = client.post(
-        "/users",
-        json={"email": "taken@email.com", "password": "password"},
-        follow_redirects=False,
-    )
+    with app.container.register_user.override(register_user_mock):
+        response = client.post(
+            "/users",
+            json={"email": "taken@email.com", "password": "password"},
+            follow_redirects=False,
+        )
 
     # Then
     assert response.status_code == status.HTTP_409_CONFLICT

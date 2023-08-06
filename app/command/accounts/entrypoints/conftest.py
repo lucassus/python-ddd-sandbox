@@ -6,7 +6,7 @@ from app.command.accounts.entrypoints import endpoints
 from app.command.accounts.entrypoints.containers import Container
 
 
-@pytest.fixture
+@pytest.fixture()
 def app():
     container = Container()
     container.wire(modules=[endpoints])
@@ -18,6 +18,6 @@ def app():
     return app
 
 
-@pytest.fixture
+@pytest.fixture()
 def client(app):
     return TestClient(app)

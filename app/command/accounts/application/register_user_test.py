@@ -12,7 +12,7 @@ from app.command.accounts.entities.user import User
 from app.command.accounts.entities.user_builder import UserBuilder
 
 
-@pytest.fixture
+@pytest.fixture()
 def register_user(uow: FakeUnitOfWork, message_bus):
     return RegisterUser(uow=uow, bus=message_bus)
 

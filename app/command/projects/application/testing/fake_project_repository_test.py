@@ -1,11 +1,10 @@
-from datetime import datetime
-
 import pytest
 
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.command.projects.entities.errors import ProjectNotFoundError
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.entities.project_builder import ProjectBuilder
+from app.utc_datetime import utc_now
 
 
 def test_fake_project_repository():
@@ -26,7 +25,7 @@ def test_fake_project_repository():
         repository.get(ProjectID(3))
 
     archived_project = ProjectBuilder().with_name("Archived").build()
-    archived_project.archive(now=datetime.now())
+    archived_project.archive(now=utc_now())
 
     repository.create(archived_project)
     assert repository.get_archived(archived_project.id) is not None

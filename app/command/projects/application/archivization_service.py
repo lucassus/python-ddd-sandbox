@@ -2,6 +2,7 @@ from datetime import datetime
 
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.command.projects.entities.project import ProjectID
+from app.utc_datetime import utc_now
 
 
 class ArchivizationService:
@@ -10,7 +11,7 @@ class ArchivizationService:
 
     def archive(self, project_id: ProjectID, now: None | datetime = None) -> None:
         if now is None:
-            now = datetime.now()
+            now = utc_now()
 
         with self._uow as ouw:
             project = ouw.project.get(project_id)
@@ -27,7 +28,7 @@ class ArchivizationService:
 
     def delete(self, project_id: ProjectID, now: None | datetime = None) -> None:
         if now is None:
-            now = datetime.now()
+            now = utc_now()
 
         with self._uow as ouw:
             project = ouw.project.get_archived(project_id)

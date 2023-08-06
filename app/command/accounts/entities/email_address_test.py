@@ -13,7 +13,7 @@ class TestEmailAddress:
         assert email.address == "test@email.com"
 
     @pytest.mark.parametrize(
-        "email,expected",
+        ("email", "expected"),
         [
             ("invalid", False),
             ("invalid@", False),
@@ -28,7 +28,7 @@ class TestEmailAddress:
         assert EmailAddress.is_valid(email) == expected
 
     @pytest.mark.parametrize(
-        "left,right,expected",
+        ("left", "right", "expected"),
         [
             (EmailAddress("first@email.com"), EmailAddress("first@email.com"), True),
             (EmailAddress("first@email.com"), EmailAddress("second@email.com"), False),

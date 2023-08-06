@@ -6,7 +6,7 @@ from app.query.dependencies import get_project
 from app.query.queries.tasks import FindTaskQuery
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_task_endpoint_returns_404(app, client):
     # Given
     find_project_mock = Mock(return_value=Mock(id=1))

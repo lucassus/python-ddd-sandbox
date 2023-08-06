@@ -5,7 +5,7 @@ from starlette.testclient import TestClient
 from app.command.projects.entrypoints.endpoints import router
 
 
-@pytest.fixture
+@pytest.fixture()
 def app():
     app = FastAPI()
     app.include_router(router)
@@ -13,6 +13,6 @@ def app():
     return app
 
 
-@pytest.fixture
+@pytest.fixture()
 def client(app):
     return TestClient(app)

@@ -1,14 +1,13 @@
-from datetime import date
-
 import pytest
 
 from app.command.projects.entities.errors import ProjectNotFoundError
 from app.command.projects.entities.project import ProjectID
 from app.command.projects.infrastructure.adapters.project_repository import ProjectRepository
+from app.utc_datetime import utc_now
 
 
 class TestProjectRepository:
-    @pytest.fixture
+    @pytest.fixture()
     def repository(self, session):
         return ProjectRepository(session=session)
 
@@ -30,7 +29,7 @@ class TestProjectRepository:
     def test_get_raises_error_when_archived(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()
-        project.archive(now=date.today())
+        project.archive(now=utc_now())
         session.commit()
 
         # Then
@@ -40,7 +39,7 @@ class TestProjectRepository:
     def test_get_archived(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()
-        project.archive(now=date.today())
+        project.archive(now=utc_now())
         session.commit()
 
         # When
@@ -56,8 +55,8 @@ class TestProjectRepository:
     def test_get_archived_raises_error_when_deleted(self, session, create_project, repository: ProjectRepository):
         # Given
         project = create_project()
-        project.archive(now=date.today())
-        project.delete(now=date.today())
+        project.archive(now=utc_now())
+        project.delete(now=utc_now())
         session.commit()
 
         # Then

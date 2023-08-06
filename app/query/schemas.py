@@ -12,7 +12,7 @@ class Project(BaseSchema):
 class Task(BaseSchema):
     number: int
     name: str
-    completed_at: Optional[datetime]
+    completed_at: Optional[datetime] = None
 
 
 class User(BaseSchema):

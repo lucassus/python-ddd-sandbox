@@ -16,7 +16,7 @@ class SomeOtherEvent(BaseEvent):
     id: int
 
 
-@pytest.fixture
+@pytest.fixture()
 def bus() -> MessageBus:
     return MessageBus()
 

@@ -1,8 +1,8 @@
 import os
 from enum import StrEnum
 
-from pydantic import BaseSettings
 from pydantic.fields import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Environment(StrEnum):
@@ -15,12 +15,13 @@ _environment = os.getenv("APP_ENV", Environment.DEVELOPMENT)
 
 
 class Settings(BaseSettings):
-    environment: Environment = Field(..., env="APP_ENV")
-    database_url: str = Field(..., env="APP_DATABASE_URL")
+    model_config = SettingsConfigDict(
+        env_file=f".env.{_environment}",
+        env_file_encoding="utf-8",
+    )
 
-    class Config:
-        env_file = f".env.{_environment}"
-        env_file_encoding = "utf-8"
+    environment: Environment = Field(..., validation_alias="APP_ENV")
+    database_url: str = Field(..., validation_alias="APP_DATABASE_URL")
 
 
 settings = Settings()

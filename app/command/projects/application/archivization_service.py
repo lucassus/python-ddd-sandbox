@@ -1,8 +1,8 @@
 from datetime import datetime
 
+from app.command.projects.application.fetchers import ActiveProjectFetcher, ArchivedProjectFetcher
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.projects.application.specifications import ActiveProjectSpecification, ArchivedProjectSpecification
-from app.command.projects.entities.project import Project, ProjectID
+from app.command.projects.entities.project import ProjectID
 from app.utc_datetime import utc_now
 
 
@@ -10,14 +10,8 @@ class ArchivizationService:
     def __init__(self, uow: AbstractUnitOfWork):
         self._uow = uow
 
-        self._active = ActiveProjectSpecification()
-        self._archived = ArchivedProjectSpecification()
-
-    def _get_active_project(self, project_id: ProjectID) -> Project:
-        return self._active.satisfied_from(self._uow.project, by=project_id)
-
-    def _get_archived_project(self, project_id: ProjectID) -> Project:
-        return self._archived.satisfied_from(self._uow.project, by=project_id)
+        self._get_active_project = ActiveProjectFetcher(uow)
+        self._get_archived_project = ArchivedProjectFetcher(uow)
 
     def archive(self, project_id: ProjectID, now: None | datetime = None) -> None:
         if now is None:

@@ -1,5 +1,5 @@
-from app.command.projects.application.specifications import ActiveProjectSpecification
 from app.command.projects.entities.project_builder import ProjectBuilder
+from app.command.projects.entities.specifications import ActiveProjectSpecification
 from app.utc_datetime import utc_now
 
 

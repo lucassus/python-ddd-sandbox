@@ -1,15 +1,12 @@
+from app.command.projects.application.fetchers import ActiveProjectFetcher
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.projects.application.specifications import ActiveProjectSpecification
-from app.command.projects.entities.project import Project, ProjectID, ProjectName
+from app.command.projects.entities.project import ProjectID, ProjectName
 
 
 class UpdateProject:
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
-        self._active = ActiveProjectSpecification()
-
-    def _get_active_project(self, project_id: ProjectID) -> Project:
-        return self._active.satisfied_from(self._uow.project, by=project_id)
+        self._get_active_project = ActiveProjectFetcher(uow)
 
     def __call__(self, project_id: ProjectID, name: ProjectName):
         with self._uow as uow:

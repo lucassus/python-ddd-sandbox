@@ -3,6 +3,7 @@ from typing import NewType
 
 from app.command.projects.entities import ensure
 from app.command.projects.entities.errors import TaskNotFoundError
+from app.command.projects.entities.specifications import ArchivedProjectSpecification
 from app.command.projects.entities.task import Task, TaskNumber
 from app.command.shared_kernel.entities.aggregate_root import AggregateRoot
 from app.command.shared_kernel.entities.user_id import UserID
@@ -122,8 +123,15 @@ class Project(AggregateRoot):
         self._archived_at = now
 
     def unarchive(self) -> None:
+        # TODO: Where should I place business rules?
+        #  Aggregate root? - It potentially can lean to large class.
+        #  or Application layer?
         self._archived_at = None
 
     def delete(self, now: datetime) -> None:
-        ensure.project_is_archived(self)
+        spec = ArchivedProjectSpecification()
+
+        if not spec.is_satisfied_by(self):
+            raise Exception("Project is not archived")
+
         self._deleted_at = now

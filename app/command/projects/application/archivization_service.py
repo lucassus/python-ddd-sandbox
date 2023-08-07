@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.projects.entities.project import ProjectID, Project
-from app.command.projects.entities.specifications import ActiveProjectSpecification, ArchivedProjectSpecification
+from app.command.projects.application.specifications import ActiveProjectSpecification, ArchivedProjectSpecification
+from app.command.projects.entities.project import Project, ProjectID
 from app.utc_datetime import utc_now
 
 

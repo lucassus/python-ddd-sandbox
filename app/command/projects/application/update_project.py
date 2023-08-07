@@ -1,6 +1,6 @@
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.command.projects.application.specifications import ActiveProjectSpecification
 from app.command.projects.entities.project import Project, ProjectID, ProjectName
-from app.command.projects.entities.specifications import ActiveProjectSpecification
 
 
 class UpdateProject:

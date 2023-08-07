@@ -132,6 +132,6 @@ class Project(AggregateRoot):
         spec = ArchivedProjectSpecification()
 
         if not spec.is_satisfied_by(self):
-            raise Exception("Project is not archived")
+            raise Exception("Project is not archived")  # noqa: TRY003
 
         self._deleted_at = now

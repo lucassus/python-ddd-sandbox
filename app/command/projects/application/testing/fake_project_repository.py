@@ -26,7 +26,7 @@ class FakeProjectRepository(AbstractProjectRepository):
 
         return project
 
-    def get(self, id: ProjectID) -> Project:
+    def get_active(self, id: ProjectID) -> Project:
         project = self._projects_by_id.get(id)
 
         if project is None or project.archived:

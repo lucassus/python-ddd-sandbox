@@ -23,9 +23,12 @@ class ProjectRepository(AbstractProjectRepository):
             projects_table.c.id == id,
         )
 
-    def get(self, id: ProjectID) -> Project:
+    def get_active(self, id: ProjectID) -> Project:
         query = self._project_query(id).where(
-            projects_table.c.archived_at.is_(None),
+            and_(
+                projects_table.c.archived_at.is_(None),
+                projects_table.c.deleted_at.is_(None),
+            ),
         )
 
         try:

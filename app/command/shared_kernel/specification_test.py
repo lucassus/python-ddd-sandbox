@@ -1,4 +1,4 @@
-from py_katas.specification.specification import AlwaysFalse, AlwaysTrue, Specification
+from app.command.shared_kernel.specification import AlwaysFalse, AlwaysTrue, Specification
 
 
 class GreaterThan(Specification[int]):
@@ -46,12 +46,12 @@ def test_or_specification():
 
 
 def test_always_true_specification():
-    spec = AlwaysTrue[int]()
+    spec = AlwaysTrue()
 
     assert spec.is_satisfied_by(2) is True
 
 
 def test_always_false_specification():
-    spec = AlwaysFalse[int]()
+    spec = AlwaysFalse()
 
     assert spec.is_satisfied_by(2) is False

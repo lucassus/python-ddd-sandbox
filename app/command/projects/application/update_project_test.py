@@ -11,6 +11,6 @@ class TestUpdateProject:
         update_project = UpdateProject(uow=fake_uow)
         update_project(project_id=project.id, name=ProjectName("New name"))
 
-        updated = repository.get(project.id)
+        updated = repository.get_active(project.id)
         assert updated.name == ProjectName("New name")
         assert fake_uow.committed

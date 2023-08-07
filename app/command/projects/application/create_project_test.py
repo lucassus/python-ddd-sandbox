@@ -10,7 +10,7 @@ def test_create_project_use_case(fake_uow, repository: AbstractProjectRepository
 
     assert fake_uow.committed
 
-    project = repository.get(project_id)
+    project = repository.get_active(project_id)
     assert project.name == "Project X"
     assert project.user_id == UserID(1)
     assert len(project.tasks) == 0

@@ -9,7 +9,7 @@ class AbstractProjectRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get(self, id: ProjectID) -> Project:
+    def get_active(self, id: ProjectID) -> Project:
         raise NotImplementedError
 
     @abc.abstractmethod

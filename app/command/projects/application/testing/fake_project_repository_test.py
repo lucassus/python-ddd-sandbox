@@ -13,7 +13,7 @@ def test_fake_project_repository():
     repository.create(ProjectBuilder().with_name("First").build())
     repository.create(ProjectBuilder().with_name("Second").build())
 
-    project = repository.get(ProjectID(1))
+    project = repository.get_active(ProjectID(1))
     assert project is not None
     assert project.id == 1
     assert project.name == "First"
@@ -22,7 +22,7 @@ def test_fake_project_repository():
         ProjectNotFoundError,
         match="Unable to find Project with id=3",
     ):
-        repository.get(ProjectID(3))
+        repository.get_active(ProjectID(3))
 
     archived_project = ProjectBuilder().with_name("Archived").build()
     archived_project.archive(now=utc_now())

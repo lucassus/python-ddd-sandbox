@@ -17,14 +17,14 @@ class TestProjectRepository:
         session.commit()
 
         # When
-        loaded = repository.get(project.id)
+        loaded = repository.get_active(project.id)
 
         # Then
         assert loaded.name == "Test project"
 
     def test_get_raises_error_when_not_found(self, session, repository: ProjectRepository):
         with pytest.raises(ProjectNotFoundError):
-            repository.get(ProjectID(1))
+            repository.get_active(ProjectID(1))
 
     def test_get_raises_error_when_archived(self, session, create_project, repository: ProjectRepository):
         # Given
@@ -34,7 +34,7 @@ class TestProjectRepository:
 
         # Then
         with pytest.raises(ProjectNotFoundError):
-            repository.get(project.id)
+            repository.get_active(project.id)
 
     def test_get_archived(self, session, create_project, repository: ProjectRepository):
         # Given

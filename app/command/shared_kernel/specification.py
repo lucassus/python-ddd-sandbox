@@ -1,6 +1,6 @@
 import abc
 from abc import ABCMeta
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 T = TypeVar("T")
 
@@ -49,11 +49,11 @@ class NotSpecification(UnarySpecification[T]):
         return not self._spec.is_satisfied_by(candidate)
 
 
-class AlwaysTrue(Specification[T]):
-    def is_satisfied_by(self, candidate: T) -> bool:
+class AlwaysTrue(Specification[Any]):
+    def is_satisfied_by(self, candidate: Any) -> bool:
         return True
 
 
-class AlwaysFalse(Specification[T]):
-    def is_satisfied_by(self, candidate: T) -> bool:
+class AlwaysFalse(Specification[Any]):
+    def is_satisfied_by(self, candidate: Any) -> bool:
         return False

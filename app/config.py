@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 
     environment: Environment = Field(..., validation_alias="APP_ENV")
     database_url: str = Field(..., validation_alias="APP_DATABASE_URL")
+    secret_auth_key: str = Field(..., validation_alias="APP_SECRET_AUTH_KEY")
 
 
 settings = Settings()

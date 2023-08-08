@@ -12,12 +12,12 @@ class AuthenticationError(Exception):
     pass
 
 
-class Authenticate:
+class Authentication:
     def __init__(self, uow: AbstractUnitOfWork, secret_auth_key: str):
         self._uow = uow
         self._secret_auth_key = secret_auth_key
 
-    def __call__(
+    def login(
         self,
         email: EmailAddress,
         password: Password,

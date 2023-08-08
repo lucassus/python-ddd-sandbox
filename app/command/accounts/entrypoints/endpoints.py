@@ -2,7 +2,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
-from app.command.accounts.application.authenticate import Authenticate, AuthenticationError
+from app.command.accounts.application.authentication import Authentication, AuthenticationError
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.command.accounts.application.register_user import RegisterUser
 from app.command.accounts.entities.email_address import EmailAddress
@@ -39,10 +39,10 @@ def user_register_endpoint(
 @inject
 def user_login_endpoint(
     data: schemas.LoginUser,
-    authenticate: Authenticate = Depends(Provide[Container.authenticate]),
+    authentication: Authentication = Depends(Provide[Container.authenticate]),
 ):
     try:
-        token = authenticate(
+        token = authentication.login(
             email=EmailAddress(data.email),
             password=Password(data.password),
         )

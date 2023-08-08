@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.command.accounts.application.authenticate import AuthenticationError
+from app.command.accounts.application.authentication import Authentication, AuthenticationError
 from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.command.accounts.application.testing.fake_user_repository import FakeUserRepository
 from app.command.accounts.entities.email_address import EmailAddress
@@ -55,7 +55,8 @@ def test_login_endpoint(container: Container, client: TestClient):
 
 def test_login_endpoint_with_invalid_credentials(container: Container, client: TestClient):
     # Given
-    authenticate_mock = Mock(side_effect=AuthenticationError())
+    authenticate_mock = Mock(spec=Authentication)
+    authenticate_mock.login.side_effect = AuthenticationError()
 
     # When
     with container.authenticate.override(authenticate_mock):

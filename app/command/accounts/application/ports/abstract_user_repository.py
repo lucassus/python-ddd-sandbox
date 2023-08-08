@@ -17,3 +17,7 @@ class AbstractUserRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get(self, user_id: UserID) -> User | None:
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_by_email(self, email: EmailAddress) -> User | None:
+        raise NotImplementedError

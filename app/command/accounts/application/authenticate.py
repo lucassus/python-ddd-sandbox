@@ -29,18 +29,18 @@ class Authenticate:
         with self._uow as uow:
             user = uow.user.get_by_email(email)
 
-            if user is None:
-                raise AuthenticationError()
+        if user is None:
+            raise AuthenticationError()
 
-            if user.password != password:
-                raise AuthenticationError()
+        if user.password != password:
+            raise AuthenticationError()
 
-            return jwt.encode(
-                payload={
-                    "sub": str(user.id),
-                    "exp": now + timedelta(days=90),
-                    "iat": now,
-                },
-                key=self._secret_auth_key,
-                algorithm="HS256",
-            )
+        return jwt.encode(
+            payload={
+                "sub": str(user.id),
+                "exp": now + timedelta(days=90),
+                "iat": now,
+            },
+            key=self._secret_auth_key,
+            algorithm="HS256",
+        )

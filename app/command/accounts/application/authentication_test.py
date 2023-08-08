@@ -13,7 +13,7 @@ class TestAuthenticate:
     def authentication(self, uow: FakeUnitOfWork):
         return Authentication(uow=uow, secret_auth_key="test-secret")
 
-    def test_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
+    def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
         user = UserBuilder().with_email("test@email.com").with_password("secret-password").build()
         repository.create(user)
@@ -23,3 +23,15 @@ class TestAuthenticate:
 
         # Then
         assert isinstance(token, str)
+
+    def test_trade_token_for_user(self, repository: AbstractUserRepository, authentication: Authentication):
+        # Given
+        user = UserBuilder().build()
+        repository.create(user)
+        token = authentication.login(user.email, user.password)
+
+        # When
+        user_from_token = authentication.trade_token_for_user(token)
+
+        # Then
+        assert user_from_token == user

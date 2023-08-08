@@ -1,4 +1,5 @@
 import pytest
+from dependency_injector import providers
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
@@ -8,7 +9,7 @@ from app.command.accounts.entrypoints.containers import Container
 
 @pytest.fixture()
 def container():
-    container = Container()
+    container = Container(secret_auth_key=providers.Object("secret-key"))  # TODO: Improve this
     container.wire()
     yield container
     container.unwire()

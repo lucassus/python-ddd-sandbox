@@ -4,9 +4,12 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from app.command.accounts.application.authenticate import AuthenticationError
+from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.command.accounts.application.testing.fake_user_repository import FakeUserRepository
 from app.command.accounts.entities.email_address import EmailAddress
 from app.command.accounts.entities.errors import EmailAlreadyExistsException
 from app.command.accounts.entities.password import Password
+from app.command.accounts.entities.user_builder import UserBuilder
 from app.command.accounts.entrypoints.containers import Container
 
 
@@ -33,23 +36,21 @@ def test_register_user_endpoint(container: Container, client: TestClient):
 
 def test_login_endpoint(container: Container, client: TestClient):
     # Given
-    authenticate_mock = Mock(return_value="some-token")
+    user = UserBuilder().with_email("test@email.com").with_password("password").build()
+    repository = FakeUserRepository()
+    repository.create(user)
 
     # When
-    with container.authenticate.override(authenticate_mock):
+    with container.uow.override(FakeUnitOfWork(repository)):
         response = client.post(
             "/users/login",
-            json={"email": "test@email.com", "password": "password"},
+            json={"email": str(user.email), "password": str(user.password)},
             follow_redirects=False,
         )
 
     # Then
     assert response.status_code == status.HTTP_200_OK
-    authenticate_mock.assert_called_with(
-        email=EmailAddress("test@email.com"),
-        password=Password("password"),
-    )
-    assert response.json()["token"] == "some-token"
+    assert response.json()["token"] is not None
 
 
 def test_login_endpoint_with_invalid_credentials(container: Container, client: TestClient):

@@ -16,7 +16,8 @@ class Container(containers.DeclarativeContainer):
 
     bus = providers.Dependency(instance_of=MessageBus)
     uow = providers.Factory(UnitOfWork, session_factory=lambda: AppSession())
+    secret_auth_key = providers.Dependency(instance_of=str)
 
     register_user = providers.Factory(RegisterUser, uow=uow, bus=bus)
-    authenticate = providers.Factory(Authenticate, uow=uow)
+    authenticate = providers.Factory(Authenticate, uow=uow, secret_auth_key=secret_auth_key)
     change_user_email_address = providers.Factory(ChangeUserEmailAddress, uow=uow)

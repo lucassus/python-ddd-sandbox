@@ -2,6 +2,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
+from app.command.accounts.application.authenticate import Authenticate, AuthenticationError
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.command.accounts.application.register_user import RegisterUser
 from app.command.accounts.entities.email_address import EmailAddress
@@ -32,6 +33,23 @@ def user_register_endpoint(
         f"/queries/users/{user_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
+
+@router.post("/login")
+@inject
+def user_login_endpoint(
+    data: schemas.LoginUser,
+    authenticate: Authenticate = Depends(Provide[Container.authenticate]),
+):
+    try:
+        token = authenticate(
+            email=EmailAddress(data.email),
+            password=Password(data.password),
+        )
+    except AuthenticationError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    return {"token": token}
 
 
 @router.put("/{user_id}")

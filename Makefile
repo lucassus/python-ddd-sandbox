@@ -5,7 +5,7 @@ venv:
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:
-	pip install --upgrade pip==23.2.1 pip-tools==7.2.0
+	pip install --upgrade pip==23.2.1 pip-tools==7.3.0
 
 deps-compile:
 	pip-compile requirements.in --output-file requirements.txt

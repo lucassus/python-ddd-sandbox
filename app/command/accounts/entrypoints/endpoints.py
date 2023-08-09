@@ -52,6 +52,7 @@ def user_login_endpoint(
     return {"token": token}
 
 
+# TODO: Add authentication
 @router.put("/{user_id}")
 @inject
 def user_update_endpoint(

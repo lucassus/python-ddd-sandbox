@@ -14,13 +14,13 @@ class AuthenticationError(Exception):
     pass
 
 
-TOKEN_ENCODE_ALGORITHM = "HS256"
+JWT_ENCODE_ALGORITHM = "HS256"
 
 
 class Authentication:
-    def __init__(self, uow: AbstractUnitOfWork, secret_auth_key: str):
+    def __init__(self, uow: AbstractUnitOfWork, jwt_secret_key: str):
         self._uow = uow
-        self._secret_auth_key = secret_auth_key
+        self._jwt_secret_key = jwt_secret_key
 
     def login(
         self,
@@ -34,10 +34,7 @@ class Authentication:
         with self._uow as uow:
             user = uow.user.get_by_email(email)
 
-        if user is None:
-            raise AuthenticationError()
-
-        if user.password != password:
+        if user is None or user.password != password:
             raise AuthenticationError()
 
         return jwt.encode(
@@ -46,15 +43,15 @@ class Authentication:
                 "exp": now + timedelta(days=90),
                 "iat": now,
             },
-            key=self._secret_auth_key,
-            algorithm=TOKEN_ENCODE_ALGORITHM,
+            key=self._jwt_secret_key,
+            algorithm=JWT_ENCODE_ALGORITHM,
         )
 
     def trade_token_for_user(self, token: str) -> User:
         payload = jwt.decode(
             token,
-            key=self._secret_auth_key,
-            algorithms=[TOKEN_ENCODE_ALGORITHM],
+            key=self._jwt_secret_key,
+            algorithms=[JWT_ENCODE_ALGORITHM],
         )
 
         user_id = UserID(payload["sub"])

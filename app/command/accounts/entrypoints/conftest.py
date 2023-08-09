@@ -9,7 +9,7 @@ from app.command.accounts.entrypoints.containers import Container
 
 @pytest.fixture()
 def container():
-    container = Container(secret_auth_key=providers.Object("secret-key"))  # TODO: Improve this
+    container = Container(jwt_secret_key=providers.Object("secret-key"))  # TODO: Improve this
     container.wire()
     yield container
     container.unwire()

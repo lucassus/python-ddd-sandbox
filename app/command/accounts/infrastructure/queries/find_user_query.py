@@ -1,17 +1,20 @@
 from typing import Optional
 
-from sqlalchemy import select
+from sqlalchemy import Connection, select
 
-from app.command.accounts.application.queries import schemas
-from app.command.accounts.application.queries.abstract_find_user_query import AbstractFindUserQuery
+import app.command.accounts.application.queries.abstract_find_user_query
+from app.command.accounts.application.queries.abstract_find_user_query import AbstractFindUserQuery, UserDetails
 from app.infrastructure.tables import projects_table, users_table
 
 
 # TODO: Write integration tests for this query
 class FindUserQuery(AbstractFindUserQuery):
-    def __call__(self, *, id: int) -> Optional[schemas.UserDetails]:
+    def __init__(self, connection: Connection):
+        self._connection = connection
+
+    def __call__(self, *, id: int) -> Optional[UserDetails]:
         query = select(users_table.c.id, users_table.c.email).select_from(users_table).where(users_table.c.id == id)
-        user = self._first_from(query)
+        user = self._connection.execute(query).first()
 
         if user is None:
             return None  # TODO: Raise an exception
@@ -21,9 +24,9 @@ class FindUserQuery(AbstractFindUserQuery):
             .select_from(projects_table)
             .where(projects_table.c.user_id == user.id)
         )
-        projects = self._all_from(query)
+        projects = list(self._connection.execute(query).all())
 
-        return schemas.UserDetails(
+        return app.command.accounts.application.queries.abstract_find_user_query.UserDetails(
             **{
                 **user._asdict(),
                 "email": user.email.address,

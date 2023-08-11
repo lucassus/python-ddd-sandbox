@@ -1,7 +1,7 @@
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.command.accounts.application.testing.fake_user_repository import FakeUserRepository
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.user_builder import UserBuilder
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.user_builder import UserBuilder
 
 
 def test_fake_repository():

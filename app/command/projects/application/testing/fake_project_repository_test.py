@@ -1,9 +1,9 @@
 import pytest
 
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
-from app.command.projects.entities.errors import ProjectNotFoundError
-from app.command.projects.entities.project import ProjectID
-from app.command.projects.entities.project_builder import ProjectBuilder
+from app.command.projects.domain.errors import ProjectNotFoundError
+from app.command.projects.domain.project import ProjectID
+from app.command.projects.domain.project_builder import ProjectBuilder
 from app.utc_datetime import utc_now
 
 

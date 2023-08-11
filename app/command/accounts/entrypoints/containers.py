@@ -23,6 +23,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     engine = providers.Dependency(instance_of=Engine)
+    connection = providers.Resource(init_connection, engine=engine)
     session_factory = providers.Singleton(sessionmaker, bind=engine)
 
     bus = providers.Dependency(instance_of=MessageBus)
@@ -31,7 +32,4 @@ class Container(containers.DeclarativeContainer):
     register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
     change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
 
-    # Queries
-
-    connection = providers.Resource(init_connection, engine=engine)
     find_user_query = providers.Factory(FindUserQuery, connection=connection)

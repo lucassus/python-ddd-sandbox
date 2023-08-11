@@ -1,7 +1,7 @@
 import pytest
 
 from app.command.projects.application.tasks_service import TasksService
-from app.command.projects.entities.project_builder import ProjectBuilder
+from app.command.projects.domain.project_builder import ProjectBuilder
 from app.utc_datetime import utc_datetime
 
 

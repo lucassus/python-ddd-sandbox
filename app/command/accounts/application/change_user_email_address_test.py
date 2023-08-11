@@ -3,9 +3,9 @@ import pytest
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.errors import EmailAlreadyExistsException, UserNotFoundError
-from app.command.accounts.entities.user_builder import UserBuilder
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError
+from app.command.accounts.domain.user_builder import UserBuilder
 from app.command.shared_kernel.entities.user_id import UserID
 
 

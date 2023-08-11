@@ -6,7 +6,7 @@ from starlette.status import HTTP_200_OK
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.update_project import UpdateProject
-from app.command.projects.entities.project import ProjectID, ProjectName
+from app.command.projects.domain.project import ProjectID, ProjectName
 from app.command.projects.entrypoints import schemas
 from app.command.projects.entrypoints.containers import Container
 from app.command.shared_kernel.entities.user_id import UserID

@@ -1,6 +1,6 @@
 import pytest
 
-from app.command.accounts.entities.errors import UserNotFoundError
+from app.command.accounts.domain.errors import UserNotFoundError
 from app.command.accounts.infrastructure.queries.find_user_query import FindUserQuery
 
 

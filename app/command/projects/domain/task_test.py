@@ -1,4 +1,4 @@
-from app.command.projects.entities.task import Task, TaskNumber
+from app.command.projects.domain.task import Task, TaskNumber
 from app.utc_datetime import utc_datetime
 
 

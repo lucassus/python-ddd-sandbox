@@ -1,11 +1,13 @@
 import abc
 
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.user import User
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.user import User
 from app.command.shared_kernel.entities.user_id import UserID
 
 
 class AbstractUserRepository(metaclass=abc.ABCMeta):
+    # Repositories are part of domain layer, therefore it is more appropriate
+    # to use value object not just a string.
     @abc.abstractmethod
     def exists_by_email(self, email: EmailAddress) -> bool:
         pass

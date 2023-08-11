@@ -1,6 +1,6 @@
 from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.user import User
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.user import User
 from app.command.shared_kernel.entities.user_id import UserID
 
 

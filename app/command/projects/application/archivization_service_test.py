@@ -3,7 +3,7 @@ import pytest
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.command.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.command.projects.entities.project_builder import ProjectBuilder
+from app.command.projects.domain.project_builder import ProjectBuilder
 from app.utc_datetime import utc_now
 
 

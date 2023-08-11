@@ -3,8 +3,8 @@ from unittest.mock import Mock
 from starlette.testclient import TestClient
 
 from app.command.projects.application.tasks_service import TasksService
-from app.command.projects.entities.project import ProjectID
-from app.command.projects.entities.task import TaskNumber
+from app.command.projects.domain.project import ProjectID
+from app.command.projects.domain.task import TaskNumber
 from app.command.projects.entrypoints.containers import Container
 
 

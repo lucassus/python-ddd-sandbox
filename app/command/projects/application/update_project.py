@@ -1,5 +1,5 @@
 from app.command.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.projects.entities.project import ProjectID, ProjectName
+from app.command.projects.domain.project import ProjectID, ProjectName
 
 
 class UpdateProject:

@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING
 
-from app.command.projects.entities.errors import (
+from app.command.projects.domain.errors import (
     MaxIncompleteTasksNumberIsReachedError,
     ProjectIsNotCompletedError,
     ProjectNotArchivedError,
 )
 
 if TYPE_CHECKING:
-    from app.command.projects.entities.project import Project
+    from app.command.projects.domain.project import Project
 
 
 def project_has_allowed_number_of_incomplete_tasks(project: "Project") -> None:

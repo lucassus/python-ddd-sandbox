@@ -1,14 +1,14 @@
 import pytest
 
-from app.command.projects.entities.errors import (
+from app.command.projects.domain.errors import (
     MaxIncompleteTasksNumberIsReachedError,
     ProjectIsNotCompletedError,
     ProjectNotArchivedError,
     TaskNotFoundError,
 )
-from app.command.projects.entities.project import ProjectName
-from app.command.projects.entities.project_builder import ProjectBuilder
-from app.command.projects.entities.task import TaskNumber
+from app.command.projects.domain.project import ProjectName
+from app.command.projects.domain.project_builder import ProjectBuilder
+from app.command.projects.domain.task import TaskNumber
 from app.utc_datetime import utc_datetime
 
 

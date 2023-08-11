@@ -5,8 +5,8 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.command.projects.entities.errors import ProjectNotFoundError
-from app.command.projects.entities.project import Project, ProjectID
+from app.command.projects.domain.errors import ProjectNotFoundError
+from app.command.projects.domain.project import Project, ProjectID
 from app.infrastructure.tables import projects_table
 
 

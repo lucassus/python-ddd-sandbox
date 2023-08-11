@@ -1,11 +1,11 @@
 import pytest
 from sqlalchemy.orm import Session
 
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.password import Password
-from app.command.accounts.entities.user import User
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.password import Password
+from app.command.accounts.domain.user import User
 from app.command.accounts.infrastructure.adapters.user_repository import UserRepository
-from app.command.projects.entities.project import Project, ProjectName
+from app.command.projects.domain.project import Project, ProjectName
 from app.command.projects.infrastructure.adapters.project_repository import ProjectRepository
 
 

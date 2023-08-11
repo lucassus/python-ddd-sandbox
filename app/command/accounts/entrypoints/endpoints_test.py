@@ -4,9 +4,9 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from app.command.accounts.application.queries.abstract_find_user_query import FindUserQueryError, UserDetails
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.errors import EmailAlreadyExistsException
-from app.command.accounts.entities.password import Password
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.errors import EmailAlreadyExistsException
+from app.command.accounts.domain.password import Password
 from app.command.accounts.entrypoints.containers import Container
 
 

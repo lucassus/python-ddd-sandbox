@@ -1,6 +1,6 @@
 from sqlalchemy.orm import attribute_keyed_dict, relationship
 
-from app.command.projects.entities.project import Project, Task
+from app.command.projects.domain.project import Project, Task
 from app.infrastructure.tables import projects_table, tasks_table
 
 

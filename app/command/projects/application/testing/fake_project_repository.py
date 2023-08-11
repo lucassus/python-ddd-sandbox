@@ -1,8 +1,8 @@
 from typing import Iterator
 
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.command.projects.entities.errors import ProjectNotFoundError
-from app.command.projects.entities.project import Project, ProjectID
+from app.command.projects.domain.errors import ProjectNotFoundError
+from app.command.projects.domain.project import Project, ProjectID
 
 
 def _project_id_generator() -> Iterator[ProjectID]:

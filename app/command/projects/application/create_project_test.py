@@ -1,6 +1,6 @@
 from app.command.projects.application.create_project import CreateProject
 from app.command.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.command.projects.entities.project import ProjectName
+from app.command.projects.domain.project import ProjectName
 from app.command.shared_kernel.entities.user_id import UserID
 
 

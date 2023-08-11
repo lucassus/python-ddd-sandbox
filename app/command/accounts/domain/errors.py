@@ -1,4 +1,4 @@
-from app.command.accounts.entities.email_address import EmailAddress
+from app.command.accounts.domain.email_address import EmailAddress
 from app.command.shared_kernel.errors import EntityNotFoundError
 
 

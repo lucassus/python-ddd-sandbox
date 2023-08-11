@@ -1,8 +1,8 @@
 from typing import Self
 
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.password import Password
-from app.command.accounts.entities.user import User
+from app.command.accounts.domain.email_address import EmailAddress
+from app.command.accounts.domain.password import Password
+from app.command.accounts.domain.user import User
 
 
 class UserBuilder:

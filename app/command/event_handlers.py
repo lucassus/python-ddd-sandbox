@@ -1,4 +1,4 @@
-from app.command.accounts.entities.user import User
+from app.command.accounts.domain.user import User
 from app.command.shared_kernel.message_bus import MessageBus
 from app.infrastructure.db import AppSession
 

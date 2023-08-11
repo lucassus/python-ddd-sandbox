@@ -1,6 +1,6 @@
 import pytest
 
-from app.command.accounts.entities.password import InvalidPasswordError, Password
+from app.command.accounts.domain.password import InvalidPasswordError, Password
 
 
 class TestPassword:

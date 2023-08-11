@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from app.command.projects.entities.project import Project, ProjectName
+from app.command.projects.domain.project import Project, ProjectName
 from app.command.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
 

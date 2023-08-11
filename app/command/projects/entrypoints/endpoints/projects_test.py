@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from starlette.testclient import TestClient
 
 from app.command.projects.application.archivization_service import ArchivizationService
-from app.command.projects.entities.project import ProjectID
+from app.command.projects.domain.project import ProjectID
 from app.command.projects.entrypoints.containers import Container
 from app.command.shared_kernel.entities.user_id import UserID
 

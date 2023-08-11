@@ -1,6 +1,6 @@
 from typing import Self
 
-from app.command.projects.entities.project import MaximumNumberOfIncompleteTasks, Project, ProjectName
+from app.command.projects.domain.project import MaximumNumberOfIncompleteTasks, Project, ProjectName
 from app.command.shared_kernel.entities.user_id import UserID
 
 

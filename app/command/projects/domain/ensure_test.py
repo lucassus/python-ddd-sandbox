@@ -1,8 +1,8 @@
 import pytest
 
-from app.command.projects.entities import ensure
-from app.command.projects.entities.errors import MaxIncompleteTasksNumberIsReachedError
-from app.command.projects.entities.project_builder import ProjectBuilder
+from app.command.projects.domain import ensure
+from app.command.projects.domain.errors import MaxIncompleteTasksNumberIsReachedError
+from app.command.projects.domain.project_builder import ProjectBuilder
 
 
 class TestEnsureProjectHasAllowedNumberOfIncompleteTasks:

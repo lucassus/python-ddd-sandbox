@@ -12,7 +12,10 @@ def get_connection():
         yield connection
 
 
-class AbstractQuery(abc.ABC):
+# TODO: Remove FastAPI dependency
+
+
+class Query(metaclass=abc.ABCMeta):
     def __init__(
         self,
         connection: Annotated[Connection, Depends(get_connection)],

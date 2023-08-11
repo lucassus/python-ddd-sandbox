@@ -13,10 +13,3 @@ class Task(BaseSchema):
     number: int
     name: str
     completed_at: Optional[datetime] = None
-
-
-class User(BaseSchema):
-    id: int
-    email: str
-
-    projects: list[Project]

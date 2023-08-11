@@ -1,11 +1,10 @@
 from fastapi import APIRouter
 
-from app.query.routes import health, project_tasks, projects, users
+from app.query.routes import health, project_tasks, projects
 
 api_router = APIRouter()
 
 api_router.include_router(health.router)
-api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(projects.router, prefix="/projects", tags=["projects"])
 api_router.include_router(
     project_tasks.router,

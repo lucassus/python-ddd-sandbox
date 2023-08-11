@@ -1,4 +1,4 @@
-from app.query.queries.users import FindUserQuery
+from app.command.accounts.infrastructure.queries.find_user_query import FindUserQuery
 
 
 def test_find_user_query(connection, create_user, create_project):

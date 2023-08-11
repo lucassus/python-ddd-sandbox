@@ -2,11 +2,11 @@ from typing import Optional
 
 from sqlalchemy import select
 
+from app.command.shared_kernel.query import Query
 from app.infrastructure.tables import projects_table
-from app.query.queries.abstract_query import AbstractQuery
 
 
-class FetchProjectsQuery(AbstractQuery):
+class FetchProjectsQuery(Query):
     def __call__(self, user_id: Optional[int] = None):
         query = select(projects_table)
 
@@ -16,7 +16,7 @@ class FetchProjectsQuery(AbstractQuery):
         return self._all_from(query)
 
 
-class FindProjectQuery(AbstractQuery):
+class FindProjectQuery(Query):
     def __call__(self, *, id: int):
         query = select(projects_table).where(projects_table.c.id == id)
         return self._first_from(query)

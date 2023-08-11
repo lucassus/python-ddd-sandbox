@@ -12,8 +12,8 @@ from app.infrastructure.db import AppSession
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            ".endpoints.project_tasks",
-            ".endpoints.projects",
+            ".routes.project_tasks",
+            ".routes.projects",
         ],
         auto_wire=False,
     )

@@ -18,7 +18,7 @@ def init_connection(engine: Engine) -> Iterator[Connection]:
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
-        modules=[".endpoints"],
+        modules=[".routes"],
         auto_wire=False,
     )
 

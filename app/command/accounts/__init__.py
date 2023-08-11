@@ -9,7 +9,7 @@ from app.infrastructure.db import engine
 # TODO: __init__ is hard to find, move it to accounts/register.py
 # TODO: ...and do the same for projects
 def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> None:
-    from app.command.accounts.entrypoints import endpoints
+    from app.command.accounts.entrypoints import routes
     from app.command.accounts.entrypoints.containers import Container
     from app.command.accounts.infrastructure.mappers import start_mappers
 
@@ -17,4 +17,4 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> None:
     container.wire()
 
     start_mappers(mappers)
-    app.include_router(endpoints.router)
+    app.include_router(routes.router)

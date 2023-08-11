@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from app.command.projects.entrypoints import endpoints
+from app.command.projects.entrypoints import routes
 from app.command.projects.entrypoints.containers import Container
 
 
@@ -17,6 +17,6 @@ def container():
 @pytest.fixture()
 def client(container):
     app = FastAPI()
-    app.include_router(endpoints.router)
+    app.include_router(routes.router)
 
     return TestClient(app)

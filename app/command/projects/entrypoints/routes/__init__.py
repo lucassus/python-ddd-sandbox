@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.command.projects.entrypoints.endpoints import project_tasks, projects
+from app.command.projects.entrypoints.routes import project_tasks, projects
 
 router = APIRouter()
 

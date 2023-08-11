@@ -15,6 +15,7 @@ def get_connection():
 # TODO: Remove FastAPI dependency
 
 
+# TODO: Kill this class
 class Query(metaclass=abc.ABCMeta):
     def __init__(
         self,

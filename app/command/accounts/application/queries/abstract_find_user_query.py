@@ -1,22 +1,24 @@
 import abc
-from typing import Optional
 
 from app.base_schema import BaseSchema
 
 
-class Project(BaseSchema):
-    id: int
-    name: str
-
-
 class UserDetails(BaseSchema):
+    class Project(BaseSchema):
+        id: int
+        name: str
+
     id: int
     email: str
     projects: list[Project]
 
 
+class FindUserQueryError(Exception):
+    def __init__(self, id: int):
+        super().__init__(f"User with id {id} not found")
+
+
 class AbstractFindUserQuery:
     @abc.abstractmethod
-    def __call__(self, *, id: int) -> Optional[UserDetails]:
-        # TODO: Do not use Optional, raise an error when not found, less work for the caller
+    def __call__(self, *, id: int) -> UserDetails:
         raise NotImplementedError()

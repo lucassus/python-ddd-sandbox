@@ -18,10 +18,10 @@ class Container(containers.DeclarativeContainer):
         auto_wire=False,
     )
 
-    uow = providers.Factory(UnitOfWork, session_factory=lambda: AppSession())
+    uow = providers.Singleton(UnitOfWork, session_factory=lambda: AppSession())
 
-    create_project = providers.Factory(CreateProject, uow=uow)
-    create_example_project = providers.Factory(CreateExampleProject, uow=uow)
-    update_project = providers.Factory(UpdateProject, uow=uow)
-    archivization_service = providers.Factory(ArchivizationService, uow=uow)
-    tasks_service = providers.Factory(TasksService, uow=uow)
+    create_project = providers.Singleton(CreateProject, uow=uow)
+    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
+    update_project = providers.Singleton(UpdateProject, uow=uow)
+    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
+    tasks_service = providers.Singleton(TasksService, uow=uow)

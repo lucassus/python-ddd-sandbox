@@ -7,7 +7,7 @@ from app.command.accounts.entrypoints.containers import Container
 
 
 @pytest.fixture()
-def container():
+def container():  # TODO: Is it a good idea to use a fixture for the container?
     container = Container()
     container.wire()
     yield container

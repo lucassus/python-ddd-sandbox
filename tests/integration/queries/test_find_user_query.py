@@ -1,3 +1,6 @@
+import pytest
+
+from app.command.accounts.entities.errors import UserNotFoundError
 from app.command.accounts.infrastructure.queries.find_user_query import FindUserQuery
 
 
@@ -17,6 +20,6 @@ def test_find_user_query(connection, create_user, create_project):
 
 def test_find_user_query_not_found(connection):
     find_user = FindUserQuery(connection=connection)
-    user = find_user(id=1)
 
-    assert user is None
+    with pytest.raises(UserNotFoundError):
+        find_user(id=1)

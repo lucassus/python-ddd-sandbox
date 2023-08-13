@@ -2,15 +2,16 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
-from app.modules.projects.application.queries.project_queries import AbstractFindProjectQuery
-from app.modules.projects.application.queries.task_queries import AbstractFindTaskQuery
+import app.modules.projects.application.queries.task_queries
+from app.modules.projects.application.queries.project_queries import FindProjectQueryProtocol
+from app.modules.projects.application.queries.task_queries import FindTaskQueryProtocol
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.errors import EntityNotFoundError
-from app.modules.projects.infrastructure.queries.task_queries import FetchTasksQuery
+from app.modules.projects.infrastructure.queries.task_queries import ListTasksQuery
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
 
@@ -19,7 +20,7 @@ router = APIRouter(prefix="/projects/{project_id}/tasks")
 @inject
 def get_project(
     project_id: int,
-    find_project: AbstractFindProjectQuery = Depends(Provide[Container.find_project_query]),
+    find_project: FindProjectQueryProtocol = Depends(Provide[Container.find_project_query]),
 ):
     return find_project(id=ProjectID(project_id))
 
@@ -44,25 +45,25 @@ def task_create_endpoint(
 
 @router.get(
     "",
-    response_model=list[schemas.Task],
+    response_model=list[app.modules.projects.application.queries.task_queries.Task],
     name="Returns list of tasks",
 )
 @inject
 def tasks_endpoint(
-    list_tasks: FetchTasksQuery = Depends(Provide[Container.list_tasks_query]),
+    list_tasks: ListTasksQuery = Depends(Provide[Container.list_tasks_query]),
     project=Depends(get_project),
 ):
     tasks = list_tasks(project_id=project.id)
-    return [schemas.Task.from_orm(task) for task in tasks]
+    return [app.modules.projects.application.queries.task_queries.Task.from_orm(task) for task in tasks]
 
 
 @router.get(
     "/{number}",
-    response_model=schemas.Task,
+    response_model=app.modules.projects.application.queries.task_queries.Task,
 )
 @inject
 def task_endpoint(
-    find_task: AbstractFindTaskQuery = Depends(Provide[Container.find_task_query]),
+    find_task: FindTaskQueryProtocol = Depends(Provide[Container.find_task_query]),
     project=Depends(get_project),
     number: int = Path(..., description="The number of the task", ge=1),
 ):
@@ -72,7 +73,7 @@ def task_endpoint(
         raise EntityNotFoundError(detail=f"Unable to find a task with {number=}")
 
     # TODO: Remove this deprecated code
-    return schemas.Task.from_orm(task)
+    return app.modules.projects.application.queries.task_queries.Task.from_orm(task)
 
 
 @router.put("/{task_number}/complete")

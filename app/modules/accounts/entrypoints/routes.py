@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.queries.find_user_query_protocol import (
+from app.modules.accounts.application.queries.find_user_query import (
     FindUserQueryError,
     FindUserQueryProtocol,
     UserDetails,

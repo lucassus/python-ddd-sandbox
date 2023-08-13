@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.modules.accounts.application.queries.find_user_query_protocol import FindUserQueryError, UserDetails
+from app.modules.accounts.application.queries.find_user_query import FindUserQueryError, UserDetails
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password

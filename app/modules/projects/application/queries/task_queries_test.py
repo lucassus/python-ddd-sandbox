@@ -1,6 +1,6 @@
 import json
 
-from app.modules.projects.entrypoints.schemas import Task
+from app.modules.projects.application.queries.task_queries import Task
 from app.utc_datetime import utc_datetime
 
 

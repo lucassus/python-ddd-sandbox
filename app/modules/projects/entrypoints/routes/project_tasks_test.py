@@ -1,6 +1,5 @@
 from unittest.mock import Mock
 
-import pytest
 from starlette.testclient import TestClient
 
 from app.modules.projects.application.tasks_service import TasksService
@@ -28,6 +27,7 @@ def test_task_create_endpoint(container: Container, client: TestClient):
     mock_tasks_service.create_task.assert_called_once_with(project_id=ProjectID(123), name="Some task")
 
 
+# TODO: Fix this test
 def test_task_endpoint_returns_404(container: Container, client: TestClient):
     # Given
     find_project_mock = Mock(return_value=Mock(id=1))

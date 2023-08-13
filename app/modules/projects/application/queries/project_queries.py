@@ -1,19 +1,20 @@
-import abc
-from typing import Optional
+from typing import Optional, Protocol
 
 from app.modules.projects.domain.project import ProjectID
+from app.modules.shared_kernel.base_schema import BaseSchema
 from app.modules.shared_kernel.entities.user_id import UserID
 
-# TODO: Move schemas here
+
+class Project(BaseSchema):
+    id: int
+    name: str
 
 
-class AbstractFetchProjectsQuery(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def __call__(self, user_id: Optional[UserID] = None):
-        raise NotImplementedError()
+class ListProjectsQueryProtocol(Protocol):
+    def __call__(self, user_id: Optional[UserID] = None) -> list[Project]:
+        ...
 
 
-class AbstractFindProjectQuery(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def __call__(self, *, id: ProjectID):
-        raise NotImplementedError()
+class FindProjectQueryProtocol(Protocol):
+    def __call__(self, *, id: ProjectID) -> Project:
+        ...

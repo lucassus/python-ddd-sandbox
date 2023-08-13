@@ -1,26 +1,13 @@
-from typing import Any
+from sqlalchemy import select
 
-from sqlalchemy import Connection, Executable, select
-
+from app.infrastructure.base_query import BaseQuery
 from app.infrastructure.tables import projects_table, users_table
-from app.modules.accounts.application.queries.find_user_query_protocol import (
+from app.modules.accounts.application.queries.find_user_query import (
     FindUserQueryError,
     FindUserQueryProtocol,
     UserDetails,
 )
 from app.modules.shared_kernel.entities.user_id import UserID
-
-
-# TODO: Bring back a base class for queries with connection and helper methods
-class BaseQuery:
-    def __init__(self, connection: Connection):
-        self._connection = connection
-
-    def _first_from(self, query: Executable) -> Any:
-        return self._connection.execute(query).first()
-
-    def _all_from(self, query: Executable) -> list[Any]:
-        return list(self._connection.execute(query).all())
 
 
 class FindUserQuery(BaseQuery, FindUserQueryProtocol):

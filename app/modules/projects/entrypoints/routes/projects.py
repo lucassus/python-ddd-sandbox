@@ -3,12 +3,10 @@ from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
+import app.modules.projects.application.queries.project_queries
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.application.create_project import CreateProject
-from app.modules.projects.application.queries.project_queries import (
-    AbstractFetchProjectsQuery,
-    AbstractFindProjectQuery,
-)
+from app.modules.projects.application.queries.project_queries import FindProjectQueryProtocol, ListProjectsQueryProtocol
 from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
@@ -23,7 +21,7 @@ router = APIRouter(prefix="/projects")
 @inject
 def get_project(
     project_id: int,
-    find_project: AbstractFindProjectQuery = Depends(Provide[Container.find_project_query]),
+    find_project: FindProjectQueryProtocol = Depends(Provide[Container.find_project_query]),
 ):
     project = find_project(id=ProjectID(project_id))
 
@@ -52,19 +50,19 @@ def project_create_endpoint(
 
 @router.get(
     "",
-    response_model=list[schemas.Project],
+    response_model=list[app.modules.projects.application.queries.project_queries.Project],
     name="Returns the list of projects",
 )
 @inject
 def list_projects_endpoint(
-    list_projects: AbstractFetchProjectsQuery = Depends(Provide[Container.list_projects_query]),
+    list_projects: ListProjectsQueryProtocol = Depends(Provide[Container.list_projects_query]),
 ):
     return list_projects()
 
 
 @router.get(
     "/{project_id}",
-    response_model=schemas.Project,
+    response_model=app.modules.projects.application.queries.project_queries.Project,
 )
 @inject
 def project_endpoint(project=Depends(get_project)):

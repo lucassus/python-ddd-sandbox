@@ -1,12 +1,10 @@
 from unittest.mock import Mock
 
-import pytest
 from starlette.testclient import TestClient
 
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.infrastructure.queries.project_queries import FindProjectQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 

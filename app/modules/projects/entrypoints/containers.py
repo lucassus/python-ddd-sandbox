@@ -10,8 +10,8 @@ from app.modules.projects.application.create_project import CreateProject
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.projects.infrastructure.queries.project_queries import FetchProjectsQuery, FindProjectQuery
-from app.modules.projects.infrastructure.queries.task_queries import FetchTasksQuery, FindTaskQuery
+from app.modules.projects.infrastructure.queries.project_queries import FindProjectQuery, ListProjectsQuery
+from app.modules.projects.infrastructure.queries.task_queries import FindTaskQuery, ListTasksQuery
 
 
 def init_connection(engine: Engine) -> Iterator[Connection]:
@@ -40,8 +40,8 @@ class Container(containers.DeclarativeContainer):
     archivization_service = providers.Singleton(ArchivizationService, uow=uow)
     tasks_service = providers.Singleton(TasksService, uow=uow)
 
-    list_projects_query = providers.Factory(FetchProjectsQuery, connection=connection)
+    list_projects_query = providers.Factory(ListProjectsQuery, connection=connection)
     find_project_query = providers.Factory(FindProjectQuery, connection=connection)
 
-    list_tasks_query = providers.Factory(FetchTasksQuery, connection=connection)
+    list_tasks_query = providers.Factory(ListTasksQuery, connection=connection)
     find_task_query = providers.Factory(FindTaskQuery, connection=connection)

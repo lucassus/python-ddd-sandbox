@@ -1,6 +1,6 @@
 import pytest
 
-from app.modules.accounts.application.queries.find_user_query_protocol import FindUserQueryError
+from app.modules.accounts.application.queries.find_user_query import FindUserQueryError
 from app.modules.accounts.infrastructure.queries.find_user_query import FindUserQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.command.projects.infrastructure.queries.task_queries import FetchTasksQuery
+from app.modules.projects.infrastructure.queries.task_queries import FetchTasksQuery
 
 
 def test_fetch_tasks(session: Session, create_project):

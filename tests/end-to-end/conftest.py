@@ -25,7 +25,7 @@ def client():
 def register_user(client: TestClient):
     def _register_user(email: str) -> httpx.Response:
         return client.post(
-            "/commands/users",
+            "/api/users",
             json={"email": email, "password": "password"},
             follow_redirects=True,
         )
@@ -42,7 +42,7 @@ def create_project(register_user, client: TestClient):
             user_id = response.json()["id"]
 
         return client.post(
-            "/commands/projects",
+            "/api/projects",
             json={"user_id": user_id, "name": name},
         )
 
@@ -53,7 +53,7 @@ def create_project(register_user, client: TestClient):
 def create_task(client: TestClient):
     def _create_task(project_id: int, name: str) -> httpx.Response:
         return client.post(
-            f"/commands/projects/{project_id}/tasks",
+            f"/api/projects/{project_id}/tasks",
             json={"name": name},
         )
 

@@ -3,9 +3,9 @@ from typing import Annotated
 import pytest
 from pydantic import BaseModel, BeforeValidator, ConfigDict
 
-from app.command.accounts.domain.email_address import EmailAddress, InvalidEmailAddressError
-from app.command.accounts.domain.password import Password
-from app.command.shared_kernel.entities.user_id import UserID
+from app.modules.accounts.domain.email_address import EmailAddress, InvalidEmailAddressError
+from app.modules.accounts.domain.password import Password
+from app.modules.shared_kernel.entities.user_id import UserID
 
 EmailField = Annotated[EmailAddress, BeforeValidator(lambda value: EmailAddress(str(value)))]
 PasswordField = Annotated[Password, BeforeValidator(lambda value: Password(str(value)))]

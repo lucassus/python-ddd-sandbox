@@ -1,10 +1,10 @@
 import pytest
 from sqlalchemy.orm.session import Session
 
-from app.command.accounts.domain.email_address import EmailAddress
-from app.command.accounts.domain.user_builder import UserBuilder
-from app.command.accounts.infrastructure.adapters.user_repository import UserRepository
-from app.command.shared_kernel.entities.user_id import UserID
+from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.user_builder import UserBuilder
+from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class TestUserRepository:

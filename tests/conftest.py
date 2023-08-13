@@ -1,11 +1,11 @@
 import pytest
 from sqlalchemy.orm import clear_mappers
 
-from app.command import mapper_registry
-from app.command.accounts.infrastructure.mappers import start_mappers as start_account_mappers
-from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
+from app.modules import mapper_registry
+from app.modules.accounts.infrastructure.mappers import start_mappers as start_account_mappers
+from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 
 
 @pytest.fixture()

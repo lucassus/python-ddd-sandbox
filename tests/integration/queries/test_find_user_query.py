@@ -1,8 +1,8 @@
 import pytest
 
-from app.command.accounts.application.queries.find_user_query_protocol import FindUserQueryError
-from app.command.accounts.infrastructure.queries.find_user_query import FindUserQuery
-from app.command.shared_kernel.entities.user_id import UserID
+from app.modules.accounts.application.queries.find_user_query_protocol import FindUserQueryError
+from app.modules.accounts.infrastructure.queries.find_user_query import FindUserQuery
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
 def test_find_user_query(connection, create_user, create_project):

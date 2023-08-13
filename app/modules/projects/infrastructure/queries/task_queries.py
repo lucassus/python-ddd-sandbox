@@ -1,20 +1,22 @@
 from sqlalchemy import select
 from sqlalchemy.sql.expression import and_
 
-from app.infrastructure.base_query import BaseQuery
+from app.infrastructure.base_query import BaseSQLQuery
 from app.infrastructure.tables import tasks_table
-from app.modules.projects.application.queries.task_queries import FindTaskQueryProtocol, ListTasksQueryProtocol
+from app.modules.projects.application.queries.task_queries import GetTaskQuery, ListTasksQuery
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 
 
-class ListTasksQuery(BaseQuery, ListTasksQueryProtocol):
+class ListTasksSQLQuery(BaseSQLQuery, ListTasksQuery):
     def __call__(self, *, project_id: ProjectID):
         query = select(tasks_table).where(tasks_table.c.project_id == project_id)
-        return self._all_from(query)
+
+        tasks = self._connection.execute(query).all()
+        return ListTasksSQLQuery.Result(tasks=tasks)
 
 
-class FindTaskQuery(BaseQuery, FindTaskQueryProtocol):
+class GetTaskSQLQuery(BaseSQLQuery, GetTaskQuery):
     def __call__(self, *, project_id: ProjectID, number: TaskNumber):
         query = select(tasks_table).where(
             and_(
@@ -23,4 +25,5 @@ class FindTaskQuery(BaseQuery, FindTaskQueryProtocol):
             )
         )
 
-        return self._first_from(query)
+        task = self._first_from(query)
+        return GetTaskQuery.Result.model_validate(task)

@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.modules.accounts.application.queries.find_user_query import FindUserQueryError, UserDetails
+from app.modules.accounts.application.queries.find_user_query import GetUserQuery, GetUserQueryError
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
@@ -49,23 +49,23 @@ def test_register_user_endpoint_errors_handling(container: Container, client: Te
 
 def test_get_user_endpoint(container: Container, client: TestClient):
     # Given
-    find_user_mock = Mock(
-        return_value=UserDetails(
+    get_user_mock = Mock(
+        return_value=GetUserQuery.Result(
             id=1,
             email="test@email.com",
             projects=[
-                UserDetails.Project(id=1, name="Project One"),
-                UserDetails.Project(id=2, name="Project Two"),
+                GetUserQuery.Result.Project(id=1, name="Project One"),
+                GetUserQuery.Result.Project(id=2, name="Project Two"),
             ],
         )
     )
 
     # When
-    with container.find_user_query.override(find_user_mock):
+    with container.get_user_query.override(get_user_mock):
         response = client.get("/users/1")
 
     # Then
-    find_user_mock.assert_called_with(id=1)
+    get_user_mock.assert_called_with(id=1)
     assert response.status_code == 200
     assert response.json() == {
         "id": 1,
@@ -79,12 +79,12 @@ def test_get_user_endpoint(container: Container, client: TestClient):
 
 def test_get_user_endpoint_404(container: Container, client: TestClient):
     # Given
-    find_user_mock = Mock(side_effect=FindUserQueryError(2))
+    get_user_mock = Mock(side_effect=GetUserQueryError(2))
 
     # When
-    with container.find_user_query.override(find_user_mock):
+    with container.get_user_query.override(get_user_mock):
         response = client.get("/users/2")
 
     # Then
-    find_user_mock.assert_called_with(id=2)
+    get_user_mock.assert_called_with(id=2)
     assert response.status_code == 404

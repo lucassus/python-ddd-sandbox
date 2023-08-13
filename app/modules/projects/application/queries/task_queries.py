@@ -6,17 +6,24 @@ from app.modules.projects.domain.task import TaskNumber
 from app.modules.shared_kernel.base_schema import BaseSchema
 
 
-class Task(BaseSchema):
-    number: int
-    name: str
-    completed_at: Optional[datetime] = None
+class ListTasksQuery(Protocol):
+    class Result(BaseSchema):
+        class Task(BaseSchema):
+            number: int
+            name: str
+            completed_at: Optional[datetime] = None
 
+        tasks: list[Task]
 
-class ListTasksQueryProtocol(Protocol):
-    def __call__(self, *, project_id: ProjectID) -> list[Task]:
+    def __call__(self, *, project_id: ProjectID) -> Result:
         ...
 
 
-class FindTaskQueryProtocol(Protocol):
-    def __call__(self, *, project_id: ProjectID, number: TaskNumber) -> Task:
+class GetTaskQuery(Protocol):
+    class Result(BaseSchema):
+        number: int
+        name: str
+        completed_at: Optional[datetime] = None
+
+    def __call__(self, *, project_id: ProjectID, number: TaskNumber) -> Result:
         ...

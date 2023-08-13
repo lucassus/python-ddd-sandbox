@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 
-from app.modules.projects.infrastructure.queries.task_queries import ListTasksQuery
+from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 
 def test_fetch_tasks(session: Session, create_project):
     # Given
-    fetch_tasks = ListTasksQuery(connection=session.connection())
+    fetch_tasks = ListTasksSQLQuery(connection=session.connection())
 
     project = create_project()
     project.add_task(name="Task One")

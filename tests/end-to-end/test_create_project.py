@@ -10,3 +10,8 @@ def test_create_project(create_project, client: TestClient):
     data = response.json()
     assert data["id"] is not None
     assert data["name"] == "Project X"
+
+    # TODO: Move to a separate test suite
+    response = client.get("/api/projects")
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()["projects"]) == 2

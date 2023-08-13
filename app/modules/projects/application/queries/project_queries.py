@@ -5,16 +5,22 @@ from app.modules.shared_kernel.base_schema import BaseSchema
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
-class Project(BaseSchema):
-    id: int
-    name: str
+class ListProjectsQuery(Protocol):
+    class Result(BaseSchema):
+        class Project(BaseSchema):
+            id: int
+            name: str
 
+        projects: list[Project]
 
-class ListProjectsQueryProtocol(Protocol):
-    def __call__(self, user_id: Optional[UserID] = None) -> list[Project]:
+    def __call__(self, *, user_id: Optional[UserID] = None) -> Result:
         ...
 
 
-class FindProjectQueryProtocol(Protocol):
-    def __call__(self, *, id: ProjectID) -> Project:
+class GetProjectQuery(Protocol):
+    class Result(BaseSchema):
+        id: int
+        name: str
+
+    def __call__(self, *, id: ProjectID) -> Result:
         ...

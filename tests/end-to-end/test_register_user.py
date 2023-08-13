@@ -21,15 +21,25 @@ def test_register_user(register_user, client: TestClient):
     response = client.get(f"/api/projects/{project_id}/tasks")
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == [
-        {
-            "number": 1,
-            "name": "Sign up!",
-            "completedAt": "2023-08-02T22:20:00",
-        },
-        {"number": 2, "name": "Watch the tutorial", "completedAt": None},
-        {"number": 3, "name": "Start using our awesome app", "completedAt": None},
-    ]
+    assert response.json() == {
+        "tasks": [
+            {
+                "number": 1,
+                "name": "Sign up!",
+                "completedAt": "2023-08-02T22:20:00",
+            },
+            {
+                "number": 2,
+                "name": "Watch the tutorial",
+                "completedAt": None,
+            },
+            {
+                "number": 3,
+                "name": "Start using our awesome app",
+                "completedAt": None,
+            },
+        ]
+    }
 
 
 def test_register_user_fail(register_user, client: TestClient):

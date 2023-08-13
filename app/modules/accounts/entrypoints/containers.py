@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.accounts.infrastructure.queries.find_user_query import FindUserQuery
+from app.modules.accounts.infrastructure.queries.find_user_query import GetUserSQLQuery
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
@@ -32,4 +32,4 @@ class Container(containers.DeclarativeContainer):
     register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
     change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
 
-    find_user_query = providers.Factory(FindUserQuery, connection=connection)
+    get_user_query = providers.Factory(GetUserSQLQuery, connection=connection)

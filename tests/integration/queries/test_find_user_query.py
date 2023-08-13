@@ -1,7 +1,7 @@
 import pytest
 
-from app.modules.accounts.application.queries.find_user_query import FindUserQueryError
-from app.modules.accounts.infrastructure.queries.find_user_query import FindUserQuery
+from app.modules.accounts.application.queries.find_user_query import GetUserQueryError
+from app.modules.accounts.infrastructure.queries.find_user_query import GetUserSQLQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
@@ -10,7 +10,7 @@ def test_find_user_query(connection, create_user, create_project):
     create_project(user=user, name="Project One")
     create_project(user=user, name="Project Two")
 
-    find_user = FindUserQuery(connection=connection)
+    find_user = GetUserSQLQuery(connection=connection)
     loaded = find_user(id=user.id)
 
     assert loaded
@@ -20,7 +20,7 @@ def test_find_user_query(connection, create_user, create_project):
 
 
 def test_find_user_query_not_found(connection):
-    find_user = FindUserQuery(connection=connection)
+    find_user = GetUserSQLQuery(connection=connection)
 
-    with pytest.raises(FindUserQueryError):
+    with pytest.raises(GetUserQueryError):
         find_user(id=UserID(1))

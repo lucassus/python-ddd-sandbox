@@ -3,6 +3,7 @@ from unittest.mock import Mock
 from starlette.testclient import TestClient
 
 from app.modules.projects.application.archivization_service import ArchivizationService
+from app.modules.projects.application.queries.project_queries import ListProjectsQuery
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -28,10 +29,10 @@ def test_create_project_endpoint(container: Container, client: TestClient):
 
 def test_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
     # Given
-    find_project_mock = Mock(return_value=None)
+    get_project_mock = Mock(return_value=None)
 
     # When
-    with container.find_project_query.override(find_project_mock):
+    with container.get_project_query.override(get_project_mock):
         response = client.get("/projects/1")
 
     # Then
@@ -41,10 +42,12 @@ def test_project_endpoint_responds_with_404_if_project_cannot_be_found(container
 def test_list_projects_endpoint(container: Container, client: TestClient):
     # Given
     list_projects_query_mock = Mock(
-        return_value=[
-            {"id": 1, "name": "Test project"},
-            {"id": 2, "name": "Test project 2"},
-        ]
+        return_value={
+            "projects": [
+                {"id": 1, "name": "Test project"},
+                {"id": 2, "name": "Test project 2"},
+            ]
+        }
     )
 
     # When

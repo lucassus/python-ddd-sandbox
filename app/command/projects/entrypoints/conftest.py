@@ -5,17 +5,21 @@ from starlette.testclient import TestClient
 from app.command.projects.entrypoints import routes
 from app.command.projects.entrypoints.containers import Container
 
+_container = Container()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _wire_container():
+    _container.wire()
+
 
 @pytest.fixture()
 def container():
-    container = Container()
-    container.wire()
-    yield container
-    container.unwire()
+    return _container
 
 
 @pytest.fixture()
-def client(container):
+def client():
     app = FastAPI()
     app.include_router(routes.router)
 

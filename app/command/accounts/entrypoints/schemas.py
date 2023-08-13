@@ -4,6 +4,7 @@ from app.base_schema import BaseSchema
 
 # TODO: Move it to application layer?
 # TODO: ...and do the same for projects
+# TODO: Is it possible to combine pydantic and value objects, like EmailAddress and Password?
 
 
 class RegisterUser(BaseSchema):

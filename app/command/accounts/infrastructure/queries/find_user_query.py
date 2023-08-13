@@ -17,7 +17,7 @@ class FindUserQuery(AbstractFindUserQuery):
         user = self._connection.execute(query).first()
 
         if user is None:
-            raise FindUserQueryError(id)
+            raise FindUserQueryError(id)  # TODO: Find a better name for this exception
 
         query = (
             select(projects_table.c.id, projects_table.c.name)

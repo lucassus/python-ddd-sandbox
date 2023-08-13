@@ -10,7 +10,7 @@ class InvalidEmailAddressError(Exception):
 
 
 class EmailAddress(ValueObject):
-    def __init__(self, address: str):
+    def __init__(self, address: str) -> None:
         if not self.is_valid(address):
             raise InvalidEmailAddressError()
 

@@ -120,7 +120,7 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.4.1
+mypy==1.5.0
     # via -r requirements.in
 mypy-extensions==1.0.0
     # via

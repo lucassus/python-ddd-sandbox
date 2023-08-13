@@ -1,6 +1,6 @@
 import pytest
 
-from app.base_schema import camelize
+from app.command.shared_kernel.base_schema import camelize
 
 
 @pytest.mark.parametrize(

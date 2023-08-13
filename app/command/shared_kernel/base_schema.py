@@ -5,7 +5,6 @@ def camelize(str: str) -> str:
     return "".join([char.upper() if str[i - 1] == "_" else char for i, char in enumerate(str) if char != "_"])
 
 
-# TODO: Move it back to the shared kernel
 class BaseSchema(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,

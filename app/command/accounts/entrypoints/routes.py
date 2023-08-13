@@ -68,6 +68,6 @@ def user_endpoint(
     find_user: AbstractFindUserQuery = Depends(Provide[Container.find_user_query]),
 ):
     try:
-        return find_user(id=user_id)
+        return find_user(id=UserID(user_id))
     except FindUserQueryError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e)) from e

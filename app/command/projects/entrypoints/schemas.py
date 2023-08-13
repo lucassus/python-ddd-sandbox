@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from app.base_schema import BaseSchema
+from app.command.shared_kernel.base_schema import BaseSchema
 
 
 class CreateProject(BaseSchema):

@@ -1,21 +1,32 @@
-from sqlalchemy import Connection, select
+from typing import Any
 
-from app.command.accounts.application.queries.abstract_find_user_query import (
-    AbstractFindUserQuery,
+from sqlalchemy import Connection, Executable, select
+
+from app.command.accounts.application.queries.find_user_query_protocol import (
     FindUserQueryError,
+    FindUserQueryProtocol,
     UserDetails,
 )
 from app.command.shared_kernel.entities.user_id import UserID
 from app.infrastructure.tables import projects_table, users_table
 
 
-class FindUserQuery(AbstractFindUserQuery):
+# TODO: Bring back a base class for queries with connection and helper methods
+class BaseQuery:
     def __init__(self, connection: Connection):
         self._connection = connection
 
+    def _first_from(self, query: Executable) -> Any:
+        return self._connection.execute(query).first()
+
+    def _all_from(self, query: Executable) -> list[Any]:
+        return list(self._connection.execute(query).all())
+
+
+class FindUserQuery(BaseQuery, FindUserQueryProtocol):
     def __call__(self, *, id: UserID) -> UserDetails:
         query = select(users_table.c.id, users_table.c.email).select_from(users_table).where(users_table.c.id == id)
-        user = self._connection.execute(query).first()
+        user = self._first_from(query)
 
         if user is None:
             raise FindUserQueryError(id)
@@ -25,7 +36,7 @@ class FindUserQuery(AbstractFindUserQuery):
             .select_from(projects_table)
             .where(projects_table.c.user_id == user.id)
         )
-        projects = list(self._connection.execute(query).all())
+        projects = self._all_from(query)
 
         return UserDetails(
             **{

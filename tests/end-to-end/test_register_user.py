@@ -18,7 +18,7 @@ def test_register_user(register_user, client: TestClient):
     }
 
     project_id = response.json()["projects"][0]["id"]
-    response = client.get(f"/queries/projects/{project_id}/tasks")
+    response = client.get(f"/commands/projects/{project_id}/tasks")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == [

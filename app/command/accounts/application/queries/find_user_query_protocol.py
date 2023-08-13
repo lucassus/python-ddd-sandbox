@@ -1,4 +1,4 @@
-import abc
+from typing import Protocol
 
 from app.command.shared_kernel.base_schema import BaseSchema
 from app.command.shared_kernel.entities.user_id import UserID
@@ -19,7 +19,6 @@ class FindUserQueryError(Exception):
         super().__init__(f"User with id {id} not found")
 
 
-class AbstractFindUserQuery:
-    @abc.abstractmethod
+class FindUserQueryProtocol(Protocol):
     def __call__(self, *, id: UserID) -> UserDetails:
-        raise NotImplementedError()
+        ...

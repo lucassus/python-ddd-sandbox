@@ -3,9 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
 from app.command.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.command.accounts.application.queries.abstract_find_user_query import (
-    AbstractFindUserQuery,
+from app.command.accounts.application.queries.find_user_query_protocol import (
     FindUserQueryError,
+    FindUserQueryProtocol,
     UserDetails,
 )
 from app.command.accounts.application.register_user import RegisterUser
@@ -65,7 +65,7 @@ def user_update_endpoint(
 @inject
 def user_endpoint(
     user_id: int,
-    find_user: AbstractFindUserQuery = Depends(Provide[Container.find_user_query]),
+    find_user: FindUserQueryProtocol = Depends(Provide[Container.find_user_query]),
 ):
     try:
         return find_user(id=UserID(user_id))

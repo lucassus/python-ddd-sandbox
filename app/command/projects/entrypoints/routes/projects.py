@@ -5,13 +5,32 @@ from starlette.status import HTTP_200_OK
 
 from app.command.projects.application.archivization_service import ArchivizationService
 from app.command.projects.application.create_project import CreateProject
+from app.command.projects.application.queries.project_queries import (
+    AbstractFetchProjectsQuery,
+    AbstractFindProjectQuery,
+)
 from app.command.projects.application.update_project import UpdateProject
 from app.command.projects.domain.project import ProjectID, ProjectName
 from app.command.projects.entrypoints import schemas
 from app.command.projects.entrypoints.containers import Container
+from app.command.projects.entrypoints.errors import EntityNotFoundError
 from app.command.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
+
+
+# TODO: Drop it
+@inject
+def get_project(
+    project_id: int,
+    find_project: AbstractFindProjectQuery = Depends(Provide[Container.find_project_query]),
+):
+    project = find_project(id=ProjectID(project_id))
+
+    if project is None:
+        raise EntityNotFoundError(detail=f"Unable to find a project with ID={project_id}")
+
+    return project
 
 
 @router.post("")
@@ -26,9 +45,30 @@ def project_create_endpoint(
     )
 
     return RedirectResponse(
-        f"/queries/projects/{project_id}",
+        f"/commands/projects/{project_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
+
+@router.get(
+    "",
+    response_model=list[schemas.Project],
+    name="Returns the list of projects",
+)
+@inject
+def list_projects_endpoint(
+    list_projects: AbstractFetchProjectsQuery = Depends(Provide[Container.list_projects_query]),
+):
+    return list_projects()
+
+
+@router.get(
+    "/{project_id}",
+    response_model=schemas.Project,
+)
+@inject
+def project_endpoint(project=Depends(get_project)):
+    return project
 
 
 @router.put("/{project_id}")
@@ -41,7 +81,7 @@ def update_project_endpoint(
     update_project(ProjectID(project_id), ProjectName(data.name))
 
     return RedirectResponse(
-        f"/queries/projects/{project_id}",
+        f"/commands/projects/{project_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 

@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.command.accounts.application.queries.abstract_find_user_query import FindUserQueryError, UserDetails
+from app.command.accounts.application.queries.find_user_query_protocol import FindUserQueryError, UserDetails
 from app.command.accounts.domain.email_address import EmailAddress
 from app.command.accounts.domain.errors import EmailAlreadyExistsException
 from app.command.accounts.domain.password import Password
@@ -47,7 +47,7 @@ def test_register_user_endpoint_errors_handling(container: Container, client: Te
     assert response.status_code == status.HTTP_409_CONFLICT
 
 
-def test_get_user(container: Container, client: TestClient):
+def test_get_user_endpoint(container: Container, client: TestClient):
     # Given
     find_user_mock = Mock(
         return_value=UserDetails(
@@ -77,7 +77,7 @@ def test_get_user(container: Container, client: TestClient):
     }
 
 
-def test_get_user_404(container: Container, client: TestClient):
+def test_get_user_endpoint_404(container: Container, client: TestClient):
     # Given
     find_user_mock = Mock(side_effect=FindUserQueryError(2))
 

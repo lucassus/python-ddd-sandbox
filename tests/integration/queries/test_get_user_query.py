@@ -5,7 +5,7 @@ from app.modules.accounts.infrastructure.queries.find_user_query import GetUserS
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
-def test_find_user_query(connection, create_user, create_project):
+def test_get_user_query(connection, create_user, create_project):
     user = create_user()
     create_project(user=user, name="Project One")
     create_project(user=user, name="Project Two")

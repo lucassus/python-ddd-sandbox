@@ -19,7 +19,7 @@ class GetUserSQLQuery(BaseSQLQuery, GetUserQuery):
             .select_from(projects_table)
             .where(projects_table.c.user_id == user.id)
         )
-        projects = self._all_from(query)
+        projects = self._connection.execute(query).all()
 
         return GetUserQuery.Result(
             **{

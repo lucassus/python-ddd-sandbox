@@ -2,7 +2,6 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
-from app.modules.projects.application.queries.project_queries import GetProjectQuery
 from app.modules.projects.application.queries.task_queries import GetTaskQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
@@ -10,18 +9,10 @@ from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.errors import EntityNotFoundError
+from app.modules.projects.entrypoints.routes.dependencies import get_project
 from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
-
-
-# TODO: Drop it
-@inject
-def get_project(
-    project_id: int,
-    get_project: GetProjectQuery = Depends(Provide[Container.get_project_query]),
-):
-    return get_project(id=ProjectID(project_id))
 
 
 @router.post("")

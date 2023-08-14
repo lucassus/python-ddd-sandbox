@@ -10,24 +10,10 @@ from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.entrypoints.errors import EntityNotFoundError
+from app.modules.projects.entrypoints.routes.dependencies import get_project
 from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
-
-
-# TODO: Drop it
-@inject
-def get_project(
-    project_id: int,
-    get_project: GetProjectQuery = Depends(Provide[Container.get_project_query]),
-):
-    project = get_project(id=ProjectID(project_id))
-
-    if project is None:
-        raise EntityNotFoundError(detail=f"Unable to find a project with ID={project_id}")
-
-    return project
 
 
 @router.post("")
@@ -96,7 +82,8 @@ def archive_project_endpoint(
 @router.put("/{project_id}/unarchive")
 @inject
 def unarchive_project_endpoint(
-    project_id: int, archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service])
+    project_id: int,
+    archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service]),
 ):
     archivization_service.unarchive(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)
@@ -105,7 +92,8 @@ def unarchive_project_endpoint(
 @router.delete("/{project_id}")
 @inject
 def delete_project_endpoint(
-    project_id: int, archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service])
+    project_id: int,
+    archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service]),
 ):
     archivization_service.delete(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)

@@ -30,11 +30,11 @@ def test_task_create_endpoint(container: Container, client: TestClient):
 # TODO: Fix this test
 def test_task_endpoint_returns_404(container: Container, client: TestClient):
     # Given
-    find_project_mock = Mock(return_value=Mock(id=1))
-    # app.dependency_overrides[get_project] = lambda: find_project_mock
+    get_project_mock = Mock(return_value=Mock(id=1))
+    # app.dependency_overrides[get_project] = lambda: get_project_mock
 
-    find_task_mock = Mock(return_value=None)
-    # app.dependency_overrides[FindTaskQuery] = lambda: find_task_mock
+    get_task_mock = Mock(return_value=None)
+    # app.dependency_overrides[FindTaskQuery] = lambda: get_task_mock
 
     # When
     response = client.get("/projects/1/tasks/1")

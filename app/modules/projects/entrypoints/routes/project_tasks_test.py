@@ -27,17 +27,29 @@ def test_task_create_endpoint(container: Container, client: TestClient):
     mock_tasks_service.create_task.assert_called_once_with(project_id=ProjectID(123), name="Some task")
 
 
-# TODO: Fix this test
-def test_task_endpoint_returns_404(container: Container, client: TestClient):
+def test_task_endpoint_returns_404_when_project_not_found(container: Container, client: TestClient):
     # Given
-    get_project_mock = Mock(return_value=Mock(id=1))
-    # app.dependency_overrides[get_project] = lambda: get_project_mock
-
-    get_task_mock = Mock(return_value=None)
-    # app.dependency_overrides[FindTaskQuery] = lambda: get_task_mock
+    get_project_query_mock = Mock(return_value=None)
 
     # When
-    response = client.get("/projects/1/tasks/1")
+    with container.get_project_query.override(get_project_query_mock):
+        response = client.get("/projects/1/tasks/1")
+
+    # Then
+    assert response.status_code == 404
+
+
+def test_task_endpoint_returns_404_when_task_not_found(container: Container, client: TestClient):
+    # Given
+    get_project_query_mock = Mock(return_value=Mock(id=1))
+    get_task_query_mock = Mock(return_value=None)
+
+    # When
+    with (
+        container.get_project_query.override(get_project_query_mock),
+        container.get_task_query.override(get_task_query_mock),
+    ):
+        response = client.get("/projects/1/tasks/1")
 
     # Then
     assert response.status_code == 404

@@ -3,11 +3,12 @@ from unittest.mock import Mock
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.modules.accounts.application.queries.find_user_query import GetUserQuery, GetUserQueryError
+from app.modules.accounts.application.queries.find_user_query import GetUserQuery
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.containers import Container
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
 def test_register_user_endpoint(container: Container, client: TestClient):
@@ -79,7 +80,7 @@ def test_get_user_endpoint(container: Container, client: TestClient):
 
 def test_get_user_endpoint_404(container: Container, client: TestClient):
     # Given
-    get_user_mock = Mock(side_effect=GetUserQueryError(2))
+    get_user_mock = Mock(side_effect=GetUserQuery.NotFoundError(UserID(2)))
 
     # When
     with container.get_user_query.override(get_user_mock):
@@ -88,3 +89,4 @@ def test_get_user_endpoint_404(container: Container, client: TestClient):
     # Then
     get_user_mock.assert_called_with(id=2)
     assert response.status_code == 404
+    assert response.json() == {"detail": "User with id 2 not found"}

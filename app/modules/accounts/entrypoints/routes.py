@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.queries.find_user_query import GetUserQuery, GetUserQueryError
+from app.modules.accounts.application.queries.find_user_query import GetUserQuery
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
@@ -65,5 +65,9 @@ def user_endpoint(
 ):
     try:
         return get_user(id=UserID(user_id))
-    except GetUserQueryError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e)) from e
+    except GetUserQuery.NotFoundError as e:
+        # TODO: Figure out how to dry it
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        ) from e

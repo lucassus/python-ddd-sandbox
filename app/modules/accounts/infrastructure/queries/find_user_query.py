@@ -2,7 +2,7 @@ from sqlalchemy import select
 
 from app.infrastructure.base_query import BaseSQLQuery
 from app.infrastructure.tables import projects_table, users_table
-from app.modules.accounts.application.queries.find_user_query import GetUserQuery, GetUserQueryError
+from app.modules.accounts.application.queries.find_user_query import GetUserQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
@@ -12,7 +12,7 @@ class GetUserSQLQuery(BaseSQLQuery, GetUserQuery):
         user = self._first_from(query)
 
         if user is None:
-            raise GetUserQueryError(id)
+            raise GetUserQuery.NotFoundError(id)
 
         query = (
             select(projects_table.c.id, projects_table.c.name)

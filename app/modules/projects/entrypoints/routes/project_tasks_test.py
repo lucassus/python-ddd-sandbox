@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 from starlette.testclient import TestClient
 
+from app.modules.projects.application.queries.task_queries import ListTasksQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
@@ -53,6 +54,40 @@ def test_task_endpoint_returns_404_when_task_not_found(container: Container, cli
 
     # Then
     assert response.status_code == 404
+
+
+def test_task_list_endpoint(container: Container, client: TestClient):
+    # Given
+    class ListTasksQueryMock(ListTasksQuery):
+        def __call__(self, project_id: ProjectID) -> ListTasksQuery.Result:
+            return ListTasksQuery.Result(
+                tasks=[
+                    ListTasksQuery.Result.Task(
+                        number=TaskNumber(1),
+                        name="Some task",
+                        completed_at=None,
+                    ),
+                ]
+            )
+
+    list_tasks_query_mock = Mock(wraps=ListTasksQueryMock())
+
+    # When
+    with container.list_tasks_query.override(list_tasks_query_mock):
+        response = client.get("/projects/1/tasks")
+
+    # Then
+    assert response.status_code == 200
+    list_tasks_query_mock.assert_called_once_with(ProjectID(1))
+    assert response.json() == {
+        "tasks": [
+            {
+                "number": 1,
+                "name": "Some task",
+                "completedAt": None,
+            },
+        ]
+    }
 
 
 def test_task_complete_endpoint(container: Container, client: TestClient):

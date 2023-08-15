@@ -35,15 +35,15 @@ def task_create_endpoint(
 
 @router.get(
     "",
-    response_model=ListTasksSQLQuery.Result,
     name="Returns list of tasks",
+    response_model=ListTasksSQLQuery.Result,
 )
 @inject
-def tasks_endpoint(
+def list_tasks_endpoint(
+    project_id: ProjectID,
     list_tasks: ListTasksSQLQuery = Depends(Provide[Container.list_tasks_query]),
-    project=Depends(get_project),
 ):
-    return list_tasks(project_id=project.id)
+    return list_tasks(project_id)
 
 
 @router.get(

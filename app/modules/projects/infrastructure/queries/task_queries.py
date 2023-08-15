@@ -9,7 +9,7 @@ from app.modules.projects.domain.task import TaskNumber
 
 
 class ListTasksSQLQuery(BaseSQLQuery, ListTasksQuery):
-    def __call__(self, *, project_id: ProjectID):
+    def __call__(self, project_id: ProjectID):
         query = select(tasks_table).where(tasks_table.c.project_id == project_id)
 
         tasks = self._connection.execute(query).all()
@@ -17,7 +17,7 @@ class ListTasksSQLQuery(BaseSQLQuery, ListTasksQuery):
 
 
 class GetTaskSQLQuery(BaseSQLQuery, GetTaskQuery):
-    def __call__(self, *, project_id: ProjectID, number: TaskNumber):
+    def __call__(self, project_id: ProjectID, number: TaskNumber):
         query = select(tasks_table).where(
             and_(
                 tasks_table.c.project_id == project_id,

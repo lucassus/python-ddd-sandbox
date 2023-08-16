@@ -8,7 +8,7 @@ def test_update_project(create_project, client: TestClient):
     project_id = response.json()["id"]
 
     response = client.put(
-        f"/commands/projects/{project_id}",
+        f"/api/projects/{project_id}",
         json={"name": "Project Y"},
         follow_redirects=True,
     )

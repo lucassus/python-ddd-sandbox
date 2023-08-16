@@ -8,7 +8,7 @@ def test_change_user_email(register_user, client: TestClient):
     user_id = response.json()["id"]
 
     response = client.put(
-        f"/commands/users/{user_id}",
+        f"/api/users/{user_id}",
         json={"email": "new@email.com"},
     )
     assert response.status_code == status.HTTP_200_OK

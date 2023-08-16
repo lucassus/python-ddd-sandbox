@@ -66,7 +66,6 @@ def user_endpoint(
     try:
         return get_user(id=UserID(user_id))
     except GetUserQuery.NotFoundError as e:
-        # TODO: Figure out how to dry it
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=str(e),

@@ -15,7 +15,7 @@ class ListTasksQuery(Protocol):
 
         tasks: list[Task]
 
-    def __call__(self, *, project_id: ProjectID) -> Result:
+    def __call__(self, project_id: ProjectID) -> Result:
         ...
 
 
@@ -25,5 +25,9 @@ class GetTaskQuery(Protocol):
         name: str
         completed_at: Optional[datetime] = None
 
-    def __call__(self, *, project_id: ProjectID, number: TaskNumber) -> Result:
+    class NotFoundError(Exception):
+        def __init__(self, project_id: ProjectID, number: TaskNumber):
+            super().__init__(f"Task with number {number} in project with id {project_id} not found")
+
+    def __call__(self, project_id: ProjectID, number: TaskNumber) -> Result:
         ...

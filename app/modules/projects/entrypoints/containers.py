@@ -22,7 +22,6 @@ def init_connection(engine: Engine) -> Iterator[Connection]:
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            ".routes.dependencies",
             ".routes.project_tasks",
             ".routes.projects",
         ],

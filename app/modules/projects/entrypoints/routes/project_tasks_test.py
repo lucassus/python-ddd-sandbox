@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 from starlette.testclient import TestClient
 
-from app.modules.projects.application.queries.task_queries import ListTasksQuery
+from app.modules.projects.application.queries.task_queries import GetTaskQuery, ListTasksQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
@@ -28,32 +28,17 @@ def test_task_create_endpoint(container: Container, client: TestClient):
     mock_tasks_service.create_task.assert_called_once_with(project_id=ProjectID(123), name="Some task")
 
 
-def test_task_endpoint_returns_404_when_project_not_found(container: Container, client: TestClient):
+def test_get_task_endpoint_returns_404_when_task_not_found(container: Container, client: TestClient):
     # Given
-    get_project_query_mock = Mock(return_value=None)
+    get_task_query_mock = Mock(side_effect=GetTaskQuery.NotFoundError(ProjectID(41), TaskNumber(665)))
 
     # When
-    with container.get_project_query.override(get_project_query_mock):
-        response = client.get("/projects/1/tasks/1")
+    with container.get_task_query.override(get_task_query_mock):
+        response = client.get("/projects/41/tasks/665")
 
     # Then
     assert response.status_code == 404
-
-
-def test_task_endpoint_returns_404_when_task_not_found(container: Container, client: TestClient):
-    # Given
-    get_project_query_mock = Mock(return_value=Mock(id=1))
-    get_task_query_mock = Mock(return_value=None)
-
-    # When
-    with (
-        container.get_project_query.override(get_project_query_mock),
-        container.get_task_query.override(get_task_query_mock),
-    ):
-        response = client.get("/projects/1/tasks/1")
-
-    # Then
-    assert response.status_code == 404
+    assert response.json() == {"detail": "Task with number 665 in project with id 41 not found"}
 
 
 def test_task_list_endpoint(container: Container, client: TestClient):

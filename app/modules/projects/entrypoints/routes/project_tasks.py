@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, Path, status
+from fastapi import APIRouter, Depends, HTTPException, Path, status
 from starlette.responses import RedirectResponse
 
 from app.modules.projects.application.queries.task_queries import GetTaskQuery
@@ -9,7 +9,6 @@ from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.errors import EntityNotFoundError
-from app.modules.projects.entrypoints.routes.dependencies import get_project
 from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
@@ -51,18 +50,18 @@ def list_tasks_endpoint(
     response_model=GetTaskQuery.Result,
 )
 @inject
-def task_endpoint(
+def get_task_endpoint(
     get_task: GetTaskQuery = Depends(Provide[Container.get_task_query]),
-    project=Depends(get_project),
-    number: int = Path(..., description="The number of the task", ge=1),
+    project_id: ProjectID = Path(..., description="The ID of the project"),
+    number: TaskNumber = Path(..., description="The number of the task", ge=1),
 ):
-    task = get_task(project_id=project.id, number=TaskNumber(number))
-
-    # TODO: Move it to the query
-    if task is None:
-        raise EntityNotFoundError(detail=f"Unable to find a task with {number=}")
-
-    return task
+    try:
+        return get_task(project_id, number)
+    except GetTaskQuery.NotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        ) from e
 
 
 @router.put("/{task_number}/complete")

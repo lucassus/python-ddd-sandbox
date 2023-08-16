@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
@@ -10,7 +10,6 @@ from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.entrypoints.routes.dependencies import get_project
 from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
@@ -50,8 +49,17 @@ def list_projects_endpoint(
     response_model=GetProjectQuery.Result,
 )
 @inject
-def project_endpoint(project=Depends(get_project)):
-    return project
+def get_project_endpoint(
+    project_id: ProjectID,
+    get_project: GetProjectQuery = Depends(Provide[Container.get_project_query]),
+):
+    try:
+        return get_project(project_id)
+    except GetProjectQuery.NotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        ) from e
 
 
 @router.put("/{project_id}")

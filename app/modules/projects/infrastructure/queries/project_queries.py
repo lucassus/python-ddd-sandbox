@@ -10,7 +10,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class ListProjectsSQLSQLQuery(BaseSQLQuery, ListProjectsQuery):
-    def __call__(self, *, user_id: Optional[UserID] = None) -> ListProjectsQuery.Result:
+    def __call__(self, user_id: Optional[UserID] = None) -> ListProjectsQuery.Result:
         query = select(
             projects_table.c.id,
             projects_table.c.name,
@@ -27,8 +27,11 @@ class ListProjectsSQLSQLQuery(BaseSQLQuery, ListProjectsQuery):
 
 
 class GetProjectSQLSQLQuery(BaseSQLQuery, GetProjectQuery):
-    def __call__(self, *, id: ProjectID) -> GetProjectQuery.Result:
+    def __call__(self, id: ProjectID) -> GetProjectQuery.Result:
         query = select(projects_table).where(projects_table.c.id == id)
         project = self._first_from(query)
+
+        if project is None:
+            raise GetProjectQuery.NotFoundError(id)
 
         return GetProjectQuery.Result.model_validate(project)

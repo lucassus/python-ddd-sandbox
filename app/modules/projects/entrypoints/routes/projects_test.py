@@ -3,6 +3,7 @@ from unittest.mock import Mock
 from starlette.testclient import TestClient
 
 from app.modules.projects.application.archivization_service import ArchivizationService
+from app.modules.projects.application.queries.project_queries import GetProjectQuery
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -26,12 +27,12 @@ def test_create_project_endpoint(container: Container, client: TestClient):
     assert response.headers["location"] == "/api/projects/1"
 
 
-def test_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
+def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
     # Given
-    get_project_mock = Mock(return_value=None)
+    get_project_query_mock = Mock(side_effect=GetProjectQuery.NotFoundError(id=ProjectID(1)))
 
     # When
-    with container.get_project_query.override(get_project_mock):
+    with container.get_project_query.override(get_project_query_mock):
         response = client.get("/projects/1")
 
     # Then

@@ -1,17 +1,17 @@
 import pytest
+from sqlalchemy import Connection
 
-from app.modules.accounts.application.queries.find_user_query import GetUserQueryError
 from app.modules.accounts.infrastructure.queries.find_user_query import GetUserSQLQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
-def test_get_user_query(connection, create_user, create_project):
+def test_get_user_query(connection: Connection, create_user, create_project):
     user = create_user()
     create_project(user=user, name="Project One")
     create_project(user=user, name="Project Two")
 
-    find_user = GetUserSQLQuery(connection=connection)
-    loaded = find_user(id=user.id)
+    get_user = GetUserSQLQuery(connection=connection)
+    loaded = get_user(id=user.id)
 
     assert loaded
     assert loaded.id == user.id
@@ -19,8 +19,8 @@ def test_get_user_query(connection, create_user, create_project):
     assert len(loaded.projects) == 2
 
 
-def test_find_user_query_not_found(connection):
+def test_find_user_query_not_found(connection: Connection):
     find_user = GetUserSQLQuery(connection=connection)
 
-    with pytest.raises(GetUserQueryError):
+    with pytest.raises(GetUserSQLQuery.NotFoundError):
         find_user(id=UserID(1))

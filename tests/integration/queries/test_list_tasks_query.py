@@ -1,11 +1,12 @@
+from sqlalchemy import Connection
 from sqlalchemy.orm import Session
 
 from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 
-def test_list_tasks_query(session: Session, create_project):
+def test_list_tasks_query(connection: Connection, session: Session, create_project):
     # Given
-    fetch_tasks = ListTasksSQLQuery(connection=session.connection())
+    list_tasks = ListTasksSQLQuery(connection=connection)
 
     project = create_project()
     project.add_task(name="Task One")
@@ -13,7 +14,7 @@ def test_list_tasks_query(session: Session, create_project):
     session.commit()
 
     # When
-    tasks = fetch_tasks(project_id=project.id).tasks
+    tasks = list_tasks(project_id=project.id).tasks
 
     # Then
     assert len(tasks) == 2

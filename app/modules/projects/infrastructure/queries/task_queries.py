@@ -26,4 +26,8 @@ class GetTaskSQLQuery(BaseSQLQuery, GetTaskQuery):
         )
 
         task = self._first_from(query)
+
+        if task is None:
+            raise GetTaskQuery.NotFoundError(project_id, number)
+
         return GetTaskQuery.Result.model_validate(task)

@@ -13,7 +13,7 @@ class ListProjectsQuery(Protocol):
 
         projects: list[Project]
 
-    def __call__(self, *, user_id: Optional[UserID] = None) -> Result:
+    def __call__(self, user_id: Optional[UserID] = None) -> Result:
         ...
 
 
@@ -22,5 +22,9 @@ class GetProjectQuery(Protocol):
         id: int
         name: str
 
-    def __call__(self, *, id: ProjectID) -> Result:
+    class NotFoundError(Exception):
+        def __init__(self, id: ProjectID):
+            super().__init__(f"Project with id {id} not found")
+
+    def __call__(self, id: ProjectID) -> Result:
         ...

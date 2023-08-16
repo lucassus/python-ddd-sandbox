@@ -30,7 +30,7 @@ def user_register_endpoint(
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e)) from e
 
     return RedirectResponse(
-        f"/api/users/{user_id}",  # TODO: Try use url_for builder
+        f"/api/users/{user_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 

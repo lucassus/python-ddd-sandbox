@@ -1,8 +1,8 @@
 import pytest
 
-from app.command.projects.entities.errors import ProjectNotFoundError
-from app.command.projects.entities.project import ProjectID
-from app.command.projects.infrastructure.adapters.project_repository import ProjectRepository
+from app.modules.projects.domain.errors import ProjectNotFoundError
+from app.modules.projects.domain.project import ProjectID
+from app.modules.projects.infrastructure.adapters.project_repository import ProjectRepository
 from app.utc_datetime import utc_now
 
 

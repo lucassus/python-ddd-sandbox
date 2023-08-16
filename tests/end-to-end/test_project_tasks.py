@@ -22,10 +22,10 @@ def test_complete_task(create_project, create_task, client: TestClient):
     response = create_task(project_id=project_id, name="First task")
     task_number = response.json()["number"]
 
-    response = client.put(f"/commands/projects/{project_id}/tasks/{task_number}/complete")
+    response = client.put(f"/api/projects/{project_id}/tasks/{task_number}/complete")
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["completedAt"] is not None
 
-    response = client.put(f"/commands/projects/{project_id}/tasks/{task_number}/incomplete")
+    response = client.put(f"/api/projects/{project_id}/tasks/{task_number}/incomplete")
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["completedAt"] is None

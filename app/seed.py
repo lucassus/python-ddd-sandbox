@@ -1,21 +1,21 @@
 import typer
 
-from app.command import mapper_registry
-from app.command.accounts.application.register_user import RegisterUser
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.password import Password
-from app.command.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
-from app.command.accounts.infrastructure.mappers import start_mappers as start_account_mappers
-from app.command.projects.application.archivization_service import ArchivizationService
-from app.command.projects.application.create_example_project import CreateExampleProject
-from app.command.projects.application.create_project import CreateProject
-from app.command.projects.application.tasks_service import TasksService
-from app.command.projects.entities.project import ProjectName
-from app.command.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
-from app.command.projects.infrastructure.mappers import start_mappers as start_project_mappers
-from app.command.shared_kernel.message_bus import BaseEvent, MessageBus
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
+from app.modules import mapper_registry
+from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.password import Password
+from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
+from app.modules.accounts.infrastructure.mappers import start_mappers as start_account_mappers
+from app.modules.projects.application.archivization_service import ArchivizationService
+from app.modules.projects.application.create_example_project import CreateExampleProject
+from app.modules.projects.application.create_project import CreateProject
+from app.modules.projects.application.tasks_service import TasksService
+from app.modules.projects.domain.project import ProjectName
+from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
+from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
+from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
 
 
 class NoopMessageBus(MessageBus):

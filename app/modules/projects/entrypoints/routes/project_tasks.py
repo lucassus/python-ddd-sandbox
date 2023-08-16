@@ -8,7 +8,6 @@ from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.entrypoints.errors import EntityNotFoundError
 from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")

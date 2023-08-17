@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 import jwt
-from jwt import DecodeError
+from jwt import DecodeError, ExpiredSignatureError
 
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
@@ -18,7 +18,7 @@ class JWT:
     def __init__(self, secret_key: str):
         self._secret_key = secret_key
 
-    def create(self, user_id: UserID, now: datetime | None = None) -> str:
+    def encode(self, user_id: UserID, now: datetime | None = None) -> str:
         if now is None:
             now = utc_now()
 
@@ -39,9 +39,7 @@ class JWT:
                 key=self._secret_key,
                 algorithms=[self._algorithm],
             )
-        except DecodeError as e:
+        except (DecodeError, ExpiredSignatureError) as e:
             raise JWTError() from e
-
-        # TODO: Check if token is expired
 
         return UserID(payload["sub"])

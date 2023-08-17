@@ -11,7 +11,7 @@ def service(fake_uow):
 
 
 def test_create_task(service: TasksService, repository, fake_uow):
-    project = repository.create(ProjectBuilder().build())
+    project = repository.encode(ProjectBuilder().build())
     service.create_task(project_id=project.id, name="Testing...")
 
     assert project.tasks[-1].name == "Testing..."
@@ -19,7 +19,7 @@ def test_create_task(service: TasksService, repository, fake_uow):
 
 
 def test_complete_task(service: TasksService, repository, fake_uow):
-    project = repository.create(ProjectBuilder().build())
+    project = repository.encode(ProjectBuilder().build())
     task = project.add_task(name="Testing...")
 
     now = utc_datetime(2021, 1, 8)
@@ -30,7 +30,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
 
 
 def test_incomplete_task(service: TasksService, repository, fake_uow):
-    project = repository.create(ProjectBuilder().build())
+    project = repository.encode(ProjectBuilder().build())
     task = project.add_task(name="Testing...")
     project.complete_task(task.number, now=utc_datetime(2021, 1, 8))
 

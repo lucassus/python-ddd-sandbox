@@ -7,11 +7,13 @@ from starlette import status
 from app.modules.accounts.application.authentication import Authentication, AuthenticationError
 from app.modules.accounts.entrypoints.containers import Container
 
+# TODO: Implement a more robust authentication, see https://fastapi.tiangolo.com/tutorial/security/
+
 
 @inject
 def get_current_user(
     authentication: Authentication = Depends(Provide[Container.authenticate]),
-    x_authentication_token: Annotated[str | None, Header()] = None,  # TODO: Improve this
+    x_authentication_token: Annotated[str | None, Header()] = None,
 ) -> Authentication.UserDTO:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

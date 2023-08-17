@@ -34,7 +34,7 @@ def user_register_endpoint(
     except EmailAlreadyExistsException as e:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e)) from e
 
-    return {"token": jwt.create(user_id)}
+    return {"token": jwt.encode(user_id)}
 
 
 @router.post("/login")

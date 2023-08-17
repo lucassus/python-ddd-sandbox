@@ -1,11 +1,9 @@
 import pytest
 
-from app.command.accounts.application.authentication import Authentication
-from app.command.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.command.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.password import Password
-from app.command.accounts.entities.user_builder import UserBuilder
+from app.modules.accounts.application.authentication import Authentication
+from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.modules.accounts.domain.user_builder import UserBuilder
 
 
 class TestAuthenticate:

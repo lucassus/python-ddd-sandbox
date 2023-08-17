@@ -2,11 +2,11 @@ from datetime import datetime, timedelta
 
 import jwt
 
-from app.command.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.command.accounts.entities.email_address import EmailAddress
-from app.command.accounts.entities.password import Password
-from app.command.accounts.entities.user import User
-from app.command.shared_kernel.entities.user_id import UserID
+from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.accounts.domain.password import Password
+from app.modules.accounts.domain.user import User
+from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
 
 
@@ -33,13 +33,14 @@ class Authentication:
 
         with self._uow as uow:
             user = uow.user.get_by_email(email)
+            user_id, user_password = user.id, user.password
 
-        if user is None or user.password != password:
+        if user is None or user_password != password:
             raise AuthenticationError()
 
         return jwt.encode(
             payload={
-                "sub": user.id,
+                "sub": user_id,
                 "exp": now + timedelta(days=90),
                 "iat": now,
             },

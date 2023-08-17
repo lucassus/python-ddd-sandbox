@@ -2,6 +2,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
+from app.modules.accounts.application.authentication import Authentication, AuthenticationError
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.modules.accounts.application.queries.find_user_query import GetUserQuery
 from app.modules.accounts.application.register_user import RegisterUser
@@ -70,6 +71,7 @@ def user_update_endpoint(
     )
 
 
+# TODO: Change it to GET /api/users/me
 @router.get(
     "/{user_id}",
     name="Returns user along with projects",

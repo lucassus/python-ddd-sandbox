@@ -11,7 +11,11 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> None:
     from app.modules.accounts.entrypoints.containers import Container
     from app.modules.accounts.infrastructure.mappers import start_mappers
 
-    container = Container(engine=engine, bus=providers.Object(bus))
+    container = Container(
+        engine=engine,
+        jwt_secret_key="some secret",  # TODO: Take it from the proper config
+        bus=providers.Object(bus),
+    )
     container.wire()
 
     start_mappers(mappers)

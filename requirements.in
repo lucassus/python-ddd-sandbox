@@ -2,9 +2,10 @@ aiosqlite==0.19.0
 dependency-injector==4.41.0
 email-validator==2.0.0.post2
 fastapi==0.101.1
-pydantic==2.1.1
 pydantic-settings==2.0.3
+pydantic==2.1.1
 pyjwt==2.8.0
+python-multipart==0.0.6
 sqlalchemy[asyncio]==2.0.20
 typer==0.9.0
 uvicorn==0.23.2
@@ -27,7 +28,7 @@ freezegun==1.2.2
 httpx==0.24.1
 isort==5.12.0
 libyear==0.2.1
-mypy==1.5.0
+mypy==1.5.1
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 pytest-icdiff==0.6

@@ -120,7 +120,7 @@ mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
-mypy==1.5.0
+mypy==1.5.1
     # via -r requirements.in
 mypy-extensions==1.0.0
     # via
@@ -185,6 +185,8 @@ python-dateutil==2.8.2
     #   libyear
 python-dotenv==1.0.0
     # via pydantic-settings
+python-multipart==0.0.6
+    # via -r requirements.in
 pyyaml==6.0.1
     # via bandit
 requests==2.31.0

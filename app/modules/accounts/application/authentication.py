@@ -30,12 +30,11 @@ class Authentication:
     ) -> str:
         with self._uow as uow:
             user = uow.user.get_by_email(email)
-            user_id, user_password = user.id, user.password
 
-        if user is None or user_password != password:
-            raise AuthenticationError()
+            if user is None or user.password != password:
+                raise AuthenticationError()
 
-        return self._jwt.encode(user_id, now)
+            return self._jwt.encode(user.id, now)
 
     def trade_token_for_user(self, token: str) -> UserDTO:
         try:

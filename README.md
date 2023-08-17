@@ -7,8 +7,8 @@
 * `make seed`
 * `make server-dev`
 
-http://localhost:8000/queries/docs
-http://localhost:8000/commands/docs
+http://localhost:8000/docs
+http://localhost:8000/api/docs
 
 ## Linting and testing
 
@@ -17,8 +17,8 @@ http://localhost:8000/commands/docs
 * `make test-watch`
 
 ```
-curl http://localhost:8000/commands/users -X POST -H "Content-Type: application/json" -d '{"email": "test@email.com", "password": "passwdowrd"}' --silent
-curl http://localhost:8000/queries/projects/1/tasks --silent | jq
+curl http://localhost:8000/api/users -X POST -H "Content-Type: application/json" -d '{"email": "test@email.com", "password": "passwdowrd"}' --silent
+curl http://localhost:8000/api/projects/1/tasks --silent | jq
 ```
 
 ## Other useful commands

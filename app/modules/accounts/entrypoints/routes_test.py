@@ -22,7 +22,10 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     with container.register_user.override(register_user_mock):
         response = client.post(
             "/users",
-            json={"email": "test@email.com", "password": "password"},
+            json={
+                "email": "test@email.com",
+                "password": "password",
+            },
             follow_redirects=False,
         )
 
@@ -32,7 +35,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         password=Password("password"),
     )
     assert response.status_code == status.HTTP_200_OK
-    assert "token" in response.json()
+    assert "access_token" in response.json()
 
 
 def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):

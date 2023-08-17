@@ -18,8 +18,8 @@ def get_current_user(
 ) -> Authentication.UserDTO:
     try:
         return authentication.trade_token_for_user(token)
-    except AuthenticationError:
+    except AuthenticationError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
-        )
+        ) from e

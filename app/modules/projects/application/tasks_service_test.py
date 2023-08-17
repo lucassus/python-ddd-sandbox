@@ -1,5 +1,6 @@
 import pytest
 
+from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project_builder import ProjectBuilder
 from app.utc_datetime import utc_datetime
@@ -10,7 +11,7 @@ def service(fake_uow):
     return TasksService(uow=fake_uow)
 
 
-def test_create_task(service: TasksService, repository, fake_uow):
+def test_create_task(service: TasksService, repository: AbstractProjectRepository, fake_uow):
     project = repository.create(ProjectBuilder().build())
     service.create_task(project_id=project.id, name="Testing...")
 
@@ -18,7 +19,7 @@ def test_create_task(service: TasksService, repository, fake_uow):
     assert fake_uow.committed
 
 
-def test_complete_task(service: TasksService, repository, fake_uow):
+def test_complete_task(service: TasksService, repository: AbstractProjectRepository, fake_uow):
     project = repository.create(ProjectBuilder().build())
     task = project.add_task(name="Testing...")
 
@@ -29,7 +30,7 @@ def test_complete_task(service: TasksService, repository, fake_uow):
     assert fake_uow.committed
 
 
-def test_incomplete_task(service: TasksService, repository, fake_uow):
+def test_incomplete_task(service: TasksService, repository: AbstractProjectRepository, fake_uow):
     project = repository.create(ProjectBuilder().build())
     task = project.add_task(name="Testing...")
     project.complete_task(task.number, now=utc_datetime(2021, 1, 8))

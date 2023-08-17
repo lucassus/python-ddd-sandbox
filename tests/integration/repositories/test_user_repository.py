@@ -32,3 +32,10 @@ class TestUserRepository:
 
     def test_get_returns_none_when_not_found(self, repository: UserRepository):
         assert repository.get(UserID(1)) is None
+
+    def test_get_by_email(self, create_user, repository: UserRepository):
+        user = create_user()
+        assert repository.get_by_email(user.email) is not None
+
+    def test_get_by_email_returns_none_when_not_found(self, repository: UserRepository):
+        assert repository.get_by_email(EmailAddress("non-existing@email.com")) is None

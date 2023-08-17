@@ -39,6 +39,13 @@ def create_project(register_user, client: TestClient):
         if user_id is None:
             response = register_user("test@email.com")
             assert response.status_code == status.HTTP_200_OK  # noqa: S101
+            token = response.json()["token"]
+
+            response = client.get(
+                "/api/users/me",
+                headers={"x-authentication-token": token},
+            )
+            assert response.status_code == status.HTTP_200_OK  # noqa: S101
             user_id = response.json()["id"]
 
         return client.post(

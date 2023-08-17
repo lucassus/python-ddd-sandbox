@@ -161,6 +161,8 @@ pyflakes==3.1.0
     #   flake8
 pygments==2.15.1
     # via rich
+pyjwt==2.8.0
+    # via -r requirements.in
 pytest==7.4.0
     # via
     #   -r requirements.in

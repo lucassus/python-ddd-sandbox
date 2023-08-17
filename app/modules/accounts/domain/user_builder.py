@@ -14,5 +14,9 @@ class UserBuilder:
         self._email = EmailAddress(str(email))
         return self
 
+    def with_password(self, password: str | Password) -> Self:
+        self._password = Password(str(password))
+        return self
+
     def build(self) -> User:
         return User(email=self._email, password=self._password)

@@ -8,9 +8,14 @@ def test_register_user(register_user, client: TestClient):
     response = register_user(email="test@email.com")
 
     assert response.status_code == status.HTTP_200_OK
-    user_id = response.json()["id"]
+    token = response.json()["token"]
+
+    response = client.get(
+        "/api/users/me",
+        headers={"x-authentication-token": token},
+    )
     assert response.json() == {
-        "id": user_id,
+        "id": 1,
         "email": "test@email.com",
         "projects": [
             {"id": 1, "name": "My first project"},

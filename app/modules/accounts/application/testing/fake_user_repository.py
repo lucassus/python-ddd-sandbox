@@ -22,5 +22,12 @@ class FakeUserRepository(AbstractUserRepository):
     def get(self, user_id: UserID) -> User | None:
         return self._users_by_id.get(user_id)
 
+    def get_by_email(self, email: EmailAddress) -> User | None:
+        for user in self._users_by_id.values():
+            if user.email == email:
+                return user
+
+        return None
+
     def _get_next_id(self) -> UserID:
         return UserID(max(self._users_by_id.keys(), default=0) + 1)

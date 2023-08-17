@@ -16,15 +16,10 @@ def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     authentication: Authentication = Depends(Provide[Container.authenticate]),
 ) -> Authentication.UserDTO:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-    )
-
-    if token is None:
-        raise credentials_exception
-
     try:
         return authentication.trade_token_for_user(token)
     except AuthenticationError:
-        raise credentials_exception
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )

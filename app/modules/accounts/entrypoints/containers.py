@@ -38,7 +38,7 @@ class Container(containers.DeclarativeContainer):
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
 
     register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
-    authenticate = providers.Factory(Authentication, uow=uow, jwt=jwt)
+    authentication = providers.Factory(Authentication, uow=uow, jwt=jwt)
     change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
 
     get_user_query = providers.Factory(GetUserSQLQuery, connection=connection)

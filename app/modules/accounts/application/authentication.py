@@ -1,23 +1,13 @@
-from dataclasses import dataclass
 from datetime import datetime
 
 from app.modules.accounts.application.jwt import JWT, JWTError
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
-from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.authentication_contract import AuthenticationContract, AuthenticationError
 
 
-class AuthenticationError(Exception):
-    pass
-
-
-class Authentication:
-    @dataclass(frozen=True)
-    class UserDTO:
-        id: UserID
-        email: EmailAddress
-
+class Authentication(AuthenticationContract):
     def __init__(self, uow: AbstractUnitOfWork, jwt: JWT):
         self._uow = uow
         self._jwt = jwt
@@ -36,7 +26,7 @@ class Authentication:
 
             return self._jwt.encode(user.id, now)
 
-    def trade_token_for_user(self, token: str) -> UserDTO:
+    def trade_token_for_user(self, token: str) -> AuthenticationContract.UserDTO:
         try:
             user_id = self._jwt.decode(token)
         except JWTError as e:
@@ -48,7 +38,7 @@ class Authentication:
             if user is None:
                 raise AuthenticationError()
 
-            return Authentication.UserDTO(
+            return AuthenticationContract.UserDTO(
                 id=user.id,
                 email=user.email,
             )

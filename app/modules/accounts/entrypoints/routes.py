@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 
-from app.modules.accounts.application.authentication import Authentication, AuthenticationError
+from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.queries.find_user_query import GetUserQuery
@@ -16,6 +16,7 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
+from app.modules.authentication_contract import AuthenticationError
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -45,7 +46,7 @@ def user_register_endpoint(
 @inject
 def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    authentication: Authentication = Depends(Provide[Container.authenticate]),
+    authentication: Authentication = Depends(Provide[Container.authentication]),
 ):
     try:
         token = authentication.login(

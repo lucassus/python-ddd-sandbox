@@ -5,8 +5,8 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 
-from app.modules.accounts.application.authentication import Authentication, AuthenticationError
 from app.modules.accounts.entrypoints.containers import Container
+from app.modules.authentication_contract import AuthenticationContract, AuthenticationError
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/users/login")
 
@@ -14,8 +14,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/users/login")
 @inject
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
-    authentication: Authentication = Depends(Provide[Container.authenticate]),
-) -> Authentication.UserDTO:
+    authentication: AuthenticationContract = Depends(Provide[Container.authentication]),
+) -> AuthenticationContract.UserDTO:
     try:
         return authentication.trade_token_for_user(token)
     except AuthenticationError as e:

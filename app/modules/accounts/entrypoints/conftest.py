@@ -5,7 +5,9 @@ from starlette.testclient import TestClient
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container
 
-_container = Container()
+_container = Container(
+    jwt_secret_key="test-secret",
+)
 
 
 @pytest.fixture(scope="session", autouse=True)

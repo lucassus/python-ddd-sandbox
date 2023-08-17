@@ -18,5 +18,5 @@ class GetUserQuery(Protocol):
         def __init__(self, id: UserID):
             super().__init__(f"User with id {id} not found")
 
-    def __call__(self, *, id: UserID) -> Result:
+    def __call__(self, id: UserID) -> Result:
         ...

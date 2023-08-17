@@ -15,3 +15,11 @@ def test_login(register_user, client: TestClient):
     )
     assert response.status_code == status.HTTP_200_OK
     assert "token" in response.json()
+
+    token = response.json()["token"]
+    response = client.get(
+        "/api/users/me",
+        headers={"x-authentication-token": token},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["email"] == "just@email.com"

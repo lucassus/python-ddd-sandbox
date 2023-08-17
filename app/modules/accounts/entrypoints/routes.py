@@ -1,9 +1,12 @@
+from typing import Annotated
+
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication, AuthenticationError
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
+from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.queries.find_user_query import GetUserQuery
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.domain.email_address import EmailAddress
@@ -11,6 +14,7 @@ from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
+from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -21,6 +25,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 def user_register_endpoint(
     data: schemas.RegisterUser,
     register_user: RegisterUser = Depends(Provide[Container.register_user]),
+    jwt: JWT = Depends(Provide[Container.jwt]),
 ):
     try:
         user_id = register_user(
@@ -30,10 +35,7 @@ def user_register_endpoint(
     except EmailAlreadyExistsException as e:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e)) from e
 
-    return RedirectResponse(
-        f"/api/users/{user_id}",
-        status_code=status.HTTP_303_SEE_OTHER,
-    )
+    return {"token": jwt.create(user_id)}
 
 
 @router.post("/login")
@@ -53,37 +55,36 @@ def user_login_endpoint(
     return {"token": token}
 
 
-@router.put("/{user_id}")
+@router.put("/me")
 @inject
 def user_update_endpoint(
-    user_id: int,
+    user: Annotated[Authentication.UserDTO, Depends(get_current_user)],
     data: schemas.UpdateUser,
     change_user_email_address: ChangeUserEmailAddress = Depends(Provide[Container.change_user_email_address]),
 ):
     change_user_email_address(
-        user_id=UserID(user_id),
+        user_id=UserID(user.id),
         new_email=EmailAddress(data.email),
     )
 
     return RedirectResponse(
-        f"/api/users/{user_id}",
+        f"/api/users/me",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
 
-# TODO: Change it to GET /api/users/me
 @router.get(
-    "/{user_id}",
-    name="Returns user along with projects",
+    "/me",
+    name="Returns the current user along with projects",
     response_model=GetUserQuery.Result,
 )
 @inject
 def user_endpoint(
-    user_id: int,
+    user: Annotated[Authentication.UserDTO, Depends(get_current_user)],
     get_user: GetUserQuery = Depends(Provide[Container.get_user_query]),
 ):
     try:
-        return get_user(id=UserID(user_id))
+        return get_user(user.id)
     except GetUserQuery.NotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

@@ -1,6 +1,7 @@
 import pytest
 
 from app.modules.accounts.application.authentication import Authentication
+from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.user_builder import UserBuilder
@@ -9,7 +10,7 @@ from app.modules.accounts.domain.user_builder import UserBuilder
 class TestAuthenticate:
     @pytest.fixture()
     def authentication(self, uow: FakeUnitOfWork):
-        return Authentication(uow=uow, jwt_secret_key="test-secret")
+        return Authentication(uow=uow, jwt=JWT(jwt_secret_key="test-secret"))
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
@@ -29,7 +30,8 @@ class TestAuthenticate:
         token = authentication.login(user.email, user.password)
 
         # When
-        user_from_token = authentication.trade_token_for_user(token)
+        user_dto = authentication.trade_token_for_user(token)
 
         # Then
-        assert user_from_token == user
+        assert user_dto.id == user.id
+        assert user_dto.email == user.email

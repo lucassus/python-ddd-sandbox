@@ -7,7 +7,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class GetUserSQLQuery(BaseSQLQuery, GetUserQuery):
-    def __call__(self, *, id: UserID) -> GetUserQuery.Result:
+    def __call__(self, id: UserID) -> GetUserQuery.Result:
         query = select(users_table.c.id, users_table.c.email).select_from(users_table).where(users_table.c.id == id)
         user = self._first_from(query)
 

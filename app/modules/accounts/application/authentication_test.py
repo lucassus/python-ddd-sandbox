@@ -10,7 +10,7 @@ from app.modules.accounts.domain.user_builder import UserBuilder
 class TestAuthenticate:
     @pytest.fixture()
     def authentication(self, uow: FakeUnitOfWork):
-        return Authentication(uow=uow, jwt=JWT(jwt_secret_key="test-secret"))
+        return Authentication(uow=uow, jwt=JWT(secret_key="test-secret"))
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given

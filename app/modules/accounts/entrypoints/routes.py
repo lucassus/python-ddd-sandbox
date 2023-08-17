@@ -15,7 +15,6 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
-from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -49,8 +48,8 @@ def user_login_endpoint(
             email=EmailAddress(data.email),
             password=Password(data.password),
         )
-    except AuthenticationError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    except AuthenticationError as e:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) from e
 
     return {"token": token}
 
@@ -58,17 +57,17 @@ def user_login_endpoint(
 @router.put("/me")
 @inject
 def user_update_endpoint(
-    user: Annotated[Authentication.UserDTO, Depends(get_current_user)],
+    current_user: Annotated[Authentication.UserDTO, Depends(get_current_user)],
     data: schemas.UpdateUser,
     change_user_email_address: ChangeUserEmailAddress = Depends(Provide[Container.change_user_email_address]),
 ):
     change_user_email_address(
-        user_id=UserID(user.id),
+        user_id=current_user.id,
         new_email=EmailAddress(data.email),
     )
 
     return RedirectResponse(
-        f"/api/users/me",
+        "/api/users/me",
         status_code=status.HTTP_303_SEE_OTHER,
     )
 
@@ -80,11 +79,11 @@ def user_update_endpoint(
 )
 @inject
 def user_endpoint(
-    user: Annotated[Authentication.UserDTO, Depends(get_current_user)],
+    current_user: Annotated[Authentication.UserDTO, Depends(get_current_user)],
     get_user: GetUserQuery = Depends(Provide[Container.get_user_query]),
 ):
     try:
-        return get_user(user.id)
+        return get_user(current_user.id)
     except GetUserQuery.NotFoundError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

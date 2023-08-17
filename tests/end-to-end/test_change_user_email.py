@@ -8,7 +8,7 @@ def test_change_user_email(register_user, client: TestClient):
     token = response.json()["token"]
 
     response = client.put(
-        f"/api/users/me",
+        "/api/users/me",
         json={"email": "new@email.com"},
         headers={"x-authentication-token": token},
     )

@@ -32,7 +32,7 @@ class Container(containers.DeclarativeContainer):
     session_factory = providers.Singleton(sessionmaker, bind=engine)
 
     jwt_secret_key = providers.Dependency(instance_of=str)
-    jwt = providers.Factory(JWT, jwt_secret_key=jwt_secret_key)
+    jwt = providers.Factory(JWT, secret_key=jwt_secret_key)
 
     bus = providers.Dependency(instance_of=MessageBus)
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory)

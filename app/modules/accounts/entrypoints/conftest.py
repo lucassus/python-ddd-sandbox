@@ -21,8 +21,13 @@ def container():
 
 
 @pytest.fixture()
-def client():
+def app():
     app = FastAPI()
     app.include_router(routes.router)
 
+    return app
+
+
+@pytest.fixture()
+def client(app):
     return TestClient(app)

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from app.modules.accounts.application.jwt import JWT
+from app.modules.accounts.application.jwt import JWT, JWTError
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
@@ -38,7 +38,10 @@ class Authentication:
         return self._jwt.create(user_id, now)
 
     def trade_token_for_user(self, token: str) -> UserDTO:
-        user_id = self._jwt.decode(token)
+        try:
+            user_id = self._jwt.decode(token)
+        except JWTError as e:
+            raise AuthenticationError() from e
 
         with self._uow as uow:
             user = uow.user.get(user_id)

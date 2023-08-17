@@ -24,3 +24,17 @@ def test_login(register_user, client: TestClient):
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["email"] == "just@email.com"
+
+
+def test_login_with_invalid_credentials(client: TestClient):
+    response = client.post(
+        "/api/users/login",
+        data={
+            "grant_type": "password",
+            "username": "invalid@email.com",
+            "password": "invalid-passwd",
+        },
+    )
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.json()["detail"] == "Unauthorized"

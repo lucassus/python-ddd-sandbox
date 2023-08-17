@@ -1,29 +1,30 @@
 from typing import Annotated
 
 from dependency_injector.wiring import Provide, inject
-from fastapi import Depends, Header, HTTPException
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 
 from app.modules.accounts.application.authentication import Authentication, AuthenticationError
 from app.modules.accounts.entrypoints.containers import Container
 
-# TODO: Implement a more robust authentication, see https://fastapi.tiangolo.com/tutorial/security/
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/users/login")
 
 
 @inject
 def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
     authentication: Authentication = Depends(Provide[Container.authenticate]),
-    x_authentication_token: Annotated[str | None, Header()] = None,
 ) -> Authentication.UserDTO:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
     )
 
-    if x_authentication_token is None:
+    if token is None:
         raise credentials_exception
 
     try:
-        return authentication.trade_token_for_user(x_authentication_token)
+        return authentication.trade_token_for_user(token)
     except AuthenticationError:
         raise credentials_exception

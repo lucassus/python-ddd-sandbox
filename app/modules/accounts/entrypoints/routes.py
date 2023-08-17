@@ -2,6 +2,7 @@ from typing import Annotated
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication, AuthenticationError
@@ -34,24 +35,30 @@ def user_register_endpoint(
     except EmailAlreadyExistsException as e:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e)) from e
 
-    return {"token": jwt.encode(user_id)}
+    return {
+        "token_type": "bearer",
+        "access_token": jwt.encode(user_id),
+    }
 
 
 @router.post("/login")
 @inject
 def user_login_endpoint(
-    data: schemas.LoginUser,
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     authentication: Authentication = Depends(Provide[Container.authenticate]),
 ):
     try:
         token = authentication.login(
-            email=EmailAddress(data.email),
-            password=Password(data.password),
+            email=EmailAddress(form_data.username),
+            password=Password(form_data.password),
         )
     except AuthenticationError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) from e
 
-    return {"token": token}
+    return {
+        "token_type": "bearer",
+        "access_token": token,
+    }
 
 
 @router.put("/me")

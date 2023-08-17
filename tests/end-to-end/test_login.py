@@ -8,18 +8,19 @@ def test_login(register_user, client: TestClient):
 
     response = client.post(
         "/api/users/login",
-        json={
-            "email": "just@email.com",
+        data={
+            "grant_type": "password",
+            "username": "just@email.com",
             "password": "password",
         },
     )
     assert response.status_code == status.HTTP_200_OK
-    assert "token" in response.json()
+    assert "access_token" in response.json()
 
-    token = response.json()["token"]
+    token = response.json()["access_token"]
     response = client.get(
         "/api/users/me",
-        headers={"x-authentication-token": token},
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["email"] == "just@email.com"

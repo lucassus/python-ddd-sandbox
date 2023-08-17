@@ -16,11 +16,11 @@ def test_list_projects(register_user, create_project, client: TestClient):
     # Given
     response = register_user("test@email.com")
     assert response.status_code == status.HTTP_200_OK
-    token = response.json()["token"]
+    token = response.json()["access_token"]
 
     response = client.get(
         "/api/users/me",
-        headers={"x-authentication-token": token},
+        headers={"Authorization": f"Bearer {token}"},
     )
     user_id = response.json()["id"]
 

@@ -8,11 +8,11 @@ def test_register_user(register_user, client: TestClient):
     response = register_user(email="test@email.com")
 
     assert response.status_code == status.HTTP_200_OK
-    token = response.json()["token"]
+    token = response.json()["access_token"]
 
     response = client.get(
         "/api/users/me",
-        headers={"x-authentication-token": token},
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert response.json() == {
         "id": 1,

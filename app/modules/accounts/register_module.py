@@ -3,14 +3,14 @@ from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
 from app import engine
+from app.modules.accounts.entrypoints import routes
+from app.modules.accounts.entrypoints.containers import Container
+from app.modules.accounts.infrastructure.mappers import start_mappers
+from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-def register_module(app: FastAPI, mappers: registry, bus: MessageBus):
-    from app.modules.accounts.entrypoints import routes
-    from app.modules.accounts.entrypoints.containers import Container
-    from app.modules.accounts.infrastructure.mappers import start_mappers
-
+def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> AuthenticationContract:
     container = Container(
         engine=engine,
         jwt_secret_key="some secret",  # TODO: Take it from the proper config
@@ -21,4 +21,4 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus):
     start_mappers(mappers)
     app.include_router(routes.router)
 
-    return container
+    return container.authentication()

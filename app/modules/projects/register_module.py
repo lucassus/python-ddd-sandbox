@@ -4,6 +4,9 @@ from sqlalchemy.orm import registry
 
 from app import engine
 from app.modules.authentication_contract import AuthenticationContract
+from app.modules.projects.entrypoints import routes
+from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.infrastructure.mappers import start_mappers
 
 
 def register_module(
@@ -11,10 +14,6 @@ def register_module(
     mappers: registry,
     authentication: AuthenticationContract,
 ) -> None:
-    from app.modules.projects.entrypoints import routes
-    from app.modules.projects.entrypoints.containers import Container
-    from app.modules.projects.infrastructure.mappers import start_mappers
-
     container = Container(
         engine=engine,
         authentication=providers.Object(authentication),

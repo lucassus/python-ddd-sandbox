@@ -26,7 +26,6 @@ def app():
     app = FastAPI()
     app.include_router(routes.router)
 
-    # TODO: Why I have to use routes.get_current_user?
     app.dependency_overrides[routes.get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
         id=UserID(1),
         email=EmailAddress("test@email.com"),

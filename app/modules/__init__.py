@@ -14,10 +14,9 @@ def create_app() -> FastAPI:
 
     app = FastAPI()
 
-    # TODO: Is it a good idea to return the container?
-    container = register_accounts_module(app, mapper_registry, bus)
-    # TODO: Pass down assembled authentication service to comply with the contract
-    register_projects_module(app, mapper_registry, container.authentication())
+    authentication = register_accounts_module(app, mapper_registry, bus)
+    # Pass down assembled authentication service to comply with the contract
+    register_projects_module(app, mapper_registry, authentication)
 
     # TODO: Figure out how to test these handlers
     @app.exception_handler(EntityNotFoundError)

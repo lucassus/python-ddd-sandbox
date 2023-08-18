@@ -49,8 +49,6 @@ docopt==0.6.2
     # via pytest-watch
 email-validator==2.0.0.post2
     # via -r requirements.in
-faker==19.3.0
-    # via -r requirements.in
 fastapi==0.101.1
     # via -r requirements.in
 flake8==6.1.0
@@ -146,12 +144,12 @@ pycodestyle==2.11.0
     # via
     #   flake8
     #   flake8-debugger
-pydantic==2.1.1
+pydantic==2.2.0
     # via
     #   -r requirements.in
     #   fastapi
     #   pydantic-settings
-pydantic-core==2.4.0
+pydantic-core==2.6.0
     # via pydantic
 pydantic-settings==2.0.3
     # via -r requirements.in
@@ -180,7 +178,6 @@ pytest-watch==4.2.0
     # via -r requirements.in
 python-dateutil==2.8.2
     # via
-    #   faker
     #   freezegun
     #   libyear
 python-dotenv==1.0.0

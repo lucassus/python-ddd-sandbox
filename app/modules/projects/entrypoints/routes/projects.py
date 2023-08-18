@@ -43,9 +43,10 @@ def project_create_endpoint(
 )
 @inject
 def list_projects_endpoint(
+    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     list_projects: ListProjectsQuery = Depends(Provide[Container.list_projects_query]),
 ):
-    return list_projects()
+    return list_projects(current_user.id)
 
 
 @router.get(

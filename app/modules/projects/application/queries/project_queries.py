@@ -1,4 +1,4 @@
-from typing import Optional, Protocol
+from typing import Protocol
 
 from app.modules.projects.domain.project import ProjectID
 from app.modules.shared_kernel.base_schema import BaseSchema
@@ -13,7 +13,7 @@ class ListProjectsQuery(Protocol):
 
         projects: list[Project]
 
-    def __call__(self, user_id: Optional[UserID] = None) -> Result:
+    def __call__(self, id: UserID) -> Result:
         ...
 
 

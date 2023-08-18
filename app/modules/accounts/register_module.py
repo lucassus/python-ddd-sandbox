@@ -11,7 +11,7 @@ from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> AuthenticationContract:
+def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> Container:
     container = Container(
         engine=engine,
         jwt_secret_key=settings.jwt_secret_key,
@@ -22,4 +22,4 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> Authent
     start_mappers(mappers)
     app.include_router(routes.router)
 
-    return container.authentication()
+    return container

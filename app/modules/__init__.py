@@ -14,9 +14,13 @@ def create_app() -> FastAPI:
 
     app = FastAPI()
 
-    authentication = register_accounts_module(app, mapper_registry, bus)
-    # Pass down assembled authentication service to comply with the contract
-    register_projects_module(app, mapper_registry, authentication)
+    container = register_accounts_module(app, mapper_registry, bus)
+    register_projects_module(
+        app,
+        mapper_registry,
+        # Pass down assembled authentication service to comply with the contract
+        authentication=container.authentication(),
+    )
 
     # TODO: Figure out how to test these handlers
     @app.exception_handler(EntityNotFoundError)

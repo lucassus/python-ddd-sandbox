@@ -1,8 +1,10 @@
 from datetime import datetime
+from typing import Optional
 
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
+from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
 
 
@@ -14,10 +16,11 @@ class TasksService:
         self,
         project_id: ProjectID,
         name: str,
+        created_by: Optional[UserID] = None,
     ) -> TaskNumber:
         with self._uow as uow:
             project = uow.project.get(project_id)
-            task = project.add_task(name=name)
+            task = project.add_task(name=name, created_by=created_by)
 
             uow.commit()
             return task.number

@@ -1,13 +1,17 @@
+from typing import Annotated
+
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, Path, status
 from starlette.responses import RedirectResponse
 
+from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.queries.task_queries import GetTaskQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
@@ -18,10 +22,12 @@ router = APIRouter(prefix="/projects/{project_id}/tasks")
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
+    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     service: TasksService = Depends(Provide[Container.tasks_service]),
 ):
     task_number = service.create_task(
         project_id=ProjectID(project_id),
+        created_by=current_user.id,
         name=data.name,
     )
 

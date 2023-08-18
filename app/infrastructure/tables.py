@@ -32,6 +32,7 @@ tasks_table = Table(
     Column("project_id", Integer(), ForeignKey(projects_table.c.id), nullable=False),
     Column("number", Integer(), nullable=False),
     Column("name", String(255), nullable=False),
+    Column("created_by", Integer(), ForeignKey(users_table.c.id), nullable=True),
     Column("completed_at", DateTime(), nullable=True, default=None),
     UniqueConstraint("project_id", "number"),
 )

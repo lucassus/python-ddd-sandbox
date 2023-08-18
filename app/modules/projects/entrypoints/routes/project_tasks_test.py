@@ -34,7 +34,11 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/api/projects/123/tasks/1"
-    mock_tasks_service.create_task.assert_called_once_with(project_id=ProjectID(123), name="Some task")
+    mock_tasks_service.create_task.assert_called_once_with(
+        project_id=ProjectID(123),
+        name="Some task",
+        created_by=UserID(1),
+    )
 
 
 def test_get_task_endpoint_returns_404_when_task_not_found(container: Container, client: TestClient):

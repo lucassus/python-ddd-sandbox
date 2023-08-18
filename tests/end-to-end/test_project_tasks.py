@@ -9,6 +9,12 @@ def test_create_task(create_project, create_task, anonymous_client: TestClient):
 
     response = create_task(project_id=project_id, name="First task")
     assert response.status_code == status.HTTP_200_OK
+    assert response.json() == {
+        "number": 1,
+        "name": "First task",
+        "createdBy": 1,
+        "completedAt": None,
+    }
 
     response = create_task(project_id=project_id, name="Second task")
     assert response.status_code == status.HTTP_200_OK

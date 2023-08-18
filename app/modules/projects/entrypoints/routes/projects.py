@@ -14,7 +14,6 @@ from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
-from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
 

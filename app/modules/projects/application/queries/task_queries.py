@@ -24,8 +24,8 @@ class GetTaskQuery(Protocol):
     class Result(BaseSchema):
         number: int
         name: str
-        created_by: Optional[UserID] = None
-        completed_at: Optional[datetime] = None
+        created_by: Optional[UserID]
+        completed_at: Optional[datetime]
 
     class NotFoundError(Exception):
         def __init__(self, project_id: ProjectID, number: TaskNumber):

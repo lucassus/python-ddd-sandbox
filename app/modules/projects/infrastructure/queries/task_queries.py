@@ -18,10 +18,20 @@ class ListTasksSQLQuery(BaseSQLQuery, ListTasksQuery):
 
 class GetTaskSQLQuery(BaseSQLQuery, GetTaskQuery):
     def __call__(self, project_id: ProjectID, number: TaskNumber):
-        query = select(tasks_table).where(
-            and_(
-                tasks_table.c.project_id == project_id,
-                tasks_table.c.number == number,
+        query = (
+            select(
+                tasks_table.c.id,
+                tasks_table.c.number,
+                tasks_table.c.name,
+                tasks_table.c.created_by,
+                tasks_table.c.completed_at,
+            )
+            .select_from(tasks_table)
+            .where(
+                and_(
+                    tasks_table.c.project_id == project_id,
+                    tasks_table.c.number == number,
+                )
             )
         )
 

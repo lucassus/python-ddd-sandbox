@@ -1,5 +1,4 @@
 import pytest
-from modules.shared_kernel.entities.email_address import EmailAddress
 from sqlalchemy.orm import Session
 
 from app.modules.accounts.domain.password import Password
@@ -7,6 +6,7 @@ from app.modules.accounts.domain.user import User
 from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository
 from app.modules.projects.domain.project import Project, ProjectName
 from app.modules.projects.infrastructure.adapters.project_repository import ProjectRepository
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 @pytest.fixture()

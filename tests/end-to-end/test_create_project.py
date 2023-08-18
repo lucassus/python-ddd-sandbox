@@ -12,6 +12,15 @@ def test_create_project(create_project):
     assert data["name"] == "Project X"
 
 
+def test_create_project_unauthenticated(anonymous_client):
+    response = anonymous_client.post(
+        "/api/projects",
+        json={"name": "Project Y"},
+    )
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 def test_list_projects(register_user, create_project, client: TestClient):
     # Given
     response = create_project(name="Project A")
@@ -26,3 +35,8 @@ def test_list_projects(register_user, create_project, client: TestClient):
     # Then
     assert response.status_code == status.HTTP_200_OK
     assert len(response.json()["projects"]) == 3
+
+
+def test_list_projects_unauthenticated(anonymous_client):
+    response = anonymous_client.get("/api/projects")
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED

@@ -4,13 +4,13 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.queries.find_user_query import GetUserQuery
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
+from app.modules.authentication_contract import AuthenticationContract
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
@@ -60,7 +60,7 @@ def test_get_current_user_endpoint(
     client: TestClient,
 ):
     # Given
-    app.dependency_overrides[get_current_user] = lambda: Authentication.UserDTO(
+    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
         id=UserID(1),
         email=EmailAddress("test@email.com"),
     )

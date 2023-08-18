@@ -9,18 +9,10 @@ from app.modules.projects.application.queries.project_queries import GetProjectQ
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.shared_kernel.entities.user_id import UserID
-from modules.authentication_contract import AuthenticationContract
-from modules.projects.entrypoints.dependencies import get_current_user
-from modules.shared_kernel.entities.email_address import EmailAddress
 
 
 def test_create_project_endpoint(container: Container, app: FastAPI, client: TestClient):
     # Given
-    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
-        id=UserID(1),
-        email=EmailAddress("test@email.com"),
-    )
-
     create_project_mock = Mock(return_value=1)
 
     # When
@@ -32,9 +24,9 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
         )
 
     # Then
-    create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
     assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/1"
+    create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
 
 
 def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
@@ -81,9 +73,9 @@ def test_update_project_endpoint(container: Container, client: TestClient):
         )
 
     # Then
-    update_project_mock.assert_called_with(ProjectID(123), "Test project")
     assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/123"
+    update_project_mock.assert_called_with(ProjectID(123), "Test project")
 
 
 def test_archive_project_endpoint(container: Container, client: TestClient):

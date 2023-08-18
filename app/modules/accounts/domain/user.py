@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.aggregate_root import AggregateRoot
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.modules.shared_kernel.message_bus import BaseEvent
 

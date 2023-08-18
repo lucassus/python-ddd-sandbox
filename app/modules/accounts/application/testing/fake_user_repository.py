@@ -1,6 +1,6 @@
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.user import User
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
 

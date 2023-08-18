@@ -4,7 +4,6 @@ from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
 from app.modules import mapper_registry
 from app.modules.accounts.application.register_user import RegisterUser
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
 from app.modules.accounts.infrastructure.mappers import start_mappers as start_account_mappers
@@ -15,6 +14,7 @@ from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectName
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
 
 

@@ -5,11 +5,11 @@ import pytest
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.accounts.domain.user_builder import UserBuilder
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 @pytest.fixture()

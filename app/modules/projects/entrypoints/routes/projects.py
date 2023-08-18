@@ -21,7 +21,7 @@ router = APIRouter(prefix="/projects")
 @router.post("")
 @inject
 def project_create_endpoint(
-    current_user: Annotated[AuthenticationContract.UserDTO, Depends(get_current_user)],
+    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.CreateProject,
     create_project: CreateProject = Depends(Provide[Container.create_project]),
 ):

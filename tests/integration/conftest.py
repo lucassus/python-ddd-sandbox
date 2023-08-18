@@ -1,7 +1,7 @@
 import pytest
+from modules.shared_kernel.entities.email_address import EmailAddress
 from sqlalchemy.orm import Session
 
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository

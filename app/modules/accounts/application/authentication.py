@@ -2,9 +2,9 @@ from datetime import datetime
 
 from app.modules.accounts.application.jwt import JWT, JWTError
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.modules.accounts.domain.email_address import EmailAddress
 from app.modules.accounts.domain.password import Password
 from app.modules.authentication_contract import AuthenticationContract, AuthenticationError
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 class Authentication(AuthenticationContract):
@@ -26,7 +26,7 @@ class Authentication(AuthenticationContract):
 
             return self._jwt.encode(user.id, now)
 
-    def trade_token_for_user(self, token: str) -> AuthenticationContract.UserDTO:
+    def trade_token_for_user(self, token: str) -> AuthenticationContract.CurrentUserDTO:
         try:
             user_id = self._jwt.decode(token)
         except JWTError as e:
@@ -38,7 +38,7 @@ class Authentication(AuthenticationContract):
             if user is None:
                 raise AuthenticationError()
 
-            return AuthenticationContract.UserDTO(
+            return AuthenticationContract.CurrentUserDTO(
                 id=user.id,
                 email=user.email,
             )

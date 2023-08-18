@@ -1,4 +1,4 @@
-from app.modules.accounts.domain.email_address import EmailAddress
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.errors import EntityNotFoundError
 
 

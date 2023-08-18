@@ -2,7 +2,7 @@ from starlette import status
 from starlette.testclient import TestClient
 
 
-def test_create_task(create_project, create_task, client: TestClient):
+def test_create_task(create_project, create_task, anonymous_client: TestClient):
     response = create_project(name="Project X")
     assert response.status_code == status.HTTP_200_OK
     project_id = response.json()["id"]

@@ -1,3 +1,4 @@
+import abc
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -9,11 +10,12 @@ class AuthenticationError(Exception):
     pass
 
 
-class AuthenticationContract(Protocol):
+class AuthenticationContract(metaclass=abc.ABCMeta):
     @dataclass(frozen=True)
     class UserDTO:
         id: UserID
         email: EmailAddress
 
+    @abc.abstractmethod
     def trade_token_for_user(self, token: str) -> UserDTO:
-        ...
+        raise NotImplementedError()

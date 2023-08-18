@@ -4,6 +4,7 @@ from dependency_injector import containers, providers
 from sqlalchemy import Connection, Engine
 from sqlalchemy.orm import sessionmaker
 
+from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.application.create_example_project import CreateExampleProject
 from app.modules.projects.application.create_project import CreateProject
@@ -22,6 +23,7 @@ def init_connection(engine: Engine) -> Iterator[Connection]:
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
+            ".dependencies",
             ".routes.project_tasks",
             ".routes.projects",
         ],
@@ -33,6 +35,8 @@ class Container(containers.DeclarativeContainer):
     session_factory = providers.Singleton(sessionmaker, bind=engine)
 
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
+
+    authentication = providers.Dependency(instance_of=AuthenticationContract)
 
     create_project = providers.Singleton(CreateProject, uow=uow)
     create_example_project = providers.Singleton(CreateExampleProject, uow=uow)

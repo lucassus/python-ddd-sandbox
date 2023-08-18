@@ -1,8 +1,11 @@
+from typing import Annotated
+
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
+from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.application.create_project import CreateProject
 from app.modules.projects.application.queries.project_queries import GetProjectQuery, ListProjectsQuery
@@ -10,6 +13,7 @@ from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/projects")
@@ -18,11 +22,12 @@ router = APIRouter(prefix="/projects")
 @router.post("")
 @inject
 def project_create_endpoint(
+    current_user: Annotated[AuthenticationContract.UserDTO, Depends(get_current_user)],
     data: schemas.CreateProject,
     create_project: CreateProject = Depends(Provide[Container.create_project]),
 ):
     project_id = create_project(
-        user_id=UserID(data.user_id),
+        user_id=current_user.id,
         name=ProjectName(data.name),
     )
 

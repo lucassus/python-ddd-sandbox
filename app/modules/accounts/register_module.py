@@ -6,7 +6,7 @@ from app import engine
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> None:
+def register_module(app: FastAPI, mappers: registry, bus: MessageBus):
     from app.modules.accounts.entrypoints import routes
     from app.modules.accounts.entrypoints.containers import Container
     from app.modules.accounts.infrastructure.mappers import start_mappers
@@ -20,3 +20,5 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> None:
 
     start_mappers(mappers)
     app.include_router(routes.router)
+
+    return container

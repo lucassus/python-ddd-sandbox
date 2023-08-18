@@ -44,7 +44,7 @@ class Container(containers.DeclarativeContainer):
     archivization_service = providers.Singleton(ArchivizationService, uow=uow)
     tasks_service = providers.Singleton(TasksService, uow=uow)
 
-    list_projects_query = providers.Factory(ListProjectsSQLSQLQuery, connection=connection)
-    get_project_query = providers.Factory(GetProjectSQLSQLQuery, connection=connection)
-    list_tasks_query = providers.Factory(ListTasksSQLQuery, connection=connection)
-    get_task_query = providers.Factory(GetTaskSQLQuery, connection=connection)
+    list_projects_query = providers.Singleton(ListProjectsSQLSQLQuery, connection=connection)
+    get_project_query = providers.Singleton(GetProjectSQLSQLQuery, connection=connection)
+    list_tasks_query = providers.Singleton(ListTasksSQLQuery, connection=connection)
+    get_task_query = providers.Singleton(GetTaskSQLQuery, connection=connection)

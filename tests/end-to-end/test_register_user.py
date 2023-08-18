@@ -50,7 +50,7 @@ def test_register_user(register_user, anonymous_client: TestClient):
     }
 
 
-def test_register_user_fail(register_user, anonymous_client: TestClient):
+def test_register_user_fail(register_user):
     response = register_user(email="taken@email.com")
     assert response.status_code == status.HTTP_200_OK
 

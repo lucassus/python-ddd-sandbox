@@ -8,12 +8,12 @@ from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-# TODO: Use it the unit tests
 class ApplicationContainer(containers.DeclarativeContainer):
+    bus = providers.Dependency(instance_of=MessageBus)
+
     jwt_secret_key = providers.Dependency(instance_of=str)
     jwt = providers.Singleton(JWT, secret_key=jwt_secret_key)
 
-    bus = providers.Dependency(instance_of=MessageBus)
     uow = providers.AbstractFactory(AbstractUnitOfWork)
 
     register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)

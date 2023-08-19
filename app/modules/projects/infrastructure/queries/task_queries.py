@@ -11,16 +11,14 @@ from app.modules.projects.domain.task import TaskNumber
 class ListTasksSQLQuery(BaseSQLQuery, ListTasksQuery):
     def __call__(self, project_id: ProjectID):
         query = select(tasks_table).where(tasks_table.c.project_id == project_id)
-
-        with self._engine.connect() as connection:
-            tasks = connection.execute(query).all()
+        tasks = self._all_from(query)
 
         return ListTasksSQLQuery.Result(tasks=tasks)
 
 
 class GetTaskSQLQuery(BaseSQLQuery, GetTaskQuery):
     def __call__(self, project_id: ProjectID, number: TaskNumber):
-        query = (
+        task = self._first_from(
             select(
                 tasks_table.c.id,
                 tasks_table.c.number,
@@ -36,8 +34,6 @@ class GetTaskSQLQuery(BaseSQLQuery, GetTaskQuery):
                 )
             )
         )
-
-        task = self._first_from(query)
 
         if task is None:
             raise GetTaskQuery.NotFoundError(project_id, number)

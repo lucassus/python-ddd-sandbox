@@ -18,10 +18,8 @@ class ApplicationContainer(containers.DeclarativeContainer):
     jwt_secret_key = providers.Dependency(instance_of=str)
     jwt = providers.Singleton(JWT, secret_key=jwt_secret_key)
 
-    uow = providers.Singleton(
-        UnitOfWork,
-        session_factory=lambda: AppSession(bind=engine),
-    )
+    session_factory = providers.Factory(AppSession, bind=engine)
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
 
     register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
     authentication = providers.Singleton(Authentication, uow=uow, jwt=jwt)

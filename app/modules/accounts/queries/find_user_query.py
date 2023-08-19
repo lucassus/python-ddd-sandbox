@@ -33,8 +33,7 @@ class GetUserQuery(BaseSQLQuery):
             .where(projects_table.c.user_id == user.id)
         )
 
-        with self._engine.connect() as connection:
-            projects = connection.execute(query).all()
+        projects = self._all_from(query)
 
         return GetUserQuery.Result(
             **{

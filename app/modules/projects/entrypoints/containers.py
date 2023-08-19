@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 from sqlalchemy import Engine
-from sqlalchemy.orm import sessionmaker
 
+from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.application.create_example_project import CreateExampleProject
@@ -24,9 +24,8 @@ class Container(containers.DeclarativeContainer):
     )
 
     engine = providers.Dependency(instance_of=Engine)
-    session_factory = providers.Singleton(sessionmaker, bind=engine)
-
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
+    session_factory = providers.Factory(AppSession, bind=engine)
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
 
     authentication = providers.Dependency(instance_of=AuthenticationContract)  # type: ignore[type-abstract]
 

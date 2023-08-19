@@ -17,7 +17,6 @@ engine = create_engine(
 # See https://docs.sqlalchemy.org/en/20/orm/session_api.html#session-and-sessionmaker
 # The purpose of sessionmaker is to provide a factory for Session objects with a fixed configuration.
 AppSession = sessionmaker(
-    bind=engine,
     autoflush=True,  # Default is True
     autocommit=False,  # Default is False
     # Defaults to True. When True, all instances will be fully expired after each commit(), so that all

@@ -7,7 +7,6 @@ from app.infrastructure.db import engine
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.mappers import start_mappers
-from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.message_bus import MessageBus
 
 

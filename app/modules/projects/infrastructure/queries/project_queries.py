@@ -9,7 +9,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 class ListProjectsSQLSQLQuery(BaseSQLQuery, ListProjectsQuery):
     def __call__(self, user_id: UserID) -> ListProjectsQuery.Result:
-        query = (
+        projects = self._all_from(
             select(
                 projects_table.c.id,
                 projects_table.c.name,
@@ -17,7 +17,6 @@ class ListProjectsSQLSQLQuery(BaseSQLQuery, ListProjectsQuery):
             .select_from(projects_table)
             .where(projects_table.c.user_id == user_id)
         )
-        projects = self._all_from(query)
 
         return ListProjectsQuery.Result(projects=projects)
 

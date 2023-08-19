@@ -12,13 +12,7 @@ _container = Container(
 
 @pytest.fixture(scope="session", autouse=True)
 def _wire_container():
-    # TODO: Maybe just wire it like before?
-    _container.wire(
-        modules=[
-            ".dependencies",
-            ".routes",
-        ]
-    )
+    _container.wire()
 
 
 @pytest.fixture()

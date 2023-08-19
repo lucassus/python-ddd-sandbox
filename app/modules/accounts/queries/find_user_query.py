@@ -21,19 +21,22 @@ class GetUserQuery(BaseSQLQuery):
             super().__init__(f"User with id {id} not found")
 
     def __call__(self, id: UserID) -> Result:
-        query = select(users_table.c.id, users_table.c.email).select_from(users_table).where(users_table.c.id == id)
-        user = self._first_from(query)
+        user = self._first_from(
+            # fmt: off
+            select(users_table.c.id, users_table.c.email)
+            .select_from(users_table)
+            .where(users_table.c.id == id)
+            # fmt: on
+        )
 
         if user is None:
             raise GetUserQuery.NotFoundError(id)
 
-        query = (
+        projects = self._all_from(
             select(projects_table.c.id, projects_table.c.name)
             .select_from(projects_table)
             .where(projects_table.c.user_id == user.id)
         )
-
-        projects = self._all_from(query)
 
         return GetUserQuery.Result(
             **{

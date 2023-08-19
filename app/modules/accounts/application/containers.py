@@ -8,17 +8,7 @@ from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-# TODO: Now it can be moved to application layer
 class Container(containers.DeclarativeContainer):
-    # TODO: Wire it outside
-    wiring_config = containers.WiringConfiguration(
-        modules=[
-            ".dependencies",
-            ".routes",
-        ],
-        auto_wire=False,
-    )
-
     jwt_secret_key = providers.Dependency(instance_of=str)
     jwt = providers.Singleton(JWT, secret_key=jwt_secret_key)
 

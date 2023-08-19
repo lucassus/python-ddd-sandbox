@@ -1,5 +1,7 @@
 from unittest.mock import Mock
 
+from fastapi import FastAPI
+from starlette import status
 from starlette.testclient import TestClient
 
 from app.modules.projects.application.archivization_service import ArchivizationService
@@ -9,7 +11,7 @@ from app.modules.projects.entrypoints.containers import Container
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
-def test_create_project_endpoint(container: Container, client: TestClient):
+def test_create_project_endpoint(container: Container, app: FastAPI, client: TestClient):
     # Given
     create_project_mock = Mock(return_value=1)
 
@@ -17,14 +19,14 @@ def test_create_project_endpoint(container: Container, client: TestClient):
     with container.create_project.override(create_project_mock):
         response = client.post(
             "/projects",
-            json={"user_id": 1, "name": "Test project"},
+            json={"name": "Test project"},
             follow_redirects=False,
         )
 
     # Then
-    create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
-    assert response.status_code == 303
+    assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/1"
+    create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
 
 
 def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
@@ -36,7 +38,7 @@ def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(conta
         response = client.get("/projects/1")
 
     # Then
-    assert response.status_code == 404
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_list_projects_endpoint(container: Container, client: TestClient):
@@ -55,7 +57,7 @@ def test_list_projects_endpoint(container: Container, client: TestClient):
         response = client.get("/projects")
 
     # Then
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
 
 def test_update_project_endpoint(container: Container, client: TestClient):
@@ -71,9 +73,9 @@ def test_update_project_endpoint(container: Container, client: TestClient):
         )
 
     # Then
-    update_project_mock.assert_called_with(ProjectID(123), "Test project")
-    assert response.status_code == 303
+    assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/123"
+    update_project_mock.assert_called_with(ProjectID(123), "Test project")
 
 
 def test_archive_project_endpoint(container: Container, client: TestClient):
@@ -85,7 +87,7 @@ def test_archive_project_endpoint(container: Container, client: TestClient):
         response = client.put("/projects/123/archive")
 
     # Then
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     archivization_service_mock.archive.assert_called_with(ProjectID(123))
 
 
@@ -98,7 +100,7 @@ def test_unarchive_project_endpoint(container: Container, client: TestClient):
         response = client.put("/projects/124/unarchive")
 
     # Then
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     archivization_service_mock.unarchive.assert_called_with(ProjectID(124))
 
 
@@ -111,5 +113,5 @@ def test_delete_project_endpoint(container: Container, client: TestClient):
         response = client.delete("/projects/124")
 
     # Then
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     archivization_service_mock.delete.assert_called_with(ProjectID(124))

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import NewType
+from typing import NewType, Optional
 
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.errors import TaskNotFoundError
@@ -79,11 +79,11 @@ class Project(AggregateRoot):
     def deleted_at(self) -> None | datetime:
         return self._deleted_at
 
-    def add_task(self, *, name: str) -> Task:
+    def add_task(self, *, name: str, created_by: Optional[UserID] = None) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
         self._last_task_number = TaskNumber(self._last_task_number + 1)
-        task = Task(name=name, number=self._last_task_number)
+        task = Task(name=name, number=self._last_task_number, created_by=created_by)
 
         self._tasks_by_number[task.number] = task
 

@@ -1,4 +1,3 @@
-import httpx
 import pytest
 from starlette import status
 from starlette.testclient import TestClient
@@ -16,15 +15,19 @@ def _prepare_db():
 
 
 @pytest.fixture(scope="session")
-def client():
-    app = create_app()
+def app():
+    return create_app()
+
+
+@pytest.fixture(scope="session")
+def anonymous_client(app):
     return TestClient(app)
 
 
 @pytest.fixture()
-def register_user(client: TestClient):
-    def _register_user(email: str) -> httpx.Response:
-        return client.post(
+def register_user(anonymous_client: TestClient):
+    def _register_user(email: str):
+        return anonymous_client.post(
             "/api/users",
             json={"email": email, "password": "password"},
             follow_redirects=True,
@@ -34,23 +37,24 @@ def register_user(client: TestClient):
 
 
 @pytest.fixture()
+def client(register_user, app):
+    response = register_user("test@email.com")
+    assert response.status_code == status.HTTP_200_OK  # noqa: S101
+
+    token = response.json()["access_token"]
+
+    return TestClient(
+        app,
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+
+@pytest.fixture()
 def create_project(register_user, client: TestClient):
-    def _create_project(name: str, user_id: int | None = None) -> httpx.Response:
-        if user_id is None:
-            response = register_user("test@email.com")
-            assert response.status_code == status.HTTP_200_OK  # noqa: S101
-            token = response.json()["access_token"]
-
-            response = client.get(
-                "/api/users/me",
-                headers={"Authorization": f"Bearer {token}"},
-            )
-            assert response.status_code == status.HTTP_200_OK  # noqa: S101
-            user_id = response.json()["id"]
-
+    def _create_project(name: str):
         return client.post(
             "/api/projects",
-            json={"user_id": user_id, "name": name},
+            json={"name": name},
         )
 
     return _create_project
@@ -58,7 +62,7 @@ def create_project(register_user, client: TestClient):
 
 @pytest.fixture()
 def create_task(client: TestClient):
-    def _create_task(project_id: int, name: str) -> httpx.Response:
+    def _create_task(project_id: int, name: str):
         return client.post(
             f"/api/projects/{project_id}/tasks",
             json={"name": name},

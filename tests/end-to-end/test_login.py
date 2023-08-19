@@ -2,11 +2,11 @@ from starlette import status
 from starlette.testclient import TestClient
 
 
-def test_login(register_user, client: TestClient):
+def test_login(register_user, anonymous_client: TestClient):
     response = register_user(email="just@email.com")
     assert response.status_code == status.HTTP_200_OK
 
-    response = client.post(
+    response = anonymous_client.post(
         "/api/users/login",
         data={
             "grant_type": "password",
@@ -18,7 +18,7 @@ def test_login(register_user, client: TestClient):
     assert "access_token" in response.json()
 
     token = response.json()["access_token"]
-    response = client.get(
+    response = anonymous_client.get(
         "/api/users/me",
         headers={"Authorization": f"Bearer {token}"},
     )
@@ -26,8 +26,8 @@ def test_login(register_user, client: TestClient):
     assert response.json()["email"] == "just@email.com"
 
 
-def test_login_with_invalid_credentials(client: TestClient):
-    response = client.post(
+def test_login_with_invalid_credentials(anonymous_client: TestClient):
+    response = anonymous_client.post(
         "/api/users/login",
         data={
             "grant_type": "password",

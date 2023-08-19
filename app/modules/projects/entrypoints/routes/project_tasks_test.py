@@ -2,17 +2,26 @@ from unittest.mock import Mock
 
 from starlette.testclient import TestClient
 
+from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.queries.task_queries import GetTaskQuery, ListTasksQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.entrypoints.dependencies import get_current_user
+from app.modules.shared_kernel.entities.email_address import EmailAddress
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
-def test_task_create_endpoint(container: Container, client: TestClient):
+def test_task_create_endpoint(container: Container, app, client: TestClient):
     # Given
     mock_tasks_service = Mock(spec=TasksService)
     mock_tasks_service.create_task.return_value = TaskNumber(1)
+
+    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
+        id=UserID(1),
+        email=EmailAddress("test@email.com"),
+    )
 
     # When
     with container.tasks_service.override(mock_tasks_service):
@@ -25,7 +34,11 @@ def test_task_create_endpoint(container: Container, client: TestClient):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/api/projects/123/tasks/1"
-    mock_tasks_service.create_task.assert_called_once_with(project_id=ProjectID(123), name="Some task")
+    mock_tasks_service.create_task.assert_called_once_with(
+        project_id=ProjectID(123),
+        name="Some task",
+        created_by=UserID(1),
+    )
 
 
 def test_get_task_endpoint_returns_404_when_task_not_found(container: Container, client: TestClient):

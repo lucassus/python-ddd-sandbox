@@ -32,13 +32,13 @@ class Container(containers.DeclarativeContainer):
     session_factory = providers.Singleton(sessionmaker, bind=engine)
 
     jwt_secret_key = providers.Dependency(instance_of=str)
-    jwt = providers.Factory(JWT, secret_key=jwt_secret_key)
+    jwt = providers.Singleton(JWT, secret_key=jwt_secret_key)
 
     bus = providers.Dependency(instance_of=MessageBus)
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
 
     register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
-    authenticate = providers.Factory(Authentication, uow=uow, jwt=jwt)
+    authentication = providers.Singleton(Authentication, uow=uow, jwt=jwt)
     change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
 
-    get_user_query = providers.Factory(GetUserSQLQuery, connection=connection)
+    get_user_query = providers.Singleton(GetUserSQLQuery, connection=connection)

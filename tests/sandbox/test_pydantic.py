@@ -1,9 +1,9 @@
 from typing import Annotated
 
 import pytest
+from modules.shared_kernel.entities.email_address import EmailAddress, InvalidEmailAddressError
 from pydantic import BaseModel, BeforeValidator, ConfigDict
 
-from app.modules.accounts.domain.email_address import EmailAddress, InvalidEmailAddressError
 from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.user_id import UserID
 

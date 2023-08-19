@@ -4,6 +4,7 @@ from typing import Optional, Protocol
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.shared_kernel.base_schema import BaseSchema
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class ListTasksQuery(Protocol):
@@ -23,7 +24,8 @@ class GetTaskQuery(Protocol):
     class Result(BaseSchema):
         number: int
         name: str
-        completed_at: Optional[datetime] = None
+        created_by: Optional[UserID]
+        completed_at: Optional[datetime]
 
     class NotFoundError(Exception):
         def __init__(self, project_id: ProjectID, number: TaskNumber):

@@ -5,8 +5,8 @@ from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from starlette import status
 
-from app.modules.accounts.entrypoints.containers import Container
 from app.modules.authentication_contract import AuthenticationContract, AuthenticationError
+from app.modules.projects.entrypoints.containers import Container
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/users/login",

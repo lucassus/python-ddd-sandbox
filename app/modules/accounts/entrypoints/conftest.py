@@ -1,6 +1,6 @@
 import pytest
 from fastapi import FastAPI
-from starlette.testclient import TestClient
+from fastapi.testclient import TestClient
 
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container

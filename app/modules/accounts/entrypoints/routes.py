@@ -7,9 +7,9 @@ from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.containers import Container
 from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.containers import Container
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints import schemas
@@ -25,8 +25,8 @@ router = APIRouter(prefix="/users", tags=["users"])
 @inject
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    register_user: RegisterUser = Depends(Provide[Container.register_user]),
-    jwt: JWT = Depends(Provide[Container.jwt]),
+    register_user: RegisterUser = Depends(Provide[Container.commands.register_user]),
+    jwt: JWT = Depends(Provide[Container.commands.jwt]),
 ):
     try:
         user_id = register_user(
@@ -46,7 +46,7 @@ def user_register_endpoint(
 @inject
 def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    authentication: Authentication = Depends(Provide[Container.authentication]),
+    authentication: Authentication = Depends(Provide[Container.commands.authentication]),
 ):
     try:
         token = authentication.login(
@@ -67,7 +67,7 @@ def user_login_endpoint(
 def user_update_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.UpdateUser,
-    change_user_email_address: ChangeUserEmailAddress = Depends(Provide[Container.change_user_email_address]),
+    change_user_email_address: ChangeUserEmailAddress = Depends(Provide[Container.commands.change_user_email_address]),
 ):
     change_user_email_address(
         user_id=current_user.id,
@@ -88,7 +88,7 @@ def user_update_endpoint(
 @inject
 def user_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
-    get_user: GetUserQuery = Depends(Provide[Container.get_user_query]),
+    get_user: GetUserQuery = Depends(Provide[Container.queries.get_user]),
 ):
     try:
         return get_user(current_user.id)

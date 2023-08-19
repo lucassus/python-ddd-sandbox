@@ -19,7 +19,7 @@ def create_app() -> FastAPI:
         app,
         mapper_registry,
         # Pass down assembled authentication service to comply with the contract
-        authentication=container.authentication(),
+        authentication=container.commands.authentication(),
     )
 
     # TODO: Figure out how to test these handlers

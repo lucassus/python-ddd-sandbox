@@ -2,10 +2,10 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.modules.accounts.application.containers import Container
+from app.modules.accounts.application.containers import ApplicationContainer
 from app.modules.accounts.entrypoints import routes
 
-_container = Container(
+_container = ApplicationContainer(
     jwt_secret_key="test-secret",
 )
 

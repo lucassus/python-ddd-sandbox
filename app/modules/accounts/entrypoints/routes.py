@@ -9,10 +9,10 @@ from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.register_user import RegisterUser
-from app.modules.accounts.containers import Container
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints import schemas
+from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract, AuthenticationError

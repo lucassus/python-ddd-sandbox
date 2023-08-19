@@ -23,12 +23,6 @@ def _prepare_db():
 
 
 @pytest.fixture()
-def connection(_prepare_db):
-    with engine.begin() as connection:
-        yield connection
-
-
-@pytest.fixture()
 def session(connection):
     session = AppSession(bind=connection)
     yield session

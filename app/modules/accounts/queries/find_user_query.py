@@ -24,16 +24,17 @@ class GetUserQuery(BaseSQLQuery):
         query = select(users_table.c.id, users_table.c.email).select_from(users_table).where(users_table.c.id == id)
         user = self._first_from(query)
 
-        # TODO: Fix it
-        # if user is None:
-        #     raise NotFoundError(id)
+        if user is None:
+            raise GetUserQuery.NotFoundError(id)
 
         query = (
             select(projects_table.c.id, projects_table.c.name)
             .select_from(projects_table)
             .where(projects_table.c.user_id == user.id)
         )
-        projects = self._connection.execute(query).all()
+
+        with self._engine.connect() as connection:
+            projects = connection.execute(query).all()
 
         return GetUserQuery.Result(
             **{

@@ -1,7 +1,5 @@
-from typing import Iterator
-
 from dependency_injector import containers, providers
-from sqlalchemy import Connection, Engine
+from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker
 
 from app.modules.authentication_contract import AuthenticationContract
@@ -15,11 +13,6 @@ from app.modules.projects.infrastructure.queries.project_queries import GetProje
 from app.modules.projects.infrastructure.queries.task_queries import GetTaskSQLQuery, ListTasksSQLQuery
 
 
-def init_connection(engine: Engine) -> Iterator[Connection]:
-    with engine.connect() as connection:
-        yield connection
-
-
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
@@ -31,7 +24,6 @@ class Container(containers.DeclarativeContainer):
     )
 
     engine = providers.Dependency(instance_of=Engine)
-    connection = providers.Resource(init_connection, engine=engine)
     session_factory = providers.Singleton(sessionmaker, bind=engine)
 
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
@@ -44,7 +36,7 @@ class Container(containers.DeclarativeContainer):
     archivization_service = providers.Singleton(ArchivizationService, uow=uow)
     tasks_service = providers.Singleton(TasksService, uow=uow)
 
-    list_projects_query = providers.Singleton(ListProjectsSQLSQLQuery, connection=connection)
-    get_project_query = providers.Singleton(GetProjectSQLSQLQuery, connection=connection)
-    list_tasks_query = providers.Singleton(ListTasksSQLQuery, connection=connection)
-    get_task_query = providers.Singleton(GetTaskSQLQuery, connection=connection)
+    list_projects_query = providers.Singleton(ListProjectsSQLSQLQuery, engine=engine)
+    get_project_query = providers.Singleton(GetProjectSQLSQLQuery, engine=engine)
+    list_tasks_query = providers.Singleton(ListTasksSQLQuery, engine=engine)
+    get_task_query = providers.Singleton(GetTaskSQLQuery, engine=engine)

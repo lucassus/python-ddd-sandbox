@@ -3,9 +3,8 @@ from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
 from app.config import settings
-from app.modules.accounts.containers import Container
 from app.modules.accounts.entrypoints import routes
-from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
+from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.message_bus import MessageBus
 
@@ -16,19 +15,7 @@ def _create_container(bus: MessageBus) -> Container:
         bus=providers.Object(bus),
     )
 
-    container.application.uow.override(
-        providers.Factory(
-            UnitOfWork,
-            session_factory=container.infrastructure.session_factory(),  # TODO: Find a bit better option to pass it
-        )
-    )
-
-    container.wire(
-        modules=[
-            ".entrypoints.dependencies",
-            ".entrypoints.routes",
-        ]
-    )
+    container.wire()
 
     return container
 

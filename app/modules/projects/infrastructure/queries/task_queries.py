@@ -12,7 +12,9 @@ class ListTasksSQLQuery(BaseSQLQuery, ListTasksQuery):
     def __call__(self, project_id: ProjectID):
         query = select(tasks_table).where(tasks_table.c.project_id == project_id)
 
-        tasks = self._connection.execute(query).all()
+        with self._engine.connect() as connection:
+            tasks = connection.execute(query).all()
+
         return ListTasksSQLQuery.Result(tasks=tasks)
 
 

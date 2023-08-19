@@ -1,12 +1,12 @@
-from sqlalchemy import Connection
 from sqlalchemy.orm import Session
 
+from app.infrastructure.db import engine
 from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
 
 
-def test_list_tasks_query(connection: Connection, session: Session, create_project):
+def test_list_tasks_query(session: Session, create_project):
     # Given
-    list_tasks = ListTasksSQLQuery(connection=connection)
+    list_tasks = ListTasksSQLQuery(engine=engine)
 
     project = create_project()
     project.add_task(name="Task One")

@@ -18,7 +18,9 @@ class ListProjectsSQLSQLQuery(BaseSQLQuery, ListProjectsQuery):
             .where(projects_table.c.user_id == user_id)
         )
 
-        projects = self._connection.execute(query).fetchall()
+        # TODO: Create self._all_from method
+        with self._engine.connect() as connection:
+            projects = connection.execute(query).fetchall()
 
         return ListProjectsQuery.Result(projects=projects)
 

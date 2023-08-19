@@ -2,17 +2,22 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.modules.accounts.application.containers import ApplicationContainer
+from app.modules.accounts.containers import Container
 from app.modules.accounts.entrypoints import routes
 
-_container = ApplicationContainer(
+_container = Container(
     jwt_secret_key="test-secret",
 )
 
 
 @pytest.fixture(scope="session", autouse=True)
 def _wire_container():
-    _container.wire()
+    _container.wire(
+        modules=[
+            ".dependencies",
+            ".routes",
+        ]
+    )
 
 
 @pytest.fixture()

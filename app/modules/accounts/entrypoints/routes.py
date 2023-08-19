@@ -25,8 +25,8 @@ router = APIRouter(prefix="/users", tags=["users"])
 @inject
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    register_user: RegisterUser = Depends(Provide[Container.commands.register_user]),
-    jwt: JWT = Depends(Provide[Container.commands.jwt]),
+    register_user: RegisterUser = Depends(Provide[Container.application.register_user]),
+    jwt: JWT = Depends(Provide[Container.application.jwt]),
 ):
     try:
         user_id = register_user(
@@ -46,7 +46,7 @@ def user_register_endpoint(
 @inject
 def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    authentication: Authentication = Depends(Provide[Container.commands.authentication]),
+    authentication: Authentication = Depends(Provide[Container.application.authentication]),
 ):
     try:
         token = authentication.login(
@@ -67,7 +67,9 @@ def user_login_endpoint(
 def user_update_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.UpdateUser,
-    change_user_email_address: ChangeUserEmailAddress = Depends(Provide[Container.commands.change_user_email_address]),
+    change_user_email_address: ChangeUserEmailAddress = Depends(
+        Provide[Container.application.change_user_email_address]
+    ),
 ):
     change_user_email_address(
         user_id=current_user.id,

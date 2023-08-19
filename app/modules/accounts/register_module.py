@@ -16,7 +16,7 @@ def _create_container(bus: MessageBus) -> Container:
         bus=providers.Object(bus),
     )
 
-    container.commands.uow.override(
+    container.application.uow.override(
         providers.Factory(
             UnitOfWork,
             session_factory=container.infrastructure.session_factory(),  # TODO: Find a bit better option to pass it

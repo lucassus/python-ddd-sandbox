@@ -12,7 +12,7 @@ class Container(containers.DeclarativeContainer):
 
     infrastructure = providers.Container(InfrastructureContainer)
 
-    commands = providers.Container(
+    application = providers.Container(
         ApplicationContainer,
         jwt_secret_key=jwt_secret_key,
         bus=bus,

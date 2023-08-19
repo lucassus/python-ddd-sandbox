@@ -19,7 +19,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     register_user_mock = Mock(return_value=123)
 
     # When
-    with container.commands.register_user.override(register_user_mock):
+    with container.application.register_user.override(register_user_mock):
         response = client.post(
             "/users",
             json={
@@ -43,7 +43,7 @@ def test_register_user_endpoint_errors_handling(container: Container, client: Te
     register_user_mock = Mock(side_effect=EmailAlreadyExistsException(EmailAddress("taken@email.com")))
 
     # When
-    with container.commands.register_user.override(register_user_mock):
+    with container.application.register_user.override(register_user_mock):
         response = client.post(
             "/users",
             json={"email": "taken@email.com", "password": "password"},

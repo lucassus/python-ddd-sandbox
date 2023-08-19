@@ -1,8 +1,8 @@
 from dependency_injector import containers, providers
 from sqlalchemy import Engine
 
+from app.infrastructure.containers import InfrastructureContainer
 from app.modules.accounts.application.containers import ApplicationContainer as ApplicationContainer
-from app.modules.accounts.infrastructure.containers import InfrastructureContainer
 from app.modules.accounts.queries.containers import QueriesContainer
 from app.modules.shared_kernel.message_bus import MessageBus
 

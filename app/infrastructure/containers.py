@@ -10,8 +10,6 @@ def init_connection(engine: Engine) -> Iterator[Connection]:
         yield connection
 
 
-# TODO: It can be actually shared with the other modules.
-#  Should I move it to app.infrastructure.containers?
 class InfrastructureContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
     connection = providers.Resource(init_connection, engine=engine)

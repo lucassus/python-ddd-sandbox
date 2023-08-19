@@ -4,6 +4,7 @@ from app.modules.shared_kernel.base_schema import BaseSchema
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
+# TODO: It seems to be redundant...
 class GetUserQuery(Protocol):
     class Result(BaseSchema):
         class Project(BaseSchema):

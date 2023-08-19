@@ -11,6 +11,7 @@ class JWTError(Exception):
     pass
 
 
+# TODO: Create an interface for this class
 class JWT:
     _algorithm = "HS256"
     _expiration_delta = timedelta(days=90)

@@ -80,20 +80,20 @@ def user_update_endpoint(
     )
 
 
-@router.get(
-    "/me",
-    name="Returns the current user along with projects",
-    response_model=GetUserQuery.Result,
-)
-@inject
-def user_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
-    get_user: GetUserQuery = Depends(Provide[Container.get_user_query]),
-):
-    try:
-        return get_user(current_user.id)
-    except GetUserQuery.NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e),
-        ) from e
+# @router.get(
+#     "/me",
+#     name="Returns the current user along with projects",
+#     response_model=GetUserQuery.Result,
+# )
+# @inject
+# def user_endpoint(
+#     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+#     get_user: GetUserQuery = Depends(Provide[Container.get_user_query]),
+# ):
+#     try:
+#         return get_user(current_user.id)
+#     except GetUserQuery.NotFoundError as e:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail=str(e),
+#         ) from e

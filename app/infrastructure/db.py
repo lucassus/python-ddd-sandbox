@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.config import settings
+from app.config import app_config
 
 # https://docs.sqlalchemy.org/en/20/orm/quickstart.html#create-an-engine
 # The engine is a factory that can create db connections.
 # Also holds connections inside a connection pool for fast re-use.
 engine = create_engine(
-    settings.database_url,
+    app_config.database_url,
     connect_args={"check_same_thread": False},
     echo=False,  # To have SQLAlchemy log every SQL statements issued to the database
     pool_size=5,

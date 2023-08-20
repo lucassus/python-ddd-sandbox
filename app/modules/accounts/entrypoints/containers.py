@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 from sqlalchemy import Engine
 
-from app.infrastructure.db import AppSession, engine
+from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
 from app.modules.accounts.application.jwt import JWT
@@ -39,7 +39,7 @@ class Container(containers.DeclarativeContainer):
         ]
     )
 
-    engine = providers.Object(engine)
+    engine = providers.Dependency(instance_of=Engine)
 
     bus = providers.Dependency(instance_of=MessageBus)
     jwt_secret_key = providers.Dependency(instance_of=str)

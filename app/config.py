@@ -25,4 +25,4 @@ class Settings(BaseSettings):
     jwt_secret_key: str = Field(..., validation_alias="APP_JWT_SECRET_KEY")
 
 
-settings = Settings()
+app_config = Settings()

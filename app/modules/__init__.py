@@ -1,3 +1,4 @@
+from dependency_injector import providers
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import registry
@@ -14,12 +15,12 @@ def create_app() -> FastAPI:
 
     app = FastAPI()
 
-    container = register_accounts_module(app, mapper_registry, bus)
-    register_projects_module(
-        app,
-        mapper_registry,
+    accounts_container = register_accounts_module(app, mapper_registry, bus)
+    projects_container = register_projects_module(app, mapper_registry)
+
+    projects_container.authentication.override(
         # Pass down assembled authentication service to comply with the contract
-        authentication=container.application.authentication(),
+        providers.Factory(accounts_container.application.authentication),
     )
 
     # TODO: Figure out how to test these handlers

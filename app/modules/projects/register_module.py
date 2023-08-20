@@ -12,13 +12,11 @@ from app.modules.projects.infrastructure.mappers import start_mappers
 def register_module(
     app: FastAPI,
     mappers: registry,
-    authentication: AuthenticationContract,
-) -> None:
-    container = Container(
-        engine=engine,
-        authentication=providers.Object(authentication),
-    )
+) -> Container:
+    container = Container(engine=engine)
     container.wire()
 
     start_mappers(mappers)
     app.include_router(routes.router)
+
+    return container

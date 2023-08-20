@@ -27,7 +27,7 @@ class Container(containers.DeclarativeContainer):
     session_factory = providers.Factory(AppSession, bind=engine)
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
 
-    authentication = providers.Dependency(instance_of=AuthenticationContract)  # type: ignore[type-abstract]
+    authentication = providers.AbstractFactory(AuthenticationContract)
 
     create_project = providers.Singleton(CreateProject, uow=uow)
     create_example_project = providers.Singleton(CreateExampleProject, uow=uow)

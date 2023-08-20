@@ -1,16 +1,20 @@
 from datetime import datetime
 
-from app.modules.accounts.application.jwt import JWT, JWTError
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.modules.accounts.application.ports.authenticationtoken import AuthenticationToken, AuthenticationTokenError
 from app.modules.accounts.domain.password import Password
 from app.modules.authentication_contract import AuthenticationContract, AuthenticationError
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 class Authentication(AuthenticationContract):
-    def __init__(self, uow: AbstractUnitOfWork, jwt: JWT):
+    def __init__(
+        self,
+        uow: AbstractUnitOfWork,
+        auth_token: AuthenticationToken,
+    ):
         self._uow = uow
-        self._jwt = jwt
+        self._auth_token = auth_token
 
     def login(
         self,
@@ -24,12 +28,12 @@ class Authentication(AuthenticationContract):
             if user is None or user.password != password:
                 raise AuthenticationError()
 
-            return self._jwt.encode(user.id, now)
+            return self._auth_token.encode(user.id, now)
 
     def trade_token_for_user(self, token: str) -> AuthenticationContract.CurrentUserDTO:
         try:
-            user_id = self._jwt.decode(token)
-        except JWTError as e:
+            user_id = self._auth_token.decode(token)
+        except AuthenticationTokenError as e:
             raise AuthenticationError() from e
 
         with self._uow as uow:

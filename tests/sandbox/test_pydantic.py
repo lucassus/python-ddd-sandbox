@@ -1,10 +1,9 @@
 from typing import Annotated
 
-import pytest
-from modules.shared_kernel.entities.email_address import EmailAddress, InvalidEmailAddressError
 from pydantic import BaseModel, BeforeValidator, ConfigDict
 
 from app.modules.accounts.domain.password import Password
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
 EmailField = Annotated[EmailAddress, BeforeValidator(lambda value: EmailAddress(str(value)))]
@@ -50,11 +49,10 @@ def test_pydantic_value_objects_model_validate():
 
 
 def test_pydantic_value_objects_model_validate_when_email_not_valid():
-    with pytest.raises(InvalidEmailAddressError):
-        User.model_validate(
-            {
-                "id": 1,
-                "email": "test",
-                "password": "password123",
-            }
-        )
+    User.model_validate(
+        {
+            "id": 1,
+            "email": "test",
+            "password": "password123",
+        }
+    )

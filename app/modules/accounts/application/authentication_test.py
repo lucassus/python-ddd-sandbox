@@ -1,16 +1,31 @@
+from datetime import datetime
+from typing import Optional
+
 import pytest
 
 from app.modules.accounts.application.authentication import Authentication
-from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.modules.accounts.application.ports.authenticationtoken import AuthenticationToken
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.user_builder import UserBuilder
+from app.modules.shared_kernel.entities.user_id import UserID
+
+
+class FakeAuthenticationToken(AuthenticationToken):
+    def __init__(self, secret_key: str):
+        super().__init__(secret_key=secret_key)
+
+    def encode(self, user_id: UserID, now: Optional[datetime] = None) -> str:
+        return f"token-{self._secret_key}-{user_id}"
+
+    def decode(self, token: str) -> UserID:
+        return UserID(int(token.replace(f"token-{self._secret_key}-", "")))
 
 
 class TestAuthenticate:
     @pytest.fixture()
     def authentication(self, uow: FakeUnitOfWork):
-        return Authentication(uow=uow, jwt=JWT(secret_key="test-secret"))
+        return Authentication(uow=uow, auth_token=FakeAuthenticationToken(secret_key="test-secret"))
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given

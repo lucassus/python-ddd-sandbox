@@ -8,7 +8,7 @@ from app.modules.accounts.infrastructure.mappers import start_mappers as start_a
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def _prepare_db():
     create_tables(engine)
 
@@ -23,7 +23,7 @@ def _prepare_db():
 
 
 @pytest.fixture()
-def session(connection):
-    session = AppSession(bind=connection)
+def session():
+    session = AppSession(bind=engine)
     yield session
     session.close()

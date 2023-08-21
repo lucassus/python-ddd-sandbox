@@ -5,19 +5,13 @@ from fastapi.testclient import TestClient
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container
 
-_container = Container(
-    jwt_secret_key="test-secret",
-)
 
-
-@pytest.fixture(scope="session", autouse=True)
-def _wire_container():
-    _container.wire()
-
-
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def container():
-    return _container
+    container = Container(jwt_secret_key="test-secret")
+    container.wire()
+
+    return container
 
 
 @pytest.fixture()

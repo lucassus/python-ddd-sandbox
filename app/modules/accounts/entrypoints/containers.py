@@ -1,21 +1,35 @@
-from typing import Iterator
-
 from dependency_injector import containers, providers
-from sqlalchemy import Connection, Engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Engine
 
+from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.jwt import JWT
 from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.accounts.infrastructure.queries.find_user_query import GetUserSQLQuery
+from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-def init_connection(engine: Engine) -> Iterator[Connection]:
-    with engine.connect() as connection:
-        yield connection
+class ApplicationContainer(containers.DeclarativeContainer):
+    engine = providers.Dependency(instance_of=Engine)
+    bus = providers.Dependency(instance_of=MessageBus)
+
+    jwt_secret_key = providers.Dependency(instance_of=str)
+
+    session_factory = providers.Factory(AppSession, bind=engine)
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
+
+    auth_token = providers.Singleton(JWTAuthentication, secret_key=jwt_secret_key)
+    authentication = providers.Singleton(Authentication, uow=uow, token=auth_token)
+
+    register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
+    change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
+
+
+class QueriesContainer(containers.DeclarativeContainer):
+    engine = providers.Dependency(instance_of=Engine)
+    get_user = providers.Singleton(GetUserQuery, engine=engine)
 
 
 class Container(containers.DeclarativeContainer):
@@ -23,22 +37,19 @@ class Container(containers.DeclarativeContainer):
         modules=[
             ".dependencies",
             ".routes",
-        ],
-        auto_wire=False,
+        ]
     )
 
     engine = providers.Dependency(instance_of=Engine)
-    connection = providers.Resource(init_connection, engine=engine)
-    session_factory = providers.Singleton(sessionmaker, bind=engine)
-
-    jwt_secret_key = providers.Dependency(instance_of=str)
-    jwt = providers.Singleton(JWT, secret_key=jwt_secret_key)
 
     bus = providers.Dependency(instance_of=MessageBus)
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
+    jwt_secret_key = providers.Dependency(instance_of=str)
 
-    register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
-    authentication = providers.Singleton(Authentication, uow=uow, jwt=jwt)
-    change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
+    application = providers.Container(
+        ApplicationContainer,
+        jwt_secret_key=jwt_secret_key,
+        bus=bus,
+        engine=engine,
+    )
 
-    get_user_query = providers.Singleton(GetUserSQLQuery, connection=connection)
+    queries = providers.Container(QueriesContainer, engine=engine)

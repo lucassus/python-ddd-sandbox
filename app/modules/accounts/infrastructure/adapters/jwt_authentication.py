@@ -1,22 +1,15 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import jwt
 from jwt import DecodeError, ExpiredSignatureError
 
+from app.modules.accounts.application.ports.authenticationtoken import AuthenticationToken, AuthenticationTokenError
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
 
 
-class JWTError(Exception):
-    pass
-
-
-class JWT:
+class JWTAuthentication(AuthenticationToken):
     _algorithm = "HS256"
-    _expiration_delta = timedelta(days=90)
-
-    def __init__(self, secret_key: str):
-        self._secret_key = secret_key
 
     def encode(self, user_id: UserID, now: datetime | None = None) -> str:
         if now is None:
@@ -40,6 +33,6 @@ class JWT:
                 algorithms=[self._algorithm],
             )
         except (DecodeError, ExpiredSignatureError) as e:
-            raise JWTError() from e
+            raise AuthenticationTokenError() from e
 
         return UserID(payload["sub"])

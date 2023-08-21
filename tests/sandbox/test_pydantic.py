@@ -1,38 +1,73 @@
-from typing import Annotated
+from typing import Annotated, Any
 
 import pytest
-from modules.shared_kernel.entities.email_address import EmailAddress, InvalidEmailAddressError
-from pydantic import BaseModel, BeforeValidator, ConfigDict
+from pydantic import BaseModel, ConfigDict, GetCoreSchemaHandler, ValidationError
+from pydantic_core import CoreSchema, core_schema
 
-from app.modules.accounts.domain.password import Password
-from app.modules.shared_kernel.entities.user_id import UserID
 
-EmailField = Annotated[EmailAddress, BeforeValidator(lambda value: EmailAddress(str(value)))]
-PasswordField = Annotated[Password, BeforeValidator(lambda value: Password(str(value)))]
+class InvalidEmailError(Exception):
+    pass
+
+
+class EmailAddress:
+    def __init__(self, address: str):
+        if "@" not in address:
+            raise InvalidEmailError()
+
+        self._address = address
+
+    def __str__(self):
+        return self._address
+
+
+class EmailAddressPydanticAnnotation:
+    @classmethod
+    def validate_email_address(cls, v: Any, handler) -> EmailAddress:
+        if isinstance(v, EmailAddress):
+            return v
+
+        s = handler(v)
+
+        try:
+            return EmailAddress(s)
+        except InvalidEmailError as e:
+            raise ValueError("Invalid email address") from e  # noqa: TRY003
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source_type, handler: GetCoreSchemaHandler) -> CoreSchema:
+        assert source_type is EmailAddress
+        return core_schema.no_info_wrap_validator_function(
+            cls.validate_email_address,
+            core_schema.str_schema(),
+            serialization=core_schema.to_string_ser_schema(),
+        )
+
+
+EmailField = Annotated[EmailAddress, EmailAddressPydanticAnnotation]
 
 
 # TODO: Use this technique to pass commands from API endpoints to the application layer
 class User(BaseModel):
     model_config = ConfigDict(
-        arbitrary_types_allowed=True,
+        arbitrary_types_allowed=False,
         frozen=True,
     )
 
-    id: UserID
+    id: int
     email: EmailField
-    password: PasswordField
+    password: str
 
 
 def test_pydantic_value_objects():
     user = User(
-        id=UserID(1),
+        id=1,
         email=EmailAddress("test@email.com"),
-        password=Password("password123"),
+        password="password",
     )
 
     assert user.id == 1
     assert str(user.email) == "test@email.com"
-    assert str(user.password) == "password123"
+    assert user.password == "password"
 
 
 def test_pydantic_value_objects_model_validate():
@@ -40,21 +75,21 @@ def test_pydantic_value_objects_model_validate():
         {
             "id": 1,
             "email": "test@email.com",
-            "password": "password123",
+            "password": "password",
         }
     )
 
     assert user.id == 1
     assert str(user.email) == "test@email.com"
-    assert str(user.password) == "password123"
+    assert user.password == "password"
 
 
 def test_pydantic_value_objects_model_validate_when_email_not_valid():
-    with pytest.raises(InvalidEmailAddressError):
+    with pytest.raises(ValidationError):
         User.model_validate(
             {
                 "id": 1,
                 "email": "test",
-                "password": "password123",
+                "password": "password",
             }
         )

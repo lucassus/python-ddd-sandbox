@@ -5,9 +5,9 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from app.modules.projects.application.archivization_service import ArchivizationService
-from app.modules.projects.application.queries.project_queries import GetProjectQuery
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.queries.project_queries import GetProjectQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
@@ -16,7 +16,7 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
     create_project_mock = Mock(return_value=1)
 
     # When
-    with container.create_project.override(create_project_mock):
+    with container.application.create_project.override(create_project_mock):
         response = client.post(
             "/projects",
             json={"name": "Test project"},
@@ -34,7 +34,7 @@ def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(conta
     get_project_query_mock = Mock(side_effect=GetProjectQuery.NotFoundError(id=ProjectID(1)))
 
     # When
-    with container.get_project_query.override(get_project_query_mock):
+    with container.queries.get_project.override(get_project_query_mock):
         response = client.get("/projects/1")
 
     # Then
@@ -53,7 +53,7 @@ def test_list_projects_endpoint(container: Container, client: TestClient):
     )
 
     # When
-    with container.list_projects_query.override(list_projects_query_mock):
+    with container.queries.list_projects.override(list_projects_query_mock):
         response = client.get("/projects")
 
     # Then
@@ -65,7 +65,7 @@ def test_update_project_endpoint(container: Container, client: TestClient):
     update_project_mock = Mock()
 
     # When
-    with container.update_project.override(update_project_mock):
+    with container.application.update_project.override(update_project_mock):
         response = client.put(
             "/projects/123",
             json={"name": "Test project"},
@@ -83,7 +83,7 @@ def test_archive_project_endpoint(container: Container, client: TestClient):
     archivization_service_mock = Mock(spec=ArchivizationService)
 
     # When
-    with container.archivization_service.override(archivization_service_mock):
+    with container.application.archivization_service.override(archivization_service_mock):
         response = client.put("/projects/123/archive")
 
     # Then
@@ -96,7 +96,7 @@ def test_unarchive_project_endpoint(container: Container, client: TestClient):
     archivization_service_mock = Mock(spec=ArchivizationService)
 
     # When
-    with container.archivization_service.override(archivization_service_mock):
+    with container.application.archivization_service.override(archivization_service_mock):
         response = client.put("/projects/124/unarchive")
 
     # Then
@@ -109,7 +109,7 @@ def test_delete_project_endpoint(container: Container, client: TestClient):
     archivization_service_mock = Mock(spec=ArchivizationService)
 
     # When
-    with container.archivization_service.override(archivization_service_mock):
+    with container.application.archivization_service.override(archivization_service_mock):
         response = client.delete("/projects/124")
 
     # Then

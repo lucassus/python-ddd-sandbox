@@ -36,7 +36,6 @@ class TestChangeUserEmailAddressUseCase:
 
     def test_raises_error_when_user_does_not_exist(
         self,
-        repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
         change_user_email_address: ChangeUserEmailAddress,
     ):

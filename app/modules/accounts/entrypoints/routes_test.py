@@ -4,11 +4,11 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.modules.accounts.application.queries.find_user_query import GetUserQuery
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
+from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -19,7 +19,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     register_user_mock = Mock(return_value=123)
 
     # When
-    with container.register_user.override(register_user_mock):
+    with container.application.register_user.override(register_user_mock):
         response = client.post(
             "/users",
             json={
@@ -43,7 +43,7 @@ def test_register_user_endpoint_errors_handling(container: Container, client: Te
     register_user_mock = Mock(side_effect=EmailAlreadyExistsException(EmailAddress("taken@email.com")))
 
     # When
-    with container.register_user.override(register_user_mock):
+    with container.application.register_user.override(register_user_mock):
         response = client.post(
             "/users",
             json={"email": "taken@email.com", "password": "password"},
@@ -77,7 +77,7 @@ def test_get_current_user_endpoint(
     )
 
     # When
-    with container.get_user_query.override(get_user_mock):
+    with container.queries.get_user.override(get_user_mock):
         response = client.get("/users/me")
 
     # Then

@@ -8,17 +8,13 @@ from app.modules.projects.entrypoints.containers import Container
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
-_container = Container()
 
-
-@pytest.fixture(scope="session", autouse=True)
-def _wire_container():
-    _container.wire()
-
-
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def container():
-    return _container
+    container = Container()
+    container.wire()
+
+    return container
 
 
 @pytest.fixture()

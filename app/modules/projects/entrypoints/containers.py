@@ -1,9 +1,7 @@
-from typing import Iterator
-
 from dependency_injector import containers, providers
-from sqlalchemy import Connection, Engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Engine
 
+from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.application.create_example_project import CreateExampleProject
@@ -11,13 +9,32 @@ from app.modules.projects.application.create_project import CreateProject
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.projects.infrastructure.queries.project_queries import GetProjectSQLSQLQuery, ListProjectsSQLSQLQuery
-from app.modules.projects.infrastructure.queries.task_queries import GetTaskSQLQuery, ListTasksSQLQuery
+from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
+from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
 
 
-def init_connection(engine: Engine) -> Iterator[Connection]:
-    with engine.connect() as connection:
-        yield connection
+class ApplicationContainer(containers.DeclarativeContainer):
+    engine = providers.Dependency(instance_of=Engine)
+    session_factory = providers.Factory(AppSession, bind=engine)
+
+    authentication = providers.AbstractFactory(AuthenticationContract)
+
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
+
+    create_project = providers.Singleton(CreateProject, uow=uow)
+    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
+    update_project = providers.Singleton(UpdateProject, uow=uow)
+    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
+    tasks_service = providers.Singleton(TasksService, uow=uow)
+
+
+class QueriesContainer(containers.DeclarativeContainer):
+    engine = providers.Dependency(instance_of=Engine)
+
+    list_projects = providers.Singleton(ListProjectsQuery, engine=engine)
+    get_project = providers.Singleton(GetProjectQuery, engine=engine)
+    list_tasks = providers.Singleton(ListTasksQuery, engine=engine)
+    get_task = providers.Singleton(GetTaskQuery, engine=engine)
 
 
 class Container(containers.DeclarativeContainer):
@@ -31,20 +48,6 @@ class Container(containers.DeclarativeContainer):
     )
 
     engine = providers.Dependency(instance_of=Engine)
-    connection = providers.Resource(init_connection, engine=engine)
-    session_factory = providers.Singleton(sessionmaker, bind=engine)
 
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory)
-
-    authentication = providers.Dependency(instance_of=AuthenticationContract)  # type: ignore[type-abstract]
-
-    create_project = providers.Singleton(CreateProject, uow=uow)
-    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
-    update_project = providers.Singleton(UpdateProject, uow=uow)
-    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
-    tasks_service = providers.Singleton(TasksService, uow=uow)
-
-    list_projects_query = providers.Singleton(ListProjectsSQLSQLQuery, connection=connection)
-    get_project_query = providers.Singleton(GetProjectSQLSQLQuery, connection=connection)
-    list_tasks_query = providers.Singleton(ListTasksSQLQuery, connection=connection)
-    get_task_query = providers.Singleton(GetTaskSQLQuery, connection=connection)
+    application = providers.Container(ApplicationContainer, engine=engine)
+    queries = providers.Container(QueriesContainer, engine=engine)

@@ -11,10 +11,10 @@ class Authentication(AuthenticationContract):
     def __init__(
         self,
         uow: AbstractUnitOfWork,
-        auth_token: AuthenticationToken,
+        token: AuthenticationToken,
     ):
         self._uow = uow
-        self._auth_token = auth_token
+        self._token = token
 
     def login(
         self,
@@ -28,11 +28,11 @@ class Authentication(AuthenticationContract):
             if user is None or user.password != password:
                 raise AuthenticationError()
 
-            return self._auth_token.encode(user.id, now)
+            return self._token.encode(user.id, now)
 
     def trade_token_for_user(self, token: str) -> AuthenticationContract.CurrentUserDTO:
         try:
-            user_id = self._auth_token.decode(token)
+            user_id = self._token.decode(token)
         except AuthenticationTokenError as e:
             raise AuthenticationError() from e
 

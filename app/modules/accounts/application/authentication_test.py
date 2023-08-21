@@ -25,7 +25,7 @@ class FakeAuthenticationToken(AuthenticationToken):
 class TestAuthenticate:
     @pytest.fixture()
     def authentication(self, uow: FakeUnitOfWork):
-        return Authentication(uow=uow, auth_token=FakeAuthenticationToken(secret_key="test-secret"))
+        return Authentication(uow=uow, token=FakeAuthenticationToken(secret_key="test-secret"))
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given

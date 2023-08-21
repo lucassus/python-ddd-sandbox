@@ -38,6 +38,17 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     assert "access_token" in response.json()
 
 
+def test_register_user_endpoint_returns_422_when_email_is_invalid(client: TestClient):
+    response = client.post(
+        "/users",
+        json={"email": "invalid", "password": "password"},
+        follow_redirects=False,
+    )
+
+    # Then
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
 def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):
     # Given
     register_user_mock = Mock(side_effect=EmailAlreadyExistsException(EmailAddress("taken@email.com")))

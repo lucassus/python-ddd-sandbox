@@ -1,7 +1,7 @@
 from typing import Annotated, Any
 
 import pytest
-from pydantic import BaseModel, ConfigDict, GetCoreSchemaHandler, ValidationError
+from pydantic import BaseModel, ConfigDict, ValidationError
 from pydantic_core import CoreSchema, core_schema
 
 
@@ -34,7 +34,7 @@ class EmailAddressPydanticAnnotation:
             raise ValueError("Invalid email address") from e  # noqa: TRY003
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type, handler: GetCoreSchemaHandler) -> CoreSchema:
+    def __get_pydantic_core_schema__(cls, source_type, _handler) -> CoreSchema:
         assert source_type is EmailAddress
         return core_schema.no_info_wrap_validator_function(
             cls.validate_email_address,

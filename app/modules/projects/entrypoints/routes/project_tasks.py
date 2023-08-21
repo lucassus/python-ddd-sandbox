@@ -5,14 +5,13 @@ from fastapi import APIRouter, Depends, HTTPException, Path, status
 from starlette.responses import RedirectResponse
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.queries.task_queries import GetTaskQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
-from app.modules.projects.infrastructure.queries.task_queries import ListTasksSQLQuery
+from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
 
@@ -40,12 +39,12 @@ def task_create_endpoint(
 @router.get(
     "",
     name="Returns list of tasks",
-    response_model=ListTasksSQLQuery.Result,
+    response_model=ListTasksQuery.Result,
 )
 @inject
 def list_tasks_endpoint(
     project_id: ProjectID,
-    list_tasks: ListTasksSQLQuery = Depends(Provide[Container.list_tasks_query]),
+    list_tasks: ListTasksQuery = Depends(Provide[Container.queries.list_tasks]),
 ):
     return list_tasks(project_id)
 
@@ -56,7 +55,7 @@ def list_tasks_endpoint(
 )
 @inject
 def get_task_endpoint(
-    get_task: GetTaskQuery = Depends(Provide[Container.get_task_query]),
+    get_task: GetTaskQuery = Depends(Provide[Container.queries.get_task]),
     project_id: ProjectID = Path(..., description="The ID of the project"),
     number: TaskNumber = Path(..., description="The number of the task", ge=1),
 ):

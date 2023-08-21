@@ -9,8 +9,17 @@ from app.modules.projects.application.create_project import CreateProject
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.projects.infrastructure.queries.project_queries import GetProjectSQLSQLQuery, ListProjectsSQLSQLQuery
-from app.modules.projects.infrastructure.queries.task_queries import GetTaskSQLQuery, ListTasksSQLQuery
+from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
+from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
+
+
+class QueriesContainer(containers.DeclarativeContainer):
+    engine = providers.Dependency(instance_of=Engine)
+
+    list_projects = providers.Singleton(ListProjectsQuery, engine=engine)
+    get_project = providers.Singleton(GetProjectQuery, engine=engine)
+    list_tasks = providers.Singleton(ListTasksQuery, engine=engine)
+    get_task = providers.Singleton(GetTaskQuery, engine=engine)
 
 
 class Container(containers.DeclarativeContainer):
@@ -29,13 +38,11 @@ class Container(containers.DeclarativeContainer):
 
     authentication = providers.AbstractFactory(AuthenticationContract)
 
+    # TODO: Align this with the accounts module
     create_project = providers.Singleton(CreateProject, uow=uow)
     create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
     update_project = providers.Singleton(UpdateProject, uow=uow)
     archivization_service = providers.Singleton(ArchivizationService, uow=uow)
     tasks_service = providers.Singleton(TasksService, uow=uow)
 
-    list_projects_query = providers.Singleton(ListProjectsSQLSQLQuery, engine=engine)
-    get_project_query = providers.Singleton(GetProjectSQLSQLQuery, engine=engine)
-    list_tasks_query = providers.Singleton(ListTasksSQLQuery, engine=engine)
-    get_task_query = providers.Singleton(GetTaskSQLQuery, engine=engine)
+    queries = providers.Container(QueriesContainer, engine=engine)

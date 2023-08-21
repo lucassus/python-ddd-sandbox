@@ -3,12 +3,12 @@ from unittest.mock import Mock
 from starlette.testclient import TestClient
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.queries.task_queries import GetTaskQuery, ListTasksQuery
 from app.modules.projects.application.tasks_service import TasksService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
+from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
@@ -46,7 +46,7 @@ def test_get_task_endpoint_returns_404_when_task_not_found(container: Container,
     get_task_query_mock = Mock(side_effect=GetTaskQuery.NotFoundError(ProjectID(41), TaskNumber(665)))
 
     # When
-    with container.get_task_query.override(get_task_query_mock):
+    with container.queries.get_task.override(get_task_query_mock):
         response = client.get("/projects/41/tasks/665")
 
     # Then
@@ -68,10 +68,10 @@ def test_task_list_endpoint(container: Container, client: TestClient):
                 ]
             )
 
-    list_tasks_query_mock = Mock(wraps=ListTasksQueryMock())
+    list_tasks_query_mock = Mock(wraps=ListTasksQueryMock(engine=Mock()))
 
     # When
-    with container.list_tasks_query.override(list_tasks_query_mock):
+    with container.queries.list_tasks.override(list_tasks_query_mock):
         response = client.get("/projects/1/tasks")
 
     # Then

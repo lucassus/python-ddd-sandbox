@@ -8,12 +8,12 @@ from starlette.status import HTTP_200_OK
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.application.create_project import CreateProject
-from app.modules.projects.application.queries.project_queries import GetProjectQuery, ListProjectsQuery
 from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
+from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
 
 router = APIRouter(prefix="/projects")
 
@@ -44,7 +44,7 @@ def project_create_endpoint(
 @inject
 def list_projects_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
-    list_projects: ListProjectsQuery = Depends(Provide[Container.list_projects_query]),
+    list_projects: ListProjectsQuery = Depends(Provide[Container.queries.list_projects]),
 ):
     return list_projects(current_user.id)
 
@@ -56,7 +56,7 @@ def list_projects_endpoint(
 @inject
 def get_project_endpoint(
     project_id: ProjectID,
-    get_project: GetProjectQuery = Depends(Provide[Container.get_project_query]),
+    get_project: GetProjectQuery = Depends(Provide[Container.queries.get_project]),
 ):
     try:
         return get_project(project_id)

@@ -31,7 +31,7 @@ class EmailAddressPydanticAnnotation:
         try:
             return EmailAddress(s)
         except InvalidEmailError as e:
-            raise ValueError("Invalid email address") from e
+            raise ValueError("Invalid email address") from e  # noqa: TRY003
 
     @classmethod
     def __get_pydantic_core_schema__(cls, source_type, handler: GetCoreSchemaHandler) -> CoreSchema:

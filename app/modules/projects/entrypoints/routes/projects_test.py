@@ -16,7 +16,7 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
     create_project_mock = Mock(return_value=1)
 
     # When
-    with container.create_project.override(create_project_mock):
+    with container.application.create_project.override(create_project_mock):
         response = client.post(
             "/projects",
             json={"name": "Test project"},
@@ -65,7 +65,7 @@ def test_update_project_endpoint(container: Container, client: TestClient):
     update_project_mock = Mock()
 
     # When
-    with container.update_project.override(update_project_mock):
+    with container.application.update_project.override(update_project_mock):
         response = client.put(
             "/projects/123",
             json={"name": "Test project"},
@@ -83,7 +83,7 @@ def test_archive_project_endpoint(container: Container, client: TestClient):
     archivization_service_mock = Mock(spec=ArchivizationService)
 
     # When
-    with container.archivization_service.override(archivization_service_mock):
+    with container.application.archivization_service.override(archivization_service_mock):
         response = client.put("/projects/123/archive")
 
     # Then
@@ -96,7 +96,7 @@ def test_unarchive_project_endpoint(container: Container, client: TestClient):
     archivization_service_mock = Mock(spec=ArchivizationService)
 
     # When
-    with container.archivization_service.override(archivization_service_mock):
+    with container.application.archivization_service.override(archivization_service_mock):
         response = client.put("/projects/124/unarchive")
 
     # Then
@@ -109,7 +109,7 @@ def test_delete_project_endpoint(container: Container, client: TestClient):
     archivization_service_mock = Mock(spec=ArchivizationService)
 
     # When
-    with container.archivization_service.override(archivization_service_mock):
+    with container.application.archivization_service.override(archivization_service_mock):
         response = client.delete("/projects/124")
 
     # Then

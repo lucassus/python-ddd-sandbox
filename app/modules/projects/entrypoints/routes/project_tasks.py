@@ -22,7 +22,7 @@ def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
-    service: TasksService = Depends(Provide[Container.tasks_service]),
+    service: TasksService = Depends(Provide[Container.application.tasks_service]),
 ):
     task_number = service.create_task(
         project_id=ProjectID(project_id),
@@ -72,7 +72,7 @@ def get_task_endpoint(
 @inject
 def task_complete_endpoint(
     project_id: int,
-    service: TasksService = Depends(Provide[Container.tasks_service]),
+    service: TasksService = Depends(Provide[Container.application.tasks_service]),
     task_number: int = Path(..., description="The number of the task to complete", ge=1),
 ):
     service.complete_task(ProjectID(project_id), TaskNumber(task_number))
@@ -87,7 +87,7 @@ def task_complete_endpoint(
 @inject
 def task_incomplete_endpoint(
     project_id: int,
-    service: TasksService = Depends(Provide[Container.tasks_service]),
+    service: TasksService = Depends(Provide[Container.application.tasks_service]),
     task_number: int = Path(..., description="The number of the task to incomplete", ge=1),
 ):
     service.incomplete_task(ProjectID(project_id), TaskNumber(task_number))

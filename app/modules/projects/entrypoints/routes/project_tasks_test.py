@@ -24,7 +24,7 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     )
 
     # When
-    with container.tasks_service.override(mock_tasks_service):
+    with container.application.tasks_service.override(mock_tasks_service):
         response = client.post(
             "/projects/123/tasks",
             json={"name": "Some task"},
@@ -94,7 +94,7 @@ def test_task_complete_endpoint(container: Container, client: TestClient):
     mock_tasks_service.create_task.return_value = TaskNumber(667)
 
     # When
-    with container.tasks_service.override(mock_tasks_service):
+    with container.application.tasks_service.override(mock_tasks_service):
         response = client.put(
             "/projects/665/tasks/667/complete",
             follow_redirects=False,
@@ -112,7 +112,7 @@ def test_task_incomplete_endpoint(container: Container, client: TestClient):
     mock_tasks_service.create_task.return_value = TaskNumber(668)
 
     # When
-    with container.tasks_service.override(mock_tasks_service):
+    with container.application.tasks_service.override(mock_tasks_service):
         response = client.put(
             "/projects/665/tasks/668/incomplete",
             follow_redirects=False,

@@ -13,6 +13,21 @@ from app.modules.projects.queries.project_queries import GetProjectQuery, ListPr
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
 
 
+class ApplicationContainer(containers.DeclarativeContainer):
+    engine = providers.Dependency(instance_of=Engine)
+    session_factory = providers.Factory(AppSession, bind=engine)
+
+    authentication = providers.AbstractFactory(AuthenticationContract)
+
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
+
+    create_project = providers.Singleton(CreateProject, uow=uow)
+    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
+    update_project = providers.Singleton(UpdateProject, uow=uow)
+    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
+    tasks_service = providers.Singleton(TasksService, uow=uow)
+
+
 class QueriesContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
 
@@ -33,16 +48,6 @@ class Container(containers.DeclarativeContainer):
     )
 
     engine = providers.Dependency(instance_of=Engine)
-    session_factory = providers.Factory(AppSession, bind=engine)
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
 
-    authentication = providers.AbstractFactory(AuthenticationContract)
-
-    # TODO: Align this with the accounts module
-    create_project = providers.Singleton(CreateProject, uow=uow)
-    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
-    update_project = providers.Singleton(UpdateProject, uow=uow)
-    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
-    tasks_service = providers.Singleton(TasksService, uow=uow)
-
+    application = providers.Container(ApplicationContainer, engine=engine)
     queries = providers.Container(QueriesContainer, engine=engine)

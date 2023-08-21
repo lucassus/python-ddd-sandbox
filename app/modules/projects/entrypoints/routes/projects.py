@@ -23,7 +23,7 @@ router = APIRouter(prefix="/projects")
 def project_create_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.CreateProject,
-    create_project: CreateProject = Depends(Provide[Container.create_project]),
+    create_project: CreateProject = Depends(Provide[Container.application.create_project]),
 ):
     project_id = create_project(
         user_id=current_user.id,
@@ -72,7 +72,7 @@ def get_project_endpoint(
 def update_project_endpoint(
     project_id: int,
     data: schemas.UpdateProject,
-    update_project: UpdateProject = Depends(Provide[Container.update_project]),
+    update_project: UpdateProject = Depends(Provide[Container.application.update_project]),
 ):
     update_project(ProjectID(project_id), ProjectName(data.name))
 
@@ -86,7 +86,7 @@ def update_project_endpoint(
 @inject
 def archive_project_endpoint(
     project_id: int,
-    archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service]),
+    archivization_service: ArchivizationService = Depends(Provide[Container.application.archivization_service]),
 ):
     archivization_service.archive(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)
@@ -96,7 +96,7 @@ def archive_project_endpoint(
 @inject
 def unarchive_project_endpoint(
     project_id: int,
-    archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service]),
+    archivization_service: ArchivizationService = Depends(Provide[Container.application.archivization_service]),
 ):
     archivization_service.unarchive(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)
@@ -106,7 +106,7 @@ def unarchive_project_endpoint(
 @inject
 def delete_project_endpoint(
     project_id: int,
-    archivization_service: ArchivizationService = Depends(Provide[Container.archivization_service]),
+    archivization_service: ArchivizationService = Depends(Provide[Container.application.archivization_service]),
 ):
     archivization_service.delete(ProjectID(project_id))
     return Response(status_code=HTTP_200_OK)

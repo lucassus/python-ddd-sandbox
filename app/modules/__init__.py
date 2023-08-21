@@ -19,7 +19,7 @@ def create_app() -> FastAPI:
     projects_container = register_projects_module(app, mapper_registry)
 
     # Pass down assembled authentication service to comply with the contract
-    projects_container.authentication.override(
+    projects_container.application.authentication.override(
         providers.Factory(accounts_container.application.authentication),
     )
 

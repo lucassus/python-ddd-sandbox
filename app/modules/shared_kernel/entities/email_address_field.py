@@ -28,7 +28,6 @@ class EmailAddressPydanticAnnotation:
         )
 
 
-# TODO: Is shared_kernel/entities or domain the right place for this?
 EmailAddressField = Annotated[
     EmailAddress,
     EmailAddressPydanticAnnotation,

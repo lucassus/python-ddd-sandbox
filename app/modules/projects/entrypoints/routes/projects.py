@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
@@ -58,13 +58,7 @@ def get_project_endpoint(
     project_id: ProjectID,
     get_project: GetProjectQuery = Depends(Provide[Container.queries.get_project]),
 ):
-    try:
-        return get_project(project_id)
-    except GetProjectQuery.NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e),
-        ) from e
+    return get_project(project_id)
 
 
 @router.put("/{project_id}")

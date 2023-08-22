@@ -1,55 +1,40 @@
-from typing import Annotated, Any
+from typing import Annotated, Union
 
 import pytest
-from pydantic import BaseModel, ConfigDict, GetCoreSchemaHandler, ValidationError
-from pydantic_core import CoreSchema, core_schema
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, ValidationError
 
 
-class InvalidEmailError(Exception):
+class InvalidEmailError(ValueError):
     pass
 
 
 class EmailAddress:
-    def __init__(self, address: str):
+    def __init__(self, address: Union["EmailAddress", str]):
         if "@" not in address:
             raise InvalidEmailError()
 
-        self._address = address
+        self._address = str(address)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._address
 
+    def __contains__(self, item: str) -> bool:
+        return item in self._address
 
-class EmailAddressPydanticAnnotation:
-    @classmethod
-    def validate_email_address(cls, v: Any, handler) -> EmailAddress:
-        if isinstance(v, EmailAddress):
-            return v
-
-        s = handler(v)
-
-        try:
-            return EmailAddress(s)
-        except InvalidEmailError as e:
-            raise ValueError("Invalid email address") from e  # noqa: TRY003
-
-    @classmethod
-    def __get_pydantic_core_schema__(cls, source_type, handler: GetCoreSchemaHandler) -> CoreSchema:
-        assert source_type is EmailAddress
-        return core_schema.no_info_wrap_validator_function(
-            cls.validate_email_address,
-            core_schema.str_schema(),
-            serialization=core_schema.to_string_ser_schema(),
-        )
+    def __len__(self) -> int:
+        return len(self._address)
 
 
-EmailField = Annotated[EmailAddress, EmailAddressPydanticAnnotation]
+EmailField = Annotated[
+    EmailAddress,
+    BeforeValidator(lambda v: EmailAddress(v)),
+    Field(title="Email address", min_length=6, max_length=32),
+]
 
 
-# TODO: Use this technique to pass commands from API endpoints to the application layer
 class User(BaseModel):
     model_config = ConfigDict(
-        arbitrary_types_allowed=False,
+        arbitrary_types_allowed=True,
         frozen=True,
     )
 
@@ -83,6 +68,14 @@ def test_pydantic_value_objects_model_validate():
     assert str(user.email) == "test@email.com"
     assert user.password == "password"
 
+    User.model_validate(
+        {
+            "id": 1,
+            "email": EmailAddress("test@email.com"),
+            "password": "password",
+        }
+    )
+
 
 def test_pydantic_value_objects_model_validate_when_email_not_valid():
     with pytest.raises(ValidationError):
@@ -90,6 +83,15 @@ def test_pydantic_value_objects_model_validate_when_email_not_valid():
             {
                 "id": 1,
                 "email": "test",
+                "password": "password",
+            }
+        )
+
+    with pytest.raises(ValidationError):
+        User.model_validate(
+            {
+                "id": 1,
+                "email": "a@b.c",
                 "password": "password",
             }
         )

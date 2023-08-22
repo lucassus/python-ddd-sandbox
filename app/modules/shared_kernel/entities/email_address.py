@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union
 
 from email_validator import EmailNotValidError, validate_email
 
@@ -10,11 +10,11 @@ class InvalidEmailAddressError(Exception):
 
 
 class EmailAddress(ValueObject):
-    def __init__(self, address: str) -> None:
-        if not self.is_valid(address):
+    def __init__(self, address: Union["EmailAddress", str]) -> None:
+        if not self.is_valid(str(address)):
             raise InvalidEmailAddressError()
 
-        self._address = address
+        self._address = str(address)
 
     @staticmethod
     def is_valid(email: str) -> bool:
@@ -37,3 +37,6 @@ class EmailAddress(ValueObject):
 
     def __str__(self) -> str:
         return self.address
+
+    def __len__(self) -> int:
+        return len(self._address)

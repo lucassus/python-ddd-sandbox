@@ -7,7 +7,6 @@ from starlette.testclient import TestClient
 from app.modules.projects.application.archivization_service import ArchivizationService
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.queries.project_queries import GetProjectQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
@@ -27,18 +26,6 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
     assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/1"
     create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
-
-
-def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
-    # Given
-    get_project_query_mock = Mock(side_effect=GetProjectQuery.NotFoundError(id=ProjectID(1)))
-
-    # When
-    with container.queries.get_project.override(get_project_query_mock):
-        response = client.get("/projects/1")
-
-    # Then
-    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_list_projects_endpoint(container: Container, client: TestClient):

@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+import pytest
 from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
@@ -36,6 +37,27 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     )
     assert response.status_code == status.HTTP_200_OK
     assert "access_token" in response.json()
+
+
+@pytest.mark.parametrize(
+    ("email", "password"),
+    [
+        ("invalid", "password"),
+        ("a@b.c", "password"),
+        ("test@email.com", "short"),
+        ("test@email.com", ""),
+        ("", ""),
+    ],
+)
+def test_register_user_endpoint_returns_422_when(client: TestClient, email, password):
+    # When
+    response = client.post(
+        "/users",
+        json={"email": email, "password": password},
+    )
+
+    # Then
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):

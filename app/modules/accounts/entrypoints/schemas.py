@@ -8,6 +8,11 @@ class RegisterUser(BaseSchema):
     password: PasswordField
 
 
+class LoginUser(BaseSchema):
+    email: EmailAddressField
+    password: PasswordField
+
+
 class UpdateUser(BaseSchema):
     email: EmailAddressField
 

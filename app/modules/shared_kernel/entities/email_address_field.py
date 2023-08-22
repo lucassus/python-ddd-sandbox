@@ -8,7 +8,7 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress, Inval
 
 class EmailAddressPydanticAnnotation:
     @classmethod
-    def validate_email_address(cls, s: Any, validator) -> EmailAddress:
+    def validate(cls, s: Any, validator) -> EmailAddress:
         if isinstance(s, EmailAddress):
             return s
 
@@ -22,7 +22,7 @@ class EmailAddressPydanticAnnotation:
         assert source_type is EmailAddress  # noqa: S101
 
         return core_schema.no_info_wrap_validator_function(
-            function=cls.validate_email_address,
+            function=cls.validate,
             schema=core_schema.str_schema(),
             serialization=core_schema.to_string_ser_schema(),
         )

@@ -10,13 +10,11 @@ from app.modules.accounts.application.change_user_email_address import ChangeUse
 from app.modules.accounts.application.ports.authenticationtoken import AuthenticationToken
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
-from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract, AuthenticationError
-from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -29,10 +27,7 @@ def user_register_endpoint(
     auth_token: AuthenticationToken = Depends(Provide[Container.application.auth_token]),
 ):
     try:
-        user_id = register_user(
-            email=data.email,
-            password=Password(data.password),
-        )
+        user_id = register_user(email=data.email, password=data.password)
     except EmailAlreadyExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -51,11 +46,10 @@ def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     authentication: Authentication = Depends(Provide[Container.application.authentication]),
 ):
+    data = schemas.LoginUser(email=form_data.username, password=form_data.password)
+
     try:
-        token = authentication.login(
-            email=EmailAddress(form_data.username),
-            password=Password(form_data.password),
-        )
+        token = authentication.login(email=data.email, password=data.password)
     except AuthenticationError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) from e
 
@@ -74,10 +68,7 @@ def user_update_endpoint(
         Provide[Container.application.change_user_email_address]
     ),
 ):
-    change_user_email_address(
-        user_id=current_user.id,
-        new_email=data.email,
-    )
+    change_user_email_address(user_id=current_user.id, new_email=data.email)
 
     return RedirectResponse(
         "/api/users/me",

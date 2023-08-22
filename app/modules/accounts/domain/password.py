@@ -25,6 +25,9 @@ class Password(ValueObject):
     def __str__(self) -> str:
         return self.value
 
+    def __len__(self) -> int:
+        return len(self._value)
+
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Password):
             return False

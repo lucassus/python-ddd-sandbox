@@ -15,8 +15,3 @@ class LoginUser(BaseSchema):
 
 class UpdateUser(BaseSchema):
     email: EmailAddressField
-
-
-class LoginUser(BaseSchema):
-    email: EmailAddressField
-    password: PasswordField

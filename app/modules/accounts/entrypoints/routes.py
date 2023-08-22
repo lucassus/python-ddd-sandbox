@@ -47,11 +47,7 @@ def user_login_endpoint(
     authentication: Authentication = Depends(Provide[Container.application.authentication]),
 ):
     data = schemas.LoginUser(email=form_data.username, password=form_data.password)
-
-    try:
-        token = authentication.login(email=data.email, password=data.password)
-    except AuthenticationError as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) from e
+    token = authentication.login(email=data.email, password=data.password)
 
     return {
         "token_type": "bearer",
@@ -86,10 +82,4 @@ def user_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     get_user: GetUserQuery = Depends(Provide[Container.queries.get_user]),
 ):
-    try:
-        return get_user(current_user.id)
-    except GetUserQuery.NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e),
-        ) from e
+    return get_user(current_user.id)

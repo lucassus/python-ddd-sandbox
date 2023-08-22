@@ -58,13 +58,7 @@ def get_project_endpoint(
     project_id: ProjectID,
     get_project: GetProjectQuery = Depends(Provide[Container.queries.get_project]),
 ):
-    try:
-        return get_project(project_id)
-    except GetProjectQuery.NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e),
-        ) from e
+    return get_project(project_id)
 
 
 @router.put("/{project_id}")

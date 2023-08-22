@@ -37,4 +37,4 @@ def test_login_with_invalid_credentials(anonymous_client: TestClient):
     )
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    assert response.json()["detail"] == "Unauthorized"
+    assert response.json()["detail"] == "Invalid email or password"

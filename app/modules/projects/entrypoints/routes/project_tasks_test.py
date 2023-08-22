@@ -41,19 +41,6 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     )
 
 
-def test_get_task_endpoint_returns_404_when_task_not_found(container: Container, client: TestClient):
-    # Given
-    get_task_query_mock = Mock(side_effect=GetTaskQuery.NotFoundError(ProjectID(41), TaskNumber(665)))
-
-    # When
-    with container.queries.get_task.override(get_task_query_mock):
-        response = client.get("/projects/41/tasks/665")
-
-    # Then
-    assert response.status_code == 404
-    assert response.json() == {"detail": "Task with number 665 in project with id 41 not found"}
-
-
 def test_task_list_endpoint(container: Container, client: TestClient):
     # Given
     class ListTasksQueryMock(ListTasksQuery):

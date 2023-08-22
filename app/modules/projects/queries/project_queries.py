@@ -5,6 +5,7 @@ from app.infrastructure.tables import projects_table
 from app.modules.projects.domain.project import ProjectID
 from app.modules.shared_kernel.base_schema import BaseSchema
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.errors import EntityNotFoundError
 
 
 class ListProjectsQuery(BaseSQLQuery):
@@ -33,7 +34,7 @@ class GetProjectQuery(BaseSQLQuery):
         id: int
         name: str
 
-    class NotFoundError(Exception):
+    class NotFoundError(EntityNotFoundError):
         def __init__(self, id: ProjectID):
             super().__init__(f"Project with id {id} not found")
 

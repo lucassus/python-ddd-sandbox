@@ -59,13 +59,7 @@ def get_task_endpoint(
     project_id: ProjectID = Path(..., description="The ID of the project"),
     number: TaskNumber = Path(..., description="The number of the task", ge=1),
 ):
-    try:
-        return get_task(project_id, number)
-    except GetTaskQuery.NotFoundError as e:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e),
-        ) from e
+    return get_task(project_id, number)
 
 
 @router.put("/{task_number}/complete")

@@ -29,18 +29,6 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
     create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
 
 
-def test_get_project_endpoint_responds_with_404_if_project_cannot_be_found(container: Container, client: TestClient):
-    # Given
-    get_project_query_mock = Mock(side_effect=GetProjectQuery.NotFoundError(id=ProjectID(1)))
-
-    # When
-    with container.queries.get_project.override(get_project_query_mock):
-        response = client.get("/projects/1")
-
-    # Then
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-
-
 def test_list_projects_endpoint(container: Container, client: TestClient):
     # Given
     list_projects_query_mock = Mock(

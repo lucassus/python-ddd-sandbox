@@ -31,7 +31,7 @@ def test_handle_page_not_found_error(client):
 def test_handle_entity_not_found_error(app, client):
     @app.get("/foo")
     def raise_entity_not_found_error():
-        raise EntityNotFoundError("Entity not found")
+        raise EntityNotFoundError("Entity not found")  # noqa: TRY003
 
     response = client.get("/foo")
 
@@ -53,7 +53,7 @@ def test_handle_user_not_found_error(app, client):
 def test_handle_authentication_error(app, client):
     @app.get("/foo")
     def raise_authentication_error():
-        raise AuthenticationError("Authentication error")
+        raise AuthenticationError("Authentication error")  # noqa: TRY003
 
     response = client.get("/foo")
 

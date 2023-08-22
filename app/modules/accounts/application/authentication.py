@@ -26,7 +26,7 @@ class Authentication(AuthenticationContract):
             user = uow.user.get_by_email(email)
 
             if user is None or user.password != password:
-                raise AuthenticationError("Invalid email or password")
+                raise AuthenticationError("Invalid email or password")  # noqa: TRY003
 
             return self._token.encode(user.id, now)
 

@@ -1,7 +1,7 @@
 from typing import Annotated, Union
 
 import pytest
-from pydantic import BaseModel, ConfigDict, ValidationError, Field, BeforeValidator
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, ValidationError
 
 
 class InvalidEmailError(ValueError):

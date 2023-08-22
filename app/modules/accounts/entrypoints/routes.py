@@ -30,7 +30,7 @@ def user_register_endpoint(
 ):
     try:
         user_id = register_user(
-            email=EmailAddress(data.email),
+            email=data.email,
             password=Password(data.password),
         )
     except EmailAlreadyExistsException as e:
@@ -76,7 +76,7 @@ def user_update_endpoint(
 ):
     change_user_email_address(
         user_id=current_user.id,
-        new_email=EmailAddress(data.email),
+        new_email=data.email,
     )
 
     return RedirectResponse(

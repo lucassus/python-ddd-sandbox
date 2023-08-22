@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+import pytest
 from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
@@ -38,11 +39,21 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     assert "access_token" in response.json()
 
 
-def test_register_user_endpoint_returns_422_when_email_is_invalid(client: TestClient):
+@pytest.mark.parametrize(
+    ("email", "password"),
+    [
+        ("invalid", "password"),
+        ("a@b.c", "password"),
+        ("test@email.com", "short"),
+        ("test@email.com", ""),
+        ("", ""),
+    ],
+)
+def test_register_user_endpoint_returns_422_when(client: TestClient, email, password):
+    # When
     response = client.post(
         "/users",
-        json={"email": "invalid", "password": "password"},
-        follow_redirects=False,
+        json={"email": email, "password": password},
     )
 
     # Then

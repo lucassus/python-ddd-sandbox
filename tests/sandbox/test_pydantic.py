@@ -1,63 +1,40 @@
-from typing import Annotated, Any
+from typing import Annotated, Union
 
 import pytest
-from pydantic import BaseModel, ConfigDict, ValidationError, Field
-from pydantic_core import CoreSchema, core_schema
+from pydantic import BaseModel, ConfigDict, ValidationError, Field, BeforeValidator
 
 
-class InvalidEmailError(Exception):
+class InvalidEmailError(ValueError):
     pass
 
 
 class EmailAddress:
-    def __init__(self, address: str):
+    def __init__(self, address: Union["EmailAddress", str]):
         if "@" not in address:
             raise InvalidEmailError()
 
-        self._address = address
+        self._address = str(address)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._address
 
-    def __len__(self):
+    def __contains__(self, item: str) -> bool:
+        return item in self._address
+
+    def __len__(self) -> int:
         return len(self._address)
-
-
-def validate_email_address(
-    s: Any,
-    validator: core_schema.ValidatorFunctionWrapHandler,
-) -> EmailAddress:
-    if isinstance(s, EmailAddress):
-        return s
-
-    try:
-        return EmailAddress(validator(s))
-    except InvalidEmailError as e:
-        raise ValueError("Invalid email address") from e  # noqa: TRY003
-
-
-class EmailAddressPydanticAnnotation:
-    @classmethod
-    def __get_pydantic_core_schema__(cls, source_type, _handler) -> CoreSchema:
-        assert source_type is EmailAddress
-
-        return core_schema.no_info_wrap_validator_function(
-            function=validate_email_address,
-            schema=core_schema.str_schema(),
-            serialization=core_schema.to_string_ser_schema(),
-        )
 
 
 EmailField = Annotated[
     EmailAddress,
-    EmailAddressPydanticAnnotation,
+    BeforeValidator(lambda v: EmailAddress(v)),
     Field(title="Email address", min_length=6, max_length=32),
 ]
 
 
 class User(BaseModel):
     model_config = ConfigDict(
-        arbitrary_types_allowed=False,
+        arbitrary_types_allowed=True,
         frozen=True,
     )
 

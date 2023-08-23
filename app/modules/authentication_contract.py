@@ -17,4 +17,4 @@ class AuthenticationContract(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def trade_token_for_user(self, token: str) -> CurrentUserDTO:
-        raise NotImplementedError()
+        raise NotImplementedError

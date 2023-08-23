@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Self
 
 from sqlalchemy.orm import Session
 
@@ -12,7 +12,7 @@ class UnitOfWork(AbstractUnitOfWork):
     def __init__(self, session_factory: Callable[..., Session]):
         self._session_factory = session_factory
 
-    def __enter__(self) -> "UnitOfWork":
+    def __enter__(self) -> Self:
         self._session = self._session_factory()
         self.user = UserRepository(session=self._session)
 

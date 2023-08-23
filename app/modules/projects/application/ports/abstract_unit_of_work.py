@@ -1,5 +1,6 @@
 import abc
 from contextlib import AbstractContextManager
+from typing import Self
 
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 
@@ -18,7 +19,7 @@ class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass
 
     project: AbstractProjectRepository
 
-    def __enter__(self):
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *args):

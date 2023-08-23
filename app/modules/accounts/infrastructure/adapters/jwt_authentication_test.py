@@ -1,6 +1,6 @@
 import pytest
 
-from app.modules.accounts.application.ports.authenticationtoken import AuthenticationTokenError
+from app.modules.accounts.application.ports.authentication_token import AuthenticationTokenError
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_datetime

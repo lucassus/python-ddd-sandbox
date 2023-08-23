@@ -3,7 +3,7 @@ from datetime import datetime
 import jwt
 from jwt import DecodeError, ExpiredSignatureError
 
-from app.modules.accounts.application.ports.authenticationtoken import AuthenticationToken, AuthenticationTokenError
+from app.modules.accounts.application.ports.authentication_token import AuthenticationToken, AuthenticationTokenError
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
 

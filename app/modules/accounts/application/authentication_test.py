@@ -5,7 +5,7 @@ import pytest
 
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.modules.accounts.application.ports.authenticationtoken import AuthenticationToken
+from app.modules.accounts.application.ports.authentication_token import AuthenticationToken
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.user_id import UserID

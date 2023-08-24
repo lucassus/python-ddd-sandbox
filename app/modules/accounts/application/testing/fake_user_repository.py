@@ -30,4 +30,4 @@ class FakeUserRepository(AbstractUserRepository):
         return None
 
     def _get_next_id(self) -> UserID:
-        return UserID(max(self._users_by_id.keys(), default=0) + 1)
+        return UserID.generate()

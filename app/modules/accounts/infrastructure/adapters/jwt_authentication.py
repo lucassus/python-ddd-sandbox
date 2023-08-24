@@ -17,7 +17,7 @@ class JWTAuthentication(AuthenticationToken):
 
         return jwt.encode(
             payload={
-                "sub": user_id,
+                "sub": str(user_id),
                 "exp": now + self._expiration_delta,
                 "iat": now,
             },

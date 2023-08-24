@@ -6,7 +6,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 class ProjectBuilder:
     # Provide some sane defaults
-    _user_id = UserID(1)
+    _user_id = UserID.generate()
     _name = ProjectName("Test project")
     _maximum_number_of_incomplete_tasks: None | MaximumNumberOfIncompleteTasks = None
 

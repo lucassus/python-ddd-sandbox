@@ -1,3 +1,4 @@
+from pydantic import UUID4
 from sqlalchemy import select
 
 from app.infrastructure.base_query import BaseSQLQuery
@@ -13,7 +14,7 @@ class GetUserQuery(BaseSQLQuery):
             id: int
             name: str
 
-        id: int
+        id: UUID4
         email: str
         projects: list[Project]
 

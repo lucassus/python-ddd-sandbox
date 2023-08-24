@@ -10,6 +10,7 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.email_address import EmailAddress
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
 @pytest.fixture()
@@ -25,7 +26,7 @@ def test_register_user_returns_user_id(
     user_id = register_user(email=EmailAddress("test@email.com"), password=Password("passwd123"))
 
     # Then
-    assert isinstance(user_id, int)
+    assert isinstance(user_id, UserID)
     assert uow.committed is True
 
 

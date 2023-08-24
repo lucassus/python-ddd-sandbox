@@ -17,9 +17,10 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     # Given
     mock_tasks_service = Mock(spec=TasksService)
     mock_tasks_service.create_task.return_value = TaskNumber(1)
+    user_id = UserID.generate()
 
     app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
-        id=UserID(1),
+        id=user_id,
         email=EmailAddress("test@email.com"),
     )
 
@@ -37,7 +38,7 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     mock_tasks_service.create_task.assert_called_once_with(
         project_id=ProjectID(123),
         name="Some task",
-        created_by=UserID(1),
+        created_by=user_id,
     )
 
 

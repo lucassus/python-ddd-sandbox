@@ -12,16 +12,17 @@ def test_create_project_use_case(fake_uow, message_bus: MessageBus, repository: 
     create_project = CreateProject(uow=fake_uow, bus=message_bus)
     listener_mock = Mock()
     message_bus.listen(Project.CreatedEvent, listener_mock)
+    user_id = UserID.generate()
 
     # When
-    project_id = create_project(user_id=UserID(1), name=ProjectName("Project X"))
+    project_id = create_project(user_id=user_id, name=ProjectName("Project X"))
 
     # Then
     assert fake_uow.committed
 
     project = repository.get(project_id)
     assert project.name == "Project X"
-    assert project.user_id == UserID(1)
+    assert project.user_id == user_id
     assert len(project.tasks) == 0
 
     listener_mock.assert_called_once_with(Project.CreatedEvent(project_id=project_id))

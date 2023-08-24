@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Annotated
 
+from pydantic.types import UuidVersion
 from sqlalchemy import select
 from sqlalchemy.sql.expression import and_
 
@@ -33,7 +34,7 @@ class GetTaskQuery(BaseSQLQuery):
     class Result(BaseSchema):
         number: int
         name: str
-        created_by: Optional[UserID]
+        created_by: Optional[Annotated[UserID, UuidVersion(4)]]
         completed_at: Optional[datetime]
 
     class NotFoundError(EntityNotFoundError):

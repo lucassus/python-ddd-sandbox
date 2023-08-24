@@ -1,3 +1,5 @@
+from unittest.mock import ANY
+
 from freezegun import freeze_time
 from starlette import status
 from starlette.testclient import TestClient
@@ -14,15 +16,19 @@ def test_register_user(register_user, anonymous_client: TestClient):
         "/api/users/me",
         headers={"Authorization": f"Bearer {token}"},
     )
-    assert response.json() == {
-        "id": 1,
+
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+
+    assert data == {
+        "id": ANY,
         "email": "test@email.com",
         "projects": [
             {"id": 1, "name": "My first project"},
         ],
     }
 
-    project_id = response.json()["projects"][0]["id"]
+    project_id = data["projects"][0]["id"]
     response = anonymous_client.get(
         f"/api/projects/{project_id}/tasks",
         headers={"Authorization": f"Bearer {token}"},

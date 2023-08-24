@@ -82,14 +82,16 @@ def test_get_current_user_endpoint(
     client: TestClient,
 ):
     # Given
+    user_id = UserID.generate()
+
     app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
-        id=UserID(1),
+        id=user_id,
         email=EmailAddress("test@email.com"),
     )
 
     get_user_mock = Mock(
         return_value=GetUserQuery.Result(
-            id=1,
+            id=user_id,
             email="test@email.com",
             projects=[
                 GetUserQuery.Result.Project(id=1, name="Project One"),
@@ -103,10 +105,10 @@ def test_get_current_user_endpoint(
         response = client.get("/users/me")
 
     # Then
-    get_user_mock.assert_called_with(1)
+    get_user_mock.assert_called_with(user_id)
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
-        "id": 1,
+        "id": str(user_id),
         "email": "test@email.com",
         "projects": [
             {"id": 1, "name": "Project One"},

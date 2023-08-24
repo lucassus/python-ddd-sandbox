@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, ANY
 
 from fastapi import FastAPI
 from starlette import status
@@ -25,7 +25,8 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
     # Then
     assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/1"
-    create_project_mock.assert_called_with(user_id=UserID(1), name="Test project")
+    # TODO: Use a proper matcher for UserID
+    create_project_mock.assert_called_with(user_id=ANY, name="Test project")
 
 
 def test_list_projects_endpoint(container: Container, client: TestClient):

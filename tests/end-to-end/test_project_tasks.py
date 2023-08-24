@@ -1,3 +1,5 @@
+from unittest.mock import ANY
+
 from starlette import status
 from starlette.testclient import TestClient
 
@@ -12,7 +14,7 @@ def test_create_task(create_project, create_task, anonymous_client: TestClient):
     assert response.json() == {
         "number": 1,
         "name": "First task",
-        "createdBy": 1,
+        "createdBy": ANY,  # TODO: Match for a string or UUID pattern
         "completedAt": None,
     }
 

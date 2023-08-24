@@ -23,4 +23,4 @@ def test_find_user_query_not_found():
     find_user = GetUserQuery(engine=engine)
 
     with pytest.raises(GetUserQuery.NotFoundError):
-        find_user(id=UserID(1))
+        find_user(id=UserID.generate())

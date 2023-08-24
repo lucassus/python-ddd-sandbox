@@ -7,7 +7,7 @@ def test_fake_repository():
     repository = FakeUserRepository()
 
     user = repository.create(UserBuilder().build())
-    assert user.id == 1
+    assert user.id is not None
 
     loaded = repository.get(user.id)
     assert loaded is not None

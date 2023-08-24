@@ -20,9 +20,10 @@ class TasksService:
     ) -> TaskNumber:
         with self._uow as uow:
             project = uow.project.get(project_id)
-            task = project.add_task(name=name, created_by=created_by)
 
+            task = project.add_task(name=name, created_by=created_by)
             uow.commit()
+
             return task.number
 
     def complete_task(

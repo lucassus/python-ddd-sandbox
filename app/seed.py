@@ -18,18 +18,24 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
 
 
+def _session_factory():
+    return AppSession(bind=engine)
+
+
 class NoopMessageBus(MessageBus):
     def dispatch(self, event: BaseEvent) -> None:
         pass
 
 
+bus = NoopMessageBus()
+
 register_user = RegisterUser(
-    uow=AccountsUnitOfWork(session_factory=AppSession),
-    bus=NoopMessageBus(),
+    uow=AccountsUnitOfWork(session_factory=_session_factory),
+    bus=bus,
 )
-projects_uow = ProjectsUnitOfWork(session_factory=AppSession)
-create_example_project = CreateExampleProject(uow=projects_uow)
-create_project = CreateProject(uow=projects_uow)
+projects_uow = ProjectsUnitOfWork(session_factory=_session_factory)
+create_example_project = CreateExampleProject(uow=projects_uow, bus=bus)
+create_project = CreateProject(uow=projects_uow, bus=bus)
 archivization = ArchivizationService(uow=projects_uow)
 tasks_service = TasksService(uow=projects_uow)
 

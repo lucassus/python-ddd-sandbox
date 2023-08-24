@@ -1,19 +1,34 @@
 import abc
+from contextlib import AbstractContextManager
+from typing import Self
 
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.modules.shared_kernel.base_unit_of_work import BaseUnitOfWork
 
 
-class AbstractUnitOfWork(BaseUnitOfWork["AbstractUnitOfWork"], metaclass=abc.ABCMeta):
+class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):
     """
     Example usage:
         class ConcreteUnitOfWork(AbstractUnitOfWork):
             ...
 
         with ConcreteUnitOfWork() as uow:
-            project = uow.repository.get(1)
+            project = uow.project.get(1)
             project.add_task(name="Buy a milk")
             uow.commit()
     """
 
     project: AbstractProjectRepository
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, *args):
+        self.rollback()  # It does nothing when the session has been committed before
+
+    @abc.abstractmethod
+    def commit(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def rollback(self):
+        raise NotImplementedError

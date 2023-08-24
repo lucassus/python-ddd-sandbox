@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from typing import NewType, Optional
 
@@ -6,6 +7,7 @@ from app.modules.projects.domain.errors import TaskNotFoundError
 from app.modules.projects.domain.task import Task, TaskNumber
 from app.modules.shared_kernel.entities.aggregate_root import AggregateRoot
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.message_bus import BaseEvent
 
 ProjectID = NewType("ProjectID", int)
 
@@ -15,6 +17,10 @@ MaximumNumberOfIncompleteTasks = NewType("MaximumNumberOfIncompleteTasks", int)
 
 
 class Project(AggregateRoot):
+    @dataclass(frozen=True)
+    class CreatedEvent(BaseEvent):
+        project_id: ProjectID
+
     _id: ProjectID
     _user_id: UserID
 

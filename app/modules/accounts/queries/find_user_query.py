@@ -2,9 +2,9 @@ from sqlalchemy import select
 
 from app.infrastructure.base_query import BaseSQLQuery
 from app.infrastructure.tables import projects_table, users_table
-from app.modules.shared_kernel.base_schema import BaseSchema
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.modules.shared_kernel.errors import EntityNotFoundError
+from app.shared.base_schema import BaseSchema
 
 
 class GetUserQuery(BaseSQLQuery):

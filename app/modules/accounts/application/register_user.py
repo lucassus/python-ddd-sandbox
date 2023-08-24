@@ -20,6 +20,6 @@ class RegisterUser:
             user = uow.user.create(User(email=email, password=password))
             uow.commit()
 
-            self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))
+        self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))
 
-            return user.id
+        return user.id

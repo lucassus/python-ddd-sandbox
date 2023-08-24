@@ -1,16 +1,27 @@
+from unittest.mock import Mock
+
 from app.modules.projects.application.create_project import CreateProject
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
-from app.modules.projects.domain.project import ProjectName
+from app.modules.projects.domain.project import Project, ProjectName
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.message_bus import MessageBus
 
 
-def test_create_project_use_case(fake_uow, repository: AbstractProjectRepository):
-    create_project = CreateProject(uow=fake_uow)
+def test_create_project_use_case(fake_uow, message_bus: MessageBus, repository: AbstractProjectRepository):
+    # Given
+    create_project = CreateProject(uow=fake_uow, bus=message_bus)
+    listener_mock = Mock()
+    message_bus.listen(Project.CreatedEvent, listener_mock)
+
+    # When
     project_id = create_project(user_id=UserID(1), name=ProjectName("Project X"))
 
+    # Then
     assert fake_uow.committed
 
     project = repository.get(project_id)
     assert project.name == "Project X"
     assert project.user_id == UserID(1)
     assert len(project.tasks) == 0
+
+    listener_mock.assert_called_once_with(Project.CreatedEvent(project_id=project_id))

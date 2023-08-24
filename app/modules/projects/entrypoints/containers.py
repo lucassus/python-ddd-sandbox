@@ -11,18 +11,21 @@ from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
+from app.modules.shared_kernel.message_bus import MessageBus
 
 
 class ApplicationContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
+    bus = providers.Dependency(instance_of=MessageBus)
+
     session_factory = providers.Factory(AppSession, bind=engine)
 
     authentication = providers.AbstractFactory(AuthenticationContract)
 
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
 
-    create_project = providers.Singleton(CreateProject, uow=uow)
-    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
+    create_project = providers.Singleton(CreateProject, uow=uow, bus=bus)
+    create_example_project = providers.Singleton(CreateExampleProject, uow=uow, bus=bus)
     update_project = providers.Singleton(UpdateProject, uow=uow)
     archivization_service = providers.Singleton(ArchivizationService, uow=uow)
     tasks_service = providers.Singleton(TasksService, uow=uow)
@@ -48,6 +51,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     engine = providers.Dependency(instance_of=Engine)
+    bus = providers.Dependency(instance_of=MessageBus)
 
-    application = providers.Container(ApplicationContainer, engine=engine)
+    application = providers.Container(ApplicationContainer, engine=engine, bus=bus)
     queries = providers.Container(QueriesContainer, engine=engine)

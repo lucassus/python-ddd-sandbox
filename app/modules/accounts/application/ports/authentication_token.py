@@ -16,8 +16,8 @@ class AuthenticationToken(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def encode(self, user_id: UserID, now: datetime | None = None) -> str:
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @abc.abstractmethod
     def decode(self, token: str) -> UserID:
-        raise NotImplementedError()
+        raise NotImplementedError

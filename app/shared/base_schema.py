@@ -5,6 +5,7 @@ from app.shared.str_utils import camelize
 
 class BaseSchema(BaseModel):
     model_config = ConfigDict(
+        frozen=True,
         from_attributes=True,
         alias_generator=camelize,
         populate_by_name=True,

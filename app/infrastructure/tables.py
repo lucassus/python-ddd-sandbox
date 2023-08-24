@@ -1,5 +1,3 @@
-import uuid
-
 from sqlalchemy.sql.schema import Column, ForeignKey, MetaData, Table, UniqueConstraint
 from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Uuid
 
@@ -10,7 +8,7 @@ metadata = MetaData()
 users_table = Table(
     "users",
     metadata,
-    Column("id", Uuid(), primary_key=True, default=lambda: uuid.uuid4()),
+    Column("id", Uuid(), primary_key=True),
     Column("email", EmailType(), nullable=False, unique=True),
     Column("password", PasswordType(), nullable=False),
 )

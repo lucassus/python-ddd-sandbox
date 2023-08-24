@@ -9,9 +9,10 @@ class CreateExampleProject:
         self.uow = uow
 
     def __call__(self, user_id: UserID) -> ProjectID:
+        new_project = build_example_project(user_id)
+
         with self.uow:
-            new_project = build_example_project(user_id)
             self.uow.project.create(new_project)
             self.uow.commit()
 
-            return new_project.id
+        return new_project.id

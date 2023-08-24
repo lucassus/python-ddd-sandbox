@@ -14,4 +14,4 @@ class CreateProject:
             new_project = uow.project.create(new_project)
             uow.commit()
 
-            return new_project.id
+        return new_project.id

@@ -21,7 +21,7 @@ AppSession = sessionmaker(
     autocommit=False,  # Default is False
     # Defaults to True. When True, all instances will be fully expired after each commit(), so that all
     # attribute/object access to a completed transaction will load from the most recent database state.
-    expire_on_commit=True,
+    expire_on_commit=False,
     # It’s also usually a good idea to set Session.expire_on_commit to False so that subsequent
     # access to objects that came from a Session within the view layer do not need to emit new SQL queries
     # to refresh the objects, if the transaction has been committed already.

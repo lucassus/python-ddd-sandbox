@@ -38,11 +38,12 @@ class Authentication(AuthenticationContract):
 
         with self._uow as uow:
             user = uow.user.get(user_id)
+            uow.commit()
 
-            if user is None:
-                raise AuthenticationError()
+        if user is None:
+            raise AuthenticationError()
 
-            return AuthenticationContract.CurrentUserDTO(
-                id=user.id,
-                email=user.email,
-            )
+        return AuthenticationContract.CurrentUserDTO(
+            id=user.id,
+            email=user.email,
+        )

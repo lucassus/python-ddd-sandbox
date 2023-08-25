@@ -18,12 +18,8 @@ class Password(ValueObject):
     def is_valid(password: str) -> bool:
         return len(password) >= 8
 
-    @property
-    def value(self) -> str:
-        return self._value
-
     def __str__(self) -> str:
-        return self.value
+        return self._value
 
     def __len__(self) -> int:
         return len(self._value)
@@ -32,4 +28,4 @@ class Password(ValueObject):
         if not isinstance(other, Password):
             return False
 
-        return self.value == other.value
+        return self._value == other._value

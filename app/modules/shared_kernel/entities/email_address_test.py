@@ -10,7 +10,7 @@ class TestEmailAddress:
 
     def test_when_valid(self):
         email = EmailAddress("test@email.com")
-        assert email.address == "test@email.com"
+        assert str(email) == "test@email.com"
 
     @pytest.mark.parametrize(
         ("email", "expected"),

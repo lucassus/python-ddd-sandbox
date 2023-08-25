@@ -25,18 +25,14 @@ class EmailAddress(ValueObject):
         else:
             return True
 
-    @property
-    def address(self) -> str:
+    def __str__(self) -> str:
         return self._address
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, EmailAddress):
             return False
 
-        return self.address == other.address
-
-    def __str__(self) -> str:
-        return self.address
+        return self._address == other._address
 
     def __len__(self) -> int:
         return len(self._address)

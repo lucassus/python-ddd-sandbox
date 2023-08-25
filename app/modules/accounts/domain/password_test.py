@@ -7,7 +7,7 @@ class TestPassword:
     def test_initialize_with_valid_password(self):
         password = Password("password")
 
-        assert password.value == "password"
+        assert str(password) == "password"
 
     def test_initialize_with_invalid_password(self):
         with pytest.raises(InvalidPasswordError):

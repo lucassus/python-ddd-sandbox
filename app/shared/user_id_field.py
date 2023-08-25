@@ -1,7 +1,6 @@
 from typing import Annotated
 
-from pydantic.types import UuidVersion
+from pydantic import BeforeValidator
+from pydantic.types import UUID4
 
-from app.modules.shared_kernel.entities.user_id import UserID
-
-UserIDField = Annotated[UserID, UuidVersion(4)]
+UserIDField = Annotated[UUID4, BeforeValidator(lambda v: str(v))]

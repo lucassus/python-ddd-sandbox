@@ -17,7 +17,7 @@ projects_table = Table(
     "projects",
     metadata,
     Column("id", Integer(), primary_key=True, autoincrement=True),
-    Column("user_id", Uuid(), ForeignKey(users_table.c.id), nullable=False),
+    Column("user_id", UserIDType(), ForeignKey(users_table.c.id), nullable=False),
     Column("name", String(255), nullable=False),
     Column("last_task_number", Integer(), nullable=False, default=0),
     Column("maximum_number_of_incomplete_tasks", Integer(), nullable=True, default=None),
@@ -32,7 +32,7 @@ tasks_table = Table(
     Column("project_id", Integer(), ForeignKey(projects_table.c.id), nullable=False),
     Column("number", Integer(), nullable=False),
     Column("name", String(255), nullable=False),
-    Column("created_by", Uuid(), ForeignKey(users_table.c.id), nullable=True),
+    Column("created_by", UserIDType(), ForeignKey(users_table.c.id), nullable=True),
     Column("completed_at", DateTime(), nullable=True, default=None),
     UniqueConstraint("project_id", "number"),
 )

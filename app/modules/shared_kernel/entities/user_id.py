@@ -1,9 +1,20 @@
-import os
 import uuid
 from typing import Self
 
 
-class UserID(uuid.UUID):
+class UserID:
+    def __init__(self, id: str | bytes | uuid.UUID) -> None:
+        self._uuid = uuid.UUID(str(id))
+
     @classmethod
     def generate(cls) -> Self:
-        return cls(bytes=os.urandom(16), version=4)
+        return cls(uuid.uuid4())
+
+    def __str__(self):
+        return str(self._uuid)
+
+    def __eq__(self, other):
+        return isinstance(other, UserID) and self._uuid == other._uuid
+
+    def __hash__(self):
+        return hash(self._uuid)

@@ -4,7 +4,10 @@ from typing import Self
 
 class UserID:
     def __init__(self, id: str | bytes | uuid.UUID) -> None:
-        self._uuid = uuid.UUID(str(id))
+        if isinstance(id, uuid.UUID):
+            self._uuid = id
+        else:
+            self._uuid = uuid.UUID(id)
 
     @classmethod
     def generate(cls) -> Self:

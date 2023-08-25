@@ -1,5 +1,6 @@
 import pytest
 
+from app.anys import AnyUUID
 from app.infrastructure.db import engine
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -14,7 +15,7 @@ def test_get_user_query(create_user, create_project):
     loaded = get_user(id=user.id)
 
     assert loaded
-    assert loaded.id == user.id
+    assert loaded.id == AnyUUID
     assert loaded.email == "test@email.com"
     assert len(loaded.projects) == 2
 

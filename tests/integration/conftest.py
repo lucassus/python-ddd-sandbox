@@ -7,6 +7,7 @@ from app.modules.accounts.infrastructure.adapters.user_repository import UserRep
 from app.modules.projects.domain.project import Project, ProjectName
 from app.modules.projects.infrastructure.adapters.project_repository import ProjectRepository
 from app.modules.shared_kernel.entities.email_address import EmailAddress
+from app.modules.shared_kernel.entities.user_id import UserID
 
 
 @pytest.fixture()
@@ -15,6 +16,7 @@ def create_user(session: Session):
 
     def _create_user(email: EmailAddress | None = None):
         user = User(
+            id=UserID.generate(),
             email=email or EmailAddress("test@email.com"),
             password=Password("password"),
         )

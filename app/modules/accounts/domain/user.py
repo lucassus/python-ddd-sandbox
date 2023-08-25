@@ -18,9 +18,11 @@ class User(AggregateRoot):
 
     def __init__(
         self,
+        id: UserID,
         email: EmailAddress,
         password: Password,
     ):
+        self._id = id
         self._email = email
         self._password = password
 

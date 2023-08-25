@@ -15,6 +15,7 @@ from app.modules.projects.domain.project import ProjectName
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.modules.shared_kernel.entities.email_address import EmailAddress
+from app.modules.shared_kernel.entities.user_id import UserID
 from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
 
 
@@ -49,6 +50,7 @@ def main(rebuild_db: bool = True):
     start_project_mappers(mapper_registry)
 
     user_id = register_user(
+        user_id=UserID.generate(),
         email=EmailAddress("test@email.com"),
         password=Password("password"),
     )

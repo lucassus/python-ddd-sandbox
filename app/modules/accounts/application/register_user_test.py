@@ -18,16 +18,20 @@ def register_user(uow: FakeUnitOfWork, message_bus):
     return RegisterUser(uow=uow, bus=message_bus)
 
 
-def test_register_user_returns_user_id(
+def test_register_user_creates_a_user(
     uow,
     register_user: RegisterUser,
 ):
     # When
-    user_id = register_user(email=EmailAddress("test@email.com"), password=Password("passwd123"))
+    register_user(
+        user_id=UserID.generate(),
+        email=EmailAddress("test@email.com"),
+        password=Password("passwd123"),
+    )
 
     # Then
-    assert isinstance(user_id, UserID)
     assert uow.committed is True
+    assert uow.user.exists_by_email(EmailAddress("test@email.com")) is True
 
 
 def test_register_user_dispatches_account_created_event(
@@ -41,7 +45,12 @@ def test_register_user_dispatches_account_created_event(
     message_bus.listen(User.AccountCreatedEvent, listener_mock)
 
     # When
-    user_id = register_user(email=EmailAddress("test@email.com"), password=Password("passwd123"))
+    user_id = UserID.generate()
+    register_user(
+        user_id=user_id,
+        email=EmailAddress("test@email.com"),
+        password=Password("passwd123"),
+    )
 
     # Then
     listener_mock.assert_called_once_with(User.AccountCreatedEvent(user_id=user_id))
@@ -53,7 +62,8 @@ def test_register_user_validate_email_uniqueness(
     repository: AbstractUserRepository,
     register_user: RegisterUser,
 ):
-    repository.create(UserBuilder().with_email("existing@email.com").build())
+    existing_user = UserBuilder().with_email("existing@email.com").build()
+    repository.create(existing_user)
 
     # Then
     with pytest.raises(
@@ -61,6 +71,7 @@ def test_register_user_validate_email_uniqueness(
         match="A user with the email existing@email.com already exists",
     ):
         register_user(
+            user_id=UserID.generate(),
             email=EmailAddress("existing@email.com"),
             password=Password("passwd123"),
         )

@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.anys import AnyUUID
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.containers import Container
@@ -17,7 +18,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 def test_register_user_endpoint(container: Container, client: TestClient):
     # Given
-    register_user_mock = Mock(return_value=123)
+    register_user_mock = Mock()
 
     # When
     with container.application.register_user.override(register_user_mock):
@@ -32,6 +33,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
 
     # Then
     register_user_mock.assert_called_with(
+        AnyUUID,
         email=EmailAddress("test@email.com"),
         password=Password("password"),
     )

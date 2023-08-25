@@ -12,14 +12,12 @@ class RegisterUser:
         self._uow = uow
         self._bus = bus
 
-    def __call__(self, *, email: EmailAddress, password: Password) -> UserID:
+    def __call__(self, user_id: UserID, *, email: EmailAddress, password: Password):
         with self._uow as uow:
             if uow.user.exists_by_email(email):
                 raise EmailAlreadyExistsException(email)
 
-            user = uow.user.create(User(email=email, password=password))
+            user = uow.user.create(User(id=user_id, email=email, password=password))
             uow.commit()
 
         self._bus.dispatch(User.AccountCreatedEvent(user_id=user.id))
-
-        return user.id

@@ -15,6 +15,7 @@ from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
+from app.modules.shared_kernel.entities.user_id import UserID
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -26,8 +27,10 @@ def user_register_endpoint(
     register_user: RegisterUser = Depends(Provide[Container.application.register_user]),
     auth_token: AuthenticationToken = Depends(Provide[Container.application.auth_token]),
 ):
+    user_id = UserID.generate()
+
     try:
-        user_id = register_user(email=data.email, password=data.password)
+        register_user(user_id, email=data.email, password=data.password)
     except EmailAlreadyExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

@@ -16,7 +16,7 @@ class UnitOfWork(AbstractUnitOfWork):
 
     def __enter__(self) -> Self:
         self._session = self._session_factory()
-        self.user = UserRepository(session=self._session)
+        self.users = UserRepository(session=self._session)
 
         return super().__enter__()
 
@@ -24,14 +24,8 @@ class UnitOfWork(AbstractUnitOfWork):
         super().__exit__(*args)
         self._session.close()
 
-    def commit(self):
+    def _commit(self):
         self._session.commit()
-
-        for user in self.user.seen:
-            for event in user.events:
-                self._bus.dispatch(event)
-
-            user.events.clear()
 
     def rollback(self):
         self._session.rollback()

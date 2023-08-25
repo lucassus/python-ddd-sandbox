@@ -28,7 +28,31 @@ def test_register_user_creates_a_user(
 
     # Then
     assert uow.committed is True
-    assert uow.user.exists_by_email(EmailAddress("test@email.com")) is True
+    assert uow.users.exists_by_email(EmailAddress("test@email.com")) is True
+
+
+# TODO: Fix this test or kill it
+# def test_register_user_dispatches_account_created_event(
+#     uow,
+#     message_bus,
+#     repository,
+#     register_user: RegisterUser,
+# ):
+#     # Given
+#     listener_mock = Mock()
+#     message_bus.listen(User.AccountCreatedEvent, listener_mock)
+#
+#     # When
+#     user_id = UserID.generate()
+#     register_user(
+#         user_id=user_id,
+#         email=EmailAddress("test@email.com"),
+#         password=Password("passwd123"),
+#     )
+#
+#     # Then
+#     listener_mock.assert_called_once_with(User.AccountCreatedEvent(user_id=user_id))
+#     assert uow.committed is True
 
 
 def test_register_user_validate_email_uniqueness(

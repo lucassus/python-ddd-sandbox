@@ -7,6 +7,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 class AbstractUserRepository(metaclass=abc.ABCMeta):
     # TODO: Make it private
+    # TODO: Create a decorator TrackingUserRepository
     seen: set[User]
 
     def __init__(self):

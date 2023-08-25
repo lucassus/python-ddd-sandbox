@@ -17,6 +17,7 @@ class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass
             uow.commit()
     """
 
+    # TODO: Rename it to projects
     project: AbstractProjectRepository
 
     def __enter__(self) -> Self:

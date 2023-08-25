@@ -23,7 +23,7 @@ class Authentication(AuthenticationContract):
         now: datetime | None = None,
     ) -> str:
         with self._uow as uow:
-            user = uow.user.get_by_email(email)
+            user = uow.users.get_by_email(email)
 
             if user is None or user.password != password:
                 raise AuthenticationError("Invalid email or password")  # noqa: TRY003
@@ -37,7 +37,7 @@ class Authentication(AuthenticationContract):
             raise AuthenticationError() from e
 
         with self._uow as uow:
-            user = uow.user.get(user_id)
+            user = uow.users.get(user_id)
             uow.commit()
 
         if user is None:

@@ -12,8 +12,8 @@ class RegisterUser:
 
     def __call__(self, user_id: UserID, *, email: EmailAddress, password: Password):
         with self._uow as uow:
-            if uow.user.exists_by_email(email):
+            if uow.users.exists_by_email(email):
                 raise EmailAlreadyExistsException(email)
 
-            uow.user.create(User(id=user_id, email=email, password=password))
+            uow.users.create(User(id=user_id, email=email, password=password))
             uow.commit()

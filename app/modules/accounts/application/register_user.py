@@ -15,5 +15,7 @@ class RegisterUser:
             if uow.users.exists_by_email(email):
                 raise EmailAlreadyExistsException(email)
 
-            uow.users.create(User(id=user_id, email=email, password=password))
+            new_user = User(id=user_id, email=email, password=password)
+            uow.users.create(new_user)
+
             uow.commit()

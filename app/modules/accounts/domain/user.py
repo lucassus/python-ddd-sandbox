@@ -29,7 +29,6 @@ class User(AggregateRoot):
         self._email = email
         self._password = password
 
-        # TODO: How to force sqla to populate this field?
         self.events = [self.AccountCreatedEvent(user_id=id)]
 
     @property
@@ -48,6 +47,5 @@ class User(AggregateRoot):
     def password(self) -> Password:
         return self._password
 
-    # TODO: Test it
     def __hash__(self):
         return hash(self._id)

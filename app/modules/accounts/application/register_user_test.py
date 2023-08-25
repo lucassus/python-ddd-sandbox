@@ -16,7 +16,7 @@ def register_user(uow: FakeUnitOfWork, message_bus):
 
 
 def test_register_user_creates_a_user(
-    uow,
+    uow: FakeUnitOfWork,
     register_user: RegisterUser,
 ):
     # When

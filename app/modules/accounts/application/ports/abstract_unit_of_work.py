@@ -2,12 +2,12 @@ import abc
 from contextlib import AbstractContextManager
 from typing import Self
 
-from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
+from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.shared_kernel.message_bus import SupportsDispatch
 
 
 class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):
-    users: AbstractUserRepository
+    users: TrackingUserRepository
 
     def __init__(self, bus: SupportsDispatch):
         self._bus = bus
@@ -22,14 +22,16 @@ class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass
     def _commit(self):
         raise NotImplementedError
 
-    def commit(self):
-        self._commit()
-
+    def _publish_events(self):
         for user in self.users.seen:
             for event in user.events:
                 self._bus.dispatch(event)
 
             user.events.clear()
+
+    def commit(self):
+        self._commit()
+        self._publish_events()
 
     @abc.abstractmethod
     def rollback(self):

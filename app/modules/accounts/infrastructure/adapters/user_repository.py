@@ -11,7 +11,6 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 class UserRepository(AbstractUserRepository):
     def __init__(self, session: Session):
-        super().__init__()
         self._session = session
 
     def exists_by_email(self, email: EmailAddress) -> bool:
@@ -23,22 +22,11 @@ class UserRepository(AbstractUserRepository):
     # to use value object not just a string.
     def create(self, user: User) -> User:
         self._session.add(user)
-        self.seen.add(user)
         return user
 
     def get(self, user_id) -> User | None:
-        user = self._session.get(User, user_id)
-
-        if user is not None:
-            self.seen.add(user)
-
-        return user
+        return self._session.get(User, user_id)
 
     def get_by_email(self, email: EmailAddress) -> User | None:
         query = select(User).where(users_table.c.email == email)
-        user = self._session.execute(query).scalar_one_or_none()
-
-        if user is not None:
-            self.seen.add(user)
-
-        return user
+        return self._session.execute(query).scalar_one_or_none()

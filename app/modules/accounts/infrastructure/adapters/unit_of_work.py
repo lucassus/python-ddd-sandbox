@@ -3,12 +3,13 @@ from typing import Callable, Self
 from sqlalchemy.orm import Session
 
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
+from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
 class UnitOfWork(AbstractUnitOfWork):
-    repository: UserRepository
+    repository: TrackingUserRepository
 
     def __init__(self, session_factory: Callable[..., Session], bus: MessageBus):
         super().__init__(bus=bus)
@@ -16,7 +17,7 @@ class UnitOfWork(AbstractUnitOfWork):
 
     def __enter__(self) -> Self:
         self._session = self._session_factory()
-        self.users = UserRepository(session=self._session)
+        self.users = TrackingUserRepository(UserRepository(session=self._session))
 
         return super().__enter__()
 

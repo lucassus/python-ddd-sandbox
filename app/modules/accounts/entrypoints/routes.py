@@ -22,12 +22,12 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.post("")
 @inject
 def user_register_endpoint(
-    command: RegisterUser.Command,
+    data: schemas.RegisterUser,
     register_user: RegisterUser = Depends(Provide[Container.application.register_user]),
     auth_token: AuthenticationToken = Depends(Provide[Container.application.auth_token]),
 ):
     try:
-        register_user(command)
+        user_id = register_user(email=data.email, password=data.password)
     except EmailAlreadyExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -36,7 +36,7 @@ def user_register_endpoint(
 
     return {
         "token_type": "bearer",
-        "access_token": auth_token.encode(command.id),
+        "access_token": auth_token.encode(user_id),
     }
 
 

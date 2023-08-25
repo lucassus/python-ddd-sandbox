@@ -3,16 +3,16 @@ from unittest import mock
 
 import pytest
 
-from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
+from app.modules.shared_kernel.message_bus import Event, MessageBus
 
 
 @dataclass(frozen=True)
-class SomeEvent(BaseEvent):
+class SomeEvent(Event):
     message: str
 
 
 @dataclass(frozen=True)
-class SomeOtherEvent(BaseEvent):
+class SomeOtherEvent(Event):
     id: int
 
 

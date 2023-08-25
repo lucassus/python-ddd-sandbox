@@ -3,12 +3,12 @@ from collections import defaultdict
 from typing import Callable
 
 
-class BaseEvent(abc.ABC):
+class Event(abc.ABC):
     pass
 
 
 class MessageBus:
-    _listeners: dict[type, list[Callable[[BaseEvent], None]]]
+    _listeners: dict[type, list[Callable[[Event], None]]]
 
     def __init__(self):
         self._listeners = defaultdict(list)
@@ -19,7 +19,7 @@ class MessageBus:
 
         return on(fn) if fn else on
 
-    def dispatch(self, event: BaseEvent) -> None:
+    def dispatch(self, event: Event) -> None:
         handlers = self._listeners[type(event)]
 
         for handle in handlers:

@@ -16,7 +16,7 @@ from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
+from app.modules.shared_kernel.message_bus import Event, MessageBus
 
 
 def _session_factory():
@@ -24,7 +24,7 @@ def _session_factory():
 
 
 class NoopMessageBus(MessageBus):
-    def dispatch(self, event: BaseEvent) -> None:
+    def dispatch(self, event: Event) -> None:
         pass
 
 

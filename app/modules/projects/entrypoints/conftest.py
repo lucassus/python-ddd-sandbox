@@ -23,7 +23,7 @@ def app():
     app.include_router(routes.router)
 
     app.dependency_overrides[routes.get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
-        id=UserID(1),
+        id=UserID.generate(),
         email=EmailAddress("test@email.com"),
     )
 

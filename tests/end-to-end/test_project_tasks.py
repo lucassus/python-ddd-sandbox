@@ -1,6 +1,8 @@
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.anys import AnyUUID
+
 
 def test_create_task(create_project, create_task, anonymous_client: TestClient):
     response = create_project(name="Project X")
@@ -12,7 +14,7 @@ def test_create_task(create_project, create_task, anonymous_client: TestClient):
     assert response.json() == {
         "number": 1,
         "name": "First task",
-        "createdBy": 1,
+        "createdBy": AnyUUID,
         "completedAt": None,
     }
 

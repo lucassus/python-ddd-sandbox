@@ -41,7 +41,7 @@ class TestChangeUserEmailAddressUseCase:
     ):
         with pytest.raises(UserNotFoundError):
             change_user_email_address(
-                user_id=UserID(123),
+                user_id=UserID.generate(),
                 new_email=EmailAddress("new@email.com"),
             )
 

@@ -40,14 +40,19 @@ def test_handle_entity_not_found_error(app, client):
 
 
 def test_handle_user_not_found_error(app, client):
+    # Given
+    user_id = UserID.generate()
+
     @app.get("/foo")
     def raise_user_not_found_error():
-        raise GetUserQuery.NotFoundError(UserID(666))
+        raise GetUserQuery.NotFoundError(user_id)
 
+    # When
     response = client.get("/foo")
 
+    # Then
     assert response.status_code == 404
-    assert response.json() == {"detail": "User with id 666 not found"}
+    assert response.json() == {"detail": f"User with id {user_id} not found"}
 
 
 def test_handle_authentication_error(app, client):

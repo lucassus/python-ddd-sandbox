@@ -5,6 +5,7 @@ from app.infrastructure.tables import projects_table, users_table
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.modules.shared_kernel.errors import EntityNotFoundError
 from app.shared.base_schema import BaseSchema
+from app.shared.user_id_field import UserIDField
 
 
 class GetUserQuery(BaseSQLQuery):
@@ -13,7 +14,7 @@ class GetUserQuery(BaseSQLQuery):
             id: int
             name: str
 
-        id: int
+        id: UserIDField
         email: str
         projects: list[Project]
 

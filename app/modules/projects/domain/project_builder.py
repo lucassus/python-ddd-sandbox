@@ -6,9 +6,11 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 class ProjectBuilder:
     # Provide some sane defaults
-    _user_id = UserID(1)
     _name = ProjectName("Test project")
     _maximum_number_of_incomplete_tasks: None | MaximumNumberOfIncompleteTasks = None
+
+    def __init__(self):
+        self._user_id = UserID.generate()
 
     def with_maximum_number_of_incomplete_tasks(self, value: None | int | MaximumNumberOfIncompleteTasks) -> Self:
         self._maximum_number_of_incomplete_tasks = MaximumNumberOfIncompleteTasks(int(value)) if value else None

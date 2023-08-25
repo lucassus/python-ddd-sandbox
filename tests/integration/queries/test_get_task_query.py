@@ -13,7 +13,7 @@ def test_get_task_query(
     create_project,
 ):
     # Given
-    list_tasks = GetTaskQuery(engine=engine)
+    get_task = GetTaskQuery(engine=engine)
 
     user = create_user()
 
@@ -27,17 +27,17 @@ def test_get_task_query(
     session.commit()
 
     # When
-    task = list_tasks(project_id=second_project.id, number=TaskNumber(1))
+    task = get_task(project_id=second_project.id, number=TaskNumber(1))
 
     # Then
     assert task.name == "Task Two"
     assert task.number == TaskNumber(1)
 
 
-def test_get_taskq_query_raises_error():
+def test_get_task_query_raises_error():
     # Given
-    list_tasks = GetTaskQuery(engine=engine)
+    get_task = GetTaskQuery(engine=engine)
 
     # When
     with pytest.raises(GetTaskQuery.NotFoundError):
-        list_tasks(project_id=ProjectID(1), number=TaskNumber(1))
+        get_task(project_id=ProjectID(1), number=TaskNumber(1))

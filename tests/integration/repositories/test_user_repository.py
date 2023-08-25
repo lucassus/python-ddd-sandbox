@@ -31,7 +31,7 @@ class TestUserRepository:
         assert repository.get(user_id) is not None
 
     def test_get_returns_none_when_not_found(self, repository: UserRepository):
-        assert repository.get(UserID(1)) is None
+        assert repository.get(UserID.generate()) is None
 
     def test_get_by_email(self, create_user, repository: UserRepository):
         user = create_user()

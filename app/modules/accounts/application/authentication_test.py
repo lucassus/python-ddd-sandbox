@@ -19,7 +19,7 @@ class FakeAuthenticationToken(AuthenticationToken):
         return f"token-{self._secret_key}-{user_id}"
 
     def decode(self, token: str) -> UserID:
-        return UserID(int(token.replace(f"token-{self._secret_key}-", "")))
+        return UserID(token.replace(f"token-{self._secret_key}-", ""))
 
 
 class TestAuthenticate:

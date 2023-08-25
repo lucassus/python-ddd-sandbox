@@ -1,6 +1,3 @@
-from typing import Annotated
-
-from pydantic import UUID4, BeforeValidator
 from sqlalchemy import select
 
 from app.infrastructure.base_query import BaseSQLQuery

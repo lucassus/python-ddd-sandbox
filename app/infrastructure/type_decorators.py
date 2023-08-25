@@ -1,7 +1,7 @@
 import uuid
 from typing import Any
 
-from sqlalchemy import String, types, Uuid
+from sqlalchemy import String, Uuid, types
 
 from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.email_address import EmailAddress

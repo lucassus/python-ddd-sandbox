@@ -1,5 +1,5 @@
 from sqlalchemy.sql.schema import Column, ForeignKey, MetaData, Table, UniqueConstraint
-from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Uuid
+from sqlalchemy.sql.sqltypes import DateTime, Integer, String
 
 from app.infrastructure.type_decorators import EmailType, PasswordType, UserIDType
 

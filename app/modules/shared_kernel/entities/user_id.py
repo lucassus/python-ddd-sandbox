@@ -1,5 +1,4 @@
 import uuid
-from typing import Self
 
 
 class UserID:
@@ -7,10 +6,10 @@ class UserID:
         if isinstance(id, uuid.UUID):
             self._uuid = id
         else:
-            self._uuid = uuid.UUID(id)
+            self._uuid = uuid.UUID(str(id))
 
     @classmethod
-    def generate(cls) -> Self:
+    def generate(cls) -> "UserID":
         return cls(uuid.uuid4())
 
     def __str__(self):

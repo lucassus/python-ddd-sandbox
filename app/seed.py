@@ -30,10 +30,9 @@ class NoopMessageBus(MessageBus):
 
 bus = NoopMessageBus()
 
-register_user = RegisterUser(
-    uow=AccountsUnitOfWork(session_factory=_session_factory),
-    bus=bus,
-)
+accounts_uow = AccountsUnitOfWork(session_factory=_session_factory, bus=bus)
+register_user = RegisterUser(uow=accounts_uow)
+
 projects_uow = ProjectsUnitOfWork(session_factory=_session_factory)
 create_example_project = CreateExampleProject(uow=projects_uow, bus=bus)
 create_project = CreateProject(uow=projects_uow, bus=bus)

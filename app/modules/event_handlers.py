@@ -25,7 +25,7 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
 def send_welcome_email_handler(event: User.AccountCreatedEvent):
     from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 
-    with UnitOfWork(session_factory=_session_factory) as uow:
+    with UnitOfWork(session_factory=_session_factory, bus=bus) as uow:
         user = uow.user.get(event.user_id)
 
         if user is not None:

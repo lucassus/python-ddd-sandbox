@@ -18,12 +18,12 @@ class ApplicationContainer(containers.DeclarativeContainer):
     jwt_secret_key = providers.Dependency(instance_of=str)
 
     session_factory = providers.Factory(AppSession, bind=engine)
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider, bus=bus)
 
     auth_token = providers.Singleton(JWTAuthentication, secret_key=jwt_secret_key)
     authentication = providers.Singleton(Authentication, uow=uow, token=auth_token)
 
-    register_user = providers.Singleton(RegisterUser, uow=uow, bus=bus)
+    register_user = providers.Singleton(RegisterUser, uow=uow)
     change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
 
 

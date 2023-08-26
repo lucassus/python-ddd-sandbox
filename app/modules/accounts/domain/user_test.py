@@ -12,4 +12,4 @@ class TestUser:
             password=Password("password"),
         )
 
-        assert user.events[-1] == User.AccountCreatedEvent(user_id=user.id)
+        assert user.events[-1] == User.AccountCreated(user_id=user.id)

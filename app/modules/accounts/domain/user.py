@@ -9,7 +9,7 @@ from app.modules.shared_kernel.message_bus import Event
 
 class User(AggregateRoot):
     @dataclass(frozen=True)
-    class AccountCreatedEvent(Event):
+    class AccountCreated(Event):
         user_id: UserID
 
     _id: UserID
@@ -29,7 +29,7 @@ class User(AggregateRoot):
         self._email = email
         self._password = password
 
-        self.events = [self.AccountCreatedEvent(user_id=id)]
+        self.events = [self.AccountCreated(user_id=id)]
 
     @property
     def id(self) -> UserID:

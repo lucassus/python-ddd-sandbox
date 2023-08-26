@@ -10,8 +10,8 @@ def _session_factory():
     return AppSession(bind=engine)
 
 
-@bus.listen(User.AccountCreatedEvent)
-def create_example_project_handler(event: User.AccountCreatedEvent):
+@bus.listen(User.AccountCreated)
+def create_example_project_handler(event: User.AccountCreated):
     from app.modules.projects.application.create_example_project import CreateExampleProject
     from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 
@@ -21,8 +21,8 @@ def create_example_project_handler(event: User.AccountCreatedEvent):
     create_example_project(user_id=event.user_id)
 
 
-@bus.listen(User.AccountCreatedEvent)
-def send_welcome_email_handler(event: User.AccountCreatedEvent):
+@bus.listen(User.AccountCreated)
+def send_welcome_email_handler(event: User.AccountCreated):
     from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 
     with UnitOfWork(session_factory=_session_factory, bus=bus) as uow:

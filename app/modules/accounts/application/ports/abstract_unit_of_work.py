@@ -27,7 +27,7 @@ class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass
             for event in user.events:
                 self._bus.dispatch(event)
 
-            user.events.clear()
+            user.clear_events()
 
     def commit(self):
         self._commit()

@@ -16,8 +16,8 @@ class User(AggregateRoot):
     _email: EmailAddress
     _password: Password
 
-    # TODO: Make it private
-    events: list[Event]
+    # TODO: Move it to AggregateRoot and re-use in other aggregates
+    _events: list[Event]
 
     def __init__(
         self,
@@ -29,7 +29,14 @@ class User(AggregateRoot):
         self._email = email
         self._password = password
 
-        self.events = [self.AccountCreated(user_id=id)]
+        self._events = [self.AccountCreated(user_id=id)]
+
+    @property
+    def events(self) -> tuple[Event, ...]:
+        return tuple(self._events)
+
+    def clear_events(self):
+        self._events.clear()
 
     @property
     def id(self) -> UserID:

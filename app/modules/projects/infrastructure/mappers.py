@@ -35,8 +35,6 @@ def start_mappers(mapper_registry):
         },
     )
 
-
-# TODO: Find less hacky solution
-@event.listens_for(Project, "load")
-def receive_load(project, _):
-    project._events = []
+    @event.listens_for(Project, "load")
+    def receive_load(project, _):
+        project._events = []

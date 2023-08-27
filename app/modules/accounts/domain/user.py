@@ -16,27 +16,19 @@ class User(AggregateRoot):
     _email: EmailAddress
     _password: Password
 
-    # TODO: Move it to AggregateRoot and re-use in other aggregates
-    _events: list[Event]
-
     def __init__(
         self,
         id: UserID,
         email: EmailAddress,
         password: Password,
     ):
+        super().__init__()
+
         self._id = id
         self._email = email
         self._password = password
 
-        self._events = [self.AccountCreated(user_id=id)]
-
-    @property
-    def events(self) -> tuple[Event, ...]:
-        return tuple(self._events)
-
-    def clear_events(self):
-        self._events.clear()
+        self.queue_event(User.AccountCreated(user_id=self._id))
 
     @property
     def id(self) -> UserID:

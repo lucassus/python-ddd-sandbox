@@ -7,17 +7,6 @@ from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
 
 
 class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):
-    """
-    Example usage:
-        class ConcreteUnitOfWork(AbstractUnitOfWork):
-            ...
-
-        with ConcreteUnitOfWork() as uow:
-            project = uow.project.get(1)
-            project.add_task(name="Buy a milk")
-            uow.commit()
-    """
-
     def __init__(self, bus: SupportsDispatchingEvents):
         self._bus = bus
 

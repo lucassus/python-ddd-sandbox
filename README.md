@@ -37,3 +37,4 @@ curl http://localhost:8000/api/projects/1/tasks --silent | jq
 ## Other valuable resources
 
 * https://www.youtube.com/watch?v=Ru2T4fu3bGQ
+* [FastAPI Best Practices and Conventions](https://github.com/zhanymkanov/fastapi-best-practices)

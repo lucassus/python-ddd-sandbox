@@ -15,8 +15,8 @@ def create_example_project_handler(event: User.AccountCreated):
     from app.modules.projects.application.create_example_project import CreateExampleProject
     from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 
-    uow = UnitOfWork(session_factory=_session_factory)
-    create_example_project = CreateExampleProject(uow=uow, bus=bus)
+    uow = UnitOfWork(session_factory=_session_factory, bus=bus)
+    create_example_project = CreateExampleProject(uow=uow)
 
     create_example_project(user_id=event.user_id)
 
@@ -32,6 +32,6 @@ def send_welcome_email_handler(event: User.AccountCreated):
             print(f"Sending welcome email to {user.email}")
 
 
-@bus.listen(Project.CreatedEvent)
-def handle_project_created_event(event: Project.CreatedEvent):
+@bus.listen(Project.Created)
+def handle_project_created_event(event: Project.Created):
     print(f"Project {event.project_id} has been created")

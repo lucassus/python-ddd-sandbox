@@ -16,5 +16,5 @@ def message_bus() -> MessageBus:
 
 
 @pytest.fixture()
-def fake_uow(repository):
-    return FakeUnitOfWork(repository)
+def fake_uow(repository, message_bus):
+    return FakeUnitOfWork(repository, bus=message_bus)

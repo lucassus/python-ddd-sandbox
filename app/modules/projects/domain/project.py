@@ -18,7 +18,7 @@ MaximumNumberOfIncompleteTasks = NewType("MaximumNumberOfIncompleteTasks", int)
 
 class Project(AggregateRoot):
     @dataclass(frozen=True)
-    class CreatedEvent(Event):
+    class Created(Event):
         project_id: ProjectID
 
     _id: ProjectID
@@ -39,6 +39,8 @@ class Project(AggregateRoot):
         name: ProjectName,
         maximum_number_of_incomplete_tasks: None | MaximumNumberOfIncompleteTasks = None,
     ):
+        super().__init__()
+
         self._user_id = user_id
         self._name = name
         self._maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
@@ -133,3 +135,7 @@ class Project(AggregateRoot):
     def delete(self, now: datetime) -> None:
         ensure.project_is_archived(self)
         self._deleted_at = now
+
+    # TODO: Move it to the base class?
+    def __hash__(self):
+        return hash(self._id)

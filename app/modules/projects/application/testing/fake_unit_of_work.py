@@ -1,15 +1,17 @@
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.application.testing.fake_project_repository import FakeProjectRepository
+from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):
-    project: FakeProjectRepository
+    projects: FakeProjectRepository
     committed = False
 
-    def __init__(self, repository: FakeProjectRepository):
-        self.project = repository
+    def __init__(self, repository: FakeProjectRepository, bus: SupportsDispatchingEvents):
+        super().__init__(bus)
+        self.projects = repository
 
-    def commit(self):
+    def _commit(self):
         self.committed = True
 
     def rollback(self):

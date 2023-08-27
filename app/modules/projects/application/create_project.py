@@ -18,9 +18,10 @@ class CreateProject:
         new_project = Project(user_id=user_id, name=name)
 
         with self._uow as uow:
-            new_project = uow.project.create(new_project)
+            new_project = uow.projects.create(new_project)
             uow.commit()
 
-        self._bus.dispatch(Project.CreatedEvent(project_id=new_project.id))
+        # In this example events are raised in the service layer
+        self._bus.dispatch(Project.Created(project_id=new_project.id))
 
         return new_project.id

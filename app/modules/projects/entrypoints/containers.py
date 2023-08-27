@@ -22,10 +22,14 @@ class ApplicationContainer(containers.DeclarativeContainer):
 
     authentication = providers.AbstractFactory(AuthenticationContract)
 
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider)
+    uow = providers.Singleton(
+        UnitOfWork,
+        bus=bus,
+        session_factory=session_factory.provider,
+    )
 
     create_project = providers.Singleton(CreateProject, uow=uow, bus=bus)
-    create_example_project = providers.Singleton(CreateExampleProject, uow=uow, bus=bus)
+    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
     update_project = providers.Singleton(UpdateProject, uow=uow)
     archivization_service = providers.Singleton(ArchivizationService, uow=uow)
     tasks_service = providers.Singleton(TasksService, uow=uow)

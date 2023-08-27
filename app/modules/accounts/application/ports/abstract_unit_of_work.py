@@ -3,13 +3,13 @@ from contextlib import AbstractContextManager
 from typing import Self
 
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
-from app.modules.shared_kernel.message_bus import SupportsDispatch
+from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
 
 
 class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):
     users: TrackingUserRepository
 
-    def __init__(self, bus: SupportsDispatch):
+    def __init__(self, bus: SupportsDispatchingEvents):
         self._bus = bus
 
     def __enter__(self) -> Self:

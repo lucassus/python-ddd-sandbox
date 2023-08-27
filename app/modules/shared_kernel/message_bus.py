@@ -7,12 +7,12 @@ class Event(abc.ABC):
     pass
 
 
-class SupportsDispatch(Protocol):
+class SupportsDispatchingEvents(Protocol):
     def dispatch(self, event: Event) -> None:
         ...
 
 
-class MessageBus(SupportsDispatch):
+class MessageBus(SupportsDispatchingEvents):
     _listeners: dict[type, list[Callable[[Event], None]]]
 
     def __init__(self):

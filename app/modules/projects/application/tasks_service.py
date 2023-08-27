@@ -19,7 +19,7 @@ class TasksService:
         created_by: Optional[UserID] = None,
     ) -> TaskNumber:
         with self._uow as uow:
-            project = uow.project.get(project_id)
+            project = uow.projects.get(project_id)
 
             task = project.add_task(name=name, created_by=created_by)
             uow.commit()
@@ -36,7 +36,7 @@ class TasksService:
             now = utc_now()
 
         with self._uow as uow:
-            project = uow.project.get(project_id)
+            project = uow.projects.get(project_id)
             project.complete_task(number, now)
 
             uow.commit()
@@ -47,7 +47,7 @@ class TasksService:
         number: TaskNumber,
     ) -> None:
         with self._uow as uow:
-            project = uow.project.get(project_id)
+            project = uow.projects.get(project_id)
             project.incomplete_task(number)
 
             uow.commit()

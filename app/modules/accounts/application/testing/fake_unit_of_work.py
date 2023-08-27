@@ -1,12 +1,12 @@
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
-from app.modules.shared_kernel.message_bus import SupportsDispatch
+from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):
     committed = False
 
-    def __init__(self, repository: TrackingUserRepository, bus: SupportsDispatch):
+    def __init__(self, repository: TrackingUserRepository, bus: SupportsDispatchingEvents):
         super().__init__(bus=bus)
         self._repository_factory = lambda: repository
 

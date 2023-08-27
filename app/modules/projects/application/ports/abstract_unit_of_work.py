@@ -7,10 +7,10 @@ from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
 
 
 class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):
+    projects: AbstractProjectRepository
+
     def __init__(self, bus: SupportsDispatchingEvents):
         self._bus = bus
-
-    projects: AbstractProjectRepository
 
     def __enter__(self) -> Self:
         return self

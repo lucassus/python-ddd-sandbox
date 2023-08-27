@@ -6,8 +6,6 @@ from app.modules.accounts.application.ports.abstract_user_repository import Abst
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 
-# TODO: Implement tracking repository concept
-
 
 class UserRepository(AbstractUserRepository):
     def __init__(self, session: Session):

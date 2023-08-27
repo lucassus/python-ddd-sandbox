@@ -15,6 +15,7 @@ def start_mappers(mapper_registry):
         },
     )
 
+    # Because SQLAlchemy doesn't call a constructor when loading an object from the database.
     @event.listens_for(User, "load")
     def receive_load(user, _):
         user._events = []

@@ -136,6 +136,5 @@ class Project(AggregateRoot):
         ensure.project_is_archived(self)
         self._deleted_at = now
 
-    # TODO: Move it to the base class?
     def __hash__(self):
         return hash(self._id)

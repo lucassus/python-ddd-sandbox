@@ -1,8 +1,10 @@
+import abc
+
 from app.modules.shared_kernel.entities.entity import Entity
 from app.modules.shared_kernel.message_bus import Event
 
 
-class AggregateRoot(Entity):
+class AggregateRoot(Entity, metaclass=abc.ABCMeta):
     _events: list[Event]
 
     def __init__(self):
@@ -17,3 +19,7 @@ class AggregateRoot(Entity):
 
     def clear_events(self):
         self._events.clear()
+
+    @abc.abstractmethod
+    def __hash__(self) -> int:
+        raise NotImplementedError

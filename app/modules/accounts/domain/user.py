@@ -46,6 +46,5 @@ class User(AggregateRoot):
     def password(self) -> Password:
         return self._password
 
-    # TODO: Move it to the base class?
     def __hash__(self):
         return hash(self._id)

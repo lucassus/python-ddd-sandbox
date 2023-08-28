@@ -38,7 +38,7 @@ class AbstractProjectRepository(abc.ABC):
 
         return project
 
-    # User repository uses a composition for address a problem with ugly _* methods
+    # User repository uses a composition to address a problem with ugly _* methods
 
     @abc.abstractmethod
     def _create(self, project: Project) -> Project:

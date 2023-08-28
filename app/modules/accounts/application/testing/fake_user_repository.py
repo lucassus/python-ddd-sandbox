@@ -12,7 +12,6 @@ class FakeUserRepository(AbstractUserRepository):
 
     def create(self, user: User) -> User:
         self._users_by_id[user.id] = user
-
         return user
 
     def exists_by_email(self, email: EmailAddress) -> bool:

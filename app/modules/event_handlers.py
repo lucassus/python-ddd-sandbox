@@ -10,28 +10,28 @@ def _session_factory():
     return AppSession(bind=engine)
 
 
-@bus.listen(User.AccountCreatedEvent)
-def create_example_project_handler(event: User.AccountCreatedEvent):
+@bus.listen(User.AccountCreated)
+def create_example_project_handler(event: User.AccountCreated):
     from app.modules.projects.application.create_example_project import CreateExampleProject
     from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 
-    uow = UnitOfWork(session_factory=_session_factory)
-    create_example_project = CreateExampleProject(uow=uow, bus=bus)
+    uow = UnitOfWork(session_factory=_session_factory, bus=bus)
+    create_example_project = CreateExampleProject(uow=uow)
 
     create_example_project(user_id=event.user_id)
 
 
-@bus.listen(User.AccountCreatedEvent)
-def send_welcome_email_handler(event: User.AccountCreatedEvent):
+@bus.listen(User.AccountCreated)
+def send_welcome_email_handler(event: User.AccountCreated):
     from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 
-    with UnitOfWork(session_factory=_session_factory) as uow:
-        user = uow.user.get(event.user_id)
+    with UnitOfWork(session_factory=_session_factory, bus=bus) as uow:
+        user = uow.users.get(event.user_id)
 
         if user is not None:
             print(f"Sending welcome email to {user.email}")
 
 
-@bus.listen(Project.CreatedEvent)
-def handle_project_created_event(event: Project.CreatedEvent):
+@bus.listen(Project.Created)
+def handle_project_created_event(event: Project.Created):
     print(f"Project {event.project_id} has been created")

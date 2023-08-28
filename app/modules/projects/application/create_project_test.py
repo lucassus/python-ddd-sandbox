@@ -11,7 +11,7 @@ def test_create_project_use_case(fake_uow, message_bus: MessageBus, repository: 
     # Given
     create_project = CreateProject(uow=fake_uow, bus=message_bus)
     listener_mock = Mock()
-    message_bus.listen(Project.CreatedEvent, listener_mock)
+    message_bus.listen(Project.Created, listener_mock)
     user_id = UserID.generate()
 
     # When
@@ -25,4 +25,4 @@ def test_create_project_use_case(fake_uow, message_bus: MessageBus, repository: 
     assert project.user_id == user_id
     assert len(project.tasks) == 0
 
-    listener_mock.assert_called_once_with(Project.CreatedEvent(project_id=project_id))
+    listener_mock.assert_called_once_with(Project.Created(project_id=project_id))

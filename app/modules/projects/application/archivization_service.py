@@ -14,14 +14,14 @@ class ArchivizationService:
             now = utc_now()
 
         with self._uow as ouw:
-            project = ouw.project.get(project_id)
+            project = ouw.projects.get(project_id)
             project.archive(now)
 
             ouw.commit()
 
     def unarchive(self, project_id: ProjectID) -> None:
         with self._uow as ouw:
-            project = ouw.project.get_archived(project_id)
+            project = ouw.projects.get_archived(project_id)
             project.unarchive()
 
             ouw.commit()
@@ -31,7 +31,7 @@ class ArchivizationService:
             now = utc_now()
 
         with self._uow as ouw:
-            project = ouw.project.get_archived(project_id)
+            project = ouw.projects.get_archived(project_id)
             project.delete(now)
 
             ouw.commit()

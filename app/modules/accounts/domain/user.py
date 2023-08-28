@@ -4,12 +4,12 @@ from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.aggregate_root import AggregateRoot
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import BaseEvent
+from app.modules.shared_kernel.message_bus import Event
 
 
 class User(AggregateRoot):
     @dataclass(frozen=True)
-    class AccountCreatedEvent(BaseEvent):
+    class AccountCreated(Event):
         user_id: UserID
 
     _id: UserID
@@ -22,9 +22,13 @@ class User(AggregateRoot):
         email: EmailAddress,
         password: Password,
     ):
+        super().__init__()
+
         self._id = id
         self._email = email
         self._password = password
+
+        self.queue_event(User.AccountCreated(user_id=self._id))
 
     @property
     def id(self) -> UserID:
@@ -41,3 +45,6 @@ class User(AggregateRoot):
     @property
     def password(self) -> Password:
         return self._password
+
+    def __hash__(self):
+        return hash(self._id)

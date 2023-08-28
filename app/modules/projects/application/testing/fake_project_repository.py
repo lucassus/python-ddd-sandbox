@@ -17,16 +17,17 @@ class FakeProjectRepository(AbstractProjectRepository):
     _projects_by_id: dict[ProjectID, Project]
 
     def __init__(self):
+        super().__init__()
         self._project_id = _project_id_generator()
         self._projects_by_id = {}
 
-    def create(self, project: Project) -> Project:
+    def _create(self, project: Project) -> Project:
         project._id = next(self._project_id)
         self._projects_by_id[project.id] = project
 
         return project
 
-    def get(self, id: ProjectID) -> Project:
+    def _get(self, id: ProjectID) -> Project:
         project = self._projects_by_id.get(id)
 
         if project is None or project.archived:
@@ -34,7 +35,7 @@ class FakeProjectRepository(AbstractProjectRepository):
 
         return project
 
-    def get_archived(self, id: ProjectID) -> Project:
+    def _get_archived(self, id: ProjectID) -> Project:
         project = self._projects_by_id.get(id)
 
         if project is None or not project.archived:

@@ -8,6 +8,6 @@ class UpdateProject:
 
     def __call__(self, project_id: ProjectID, name: ProjectName):
         with self._uow as uow:
-            project = uow.project.get(project_id)
+            project = uow.projects.get(project_id)
             project.name = name
             uow.commit()

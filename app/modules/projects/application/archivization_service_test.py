@@ -4,6 +4,7 @@ from app.modules.projects.application.archivization_service import Archivization
 from app.modules.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.projects.domain.project_builder import ProjectBuilder
+from app.modules.shared_kernel.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
 
@@ -14,7 +15,7 @@ class TestArchiveService:
 
     @pytest.fixture()
     def fake_unit_of_work(self, fake_project_repository):
-        return FakeUnitOfWork(repository=fake_project_repository)
+        return FakeUnitOfWork(repository=fake_project_repository, bus=MessageBus())
 
     @pytest.fixture()
     def service(self, fake_unit_of_work):

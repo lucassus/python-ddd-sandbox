@@ -1,3 +1,4 @@
+from sqlalchemy import event
 from sqlalchemy.orm import attribute_keyed_dict, relationship
 
 from app.infrastructure.tables import projects_table, tasks_table
@@ -33,3 +34,7 @@ def start_mappers(mapper_registry):
             "_completed_at": tasks_table.c.completed_at,
         },
     )
+
+    @event.listens_for(Project, "load")
+    def receive_load(project, _):
+        project._events = []

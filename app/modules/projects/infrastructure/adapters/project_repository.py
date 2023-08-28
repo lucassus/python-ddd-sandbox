@@ -12,9 +12,10 @@ from app.modules.projects.domain.project import Project, ProjectID
 
 class ProjectRepository(AbstractProjectRepository):
     def __init__(self, session: Session):
+        super().__init__()
         self._session = session
 
-    def create(self, project: Project) -> Project:
+    def _create(self, project: Project) -> Project:
         self._session.add(project)
         return project
 
@@ -23,7 +24,7 @@ class ProjectRepository(AbstractProjectRepository):
             projects_table.c.id == id,
         )
 
-    def get(self, id: ProjectID) -> Project:
+    def _get(self, id: ProjectID) -> Project:
         query = self._project_query(id).where(
             projects_table.c.archived_at.is_(None),
         )
@@ -35,7 +36,7 @@ class ProjectRepository(AbstractProjectRepository):
 
         return project
 
-    def get_archived(self, id: ProjectID) -> Project:
+    def _get_archived(self, id: ProjectID) -> Project:
         query = self._project_query(id).where(
             and_(
                 projects_table.c.archived_at.isnot(None),

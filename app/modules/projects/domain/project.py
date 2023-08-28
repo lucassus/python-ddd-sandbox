@@ -7,7 +7,7 @@ from app.modules.projects.domain.errors import TaskNotFoundError
 from app.modules.projects.domain.task import Task, TaskNumber
 from app.modules.shared_kernel.entities.aggregate_root import AggregateRoot
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import BaseEvent
+from app.modules.shared_kernel.message_bus import Event
 
 ProjectID = NewType("ProjectID", int)
 
@@ -18,7 +18,7 @@ MaximumNumberOfIncompleteTasks = NewType("MaximumNumberOfIncompleteTasks", int)
 
 class Project(AggregateRoot):
     @dataclass(frozen=True)
-    class CreatedEvent(BaseEvent):
+    class Created(Event):
         project_id: ProjectID
 
     _id: ProjectID
@@ -39,6 +39,8 @@ class Project(AggregateRoot):
         name: ProjectName,
         maximum_number_of_incomplete_tasks: None | MaximumNumberOfIncompleteTasks = None,
     ):
+        super().__init__()
+
         self._user_id = user_id
         self._name = name
         self._maximum_number_of_incomplete_tasks = maximum_number_of_incomplete_tasks
@@ -133,3 +135,6 @@ class Project(AggregateRoot):
     def delete(self, now: datetime) -> None:
         ensure.project_is_archived(self)
         self._deleted_at = now
+
+    def __hash__(self):
+        return hash(self._id)

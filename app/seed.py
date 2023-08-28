@@ -16,7 +16,7 @@ from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import BaseEvent, MessageBus
+from app.modules.shared_kernel.message_bus import Event, MessageBus
 
 
 def _session_factory():
@@ -24,18 +24,17 @@ def _session_factory():
 
 
 class NoopMessageBus(MessageBus):
-    def dispatch(self, event: BaseEvent) -> None:
+    def dispatch(self, event: Event) -> None:
         pass
 
 
 bus = NoopMessageBus()
 
-register_user = RegisterUser(
-    uow=AccountsUnitOfWork(session_factory=_session_factory),
-    bus=bus,
-)
-projects_uow = ProjectsUnitOfWork(session_factory=_session_factory)
-create_example_project = CreateExampleProject(uow=projects_uow, bus=bus)
+accounts_uow = AccountsUnitOfWork(session_factory=_session_factory, bus=bus)
+register_user = RegisterUser(uow=accounts_uow)
+
+projects_uow = ProjectsUnitOfWork(session_factory=_session_factory, bus=bus)
+create_example_project = CreateExampleProject(uow=projects_uow)
 create_project = CreateProject(uow=projects_uow, bus=bus)
 archivization = ArchivizationService(uow=projects_uow)
 tasks_service = TasksService(uow=projects_uow)
@@ -49,8 +48,9 @@ def main(rebuild_db: bool = True):
     start_account_mappers(mapper_registry)
     start_project_mappers(mapper_registry)
 
-    user_id = register_user(
-        user_id=UserID.generate(),
+    user_id = UserID.generate()
+    register_user(
+        user_id=user_id,
         email=EmailAddress("test@email.com"),
         password=Password("password"),
     )

@@ -13,3 +13,10 @@ def test_password_hasher():
 
     assert not hasher.verify(Password("invalid-password"), hashed_password)
     assert not hasher.verify(password, "asdf")
+
+
+def test_password_hasher_hash_each_time_generates_different_hash():
+    hasher = PasswordHasher()
+
+    password = Password("secret-password")
+    assert hasher.hash(password) != hasher.hash(password)

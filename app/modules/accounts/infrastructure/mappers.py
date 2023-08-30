@@ -11,7 +11,7 @@ def start_mappers(mapper_registry):
         properties={
             "_id": users_table.c.id,
             "_email": users_table.c.email,
-            "_password": users_table.c.password,
+            "_hashed_password": users_table.c.hashed_password,
         },
     )
 

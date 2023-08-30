@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.modules.accounts.application.password import verify_password
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.application.ports.authentication_token import AuthenticationToken, AuthenticationTokenError
 from app.modules.accounts.domain.password import Password
@@ -25,7 +26,7 @@ class Authentication(AuthenticationContract):
         with self._uow as uow:
             user = uow.users.get_by_email(email)
 
-            if user is None or user.password != password:
+            if user is None or not verify_password(password, user.hashed_password):
                 raise AuthenticationError("Invalid email or password")  # noqa: TRY003
 
             return self._token.encode(user.id, now)

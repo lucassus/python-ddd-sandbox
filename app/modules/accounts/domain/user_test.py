@@ -1,3 +1,4 @@
+from app.modules.accounts.application.password import get_password_hash
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
@@ -9,7 +10,7 @@ class TestUser:
         user = User(
             id=UserID.generate(),
             email=EmailAddress("test@email.com"),
-            password=Password("password"),
+            hashed_password=get_password_hash(Password("password")),
         )
 
         assert user.events[-1] == User.AccountCreated(user_id=user.id)

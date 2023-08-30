@@ -22,6 +22,8 @@ autoflake==2.2.0
     # via -r requirements.in
 bandit==1.7.5
     # via flake8-bandit
+bcrypt==4.0.1
+    # via passlib
 black==23.7.0
     # via -r requirements.in
 certifi==2023.7.22
@@ -128,6 +130,8 @@ packaging==23.1
     # via
     #   black
     #   pytest
+passlib[bcrypt]==1.7.4
+    # via -r requirements.in
 pathspec==0.11.1
     # via black
 pbr==5.11.1

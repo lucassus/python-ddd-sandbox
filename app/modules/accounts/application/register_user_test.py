@@ -31,7 +31,7 @@ def test_register_user_creates_a_user(
     user = uow.users.get_by_email(EmailAddress("test@email.com"))
     assert user is not None
     assert user.email == EmailAddress("test@email.com")
-    assert user.password == Password("passwd123")
+    assert isinstance(user.hashed_password, str)
 
 
 def test_register_user_validate_email_uniqueness(

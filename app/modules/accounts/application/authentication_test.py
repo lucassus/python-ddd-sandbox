@@ -7,6 +7,7 @@ from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.ports.authentication_token import AuthenticationToken
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.user_id import UserID
 
@@ -33,16 +34,16 @@ class TestAuthenticate:
         repository.create(user)
 
         # When
-        token = authentication.login(user.email, user.password)
+        token = authentication.login(user.email, Password("secret-password"))
 
         # Then
         assert isinstance(token, str)
 
     def test_trade_token_for_user(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
-        user = UserBuilder().build()
+        user = UserBuilder().with_password("passwd123").build()
         repository.create(user)
-        token = authentication.login(user.email, user.password)
+        token = authentication.login(user.email, Password("passwd123"))
 
         # When
         user_dto = authentication.trade_token_for_user(token)

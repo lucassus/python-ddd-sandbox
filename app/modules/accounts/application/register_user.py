@@ -1,3 +1,4 @@
+from app.modules.accounts.application.password import get_password_hash
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
@@ -15,7 +16,12 @@ class RegisterUser:
             if uow.users.exists_by_email(email):
                 raise EmailAlreadyExistsException(email)
 
-            new_user = User(id=user_id, email=email, password=password)
-            uow.users.create(new_user)
+            uow.users.create(
+                User(
+                    id=user_id,
+                    email=email,
+                    hashed_password=get_password_hash(password),
+                )
+            )
 
             uow.commit()

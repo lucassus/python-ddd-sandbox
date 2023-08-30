@@ -1,5 +1,6 @@
 from typing import Self
 
+from app.modules.accounts.application.password import get_password_hash
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
@@ -30,5 +31,5 @@ class UserBuilder:
         return User(
             id=self._id,
             email=self._email,
-            password=self._password,
+            hashed_password=get_password_hash(self._password),
         )

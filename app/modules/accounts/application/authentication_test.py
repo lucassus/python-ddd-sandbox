@@ -6,7 +6,9 @@ import pytest
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.ports.authentication_token import AuthenticationToken
+from app.modules.accounts.application.testing.fake_password_hasher import FakePasswordHasher
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.user_id import UserID
 
@@ -25,24 +27,30 @@ class FakeAuthenticationToken(AuthenticationToken):
 class TestAuthenticate:
     @pytest.fixture()
     def authentication(self, uow: FakeUnitOfWork):
-        return Authentication(uow=uow, token=FakeAuthenticationToken(secret_key="test-secret"))
+        return Authentication(
+            uow=uow,
+            token=FakeAuthenticationToken(secret_key="test-secret"),
+            password_hasher=FakePasswordHasher(),
+        )
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
-        user = UserBuilder().with_email("test@email.com").with_password("secret-password").build()
+        password = Password("secret-password")
+        user = UserBuilder().with_email("test@email.com").with_password(password).build()
         repository.create(user)
 
         # When
-        token = authentication.login(user.email, user.password)
+        token = authentication.login(user.email, password)
 
         # Then
         assert isinstance(token, str)
 
     def test_trade_token_for_user(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
-        user = UserBuilder().build()
+        password = Password("passwd123")
+        user = UserBuilder().with_password(password).build()
         repository.create(user)
-        token = authentication.login(user.email, user.password)
+        token = authentication.login(user.email, password)
 
         # When
         user_dto = authentication.trade_token_for_user(token)

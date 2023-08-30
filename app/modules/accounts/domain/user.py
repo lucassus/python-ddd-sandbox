@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.aggregate_root import AggregateRoot
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -14,19 +13,19 @@ class User(AggregateRoot):
 
     _id: UserID
     _email: EmailAddress
-    _password: Password
+    _hashed_password: str
 
     def __init__(
         self,
         id: UserID,
         email: EmailAddress,
-        password: Password,
+        hashed_password: str,
     ):
         super().__init__()
 
         self._id = id
         self._email = email
-        self._password = password
+        self._hashed_password = hashed_password
 
         self.queue_event(User.AccountCreated(user_id=self._id))
 
@@ -43,8 +42,8 @@ class User(AggregateRoot):
         self._email = email
 
     @property
-    def password(self) -> Password:
-        return self._password
+    def hashed_password(self) -> str:
+        return self._hashed_password
 
     def __hash__(self):
         return hash(self._id)

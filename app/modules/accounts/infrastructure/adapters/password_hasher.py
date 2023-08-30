@@ -12,4 +12,7 @@ class PasswordHasher(AbstractPasswordHasher):
         return self._crypt_context.hash(str(password))
 
     def verify(self, password: Password, hashed_password: str) -> bool:
-        return self._crypt_context.verify(str(password), hashed_password)
+        try:
+            return self._crypt_context.verify(str(password), hashed_password)
+        except ValueError:
+            return False

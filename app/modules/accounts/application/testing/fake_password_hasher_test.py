@@ -8,4 +8,5 @@ def test_fake_password_hasher():
     password = Password("secret-password")
     hashed_password = hasher.hash(password)
 
+    assert str(password) != hashed_password
     assert hasher.verify(password, hashed_password)

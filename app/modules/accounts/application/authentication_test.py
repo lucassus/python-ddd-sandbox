@@ -35,20 +35,22 @@ class TestAuthenticate:
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
-        user = UserBuilder().with_email("test@email.com").with_password("secret-password").build()
+        password = Password("secret-password")
+        user = UserBuilder().with_email("test@email.com").with_password(password).build()
         repository.create(user)
 
         # When
-        token = authentication.login(user.email, Password("secret-password"))
+        token = authentication.login(user.email, password)
 
         # Then
         assert isinstance(token, str)
 
     def test_trade_token_for_user(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given
-        user = UserBuilder().with_password("passwd123").build()
+        password = Password("passwd123")
+        user = UserBuilder().with_password(password).build()
         repository.create(user)
-        token = authentication.login(user.email, Password("passwd123"))
+        token = authentication.login(user.email, password)
 
         # When
         user_dto = authentication.trade_token_for_user(token)

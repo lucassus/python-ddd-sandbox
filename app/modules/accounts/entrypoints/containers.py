@@ -4,9 +4,9 @@ from sqlalchemy import Engine
 from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
+from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
-from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.shared_kernel.message_bus import MessageBus
@@ -22,7 +22,7 @@ class ApplicationContainer(containers.DeclarativeContainer):
     uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider, bus=bus)
 
     auth_token = providers.Singleton(JWTAuthentication, secret_key=jwt_secret_key)
-    password_hasher = providers.Singleton(PasswordHasher)
+    password_hasher = providers.AbstractFactory(AbstractPasswordHasher)
     authentication = providers.Singleton(
         Authentication,
         uow=uow,

@@ -6,6 +6,7 @@ import pytest
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.ports.authentication_token import AuthenticationToken
+from app.modules.accounts.application.testing.fake_password_hasher import FakePasswordHasher
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user_builder import UserBuilder
@@ -26,7 +27,11 @@ class FakeAuthenticationToken(AuthenticationToken):
 class TestAuthenticate:
     @pytest.fixture()
     def authentication(self, uow: FakeUnitOfWork):
-        return Authentication(uow=uow, token=FakeAuthenticationToken(secret_key="test-secret"))
+        return Authentication(
+            uow=uow,
+            token=FakeAuthenticationToken(secret_key="test-secret"),
+            password_hasher=FakePasswordHasher(),
+        )
 
     def test_login_on_success(self, repository: AbstractUserRepository, authentication: Authentication):
         # Given

@@ -2,6 +2,7 @@ import pytest
 
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.application.testing.fake_password_hasher import FakePasswordHasher
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
@@ -12,7 +13,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 @pytest.fixture()
 def register_user(uow: FakeUnitOfWork, message_bus):
-    return RegisterUser(uow=uow)
+    return RegisterUser(uow=uow, password_hasher=FakePasswordHasher())
 
 
 def test_register_user_creates_a_user(

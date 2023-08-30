@@ -1,8 +1,6 @@
 import pytest
 from sqlalchemy.orm import Session
 
-from app.modules.accounts.application.password import get_password_hash
-from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository
 from app.modules.projects.domain.project import Project, ProjectName
@@ -19,7 +17,7 @@ def create_user(session: Session):
         user = User(
             id=UserID.generate(),
             email=email or EmailAddress("test@email.com"),
-            hashed_password=get_password_hash(Password("password")),
+            hashed_password="asdf",
         )
 
         repository.create(user)

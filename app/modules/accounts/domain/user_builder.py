@@ -1,6 +1,6 @@
 from typing import Self
 
-from app.modules.accounts.application.password import get_password_hash
+from app.modules.accounts.application.testing.fake_password_hasher import FakePasswordHasher
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
@@ -14,6 +14,7 @@ class UserBuilder:
 
     def __init__(self):
         self._id = UserID.generate()
+        self._password_hasher = FakePasswordHasher()
 
     def with_id(self, id: UserID) -> Self:
         self._id = id
@@ -31,5 +32,5 @@ class UserBuilder:
         return User(
             id=self._id,
             email=self._email,
-            hashed_password=get_password_hash(self._password),
+            hashed_password=self._password_hasher.hash(self._password),
         )

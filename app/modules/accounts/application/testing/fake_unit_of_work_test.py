@@ -1,10 +1,8 @@
 from unittest.mock import Mock
 
-from app.modules.accounts.application.password import get_password_hash
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
-from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -29,7 +27,7 @@ def test_unit_of_work_commit(repository: AbstractUserRepository, message_bus: Me
             User(
                 id=user_id,
                 email=EmailAddress("test@email.com"),
-                hashed_password=get_password_hash(Password("password")),
+                hashed_password="asdf",
             )
         )
 

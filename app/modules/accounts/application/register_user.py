@@ -1,4 +1,4 @@
-from app.modules.accounts.application.password import get_password_hash
+from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
@@ -8,8 +8,14 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class RegisterUser:
-    def __init__(self, *, uow: AbstractUnitOfWork):
+    def __init__(
+        self,
+        *,
+        uow: AbstractUnitOfWork,
+        password_hasher: AbstractPasswordHasher,
+    ):
         self._uow = uow
+        self._password_hasher = password_hasher
 
     def __call__(self, user_id: UserID, *, email: EmailAddress, password: Password):
         with self._uow as uow:
@@ -20,7 +26,7 @@ class RegisterUser:
                 User(
                     id=user_id,
                     email=email,
-                    hashed_password=get_password_hash(password),
+                    hashed_password=self._password_hasher.hash(password),
                 )
             )
 

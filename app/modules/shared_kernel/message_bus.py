@@ -1,6 +1,6 @@
 import abc
 from collections import defaultdict
-from typing import Callable, Protocol
+from typing import Callable, Generic, Protocol, TypeVar
 
 
 class Event(abc.ABC):
@@ -11,7 +11,13 @@ class Command(abc.ABC):
     pass
 
 
-Message = Command | Event
+T = TypeVar("T", bound=Command)
+
+
+class CommandHandler(Generic[T], metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def __call__(self, command: T) -> None:
+        raise NotImplementedError
 
 
 class SupportsDispatchingEvents(Protocol):
@@ -20,7 +26,7 @@ class SupportsDispatchingEvents(Protocol):
 
 
 class MessageBus(SupportsDispatchingEvents):
-    _command_handlers: dict[type[Command], Callable[[Command], None]]
+    _command_handlers: dict[type[Command], CommandHandler[Command]]
 
     _event_listeners: dict[type[Event], list[Callable[[Event], None]]]
 
@@ -38,7 +44,7 @@ class MessageBus(SupportsDispatchingEvents):
         for handle in handlers:
             handle(event)
 
-    def register(self, command_class: type[Command], fn: Callable[[Command], None]):
+    def register(self, command_class: type[Command], fn: CommandHandler[Command]):
         self._command_handlers[command_class] = fn
 
     def listen(self, event_class: type[Event], fn=None):

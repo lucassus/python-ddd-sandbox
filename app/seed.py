@@ -3,7 +3,7 @@ import typer
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
 from app.modules import mapper_registry
-from app.modules.accounts.application.register_user import RegisterUser, RegisterUserHandler
+from app.modules.accounts.application.commands.register_user import RegisterUser, RegisterUserHandler
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork

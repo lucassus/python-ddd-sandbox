@@ -1,6 +1,6 @@
 import pytest
 
-from app.modules.accounts.application.change_user_email_address import (
+from app.modules.accounts.application.commands.change_user_email_address import (
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
 )

@@ -6,8 +6,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
-from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.application.commands.change_user_email_address import ChangeUserEmailAddress
+from app.modules.accounts.application.commands.register_user import RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container

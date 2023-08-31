@@ -3,15 +3,17 @@ from app.shared.base_schema import BaseSchema
 from app.shared.email_address_field import EmailAddressField
 
 
-class RegisterUser(BaseSchema):
-    email: EmailAddressField
-    password: PasswordField
-
-
 class LoginUser(BaseSchema):
     email: EmailAddressField
     password: PasswordField
 
 
+# TODO: Replace this with a command
+class RegisterUser(BaseSchema):
+    email: EmailAddressField
+    password: PasswordField
+
+
+# TODO: Replace this with a command
 class UpdateUser(BaseSchema):
     email: EmailAddressField

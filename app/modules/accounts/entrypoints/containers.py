@@ -3,9 +3,9 @@ from sqlalchemy import Engine
 
 from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
-from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddressHandler
+from app.modules.accounts.application.commands.change_user_email_address import ChangeUserEmailAddressHandler
+from app.modules.accounts.application.commands.register_user import RegisterUserHandler
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
-from app.modules.accounts.application.register_user import RegisterUserHandler
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.accounts.queries.find_user_query import GetUserQuery

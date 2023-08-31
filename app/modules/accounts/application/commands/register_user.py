@@ -7,7 +7,7 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import Command
+from app.modules.shared_kernel.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
@@ -17,7 +17,7 @@ class RegisterUser(Command):
     password: Password
 
 
-class RegisterUserHandler:
+class RegisterUserHandler(CommandHandler[RegisterUser]):
     def __init__(
         self,
         *,

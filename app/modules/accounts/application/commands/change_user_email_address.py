@@ -4,7 +4,9 @@ from app.modules.accounts.application.ports.abstract_unit_of_work import Abstrac
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import Command
+from app.modules.shared_kernel.message_bus import Command, CommandHandler
+
+# TODO: Find a better place for commands and handlers
 
 
 @dataclass(frozen=True)
@@ -13,7 +15,7 @@ class ChangeUserEmailAddress(Command):
     new_email: EmailAddress
 
 
-class ChangeUserEmailAddressHandler:
+class ChangeUserEmailAddressHandler(CommandHandler[ChangeUserEmailAddress]):
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 

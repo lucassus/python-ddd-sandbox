@@ -30,17 +30,25 @@ def register_user(anonymous_client: TestClient):
         return anonymous_client.post(
             "/api/users",
             json={"email": email, "password": "password"},
-            follow_redirects=True,
         )
 
     return _register_user
 
 
 @pytest.fixture()
-def client(register_user, app):
+def client(register_user, app, anonymous_client):
     response = register_user("test@email.com")
     assert response.status_code == status.HTTP_200_OK  # noqa: S101
 
+    response = anonymous_client.post(
+        "/api/users/login",
+        data={
+            "grant_type": "password",
+            "username": "test@email.com",
+            "password": "password",
+        },
+    )
+    assert response.status_code == status.HTTP_200_OK  # noqa: S101
     token = response.json()["access_token"]
 
     return TestClient(

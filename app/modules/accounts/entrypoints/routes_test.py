@@ -38,7 +38,6 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         password=Password("password"),
     )
     assert response.status_code == status.HTTP_200_OK
-    assert "access_token" in response.json()
 
 
 @pytest.mark.parametrize(

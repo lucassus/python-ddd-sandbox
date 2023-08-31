@@ -7,7 +7,6 @@ from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.ports.authentication_token import AuthenticationToken
 from app.modules.accounts.application.register_user import RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
@@ -25,7 +24,6 @@ router = APIRouter(prefix="/users", tags=["users"])
 def user_register_endpoint(
     data: schemas.RegisterUser,
     register_user: RegisterUser = Depends(Provide[Container.application.register_user]),
-    auth_token: AuthenticationToken = Depends(Provide[Container.application.auth_token]),
 ):
     user_id = UserID.generate()
 
@@ -36,11 +34,6 @@ def user_register_endpoint(
             status_code=status.HTTP_409_CONFLICT,
             detail=str(e),
         ) from e
-
-    return {
-        "token_type": "bearer",
-        "access_token": auth_token.encode(user_id),
-    }
 
 
 @router.post("/login")

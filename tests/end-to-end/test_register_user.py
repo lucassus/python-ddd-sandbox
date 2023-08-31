@@ -8,7 +8,16 @@ from starlette.testclient import TestClient
 @freeze_time("2023-08-02 22:20:00")
 def test_register_user(register_user, anonymous_client: TestClient):
     response = register_user(email="test@email.com")
+    assert response.status_code == status.HTTP_200_OK
 
+    response = anonymous_client.post(
+        "/api/users/login",
+        data={
+            "grant_type": "password",
+            "username": "test@email.com",
+            "password": "password",
+        },
+    )
     assert response.status_code == status.HTTP_200_OK
     token = response.json()["access_token"]
 

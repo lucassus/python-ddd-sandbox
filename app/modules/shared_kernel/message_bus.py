@@ -13,7 +13,7 @@ class SupportsDispatchingEvents(Protocol):
 
 
 class MessageBus(SupportsDispatchingEvents):
-    _listeners: dict[type, list[Callable[[Event], None]]]
+    _listeners: dict[type[Event], list[Callable[[Event], None]]]
 
     def __init__(self):
         self._listeners = defaultdict(list)
@@ -24,7 +24,7 @@ class MessageBus(SupportsDispatchingEvents):
         for handle in handlers:
             handle(event)
 
-    def listen(self, event_class: type, fn=None):
+    def listen(self, event_class: type[Event], fn=None):
         def on(handler):
             self._listeners[event_class].append(handler)
 

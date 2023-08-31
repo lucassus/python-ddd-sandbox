@@ -3,9 +3,9 @@ from sqlalchemy import Engine
 
 from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
-from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
+from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddressCommandHandler
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
-from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.application.register_user import RegisterUserCommandHandler
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.accounts.queries.find_user_query import GetUserQuery
@@ -30,8 +30,8 @@ class ApplicationContainer(containers.DeclarativeContainer):
         password_hasher=password_hasher,
     )
 
-    register_user = providers.Singleton(RegisterUser, uow=uow, password_hasher=password_hasher)
-    change_user_email_address = providers.Singleton(ChangeUserEmailAddress, uow=uow)
+    register_user = providers.Singleton(RegisterUserCommandHandler, uow=uow, password_hasher=password_hasher)
+    change_user_email_address = providers.Singleton(ChangeUserEmailAddressCommandHandler, uow=uow)
 
 
 class QueriesContainer(containers.DeclarativeContainer):

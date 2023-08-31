@@ -1,7 +1,7 @@
 import pytest
 
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.application.register_user import RegisterUserCommandHandler
 from app.modules.accounts.application.testing.fake_password_hasher import FakePasswordHasher
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
@@ -13,12 +13,12 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 @pytest.fixture()
 def register_user(uow: FakeUnitOfWork, message_bus):
-    return RegisterUser(uow=uow, password_hasher=FakePasswordHasher())
+    return RegisterUserCommandHandler(uow=uow, password_hasher=FakePasswordHasher())
 
 
 def test_register_user_creates_a_user(
     uow: FakeUnitOfWork,
-    register_user: RegisterUser,
+    register_user: RegisterUserCommandHandler,
 ):
     # When
     register_user(
@@ -38,7 +38,7 @@ def test_register_user_creates_a_user(
 def test_register_user_validate_email_uniqueness(
     uow,
     repository: AbstractUserRepository,
-    register_user: RegisterUser,
+    register_user: RegisterUserCommandHandler,
 ):
     existing_user = UserBuilder().with_email("existing@email.com").build()
     repository.create(existing_user)

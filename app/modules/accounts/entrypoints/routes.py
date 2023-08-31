@@ -6,8 +6,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
-from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.application.change_user_email_address import (
+    ChangeUserEmailAddressCommandHandler,
+    ChangeUserEmailAddressCommand,
+)
+from app.modules.accounts.application.register_user import RegisterUserCommandHandler, RegisterUserCommand
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
@@ -23,12 +26,18 @@ router = APIRouter(prefix="/users", tags=["users"])
 @inject
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    register_user: RegisterUser = Depends(Provide[Container.application.register_user]),
+    register_user: RegisterUserCommandHandler = Depends(Provide[Container.application.register_user]),
 ):
     user_id = UserID.generate()
 
     try:
-        register_user(user_id, email=data.email, password=data.password)
+        register_user(
+            RegisterUserCommand(
+                user_id=user_id,
+                email=data.email,
+                password=data.password,
+            )
+        )
     except EmailAlreadyExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -56,11 +65,16 @@ def user_login_endpoint(
 def user_update_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.UpdateUser,
-    change_user_email_address: ChangeUserEmailAddress = Depends(
+    change_user_email_address: ChangeUserEmailAddressCommandHandler = Depends(
         Provide[Container.application.change_user_email_address]
     ),
 ):
-    change_user_email_address(user_id=current_user.id, new_email=data.email)
+    change_user_email_address(
+        ChangeUserEmailAddressCommand(
+            user_id=current_user.id,
+            new_email=data.email,
+        )
+    )
 
     return RedirectResponse(
         "/api/users/me",

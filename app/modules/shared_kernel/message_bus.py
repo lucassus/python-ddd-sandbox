@@ -7,6 +7,13 @@ class Event(abc.ABC):
     pass
 
 
+class Command(abc.ABC):
+    pass
+
+
+Message = Command | Event
+
+
 class SupportsDispatchingEvents(Protocol):
     def dispatch(self, event: Event) -> None:
         ...

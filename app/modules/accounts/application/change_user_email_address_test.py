@@ -1,6 +1,9 @@
 import pytest
 
-from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddressCommandHandler
+from app.modules.accounts.application.change_user_email_address import (
+    ChangeUserEmailAddress,
+    ChangeUserEmailAddressHandler,
+)
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError
@@ -11,7 +14,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 @pytest.fixture()
 def change_user_email_address(uow: FakeUnitOfWork):
-    return ChangeUserEmailAddressCommandHandler(uow=uow)
+    return ChangeUserEmailAddressHandler(uow=uow)
 
 
 class TestChangeUserEmailAddressUseCase:
@@ -19,15 +22,17 @@ class TestChangeUserEmailAddressUseCase:
         self,
         repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
-        change_user_email_address: ChangeUserEmailAddressCommandHandler,
+        change_user_email_address: ChangeUserEmailAddressHandler,
     ):
         # Given
         user = repository.create(UserBuilder().with_email("old@email.com").build())
 
         # When
         change_user_email_address(
-            user_id=user.id,
-            new_email=EmailAddress("new@email.com"),
+            ChangeUserEmailAddress(
+                user_id=user.id,
+                new_email=EmailAddress("new@email.com"),
+            )
         )
 
         # Then
@@ -37,12 +42,14 @@ class TestChangeUserEmailAddressUseCase:
     def test_raises_error_when_user_does_not_exist(
         self,
         uow: FakeUnitOfWork,
-        change_user_email_address: ChangeUserEmailAddressCommandHandler,
+        change_user_email_address: ChangeUserEmailAddressHandler,
     ):
         with pytest.raises(UserNotFoundError):
             change_user_email_address(
-                user_id=UserID.generate(),
-                new_email=EmailAddress("new@email.com"),
+                ChangeUserEmailAddress(
+                    user_id=UserID.generate(),
+                    new_email=EmailAddress("new@email.com"),
+                )
             )
 
         assert uow.committed is False
@@ -51,7 +58,7 @@ class TestChangeUserEmailAddressUseCase:
         self,
         repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
-        change_user_email_address: ChangeUserEmailAddressCommandHandler,
+        change_user_email_address: ChangeUserEmailAddressHandler,
     ):
         # Given
         repository.create(UserBuilder().with_email("taken@email.com").build())
@@ -60,8 +67,10 @@ class TestChangeUserEmailAddressUseCase:
         # When
         with pytest.raises(EmailAlreadyExistsException):
             change_user_email_address(
-                user_id=user.id,
-                new_email=EmailAddress("taken@email.com"),
+                ChangeUserEmailAddress(
+                    user_id=user.id,
+                    new_email=EmailAddress("taken@email.com"),
+                )
             )
 
         # Then
@@ -71,15 +80,17 @@ class TestChangeUserEmailAddressUseCase:
         self,
         repository: AbstractUserRepository,
         uow: FakeUnitOfWork,
-        change_user_email_address: ChangeUserEmailAddressCommandHandler,
+        change_user_email_address: ChangeUserEmailAddressHandler,
     ):
         # Given
         user = repository.create(UserBuilder().with_email("old@email.com").build())
 
         # When
         change_user_email_address(
-            user_id=user.id,
-            new_email=EmailAddress("old@email.com"),
+            ChangeUserEmailAddress(
+                user_id=user.id,
+                new_email=EmailAddress("old@email.com"),
+            )
         )
 
         # Then

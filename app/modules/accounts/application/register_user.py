@@ -7,16 +7,17 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.message_bus import Command
 
 
 @dataclass(frozen=True)
-class RegisterUserCommand:
+class RegisterUser(Command):
     user_id: UserID
     email: EmailAddress
     password: Password
 
 
-class RegisterUserCommandHandler:
+class RegisterUserHandler:
     def __init__(
         self,
         *,
@@ -26,7 +27,7 @@ class RegisterUserCommandHandler:
         self._uow = uow
         self._password_hasher = password_hasher
 
-    def __call__(self, command: RegisterUserCommand):
+    def __call__(self, command: RegisterUser):
         user_id, email, password = command.user_id, command.email, command.password
 
         with self._uow as uow:

@@ -3,7 +3,7 @@ import typer
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
 from app.modules import mapper_registry
-from app.modules.accounts.application.register_user import RegisterUserCommandHandler
+from app.modules.accounts.application.register_user import RegisterUser, RegisterUserHandler
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
@@ -32,7 +32,7 @@ class NoopMessageBus(MessageBus):
 bus = NoopMessageBus()
 
 accounts_uow = AccountsUnitOfWork(session_factory=_session_factory, bus=bus)
-register_user = RegisterUserCommandHandler(uow=accounts_uow, password_hasher=PasswordHasher())
+register_user = RegisterUserHandler(uow=accounts_uow, password_hasher=PasswordHasher())
 
 projects_uow = ProjectsUnitOfWork(session_factory=_session_factory, bus=bus)
 create_example_project = CreateExampleProject(uow=projects_uow)
@@ -51,9 +51,11 @@ def main(rebuild_db: bool = True):
 
     user_id = UserID.generate()
     register_user(
-        user_id=user_id,
-        email=EmailAddress("test@email.com"),
-        password=Password("password"),
+        RegisterUser(
+            user_id=user_id,
+            email=EmailAddress("test@email.com"),
+            password=Password("password"),
+        )
     )
 
     create_example_project(user_id)

@@ -26,12 +26,10 @@ def user_register_endpoint(
     data: schemas.RegisterUser,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    user_id = UserID.generate()
-
     try:
         bus.execute(
             RegisterUser(
-                user_id=user_id,
+                user_id=UserID.generate(),
                 email=data.email,
                 password=data.password,
             )

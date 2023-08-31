@@ -35,6 +35,7 @@ def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> Contain
 
     container = _create_container(bus)
 
+    # TODO: Find a better way to register commands
     bus.register(RegisterUser, container.application.register_user())
     bus.register(ChangeUserEmailAddress, container.application.change_user_email_address())
 

@@ -8,12 +8,10 @@ class LoginUser(BaseSchema):
     password: PasswordField
 
 
-# TODO: Replace this with a command
 class RegisterUser(BaseSchema):
     email: EmailAddressField
     password: PasswordField
 
 
-# TODO: Replace this with a command
 class UpdateUser(BaseSchema):
     email: EmailAddressField

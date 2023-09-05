@@ -4,8 +4,11 @@ from sqlalchemy.orm import registry
 
 from app.config import app_config
 from app.infrastructure.db import engine
-from app.modules.accounts.application.commands.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.commands.register_user import RegisterUser
+from app.modules.accounts.application.commands.change_user_email_address import (
+    ChangeUserEmailAddress,
+    ChangeUserEmailAddressHandler,
+)
+from app.modules.accounts.application.commands.register_user import RegisterUser, RegisterUserHandler
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
@@ -29,14 +32,26 @@ def _create_container(bus: MessageBus) -> Container:
     return container
 
 
+# TODO: Rename this function to bootstrap_module
 def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
     app.include_router(routes.router)
 
     container = _create_container(bus)
 
-    # TODO: Find a better way to register commands
-    bus.register(RegisterUser, container.application.register_user())
-    bus.register(ChangeUserEmailAddress, container.application.change_user_email_address())
+    bus.register(
+        RegisterUser,
+        RegisterUserHandler(
+            uow=container.application.uow(),
+            password_hasher=container.application.password_hasher(),
+        ),
+    )
+
+    bus.register(
+        ChangeUserEmailAddress,
+        ChangeUserEmailAddressHandler(
+            uow=container.application.uow(),
+        ),
+    )
 
     return container

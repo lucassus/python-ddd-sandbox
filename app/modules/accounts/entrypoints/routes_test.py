@@ -52,7 +52,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         ("", ""),
     ],
 )
-def test_register_user_endpoint_returns_422_when(client: TestClient, email, password):
+def test_register_user_endpoint_returns_422(client: TestClient, email, password):
     # When
     response = client.post(
         "/users",

@@ -1,15 +1,18 @@
-from app.modules.projects.application.create_example_project import CreateExampleProject
+from app.modules.projects.application.commands.create_example_project import (
+    CreateExampleProject,
+    CreateExampleProjectHandler,
+)
 from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
 def test_create_example_project(fake_uow: FakeUnitOfWork):
     # Given
-    create_example_project = CreateExampleProject(uow=fake_uow)
+    create_example_project = CreateExampleProjectHandler(uow=fake_uow)
     user_id = UserID.generate()
 
     # When
-    project_id = create_example_project(user_id=user_id)
+    project_id = create_example_project(CreateExampleProject(user_id=user_id))
 
     # Then
     assert fake_uow.committed

@@ -28,6 +28,11 @@ class SupportsDispatchingEvents(Protocol):
         ...
 
 
+class CommandHandlerNotFoundError(Exception):
+    def __init__(self, command: Command[Any]) -> None:
+        super().__init__(f"Command handler not found for {type(command)}")
+
+
 class MessageBus(SupportsDispatchingEvents):
     _command_handlers: dict[type[Command[Any]], CommandHandler[Command[Any], Any]]
 
@@ -38,7 +43,10 @@ class MessageBus(SupportsDispatchingEvents):
         self._command_handlers = {}
 
     def execute(self, command: Command[CR]) -> CR:
-        handler = self._command_handlers[type(command)]
+        handler = self._command_handlers.get(type(command))
+        if handler is None:
+            raise CommandHandlerNotFoundError(command)
+
         return handler(command)
 
     def dispatch(self, event: Event) -> None:

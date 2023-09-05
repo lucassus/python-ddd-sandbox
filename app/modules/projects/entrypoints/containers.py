@@ -3,11 +3,6 @@ from sqlalchemy import Engine
 
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.archivization_service import ArchivizationService
-from app.modules.projects.application.create_example_project import CreateExampleProject
-from app.modules.projects.application.create_project import CreateProject
-from app.modules.projects.application.tasks_service import TasksService
-from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
@@ -27,12 +22,6 @@ class ApplicationContainer(containers.DeclarativeContainer):
         bus=bus,
         session_factory=session_factory.provider,
     )
-
-    create_project = providers.Singleton(CreateProject, uow=uow, bus=bus)
-    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
-    update_project = providers.Singleton(UpdateProject, uow=uow)
-    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
-    tasks_service = providers.Singleton(TasksService, uow=uow)
 
 
 class QueriesContainer(containers.DeclarativeContainer):

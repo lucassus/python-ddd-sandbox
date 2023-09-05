@@ -17,12 +17,7 @@ class RegisterUser(Command[UserID]):
 
 
 class RegisterUserHandler(CommandHandler[RegisterUser, UserID]):
-    def __init__(
-        self,
-        *,
-        uow: AbstractUnitOfWork,
-        password_hasher: AbstractPasswordHasher,
-    ):
+    def __init__(self, *, uow: AbstractUnitOfWork, password_hasher: AbstractPasswordHasher):
         self._uow = uow
         self._password_hasher = password_hasher
 

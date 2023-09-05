@@ -87,7 +87,7 @@ class Project(AggregateRoot):
     def deleted_at(self) -> None | datetime:
         return self._deleted_at
 
-    def add_task(self, *, name: str, created_by: Optional[UserID] = None) -> Task:
+    def add_task(self, name: str, created_by: Optional[UserID] = None) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
         self._last_task_number = TaskNumber(self._last_task_number + 1)

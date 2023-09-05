@@ -12,13 +12,9 @@ def _session_factory():
 
 @bus.listen(User.AccountCreated)
 def create_example_project_handler(event: User.AccountCreated):
-    from app.modules.projects.application.create_example_project import CreateExampleProject
-    from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
+    from app.modules.projects.application.commands.create_example_project import CreateExampleProject
 
-    uow = UnitOfWork(session_factory=_session_factory, bus=bus)
-    create_example_project = CreateExampleProject(uow=uow)
-
-    create_example_project(user_id=event.user_id)
+    bus.execute(CreateExampleProject(user_id=event.user_id))
 
 
 @bus.listen(User.AccountCreated)

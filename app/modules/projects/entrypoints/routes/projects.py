@@ -6,14 +6,18 @@ from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.archivization_service import ArchivizationService
-from app.modules.projects.application.create_project import CreateProject
-from app.modules.projects.application.update_project import UpdateProject
+from app.modules.projects.application.commands.archive_project import ArchiveProject
+from app.modules.projects.application.commands.create_project import CreateProject
+from app.modules.projects.application.commands.delete_project import DeleteProject
+from app.modules.projects.application.commands.unarchive_project import UnarchiveProject
+from app.modules.projects.application.commands.update_project import UpdateProject
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
+from app.modules.shared_kernel.message_bus import MessageBus
+from app.utc_datetime import utc_now
 
 router = APIRouter(prefix="/projects")
 
@@ -23,11 +27,13 @@ router = APIRouter(prefix="/projects")
 def project_create_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.CreateProject,
-    create_project: CreateProject = Depends(Provide[Container.application.create_project]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    project_id = create_project(
-        user_id=current_user.id,
-        name=ProjectName(data.name),
+    project_id = bus.execute(
+        CreateProject(
+            user_id=current_user.id,
+            name=ProjectName(data.name),
+        ),
     )
 
     return RedirectResponse(
@@ -66,9 +72,14 @@ def get_project_endpoint(
 def update_project_endpoint(
     project_id: int,
     data: schemas.UpdateProject,
-    update_project: UpdateProject = Depends(Provide[Container.application.update_project]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    update_project(ProjectID(project_id), ProjectName(data.name))
+    bus.execute(
+        UpdateProject(
+            project_id=ProjectID(project_id),
+            name=ProjectName(data.name),
+        ),
+    )
 
     return RedirectResponse(
         f"/api/projects/{project_id}",
@@ -80,9 +91,15 @@ def update_project_endpoint(
 @inject
 def archive_project_endpoint(
     project_id: int,
-    archivization_service: ArchivizationService = Depends(Provide[Container.application.archivization_service]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    archivization_service.archive(ProjectID(project_id))
+    bus.execute(
+        ArchiveProject(
+            project_id=ProjectID(project_id),
+            now=utc_now(),
+        )
+    )
+
     return Response(status_code=HTTP_200_OK)
 
 
@@ -90,9 +107,9 @@ def archive_project_endpoint(
 @inject
 def unarchive_project_endpoint(
     project_id: int,
-    archivization_service: ArchivizationService = Depends(Provide[Container.application.archivization_service]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    archivization_service.unarchive(ProjectID(project_id))
+    bus.execute(UnarchiveProject(project_id=ProjectID(project_id)))
     return Response(status_code=HTTP_200_OK)
 
 
@@ -100,7 +117,7 @@ def unarchive_project_endpoint(
 @inject
 def delete_project_endpoint(
     project_id: int,
-    archivization_service: ArchivizationService = Depends(Provide[Container.application.archivization_service]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    archivization_service.delete(ProjectID(project_id))
+    bus.execute(DeleteProject(project_id=ProjectID(project_id), now=utc_now()))
     return Response(status_code=HTTP_200_OK)

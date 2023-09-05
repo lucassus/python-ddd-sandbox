@@ -1,9 +1,11 @@
-from unittest.mock import Mock
+from unittest.mock import ANY, Mock
 
 from starlette.testclient import TestClient
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.tasks_service import TasksService
+from app.modules.projects.application.commands.complete_task import CompleteTask
+from app.modules.projects.application.commands.create_task import CreateTask
+from app.modules.projects.application.commands.incomplete_task import IncompleteTask
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.containers import Container
@@ -11,12 +13,13 @@ from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.task_queries import ListTasksQuery
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.message_bus import MessageBus
 
 
 def test_task_create_endpoint(container: Container, app, client: TestClient):
     # Given
-    mock_tasks_service = Mock(spec=TasksService)
-    mock_tasks_service.create_task.return_value = TaskNumber(1)
+    bus_mock = Mock(spec=MessageBus)
+    bus_mock.execute.return_value = TaskNumber(1)
     user_id = UserID.generate()
 
     app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
@@ -25,7 +28,7 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     )
 
     # When
-    with container.application.tasks_service.override(mock_tasks_service):
+    with container.bus.override(bus_mock):
         response = client.post(
             "/projects/123/tasks",
             json={"name": "Some task"},
@@ -35,10 +38,12 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/api/projects/123/tasks/1"
-    mock_tasks_service.create_task.assert_called_once_with(
-        project_id=ProjectID(123),
-        name="Some task",
-        created_by=user_id,
+    bus_mock.execute.assert_called_once_with(
+        CreateTask(
+            project_id=ProjectID(123),
+            name="Some task",
+            created_by=user_id,
+        )
     )
 
 
@@ -78,11 +83,11 @@ def test_task_list_endpoint(container: Container, client: TestClient):
 
 def test_task_complete_endpoint(container: Container, client: TestClient):
     # Given
-    mock_tasks_service = Mock(spec=TasksService)
-    mock_tasks_service.create_task.return_value = TaskNumber(667)
+    bus_mock = Mock(spec=MessageBus)
+    bus_mock.execute.return_value = TaskNumber(667)
 
     # When
-    with container.application.tasks_service.override(mock_tasks_service):
+    with container.bus.override(bus_mock):
         response = client.put(
             "/projects/665/tasks/667/complete",
             follow_redirects=False,
@@ -91,16 +96,22 @@ def test_task_complete_endpoint(container: Container, client: TestClient):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/api/projects/665/tasks/667"
-    mock_tasks_service.complete_task.assert_called_once_with(ProjectID(665), TaskNumber(667))
+    bus_mock.execute.assert_called_once_with(
+        CompleteTask(
+            project_id=ProjectID(665),
+            task_number=TaskNumber(667),
+            now=ANY,
+        )
+    )
 
 
 def test_task_incomplete_endpoint(container: Container, client: TestClient):
     # Given
-    mock_tasks_service = Mock(spec=TasksService)
-    mock_tasks_service.create_task.return_value = TaskNumber(668)
+    bus_mock = Mock(spec=MessageBus)
+    bus_mock.execute.return_value = TaskNumber(668)
 
     # When
-    with container.application.tasks_service.override(mock_tasks_service):
+    with container.bus.override(bus_mock):
         response = client.put(
             "/projects/665/tasks/668/incomplete",
             follow_redirects=False,
@@ -109,4 +120,9 @@ def test_task_incomplete_endpoint(container: Container, client: TestClient):
     # Then
     assert response.status_code == 303
     assert response.headers["Location"] == "/api/projects/665/tasks/668"
-    mock_tasks_service.incomplete_task.assert_called_once_with(ProjectID(665), TaskNumber(668))
+    bus_mock.execute.assert_called_once_with(
+        IncompleteTask(
+            project_id=ProjectID(665),
+            task_number=TaskNumber(668),
+        )
+    )

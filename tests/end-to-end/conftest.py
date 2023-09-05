@@ -54,17 +54,7 @@ def client(app, anonymous_client):
     )
 
 
-@pytest.fixture()
-def create_project(client: TestClient):
-    def _create_project(name: str):
-        return client.post(
-            "/api/projects",
-            json={"name": name},
-        )
-
-    return _create_project
-
-
+# TODO: Drop it...
 @pytest.fixture()
 def create_task(client: TestClient):
     def _create_task(project_id: int, name: str):

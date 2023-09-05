@@ -32,7 +32,7 @@ ignore_missing_imports = true
 explicit_package_bases = true
 
 # This allows discovery of imported packages that don’t have an factories.py
-#namespace_packages = true
+namespace_packages = true
 
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"

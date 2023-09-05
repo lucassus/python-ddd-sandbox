@@ -8,7 +8,6 @@ from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.email_address import EmailAddress
-from app.modules.shared_kernel.entities.user_id import UserID
 
 
 @pytest.fixture()

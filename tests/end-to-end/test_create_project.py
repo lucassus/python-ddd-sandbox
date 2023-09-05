@@ -21,7 +21,7 @@ def test_create_project_unauthenticated(anonymous_client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_list_projects(register_user, create_project, client: TestClient):
+def test_list_projects(create_project, client: TestClient):
     # Given
     response = create_project(name="Project A")
     assert response.status_code == status.HTTP_200_OK

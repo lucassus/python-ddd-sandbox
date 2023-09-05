@@ -5,7 +5,6 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.anys import AnyUUID
 from app.modules.accounts.application.commands.register_user import RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password

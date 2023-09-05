@@ -1,11 +1,22 @@
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.modules.accounts.application.commands.register_user import RegisterUser
+from app.modules.accounts.domain.password import Password
+from app.modules.event_handlers import bus
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 
-def test_login(register_user, anonymous_client: TestClient):
-    response = register_user(email="just@email.com")
-    assert response.status_code == status.HTTP_200_OK
 
+def test_login(anonymous_client: TestClient):
+    # Given
+    bus.execute(
+        RegisterUser(
+            email=EmailAddress("just@email.com"),
+            password=Password("password"),
+        ),
+    )
+
+    # When
     response = anonymous_client.post(
         "/api/users/login",
         data={

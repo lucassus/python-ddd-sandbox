@@ -1,6 +1,6 @@
 import abc
 from collections import defaultdict
-from typing import Callable, Generic, Protocol, TypeVar, Any, cast
+from typing import Any, Callable, Generic, Protocol, TypeVar, cast
 
 
 class Event(metaclass=abc.ABCMeta):

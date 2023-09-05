@@ -1,5 +1,5 @@
 import abc
-from typing import Any, Generic, TypeVar, Type, cast
+from typing import Any, Generic, Type, TypeVar, cast
 
 CR = TypeVar("CR", bound=Any)
 
@@ -17,7 +17,6 @@ class CommandHandler(Generic[C, CR]):
         raise NotImplementedError
 
 
-# TODO: Incorporate this with the main MessageBus class
 class CommandBus:
     _handlers: dict[type[Command[Any]], CommandHandler[Command[Any], Any]]
 

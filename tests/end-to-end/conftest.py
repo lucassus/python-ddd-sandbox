@@ -5,6 +5,10 @@ from starlette.testclient import TestClient
 from app import create_app
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
+from app.modules.accounts.application.commands.register_user import RegisterUser
+from app.modules.accounts.domain.password import Password
+from app.modules.event_handlers import bus
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 @pytest.fixture(autouse=True)
@@ -25,20 +29,13 @@ def anonymous_client(app):
 
 
 @pytest.fixture()
-def register_user(anonymous_client: TestClient):
-    def _register_user(email: str):
-        return anonymous_client.post(
-            "/api/users",
-            json={"email": email, "password": "password"},
-        )
-
-    return _register_user
-
-
-@pytest.fixture()
-def client(register_user, app, anonymous_client):
-    response = register_user("test@email.com")
-    assert response.status_code == status.HTTP_200_OK  # noqa: S101
+def client(app, anonymous_client):
+    bus.execute(
+        RegisterUser(
+            email=EmailAddress("test@email.com"),
+            password=Password("password"),
+        ),
+    )
 
     response = anonymous_client.post(
         "/api/users/login",
@@ -58,7 +55,7 @@ def client(register_user, app, anonymous_client):
 
 
 @pytest.fixture()
-def create_project(register_user, client: TestClient):
+def create_project(client: TestClient):
     def _create_project(name: str):
         return client.post(
             "/api/projects",

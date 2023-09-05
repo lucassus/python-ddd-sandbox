@@ -1,33 +1,36 @@
 import abc
-from typing import Any, Generic, TypeVar, Type
+from typing import Any, Generic, TypeVar, Type, cast
 
-R = TypeVar("R", contravariant=True)
-C = TypeVar("C")
+CR = TypeVar("CR", bound=Any)
 
 
-class Command(Generic[R]):
+class Command(Generic[CR]):
     pass
 
 
-class CommandHandler(Generic[R, C]):
+C = TypeVar("C", bound=Command[Any])
+
+
+class CommandHandler(Generic[C, CR]):
     @abc.abstractmethod
-    def __call__(self, command: C) -> R:
+    def __call__(self, command: C) -> CR:
         raise NotImplementedError
 
 
+# TODO: Incorporate this with the main MessageBus class
 class CommandBus:
-    _handlers: dict[type[Command[Any]], CommandHandler[Any, Command[Any]]]
+    _handlers: dict[type[Command[Any]], CommandHandler[Command[Any], Any]]
 
     def __init__(self) -> None:
         self._handlers = {}
 
     def register(
         self,
-        command_type: Type[Command[R]],
-        handler: CommandHandler[R, Command[R]],
+        command_type: Type[C],
+        handler: CommandHandler[C, CR],
     ) -> None:
-        self._handlers[command_type] = handler
+        self._handlers[command_type] = cast(CommandHandler[Any, Command[Any]], handler)
 
-    def execute(self, command: Command[R]) -> R:
-        handler: CommandHandler[R, Command[R]] = self._handlers[type(command)]
+    def execute(self, command: Command[CR]) -> CR:
+        handler = self._handlers[type(command)]
         return handler(command)

@@ -1,6 +1,6 @@
 import abc
 from collections import defaultdict
-from typing import Callable, Generic, Protocol, TypeVar
+from typing import Callable, Generic, Protocol, TypeVar, Any
 
 
 class Event(abc.ABC):
@@ -11,12 +11,12 @@ class Command(abc.ABC):
     pass
 
 
-T = TypeVar("T", bound=Command)
+C = TypeVar("C", bound=Command, contravariant=True)
 
 
-class CommandHandler(Generic[T], metaclass=abc.ABCMeta):
+class CommandHandler(Generic[C], metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __call__(self, command: T) -> None:
+    def __call__(self, command: C) -> None:
         raise NotImplementedError
 
 
@@ -26,7 +26,7 @@ class SupportsDispatchingEvents(Protocol):
 
 
 class MessageBus(SupportsDispatchingEvents):
-    _command_handlers: dict[type[Command], CommandHandler[Command]]
+    _command_handlers: dict[type[Command], CommandHandler[Any]]
 
     _event_listeners: dict[type[Event], list[Callable[[Event], None]]]
 
@@ -44,11 +44,19 @@ class MessageBus(SupportsDispatchingEvents):
         for handle in handlers:
             handle(event)
 
-    def register(self, command_class: type[Command], fn: CommandHandler[Command]):
-        self._command_handlers[command_class] = fn
+    def register(
+        self,
+        command_class: type[C],
+        handler: CommandHandler[C],
+    ):
+        self._command_handlers[command_class] = handler
 
-    def listen(self, event_class: type[Event], fn=None):
+    def listen(
+        self,
+        event_class: type[Event],
+        handler=None,
+    ):
         def on(handler):
             self._event_listeners[event_class].append(handler)
 
-        return on(fn) if fn else on
+        return on(handler) if handler else on

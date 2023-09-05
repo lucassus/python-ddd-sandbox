@@ -8,12 +8,12 @@ from app.modules.shared_kernel.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class ChangeUserEmailAddress(Command):
+class ChangeUserEmailAddress(Command[None]):
     user_id: UserID
     new_email: EmailAddress
 
 
-class ChangeUserEmailAddressHandler(CommandHandler[ChangeUserEmailAddress]):
+class ChangeUserEmailAddressHandler(CommandHandler[ChangeUserEmailAddress, None]):
     def __init__(self, *, uow: AbstractUnitOfWork):
         self._uow = uow
 

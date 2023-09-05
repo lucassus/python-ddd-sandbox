@@ -21,9 +21,8 @@ def test_register_user_creates_a_user(
     register_user: RegisterUserHandler,
 ):
     # When
-    register_user(
+    user_id = register_user(
         RegisterUser(
-            user_id=UserID.generate(),
             email=EmailAddress("test@email.com"),
             password=Password("passwd123"),
         )
@@ -35,6 +34,7 @@ def test_register_user_creates_a_user(
     assert user is not None
     assert user.email == EmailAddress("test@email.com")
     assert isinstance(user.hashed_password, str)
+    assert user.id == user_id
 
 
 def test_register_user_validate_email_uniqueness(
@@ -52,7 +52,6 @@ def test_register_user_validate_email_uniqueness(
     ):
         register_user(
             RegisterUser(
-                user_id=UserID.generate(),
                 email=EmailAddress("existing@email.com"),
                 password=Password("passwd123"),
             )

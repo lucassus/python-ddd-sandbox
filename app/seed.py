@@ -50,13 +50,7 @@ def main(rebuild_db: bool = True):
     start_project_mappers(mapper_registry)
 
     user_id = UserID.generate()
-    register_user(
-        RegisterUser(
-            user_id=user_id,
-            email=EmailAddress("test@email.com"),
-            password=Password("password"),
-        )
-    )
+    register_user(RegisterUser(email=EmailAddress("test@email.com"), password=Password("password")))
 
     create_example_project(user_id)
 

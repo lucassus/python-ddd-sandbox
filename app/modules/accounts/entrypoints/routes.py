@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, reveal_type
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -27,13 +27,7 @@ def user_register_endpoint(
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
     try:
-        bus.execute(
-            RegisterUser(
-                user_id=UserID.generate(),
-                email=data.email,
-                password=data.password,
-            )
-        )
+        bus.execute(RegisterUser(email=data.email, password=data.password))
     except EmailAlreadyExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

@@ -1,22 +1,25 @@
 import abc
 from collections import defaultdict
-from typing import Callable, Generic, Protocol, TypeVar, Any
+from typing import Callable, Generic, Protocol, TypeVar, Any, cast
 
 
-class Event(abc.ABC):
+class Event(metaclass=abc.ABCMeta):
     pass
 
 
-class Command(abc.ABC):
+CR = TypeVar("CR", bound=Any)
+
+
+class Command(Generic[CR], metaclass=abc.ABCMeta):
     pass
 
 
-C = TypeVar("C", bound=Command, contravariant=True)
+C = TypeVar("C", bound=Command[Any])
 
 
-class CommandHandler(Generic[C], metaclass=abc.ABCMeta):
+class CommandHandler(Generic[C, CR], metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __call__(self, command: C) -> None:
+    def __call__(self, command: C) -> CR:
         raise NotImplementedError
 
 
@@ -26,7 +29,7 @@ class SupportsDispatchingEvents(Protocol):
 
 
 class MessageBus(SupportsDispatchingEvents):
-    _command_handlers: dict[type[Command], CommandHandler[Any]]
+    _command_handlers: dict[type[Command[Any]], CommandHandler[Command[Any], Any]]
 
     _event_listeners: dict[type[Event], list[Callable[[Event], None]]]
 
@@ -34,9 +37,9 @@ class MessageBus(SupportsDispatchingEvents):
         self._event_listeners = defaultdict(list)
         self._command_handlers = {}
 
-    def execute(self, command: Command):
+    def execute(self, command: Command[CR]) -> CR:
         handler = self._command_handlers[type(command)]
-        handler(command)
+        return handler(command)
 
     def dispatch(self, event: Event) -> None:
         handlers = self._event_listeners[type(event)]
@@ -47,9 +50,9 @@ class MessageBus(SupportsDispatchingEvents):
     def register(
         self,
         command_class: type[C],
-        handler: CommandHandler[C],
+        handler: CommandHandler[C, CR],
     ):
-        self._command_handlers[command_class] = handler
+        self._command_handlers[command_class] = cast(CommandHandler[Any, Command[Any]], handler)
 
     def listen(
         self,

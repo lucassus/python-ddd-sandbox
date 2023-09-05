@@ -36,7 +36,6 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     # Then
     bus_mock.execute.assert_called_with(
         RegisterUser(
-            user_id=AnyUUID,  # type: ignore
             email=EmailAddress("test@email.com"),
             password=Password("password"),
         )

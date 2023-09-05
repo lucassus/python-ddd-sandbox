@@ -11,13 +11,12 @@ from app.modules.shared_kernel.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class RegisterUser(Command):
-    user_id: UserID
+class RegisterUser(Command[UserID]):
     email: EmailAddress
     password: Password
 
 
-class RegisterUserHandler(CommandHandler[RegisterUser]):
+class RegisterUserHandler(CommandHandler[RegisterUser, UserID]):
     def __init__(
         self,
         *,
@@ -27,8 +26,9 @@ class RegisterUserHandler(CommandHandler[RegisterUser]):
         self._uow = uow
         self._password_hasher = password_hasher
 
-    def __call__(self, command: RegisterUser):
-        user_id, email, password = command.user_id, command.email, command.password
+    def __call__(self, command: RegisterUser) -> UserID:
+        user_id = UserID.generate()
+        email, password = command.email, command.password
 
         with self._uow as uow:
             if uow.users.exists_by_email(email):
@@ -43,3 +43,5 @@ class RegisterUserHandler(CommandHandler[RegisterUser]):
             )
 
             uow.commit()
+
+        return user_id

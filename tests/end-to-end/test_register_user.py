@@ -75,12 +75,7 @@ def test_register_user(anonymous_client: TestClient):
 
 def test_register_user_fail(anonymous_client: TestClient):
     # Given
-    bus.execute(
-        RegisterUser(
-            email=EmailAddress("taken@email.com"),
-            password=Password("password"),
-        ),
-    )
+    bus.execute(RegisterUser(EmailAddress("taken@email.com"), Password("password")))
 
     # When
     response = anonymous_client.post(

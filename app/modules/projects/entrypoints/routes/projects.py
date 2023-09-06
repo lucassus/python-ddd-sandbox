@@ -29,12 +29,7 @@ def project_create_endpoint(
     data: schemas.CreateProject,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    project_id = bus.execute(
-        CreateProject(
-            user_id=current_user.id,
-            name=ProjectName(data.name),
-        ),
-    )
+    project_id = bus.execute(CreateProject(current_user.id, ProjectName(data.name)))
 
     return RedirectResponse(
         f"/api/projects/{project_id}",
@@ -74,12 +69,7 @@ def update_project_endpoint(
     data: schemas.UpdateProject,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    bus.execute(
-        UpdateProject(
-            project_id=ProjectID(project_id),
-            name=ProjectName(data.name),
-        ),
-    )
+    bus.execute(UpdateProject(ProjectID(project_id), ProjectName(data.name)))
 
     return RedirectResponse(
         f"/api/projects/{project_id}",
@@ -93,13 +83,7 @@ def archive_project_endpoint(
     project_id: int,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    bus.execute(
-        ArchiveProject(
-            project_id=ProjectID(project_id),
-            now=utc_now(),
-        )
-    )
-
+    bus.execute(ArchiveProject(ProjectID(project_id), now=utc_now()))
     return Response(status_code=HTTP_200_OK)
 
 
@@ -109,7 +93,7 @@ def unarchive_project_endpoint(
     project_id: int,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    bus.execute(UnarchiveProject(project_id=ProjectID(project_id)))
+    bus.execute(UnarchiveProject(ProjectID(project_id)))
     return Response(status_code=HTTP_200_OK)
 
 
@@ -119,5 +103,5 @@ def delete_project_endpoint(
     project_id: int,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    bus.execute(DeleteProject(project_id=ProjectID(project_id), now=utc_now()))
+    bus.execute(DeleteProject(ProjectID(project_id), now=utc_now()))
     return Response(status_code=HTTP_200_OK)

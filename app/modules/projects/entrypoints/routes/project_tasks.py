@@ -30,9 +30,9 @@ def task_create_endpoint(
 ):
     task_number = bus.execute(
         CreateTask(
-            project_id=ProjectID(project_id),
-            created_by=current_user.id,
+            ProjectID(project_id),
             name=data.name,
+            created_by=current_user.id,
         ),
     )
 
@@ -75,13 +75,7 @@ def task_complete_endpoint(
     task_number: int = Path(..., description="The number of the task to complete", ge=1),
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    bus.execute(
-        CompleteTask(
-            project_id=ProjectID(project_id),
-            task_number=TaskNumber(task_number),
-            now=utc_now(),
-        ),
-    )
+    bus.execute(CompleteTask(ProjectID(project_id), TaskNumber(task_number), now=utc_now()))
 
     return RedirectResponse(
         f"/api/projects/{project_id}/tasks/{task_number}",
@@ -96,12 +90,7 @@ def task_incomplete_endpoint(
     task_number: int = Path(..., description="The number of the task to incomplete", ge=1),
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    bus.execute(
-        IncompleteTask(
-            project_id=ProjectID(project_id),
-            task_number=TaskNumber(task_number),
-        )
-    )
+    bus.execute(IncompleteTask(ProjectID(project_id), TaskNumber(task_number)))
 
     return RedirectResponse(
         f"/api/projects/{project_id}/tasks/{task_number}",

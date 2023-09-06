@@ -9,12 +9,7 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 def test_login(anonymous_client: TestClient):
     # Given
-    bus.execute(
-        RegisterUser(
-            email=EmailAddress("just@email.com"),
-            password=Password("password"),
-        ),
-    )
+    bus.execute(RegisterUser(EmailAddress("just@email.com"), Password("password")))
 
     # When
     response = anonymous_client.post(

@@ -5,17 +5,13 @@ from app.modules.event_handlers import bus
 from app.modules.projects.application.commands.archive_project import ArchiveProject
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.domain.project import ProjectName
-from app.modules.shared_kernel.entities.user_id import UserID
 from app.utc_datetime import utc_now
 
 
-def test_delete_project(client: TestClient):
+def test_delete_project(current_user, client: TestClient):
     # Given
-    # TODO: Find a better way to get current user_id
-    user_id = UserID(client.get("/api/users/me").json()["id"])
-
-    project_id = bus.execute(CreateProject(user_id=user_id, name=ProjectName("Project X")))
-    bus.execute(ArchiveProject(project_id=project_id, now=utc_now()))
+    project_id = bus.execute(CreateProject(current_user.id, ProjectName("Project X")))
+    bus.execute(ArchiveProject(project_id, now=utc_now()))
 
     response = client.delete(f"/api/projects/{project_id}")
     assert response.status_code == status.HTTP_200_OK

@@ -4,7 +4,6 @@ from starlette.testclient import TestClient
 from app.modules.event_handlers import bus
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.domain.project import ProjectName
-from app.modules.shared_kernel.entities.user_id import UserID
 
 
 def test_create_project(client: TestClient):
@@ -29,14 +28,10 @@ def test_create_project_unauthenticated(anonymous_client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_list_projects(client: TestClient):
+def test_list_projects(current_user, client: TestClient):
     # Given
-
-    # TODO: Find a better way to get current user_id
-    user_id = UserID(client.get("/api/users/me").json()["id"])
-
-    bus.execute(CreateProject(user_id=user_id, name=ProjectName("Project A")))
-    bus.execute(CreateProject(user_id=user_id, name=ProjectName("Project B")))
+    bus.execute(CreateProject(current_user.id, ProjectName("Project A")))
+    bus.execute(CreateProject(current_user.id, ProjectName("Project B")))
 
     # When
     response = client.get("/api/projects")

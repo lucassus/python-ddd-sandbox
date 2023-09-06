@@ -52,15 +52,3 @@ def client(app, anonymous_client):
         app,
         headers={"Authorization": f"Bearer {token}"},
     )
-
-
-# TODO: Drop it...
-@pytest.fixture()
-def create_task(client: TestClient):
-    def _create_task(project_id: int, name: str):
-        return client.post(
-            f"/api/projects/{project_id}/tasks",
-            json={"name": name},
-        )
-
-    return _create_task

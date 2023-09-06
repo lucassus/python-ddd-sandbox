@@ -1,4 +1,4 @@
-from app.modules.projects.application.commands.create_task import CreateTask, CreateTaskHandler
+from app.modules.projects.application.commands import CreateTask, CreateTaskHandler
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.project_builder import ProjectBuilder
 

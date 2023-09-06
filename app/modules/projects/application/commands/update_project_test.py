@@ -1,4 +1,4 @@
-from app.modules.projects.application.commands.update_project import UpdateProject, UpdateProjectHandler
+from app.modules.projects.application.commands import UpdateProject, UpdateProjectHandler
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.project import ProjectName
 from app.modules.projects.domain.project_builder import ProjectBuilder

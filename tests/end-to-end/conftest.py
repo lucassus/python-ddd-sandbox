@@ -5,7 +5,7 @@ from starlette.testclient import TestClient
 from app import create_app
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
-from app.modules.accounts.application.commands.register_user import RegisterUser
+from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.domain.password import Password
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.event_handlers import bus

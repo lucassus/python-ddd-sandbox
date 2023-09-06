@@ -1,4 +1,4 @@
-from app.modules.projects.application.commands.unarchive_project import UnarchiveProject, UnarchiveProjectHandler
+from app.modules.projects.application.commands import UnarchiveProject, UnarchiveProjectHandler
 from app.modules.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.projects.domain.project_builder import ProjectBuilder

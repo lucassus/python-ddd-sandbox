@@ -4,11 +4,12 @@ from sqlalchemy.orm import registry
 
 from app.config import app_config
 from app.infrastructure.db import engine
-from app.modules.accounts.application.commands.change_user_email_address import (
+from app.modules.accounts.application.commands import (
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
+    RegisterUser,
+    RegisterUserHandler,
 )
-from app.modules.accounts.application.commands.register_user import RegisterUser, RegisterUserHandler
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher

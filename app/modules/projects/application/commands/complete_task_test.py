@@ -1,4 +1,4 @@
-from app.modules.projects.application.commands.complete_task import CompleteTask, CompleteTaskHandler
+from app.modules.projects.application.commands import CompleteTask, CompleteTaskHandler
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.project_builder import ProjectBuilder
 from app.utc_datetime import utc_datetime

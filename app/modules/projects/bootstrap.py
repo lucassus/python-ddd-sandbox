@@ -2,18 +2,26 @@ from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
 from app.infrastructure.db import engine
-from app.modules.projects.application.commands.archive_project import ArchiveProject, ArchiveProjectHandler
-from app.modules.projects.application.commands.complete_task import CompleteTask, CompleteTaskHandler
-from app.modules.projects.application.commands.create_example_project import (
+from app.modules.projects.application.commands import (
+    ArchiveProject,
+    ArchiveProjectHandler,
+    CompleteTask,
+    CompleteTaskHandler,
     CreateExampleProject,
     CreateExampleProjectHandler,
+    CreateProject,
+    CreateProjectHandler,
+    CreateTask,
+    CreateTaskHandler,
+    DeleteProject,
+    DeleteProjectHandler,
+    IncompleteTask,
+    IncompleteTaskHandler,
+    UnarchiveProject,
+    UnarchiveProjectHandler,
+    UpdateProject,
+    UpdateProjectHandler,
 )
-from app.modules.projects.application.commands.create_project import CreateProject, CreateProjectHandler
-from app.modules.projects.application.commands.create_task import CreateTask, CreateTaskHandler
-from app.modules.projects.application.commands.delete_project import DeleteProject, DeleteProjectHandler
-from app.modules.projects.application.commands.incomplete_task import IncompleteTask, IncompleteTaskHandler
-from app.modules.projects.application.commands.unarchive_project import UnarchiveProject, UnarchiveProjectHandler
-from app.modules.projects.application.commands.update_project import UpdateProject, UpdateProjectHandler
 from app.modules.projects.entrypoints import routes
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.infrastructure.mappers import start_mappers

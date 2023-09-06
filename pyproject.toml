@@ -28,8 +28,5 @@ disallow_untyped_calls = false
 warn_return_any = false
 disallow_untyped_decorators = false  # TODO: Fix this later
 
-# This allows discovery of imported packages that don’t have an factories.py
-namespace_packages = true
-
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"

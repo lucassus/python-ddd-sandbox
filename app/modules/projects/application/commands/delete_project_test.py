@@ -1,4 +1,4 @@
-from app.modules.projects.application.commands.delete_project import DeleteProject, DeleteProjectHandler
+from app.modules.projects.application.commands import DeleteProject, DeleteProjectHandler
 from app.modules.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.projects.domain.project_builder import ProjectBuilder

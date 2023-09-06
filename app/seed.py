@@ -3,20 +3,25 @@ import typer
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
 from app.modules import mapper_registry
-from app.modules.accounts.application.commands.register_user import RegisterUser, RegisterUserHandler
+from app.modules.accounts.application.commands import RegisterUser, RegisterUserHandler
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
 from app.modules.accounts.infrastructure.mappers import start_mappers as start_account_mappers
-from app.modules.projects.application.commands.archive_project import ArchiveProject, ArchiveProjectHandler
-from app.modules.projects.application.commands.complete_task import CompleteTask, CompleteTaskHandler
-from app.modules.projects.application.commands.create_example_project import (
+from app.modules.projects.application.commands import (
+    ArchiveProject,
+    ArchiveProjectHandler,
+    CompleteTask,
+    CompleteTaskHandler,
     CreateExampleProject,
     CreateExampleProjectHandler,
+    CreateProject,
+    CreateProjectHandler,
+    CreateTask,
+    CreateTaskHandler,
+    DeleteProject,
+    DeleteProjectHandler,
 )
-from app.modules.projects.application.commands.create_project import CreateProject, CreateProjectHandler
-from app.modules.projects.application.commands.create_task import CreateTask, CreateTaskHandler
-from app.modules.projects.application.commands.delete_project import DeleteProject, DeleteProjectHandler
 from app.modules.projects.domain.project import ProjectName
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers

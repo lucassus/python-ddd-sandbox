@@ -6,11 +6,13 @@ from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.commands.archive_project import ArchiveProject
-from app.modules.projects.application.commands.create_project import CreateProject
-from app.modules.projects.application.commands.delete_project import DeleteProject
-from app.modules.projects.application.commands.unarchive_project import UnarchiveProject
-from app.modules.projects.application.commands.update_project import UpdateProject
+from app.modules.projects.application.commands import (
+    ArchiveProject,
+    CreateProject,
+    DeleteProject,
+    UnarchiveProject,
+    UpdateProject,
+)
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container

@@ -1,9 +1,6 @@
 import pytest
 
-from app.modules.accounts.application.commands.change_user_email_address import (
-    ChangeUserEmailAddress,
-    ChangeUserEmailAddressHandler,
-)
+from app.modules.accounts.application.commands import ChangeUserEmailAddress, ChangeUserEmailAddressHandler
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException, UserNotFoundError

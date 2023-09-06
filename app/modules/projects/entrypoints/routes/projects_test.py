@@ -5,11 +5,13 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from app.anys import AnyUUID
-from app.modules.projects.application.commands.archive_project import ArchiveProject
-from app.modules.projects.application.commands.create_project import CreateProject
-from app.modules.projects.application.commands.delete_project import DeleteProject
-from app.modules.projects.application.commands.unarchive_project import UnarchiveProject
-from app.modules.projects.application.commands.update_project import UpdateProject
+from app.modules.projects.application.commands import (
+    ArchiveProject,
+    CreateProject,
+    DeleteProject,
+    UnarchiveProject,
+    UpdateProject,
+)
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.shared_kernel.message_bus import MessageBus

@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from app.modules.projects.application.commands.create_project import CreateProject, CreateProjectHandler
+from app.modules.projects.application.commands import CreateProject, CreateProjectHandler
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.project import Project, ProjectName
 from app.modules.shared_kernel.entities.user_id import UserID

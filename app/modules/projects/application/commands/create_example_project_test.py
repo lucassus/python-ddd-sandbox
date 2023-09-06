@@ -1,7 +1,4 @@
-from app.modules.projects.application.commands.create_example_project import (
-    CreateExampleProject,
-    CreateExampleProjectHandler,
-)
+from app.modules.projects.application.commands import CreateExampleProject, CreateExampleProjectHandler
 from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.shared_kernel.entities.user_id import UserID
 

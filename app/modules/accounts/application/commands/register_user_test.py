@@ -1,6 +1,6 @@
 import pytest
 
-from app.modules.accounts.application.commands.register_user import RegisterUser, RegisterUserHandler
+from app.modules.accounts.application.commands import RegisterUser, RegisterUserHandler
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.testing.fake_password_hasher import FakePasswordHasher
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork

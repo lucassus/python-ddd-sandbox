@@ -3,9 +3,7 @@ from unittest.mock import ANY, Mock
 from starlette.testclient import TestClient
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.commands.complete_task import CompleteTask
-from app.modules.projects.application.commands.create_task import CreateTask
-from app.modules.projects.application.commands.incomplete_task import IncompleteTask
+from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.containers import Container

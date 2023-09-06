@@ -12,7 +12,7 @@ def _session_factory():
 
 @bus.listen(User.AccountCreated)
 def create_example_project_handler(event: User.AccountCreated):
-    from app.modules.projects.application.commands.create_example_project import CreateExampleProject
+    from app.modules.projects.application.commands import CreateExampleProject
 
     bus.execute(CreateExampleProject(user_id=event.user_id))
 

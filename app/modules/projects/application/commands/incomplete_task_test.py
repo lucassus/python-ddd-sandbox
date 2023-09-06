@@ -1,4 +1,4 @@
-from app.modules.projects.application.commands.incomplete_task import IncompleteTask, IncompleteTaskHandler
+from app.modules.projects.application.commands import IncompleteTask, IncompleteTaskHandler
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.project_builder import ProjectBuilder
 from app.utc_datetime import utc_datetime

@@ -2,10 +2,8 @@ from dependency_injector import providers
 from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
-
 from app.modules.errors_handling import register_error_handlers
 from app.modules.event_handlers import bus
-
 
 mapper_registry = registry()
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
-from app import engine
+from app.infrastructure.db import engine
 from app.modules.projects.application.commands.archive_project import ArchiveProject, ArchiveProjectHandler
 from app.modules.projects.application.commands.complete_task import CompleteTask, CompleteTaskHandler
 from app.modules.projects.application.commands.create_example_project import (

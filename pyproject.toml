@@ -20,16 +20,13 @@ color_output = true
 
 exclude = [".venv"]
 
+strict = true
 check_untyped_defs = true
 disallow_untyped_defs = false
 disallow_incomplete_defs = false
-disallow_any_generics = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-strict_equality = true
-ignore_missing_imports = true
-explicit_package_bases = true
+disallow_untyped_calls = false
+warn_return_any = false
+disallow_untyped_decorators = false  # TODO: Fix this later
 
 # This allows discovery of imported packages that don’t have an factories.py
 namespace_packages = true

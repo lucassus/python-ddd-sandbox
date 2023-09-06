@@ -22,7 +22,6 @@ class GetUserQuery(BaseSQLQuery):
         def __init__(self, id: UserID):
             super().__init__(f"User with id {id} not found")
 
-    # TODO: Add include_projects flag
     def __call__(self, id: UserID) -> Result:
         user = self._first_from(
             # fmt: off

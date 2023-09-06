@@ -32,26 +32,25 @@ def _create_container(bus: MessageBus) -> Container:
     return container
 
 
-# TODO: Rename this function to bootstrap_module
-def register_module(app: FastAPI, mappers: registry, bus: MessageBus) -> Container:
-    start_mappers(mappers)
-    app.include_router(routes.router)
-
-    container = _create_container(bus)
+def _register_commands(bus: MessageBus, container: Container) -> None:
+    uow = container.application.uow()
 
     bus.register(
         RegisterUser,
         RegisterUserHandler(
-            uow=container.application.uow(),
+            uow=uow,
             password_hasher=container.application.password_hasher(),
         ),
     )
 
-    bus.register(
-        ChangeUserEmailAddress,
-        ChangeUserEmailAddressHandler(
-            uow=container.application.uow(),
-        ),
-    )
+    bus.register(ChangeUserEmailAddress, ChangeUserEmailAddressHandler(uow=uow))
+
+
+def bootstrap_accounts_module(app: FastAPI, mappers: registry, bus: MessageBus) -> Container:
+    start_mappers(mappers)
+    app.include_router(routes.router)
+
+    container = _create_container(bus)
+    _register_commands(bus, container)
 
     return container

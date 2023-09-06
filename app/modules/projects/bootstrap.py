@@ -20,55 +20,36 @@ from app.modules.projects.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.message_bus import MessageBus
 
 
-def register_module(
+def _create_container(bus: MessageBus) -> Container:
+    container = Container(engine=engine, bus=bus)
+    container.wire()
+
+    return container
+
+
+def _register_commands(bus: MessageBus, container: Container) -> None:
+    uow = container.application.uow()
+
+    bus.register(CreateProject, CreateProjectHandler(uow=uow, bus=bus))
+    bus.register(CreateExampleProject, CreateExampleProjectHandler(uow=uow))
+    bus.register(UpdateProject, UpdateProjectHandler(uow=uow))
+    bus.register(ArchiveProject, ArchiveProjectHandler(uow=uow))
+    bus.register(UnarchiveProject, UnarchiveProjectHandler(uow=uow))
+    bus.register(DeleteProject, DeleteProjectHandler(uow=uow))
+    bus.register(CreateTask, CreateTaskHandler(uow=uow))
+    bus.register(CompleteTask, CompleteTaskHandler(uow=uow))
+    bus.register(IncompleteTask, IncompleteTaskHandler(uow=uow))
+
+
+def bootstrap_projects_module(
     app: FastAPI,
     mappers: registry,
     bus: MessageBus,
 ) -> Container:
-    container = Container(engine=engine, bus=bus)
-    container.wire()
-
-    bus.register(
-        CreateProject,
-        CreateProjectHandler(
-            uow=container.application.uow(),
-            bus=bus,
-        ),
-    )
-    bus.register(
-        CreateExampleProject,
-        CreateExampleProjectHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        UpdateProject,
-        UpdateProjectHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        ArchiveProject,
-        ArchiveProjectHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        UnarchiveProject,
-        UnarchiveProjectHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        DeleteProject,
-        DeleteProjectHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        CreateTask,
-        CreateTaskHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        CompleteTask,
-        CompleteTaskHandler(uow=container.application.uow()),
-    )
-    bus.register(
-        IncompleteTask,
-        IncompleteTaskHandler(uow=container.application.uow()),
-    )
-
     start_mappers(mappers)
     app.include_router(routes.router)
+
+    container = _create_container(bus)
+    _register_commands(bus, container)
 
     return container

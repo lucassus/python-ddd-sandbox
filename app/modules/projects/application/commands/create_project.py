@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
+from app.infrastructure.message_bus import Command, CommandHandler, MessageBus
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import Project, ProjectID, ProjectName
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import Command, CommandHandler, MessageBus
 
 
 @dataclass(frozen=True)

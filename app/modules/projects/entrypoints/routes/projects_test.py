@@ -5,6 +5,7 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from app.anys import AnyUUID
+from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.commands import (
     ArchiveProject,
     CreateProject,
@@ -14,7 +15,6 @@ from app.modules.projects.application.commands import (
 )
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.shared_kernel.message_bus import MessageBus
 
 
 def test_create_project_endpoint(container: Container, app: FastAPI, client: TestClient):

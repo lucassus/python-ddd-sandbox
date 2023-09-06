@@ -4,6 +4,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
+from app.infrastructure.message_bus import MessageBus
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
 from app.modules.projects.domain.project import ProjectID
@@ -12,7 +13,6 @@ from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
-from app.modules.shared_kernel.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")

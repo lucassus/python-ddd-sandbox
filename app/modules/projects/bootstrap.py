@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
 from app.infrastructure.db import engine
+from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.commands import (
     ArchiveProject,
     ArchiveProjectHandler,
@@ -25,7 +26,6 @@ from app.modules.projects.application.commands import (
 from app.modules.projects.entrypoints import routes
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.infrastructure.mappers import start_mappers
-from app.modules.shared_kernel.message_bus import MessageBus
 
 
 def _create_container(bus: MessageBus) -> Container:

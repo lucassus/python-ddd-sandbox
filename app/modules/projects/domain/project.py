@@ -2,12 +2,12 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import NewType, Optional
 
+from app.infrastructure.message_bus import Event
 from app.modules.projects.domain import ensure
 from app.modules.projects.domain.errors import TaskNotFoundError
 from app.modules.projects.domain.task import Task, TaskNumber
 from app.modules.shared_kernel.entities.aggregate_root import AggregateRoot
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import Event
 
 ProjectID = NewType("ProjectID", int)
 

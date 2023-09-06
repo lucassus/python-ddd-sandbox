@@ -4,6 +4,7 @@ from sqlalchemy.orm import registry
 
 from app.config import app_config
 from app.infrastructure.db import engine
+from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.commands import (
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
@@ -14,7 +15,6 @@ from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.mappers import start_mappers
-from app.modules.shared_kernel.message_bus import MessageBus
 
 
 def _create_container(bus: MessageBus) -> Container:

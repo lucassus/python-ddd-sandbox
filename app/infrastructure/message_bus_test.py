@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from app.modules.shared_kernel.message_bus import Event, MessageBus
+from app.infrastructure.message_bus import Event, MessageBus
 
 
 @dataclass(frozen=True)

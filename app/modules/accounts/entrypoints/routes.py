@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 
+from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.commands import ChangeUserEmailAddress, RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
@@ -13,7 +14,6 @@ from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.shared_kernel.message_bus import MessageBus
 
 router = APIRouter(prefix="/users", tags=["users"])
 

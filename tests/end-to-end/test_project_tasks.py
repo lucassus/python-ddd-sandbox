@@ -2,13 +2,13 @@ from starlette import status
 from starlette.testclient import TestClient
 
 from app.anys import AnyUUID
-from app.modules.event_handlers import bus
+from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.application.commands.create_task import CreateTask
 from app.modules.projects.domain.project import ProjectName
 
 
-def test_create_task(current_user, client: TestClient):
+def test_create_task(bus: MessageBus, current_user, client: TestClient):
     # Given
     project_id = bus.execute(CreateProject(current_user.id, ProjectName("Project X")))
 
@@ -28,7 +28,7 @@ def test_create_task(current_user, client: TestClient):
     }
 
 
-def test_complete_task(current_user, client: TestClient):
+def test_complete_task(bus: MessageBus, current_user, client: TestClient):
     # Given
     project_id = bus.execute(CreateProject(current_user.id, ProjectName("Project X")))
     task_number = bus.execute(CreateTask(project_id, name="First task"))

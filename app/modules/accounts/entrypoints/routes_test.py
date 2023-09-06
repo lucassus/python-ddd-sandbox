@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
@@ -14,7 +15,6 @@ from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import MessageBus
 
 
 def test_register_user_endpoint(container: Container, client: TestClient):

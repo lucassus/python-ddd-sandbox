@@ -1,9 +1,9 @@
 import pytest
 
+from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.application.testing.fake_user_repository import FakeUserRepository
-from app.modules.shared_kernel.message_bus import MessageBus
 
 
 @pytest.fixture()

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
+from app.infrastructure.message_bus import Command, CommandHandler
 from app.modules.projects.domain.project import ProjectID
-from app.modules.shared_kernel.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)

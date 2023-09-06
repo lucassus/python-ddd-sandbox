@@ -1,6 +1,7 @@
 import typer
 
 from app.infrastructure.db import AppSession, engine
+from app.infrastructure.message_bus import Event, MessageBus
 from app.infrastructure.tables import create_tables, drop_tables
 from app.modules import mapper_registry
 from app.modules.accounts.application.commands import RegisterUser, RegisterUserHandler
@@ -26,7 +27,6 @@ from app.modules.projects.domain.project import ProjectName
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.modules.shared_kernel.entities.email_address import EmailAddress
-from app.modules.shared_kernel.message_bus import Event, MessageBus
 from app.utc_datetime import utc_now
 
 
@@ -35,15 +35,18 @@ def _session_factory():
 
 
 class NoopMessageBus(MessageBus):
+    # TODO: This is confusing, refactor this
     def dispatch(self, event: Event) -> None:
         pass
 
 
 bus = NoopMessageBus()
 
+# TODO: Re-use register logic from accounts module
 accounts_uow = AccountsUnitOfWork(session_factory=_session_factory, bus=bus)
 bus.register(RegisterUser, RegisterUserHandler(uow=accounts_uow, password_hasher=PasswordHasher()))
 
+# TODO: Re-use register logic from projects module
 projects_uow = ProjectsUnitOfWork(session_factory=_session_factory, bus=bus)
 bus.register(CreateProject, CreateProjectHandler(uow=projects_uow, bus=bus))
 bus.register(CreateExampleProject, CreateExampleProjectHandler(uow=projects_uow))

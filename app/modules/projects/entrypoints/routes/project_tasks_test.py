@@ -2,6 +2,7 @@ from unittest.mock import ANY, Mock
 
 from starlette.testclient import TestClient
 
+from app.infrastructure.message_bus import MessageBus
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
 from app.modules.projects.domain.project import ProjectID
@@ -11,7 +12,6 @@ from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.task_queries import ListTasksQuery
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.modules.shared_kernel.message_bus import MessageBus
 
 
 def test_task_create_endpoint(container: Container, app, client: TestClient):

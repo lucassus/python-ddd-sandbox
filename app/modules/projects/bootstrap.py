@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
 from app.infrastructure.db import engine
@@ -23,7 +22,6 @@ from app.modules.projects.application.commands import (
     UpdateProject,
     UpdateProjectHandler,
 )
-from app.modules.projects.entrypoints import routes
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.infrastructure.mappers import start_mappers
 
@@ -49,13 +47,8 @@ def _register_commands(bus: MessageBus, container: Container) -> None:
     bus.register(IncompleteTask, IncompleteTaskHandler(uow=uow))
 
 
-def bootstrap_projects_module(
-    app: FastAPI,
-    mappers: registry,
-    bus: MessageBus,
-) -> Container:
+def bootstrap_projects_module(mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
-    app.include_router(routes.router)
 
     container = _create_container(bus)
     _register_commands(bus, container)

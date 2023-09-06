@@ -29,13 +29,20 @@ def create_app() -> FastAPI:
     from app.modules.accounts.bootstrap import bootstrap_accounts_module
     from app.modules.projects.bootstrap import bootstrap_projects_module
 
-    accounts_container = bootstrap_accounts_module(app, mapper_registry, bus)
-    projects_container = bootstrap_projects_module(app, mapper_registry, bus)
+    accounts_container = bootstrap_accounts_module(mapper_registry, bus)
+    projects_container = bootstrap_projects_module(mapper_registry, bus)
 
     # Pass down assembled authentication service to comply with the contract
     projects_container.application.authentication.override(
         providers.Factory(accounts_container.application.authentication),
     )
+
+    # Include routers
+    from app.modules.accounts.entrypoints.routes import router as accounts_router
+    from app.modules.projects.entrypoints.routes import router as projects_router
+
+    app.include_router(accounts_router)
+    app.include_router(projects_router)
 
     register_error_handlers(app)
 

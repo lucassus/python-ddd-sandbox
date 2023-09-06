@@ -8,18 +8,21 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork as AccountsUnitOfWork
 from app.modules.accounts.infrastructure.mappers import start_mappers as start_account_mappers
-from app.modules.projects.application.archivization_service import ArchivizationService
+from app.modules.projects.application.commands.archive_project import ArchiveProject, ArchiveProjectHandler
+from app.modules.projects.application.commands.complete_task import CompleteTask, CompleteTaskHandler
 from app.modules.projects.application.commands.create_example_project import (
     CreateExampleProject,
     CreateExampleProjectHandler,
 )
 from app.modules.projects.application.commands.create_project import CreateProject, CreateProjectHandler
-from app.modules.projects.application.tasks_service import TasksService
+from app.modules.projects.application.commands.create_task import CreateTask, CreateTaskHandler
+from app.modules.projects.application.commands.delete_project import DeleteProject, DeleteProjectHandler
 from app.modules.projects.domain.project import ProjectName
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork as ProjectsUnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers as start_project_mappers
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.message_bus import Event, MessageBus
+from app.utc_datetime import utc_now
 
 
 def _session_factory():
@@ -39,9 +42,10 @@ bus.register(RegisterUser, RegisterUserHandler(uow=accounts_uow, password_hasher
 projects_uow = ProjectsUnitOfWork(session_factory=_session_factory, bus=bus)
 bus.register(CreateProject, CreateProjectHandler(uow=projects_uow, bus=bus))
 bus.register(CreateExampleProject, CreateExampleProjectHandler(uow=projects_uow))
-
-archivization = ArchivizationService(uow=projects_uow)
-tasks_service = TasksService(uow=projects_uow)
+bus.register(CreateTask, CreateTaskHandler(uow=projects_uow))
+bus.register(CompleteTask, CompleteTaskHandler(uow=projects_uow))
+bus.register(ArchiveProject, ArchiveProjectHandler(uow=projects_uow))
+bus.register(DeleteProject, DeleteProjectHandler(uow=projects_uow))
 
 
 def main(rebuild_db: bool = True):
@@ -52,20 +56,21 @@ def main(rebuild_db: bool = True):
     start_account_mappers(mapper_registry)
     start_project_mappers(mapper_registry)
 
-    user_id = bus.execute(RegisterUser(email=EmailAddress("test@email.com"), password=Password("password")))
+    user_id = bus.execute(RegisterUser(EmailAddress("test@email.com"), Password("password")))
     bus.execute(CreateExampleProject(user_id))
 
     project_id = bus.execute(CreateProject(user_id, ProjectName("Software Engineering")))
 
-    task_number = tasks_service.create_task(project_id, name="Learn Python")
-    tasks_service.complete_task(project_id, task_number)
-    tasks_service.create_task(project_id, name="Learn Domain Driven Design")
-    tasks_service.create_task(project_id, name="Do the shopping")
-    tasks_service.create_task(project_id, name="Clean the house")
+    task_number = bus.execute(CreateTask(project_id, name="Learn Python"))
+    bus.execute(CompleteTask(project_id, task_number, now=utc_now()))
+
+    bus.execute(CreateTask(project_id, name="Learn Domain Driven Design"))
+    bus.execute(CreateTask(project_id, name="Do the shopping"))
+    bus.execute(CreateTask(project_id, name="Clean the house"))
 
     project_id = bus.execute(CreateProject(user_id, ProjectName("Clean the house")))
-    archivization.archive(project_id)
-    archivization.delete(project_id)
+    bus.execute(ArchiveProject(project_id, now=utc_now()))
+    bus.execute(DeleteProject(project_id, now=utc_now()))
 
     typer.echo("\nSeeding completed 🚀")
 

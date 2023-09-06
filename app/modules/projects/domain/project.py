@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import NewType, Optional
+from typing import NewType
 
 from app.infrastructure.message_bus import Event
 from app.modules.projects.domain import ensure
@@ -87,11 +87,11 @@ class Project(AggregateRoot):
     def deleted_at(self) -> None | datetime:
         return self._deleted_at
 
-    def add_task(self, name: str, created_by: Optional[UserID] = None) -> Task:
+    def add_task(self, name: str) -> Task:
         ensure.project_has_allowed_number_of_incomplete_tasks(self)
 
         self._last_task_number = TaskNumber(self._last_task_number + 1)
-        task = Task(name=name, number=self._last_task_number, created_by=created_by)
+        task = Task(name=name, number=self._last_task_number)
 
         self._tasks_by_number[task.number] = task
 

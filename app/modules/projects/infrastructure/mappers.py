@@ -31,7 +31,6 @@ def start_mappers(mapper_registry):
         properties={
             "_number": tasks_table.c.number,
             "_name": tasks_table.c.name,
-            "_created_by": tasks_table.c.created_by,
             "_completed_at": tasks_table.c.completed_at,
         },
     )

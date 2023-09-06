@@ -1,18 +1,15 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from app.infrastructure.message_bus import Command, CommandHandler
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
-from app.modules.shared_kernel.entities.user_id import UserID
 
 
 @dataclass(frozen=True)
 class CreateTask(Command[TaskNumber]):
     project_id: ProjectID
     name: str
-    created_by: Optional[UserID] = None
 
 
 class CreateTaskHandler(CommandHandler[CreateTask, TaskNumber]):
@@ -23,8 +20,7 @@ class CreateTaskHandler(CommandHandler[CreateTask, TaskNumber]):
         with self.uow:
             project = self.uow.projects.get(command.project_id)
 
-            name, created_by = command.name, command.created_by
-            task = project.add_task(name, created_by)
+            task = project.add_task(command.name)
             self.uow.commit()
 
             return task.number

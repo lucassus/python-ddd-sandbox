@@ -1,7 +1,6 @@
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.anys import AnyUUID
 from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.application.commands.create_task import CreateTask
@@ -23,7 +22,6 @@ def test_create_task(bus: MessageBus, current_user, client: TestClient):
     assert response.json() == {
         "number": 1,
         "name": "First task",
-        "createdBy": AnyUUID,
         "completedAt": None,
     }
 

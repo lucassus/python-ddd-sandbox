@@ -1,17 +1,13 @@
-from typing import Annotated
-
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
 from app.infrastructure.message_bus import MessageBus
-from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
 from app.utc_datetime import utc_now
 
@@ -23,16 +19,9 @@ router = APIRouter(prefix="/projects/{project_id}/tasks")
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    task_number = bus.execute(
-        CreateTask(
-            ProjectID(project_id),
-            name=data.name,
-            created_by=current_user.id,
-        ),
-    )
+    task_number = bus.execute(CreateTask(ProjectID(project_id), name=data.name))
 
     return RedirectResponse(
         f"/api/projects/{project_id}/tasks/{task_number}",

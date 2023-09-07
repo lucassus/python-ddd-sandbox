@@ -1,7 +1,7 @@
 import typer
 
 from app.infrastructure.db import engine
-from app.infrastructure.message_bus import Event, MessageBus
+from app.infrastructure.message_bus import MessageBus
 from app.infrastructure.tables import create_tables, drop_tables
 from app.modules import mapper_registry
 from app.modules.accounts.application.commands import RegisterUser
@@ -20,14 +20,7 @@ from app.modules.projects.domain.project import ProjectName
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.utc_datetime import utc_now
 
-
-# TODO: This is confusing, refactor this
-class NoopMessageBus(MessageBus):
-    def dispatch(self, event: Event) -> None:
-        pass
-
-
-bus = NoopMessageBus()
+bus = MessageBus()
 bootstrap_accounts_module(mapper_registry, bus)
 bootstrap_projects_module(mapper_registry, bus)
 

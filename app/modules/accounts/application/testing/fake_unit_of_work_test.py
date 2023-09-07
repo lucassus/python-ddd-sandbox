@@ -5,6 +5,7 @@ from app.modules.accounts.application.ports.abstract_user_repository import Abst
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.user import User
+from app.modules.shared_kernel.events import UserAccountCreated
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
@@ -12,7 +13,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 def test_unit_of_work_commit(repository: AbstractUserRepository, message_bus: MessageBus):
     # Given
     account_created_mock = Mock()
-    message_bus.listen(User.AccountCreated, account_created_mock)
+    message_bus.listen(UserAccountCreated, account_created_mock)
 
     uow = FakeUnitOfWork(
         repository=TrackingUserRepository(repository),
@@ -38,4 +39,4 @@ def test_unit_of_work_commit(repository: AbstractUserRepository, message_bus: Me
     assert len(uow.users.seen) == 1
 
     assert account_created_mock.call_count == 1
-    account_created_mock.assert_called_with(User.AccountCreated(user_id=user_id))
+    account_created_mock.assert_called_with(UserAccountCreated(user_id=user_id))

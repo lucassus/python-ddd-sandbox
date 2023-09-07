@@ -28,7 +28,10 @@ from app.modules.projects.infrastructure.mappers import start_mappers
 
 def _create_container(bus: MessageBus) -> Container:
     container = Container(engine=engine, bus=bus)
-    container.wire()
+    container.wire(
+        modules=[".entrypoints.dependencies"],
+        packages=[".entrypoints.routes"],
+    )
 
     return container
 

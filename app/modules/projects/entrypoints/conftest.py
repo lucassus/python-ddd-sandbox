@@ -13,7 +13,10 @@ from app.modules.shared_kernel.entities.user_id import UserID
 @pytest.fixture(autouse=True)
 def container():
     container = Container()
-    container.wire()
+    container.wire(
+        modules=[".dependencies"],
+        packages=[".routes"],
+    )
 
     return container
 

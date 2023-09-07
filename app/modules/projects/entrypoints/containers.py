@@ -34,15 +34,6 @@ class QueriesContainer(containers.DeclarativeContainer):
 
 
 class Container(containers.DeclarativeContainer):
-    wiring_config = containers.WiringConfiguration(
-        modules=[
-            ".dependencies",
-            ".routes.project_tasks",
-            ".routes.projects",
-        ],
-        auto_wire=False,
-    )
-
     engine = providers.Dependency(instance_of=Engine)
     bus = providers.Dependency(instance_of=MessageBus)
 

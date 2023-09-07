@@ -26,7 +26,12 @@ def _create_container(bus: MessageBus) -> Container:
         providers.Factory(PasswordHasher),
     )
 
-    container.wire()
+    container.wire(
+        [
+            ".entrypoints.dependencies",
+            ".entrypoints.routes",
+        ]
+    )
 
     return container
 

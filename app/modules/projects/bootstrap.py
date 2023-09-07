@@ -22,6 +22,7 @@ from app.modules.projects.application.commands import (
     UpdateProject,
     UpdateProjectHandler,
 )
+from app.modules.projects.application.event_handlers import register_event_handlers
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.infrastructure.mappers import start_mappers
 
@@ -55,5 +56,6 @@ def bootstrap_projects_module(mappers: registry, bus: MessageBus) -> Container:
 
     container = _create_container(bus)
     _register_commands(bus, container)
+    register_event_handlers(bus)
 
     return container

@@ -10,6 +10,7 @@ from app.modules.accounts.application.commands import (
     RegisterUser,
     RegisterUserHandler,
 )
+from app.modules.accounts.application.event_handlers import register_event_handlers
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.mappers import start_mappers
@@ -55,5 +56,6 @@ def bootstrap_accounts_module(mappers: registry, bus: MessageBus) -> Container:
 
     container = _create_container(bus)
     _register_commands(bus, container)
+    register_event_handlers(bus)
 
     return container

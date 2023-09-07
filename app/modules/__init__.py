@@ -4,7 +4,6 @@ from sqlalchemy.orm import registry
 
 from app.infrastructure.message_bus import MessageBus
 from app.modules.errors_handling import register_error_handlers
-from app.modules.event_handlers import register_event_handlers
 
 mapper_registry = registry()
 
@@ -17,7 +16,6 @@ def get_bus() -> MessageBus:
 
     if _bus is None:
         _bus = MessageBus()
-        register_event_handlers(_bus)
 
     return _bus
 

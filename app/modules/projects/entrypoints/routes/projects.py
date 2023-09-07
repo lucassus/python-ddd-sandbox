@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, status
 from starlette.responses import RedirectResponse, Response
 from starlette.status import HTTP_200_OK
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import (
     ArchiveProject,
@@ -19,6 +18,7 @@ from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
+from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
 router = APIRouter(prefix="/projects")

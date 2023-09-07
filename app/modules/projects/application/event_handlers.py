@@ -1,17 +1,25 @@
-from app.infrastructure.message_bus import MessageBus
+from app.modules.projects.application.commands import CreateExampleProject
+from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import Project
 from app.modules.shared_kernel.events import UserAccountCreated
-from app.modules.projects.application.commands import CreateExampleProject
+from app.shared.message_bus import EventHandler, MessageBus
 
 
-# TODO: This is application but it takes a dependency from the infra, fix it
+class CreateUserExampleProjectHandler(EventHandler[UserAccountCreated]):
+    def __init__(self, bus: MessageBus):
+        self._bus = bus
+
+    def __call__(self, event: UserAccountCreated) -> None:
+        self._bus.execute(CreateExampleProject(event.user_id))
 
 
-def register_event_handlers(bus: MessageBus) -> None:
-    @bus.listen(UserAccountCreated)
-    def create_example_project_handler(event: UserAccountCreated):
-        bus.execute(CreateExampleProject(event.user_id))
+class SendProjectCreatedMessage(EventHandler[Project.Created]):
+    def __init__(self, uow: AbstractUnitOfWork):
+        self._uow = uow
 
-    @bus.listen(Project.Created)
-    def handle_project_created_event(event: Project.Created):
-        print(f"Project {event.project_id} has been created")
+    def __call__(self, event: Project.Created):
+        with self._uow as uow:
+            project = uow.projects.get(event.project_id)
+            uow.commit()
+
+        print(f"Project {project.name} has been created")

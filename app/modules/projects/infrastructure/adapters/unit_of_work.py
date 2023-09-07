@@ -2,9 +2,9 @@ from typing import Callable
 
 from sqlalchemy.orm import Session
 
-from app.infrastructure.message_bus import SupportsDispatchingEvents
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.infrastructure.adapters.project_repository import ProjectRepository
+from app.shared.message_bus import SupportsDispatchingEvents
 
 
 class UnitOfWork(AbstractUnitOfWork):

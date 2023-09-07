@@ -2,8 +2,8 @@ from dependency_injector import providers
 from fastapi import FastAPI
 from sqlalchemy.orm import registry
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.errors_handling import register_error_handlers
+from app.shared.message_bus import MessageBus
 
 mapper_registry = registry()
 

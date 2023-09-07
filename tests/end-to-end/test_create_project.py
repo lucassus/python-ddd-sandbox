@@ -1,9 +1,9 @@
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.domain.project import ProjectName
+from app.shared.message_bus import MessageBus
 
 
 def test_create_project(bus: MessageBus, client: TestClient):

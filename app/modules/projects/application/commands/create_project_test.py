@@ -1,10 +1,10 @@
 from unittest.mock import Mock
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.commands import CreateProject, CreateProjectHandler
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.project import Project, ProjectName
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.shared.message_bus import MessageBus
 
 
 def test_create_project_use_case(fake_uow, message_bus: MessageBus, repository: AbstractProjectRepository):

@@ -1,15 +1,14 @@
-from app.infrastructure.db import AppSession, engine
-from app.infrastructure.message_bus import MessageBus
+from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.shared_kernel.events import UserAccountCreated
+from app.shared.message_bus import EventHandler
 
 
-def register_event_handlers(bus: MessageBus) -> None:
-    @bus.listen(UserAccountCreated)
-    def send_welcome_email_handler(event: UserAccountCreated):
-        # TODO: This is wrong, figure how to inject unit of work here...
-        from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
+class SendWelcomeEmail(EventHandler[UserAccountCreated]):
+    def __init__(self, uow: AbstractUnitOfWork):
+        self._uow = uow
 
-        with UnitOfWork(session_factory=lambda: AppSession(bind=engine), bus=bus) as uow:
+    def __call__(self, event: UserAccountCreated):
+        with self._uow as uow:
             user = uow.users.get(event.user_id)
 
             if user is not None:

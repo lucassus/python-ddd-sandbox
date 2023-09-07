@@ -1,8 +1,8 @@
 import pytest
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.projects.application.testing.fake_project_repository import FakeProjectRepository
 from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.shared.message_bus import MessageBus
 
 
 @pytest.fixture()

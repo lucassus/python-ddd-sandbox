@@ -1,6 +1,6 @@
 import abc
 from collections import defaultdict
-from typing import Any, Callable, Generic, Protocol, TypeVar, cast
+from typing import Any, Generic, Protocol, TypeVar, cast
 
 
 class Event(metaclass=abc.ABCMeta):
@@ -23,6 +23,15 @@ class CommandHandler(Generic[C, CR], metaclass=abc.ABCMeta):
         raise NotImplementedError
 
 
+E = TypeVar("E", bound=Event)
+
+
+class EventHandler(Generic[E], metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def __call__(self, event: E) -> None:
+        raise NotImplementedError
+
+
 class SupportsDispatchingEvents(Protocol):
     def dispatch(self, event: Event) -> None:
         ...
@@ -36,7 +45,7 @@ class CommandHandlerNotFoundError(Exception):
 class MessageBus(SupportsDispatchingEvents):
     _command_handlers: dict[type[Command[Any]], CommandHandler[Command[Any], Any]]
 
-    _event_listeners: dict[type[Event], list[Callable[[Event], None]]]
+    _event_listeners: dict[type[Event], list[EventHandler[Any]]]
 
     def __init__(self):
         self._event_listeners = defaultdict(list)
@@ -62,12 +71,5 @@ class MessageBus(SupportsDispatchingEvents):
     ):
         self._command_handlers[command_class] = cast(CommandHandler[Any, Command[Any]], handler)
 
-    def listen(
-        self,
-        event_class: type[Event],
-        handler=None,
-    ):
-        def on(handler):
-            self._event_listeners[event_class].append(handler)
-
-        return on(handler) if handler else on
+    def listen(self, event_class: type[Event], handler: EventHandler[E]):
+        self._event_listeners[event_class].append(handler)

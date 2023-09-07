@@ -1,10 +1,10 @@
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.email_address import EmailAddress
+from app.shared.message_bus import MessageBus
 
 
 def test_login(bus: MessageBus, anonymous_client: TestClient):

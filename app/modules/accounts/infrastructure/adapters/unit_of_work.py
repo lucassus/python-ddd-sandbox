@@ -2,10 +2,10 @@ from typing import Callable, Self
 
 from sqlalchemy.orm import Session
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository
+from app.shared.message_bus import MessageBus
 
 
 class UnitOfWork(AbstractUnitOfWork):

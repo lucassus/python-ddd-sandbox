@@ -2,8 +2,8 @@ import abc
 from contextlib import AbstractContextManager
 from typing import Self
 
-from app.infrastructure.message_bus import SupportsDispatchingEvents
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
+from app.shared.message_bus import SupportsDispatchingEvents
 
 
 class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):

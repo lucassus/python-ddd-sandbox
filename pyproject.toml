@@ -26,7 +26,6 @@ disallow_untyped_defs = false
 disallow_incomplete_defs = false
 disallow_untyped_calls = false
 warn_return_any = false
-disallow_untyped_decorators = false  # TODO: Fix this later
 
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"

@@ -1,13 +1,13 @@
 from unittest.mock import Mock
 
-from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
 from app.modules.accounts.domain.user import User
-from app.modules.shared_kernel.events import UserAccountCreated
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.events import UserAccountCreated
+from app.shared.message_bus import MessageBus
 
 
 def test_unit_of_work_commit(repository: AbstractUserRepository, message_bus: MessageBus):

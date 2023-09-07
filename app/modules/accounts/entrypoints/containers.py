@@ -2,12 +2,12 @@ from dependency_injector import containers, providers
 from sqlalchemy import Engine
 
 from app.infrastructure.db import AppSession
-from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.accounts.queries.find_user_query import GetUserQuery
+from app.shared.message_bus import MessageBus
 
 
 class ApplicationContainer(containers.DeclarativeContainer):

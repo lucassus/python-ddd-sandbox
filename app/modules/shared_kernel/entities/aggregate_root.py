@@ -1,7 +1,7 @@
 import abc
 
-from app.infrastructure.message_bus import Event
 from app.modules.shared_kernel.entities.entity import Entity
+from app.shared.message_bus import Event
 
 
 class AggregateRoot(Entity, metaclass=abc.ABCMeta):

@@ -3,17 +3,18 @@ from sqlalchemy.orm import registry
 
 from app.config import app_config
 from app.infrastructure.db import engine
-from app.infrastructure.message_bus import MessageBus
 from app.modules.accounts.application.commands import (
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
     RegisterUser,
     RegisterUserHandler,
 )
-from app.modules.accounts.application.event_handlers import register_event_handlers
+from app.modules.accounts.application.event_handlers import SendWelcomeEmail
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.mappers import start_mappers
+from app.modules.shared_kernel.events import UserAccountCreated
+from app.shared.message_bus import MessageBus
 
 
 def _create_container(bus: MessageBus) -> Container:
@@ -51,11 +52,17 @@ def _register_commands(bus: MessageBus, container: Container) -> None:
     bus.register(ChangeUserEmailAddress, ChangeUserEmailAddressHandler(uow=uow))
 
 
+def _register_event_handlers(bus: MessageBus, container: Container) -> None:
+    uow = container.application.uow()
+    bus.listen(UserAccountCreated, SendWelcomeEmail(uow))
+
+
 def bootstrap_accounts_module(mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
 
     container = _create_container(bus)
+
     _register_commands(bus, container)
-    register_event_handlers(bus)
+    _register_event_handlers(bus, container)
 
     return container

@@ -1,7 +1,7 @@
 from app.modules.accounts.domain.user import User
-from app.modules.shared_kernel.events import UserAccountCreated
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.events import UserAccountCreated
 
 
 class TestUser:

@@ -25,7 +25,7 @@ def create_app() -> FastAPI:
     app = FastAPI()
 
     app.dependency_overrides[get_message_bus] = lambda: bus
-    app.dependency_overrides[get_authentication] = lambda: accounts_container.application.authentication()
+    app.dependency_overrides[get_authentication] = lambda: accounts_container.authentication()
 
     app.include_router(accounts_router)
     app.include_router(projects_router)

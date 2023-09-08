@@ -10,25 +10,6 @@ from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.shared.message_bus import MessageBus
 
 
-class ApplicationContainer(containers.DeclarativeContainer):
-    engine = providers.Dependency(instance_of=Engine)
-    bus = providers.Dependency(instance_of=MessageBus)
-
-    jwt_secret_key = providers.Dependency(instance_of=str)
-
-    session_factory = providers.Factory(AppSession, bind=engine)
-    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider, bus=bus)
-
-    auth_token = providers.Singleton(JWTAuthentication, secret_key=jwt_secret_key)
-    password_hasher = providers.AbstractFactory(AbstractPasswordHasher)
-    authentication = providers.Singleton(
-        Authentication,
-        uow=uow,
-        token=auth_token,
-        password_hasher=password_hasher,
-    )
-
-
 class QueriesContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
     get_user = providers.Singleton(GetUserQuery, engine=engine)
@@ -40,11 +21,18 @@ class Container(containers.DeclarativeContainer):
     bus = providers.Dependency(instance_of=MessageBus)
     jwt_secret_key = providers.Dependency(instance_of=str)
 
-    application = providers.Container(
-        ApplicationContainer,
-        jwt_secret_key=jwt_secret_key,
-        bus=bus,
-        engine=engine,
+    # TODO: Assembly the concrete uow in the bootstrap, or ifra layer
+    #  to make entrypoints independent of the infra layer
+    session_factory = providers.Factory(AppSession, bind=engine)
+    uow = providers.Singleton(UnitOfWork, session_factory=session_factory.provider, bus=bus)
+
+    auth_token = providers.Singleton(JWTAuthentication, secret_key=jwt_secret_key)
+    password_hasher = providers.AbstractFactory(AbstractPasswordHasher)
+    authentication = providers.Singleton(
+        Authentication,
+        uow=uow,
+        token=auth_token,
+        password_hasher=password_hasher,
     )
 
     queries = providers.Container(QueriesContainer, engine=engine)

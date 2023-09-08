@@ -8,18 +8,17 @@ from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
-from app.shared.message_bus import MessageBus
+from app.shared.dependencies import MessageBusDep
 from app.utc_datetime import utc_now
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
 
 
 @router.post("")
-@inject
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
-    bus: MessageBus = Depends(Provide[Container.bus]),
+    bus: MessageBusDep,
 ):
     task_number = bus.execute(CreateTask(ProjectID(project_id), name=data.name))
 
@@ -56,11 +55,10 @@ def get_task_endpoint(
 
 
 @router.put("/{task_number}/complete")
-@inject
 def task_complete_endpoint(
     project_id: int,
+    bus: MessageBusDep,
     task_number: int = Path(..., description="The number of the task to complete", ge=1),
-    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
     bus.execute(CompleteTask(ProjectID(project_id), TaskNumber(task_number), now=utc_now()))
 
@@ -71,11 +69,10 @@ def task_complete_endpoint(
 
 
 @router.put("/{task_number}/incomplete")
-@inject
 def task_incomplete_endpoint(
     project_id: int,
+    bus: MessageBusDep,
     task_number: int = Path(..., description="The number of the task to incomplete", ge=1),
-    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
     bus.execute(IncompleteTask(ProjectID(project_id), TaskNumber(task_number)))
 

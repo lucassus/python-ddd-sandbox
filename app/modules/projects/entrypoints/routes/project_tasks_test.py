@@ -7,10 +7,10 @@ from app.modules.projects.application.commands import CompleteTask, CreateTask, 
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.task_queries import ListTasksQuery
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.shared.dependencies import get_current_user
 from app.shared.message_bus import MessageBus
 
 

@@ -10,19 +10,17 @@ from app.modules.accounts.application.commands import ChangeUserEmailAddress, Re
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
-from app.modules.accounts.entrypoints.dependencies import get_current_user
+from app.modules.accounts.entrypoints.dependencies import get_authentication
 from app.modules.accounts.queries.find_user_query import GetUserQuery
-from app.modules.authentication_contract import AuthenticationContract
-from app.shared.message_bus import MessageBus
+from app.shared.dependencies import CurrentUserDep, MessageBusDep
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("")
-@inject
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    bus: MessageBus = Depends(Provide[Container.bus]),
+    bus: MessageBusDep,
 ):
     try:
         bus.execute(RegisterUser(email=data.email, password=data.password))
@@ -34,10 +32,9 @@ def user_register_endpoint(
 
 
 @router.post("/login")
-@inject
 def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    authentication: Authentication = Depends(Provide[Container.application.authentication]),
+    authentication: Annotated[Authentication, Depends(get_authentication)],
 ):
     data = schemas.LoginUser(email=form_data.username, password=form_data.password)
     token = authentication.login(email=data.email, password=data.password)
@@ -49,11 +46,10 @@ def user_login_endpoint(
 
 
 @router.put("/me")
-@inject
 def user_update_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: CurrentUserDep,
     data: schemas.UpdateUser,
-    bus: MessageBus = Depends(Provide[Container.bus]),
+    bus: MessageBusDep,
 ):
     bus.execute(
         ChangeUserEmailAddress(
@@ -75,7 +71,7 @@ def user_update_endpoint(
 )
 @inject
 def user_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: CurrentUserDep,
     get_user: GetUserQuery = Depends(Provide[Container.queries.get_user]),
 ):
     return get_user(current_user.id)

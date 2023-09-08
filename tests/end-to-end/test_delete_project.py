@@ -1,14 +1,14 @@
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.modules import bus
 from app.modules.projects.application.commands.archive_project import ArchiveProject
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.domain.project import ProjectName
-from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
 
-def test_delete_project(bus: MessageBus, current_user, client: TestClient):
+def test_delete_project(current_user, client: TestClient):
     # Given
     project_id = bus.execute(CreateProject(current_user.id, ProjectName("Project X")))
     bus.execute(ArchiveProject(project_id, now=utc_now()))

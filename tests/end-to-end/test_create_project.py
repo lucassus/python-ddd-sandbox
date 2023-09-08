@@ -1,12 +1,12 @@
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.modules import bus
 from app.modules.projects.application.commands.create_project import CreateProject
 from app.modules.projects.domain.project import ProjectName
-from app.shared.message_bus import MessageBus
 
 
-def test_create_project(bus: MessageBus, client: TestClient):
+def test_create_project(client: TestClient):
     response = client.post(
         "/api/projects",
         json={"name": "Project X"},
@@ -28,7 +28,7 @@ def test_create_project_unauthenticated(anonymous_client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_list_projects(bus: MessageBus, current_user, client: TestClient):
+def test_list_projects(current_user, client: TestClient):
     # Given
     bus.execute(CreateProject(current_user.id, ProjectName("Project A")))
     bus.execute(CreateProject(current_user.id, ProjectName("Project B")))

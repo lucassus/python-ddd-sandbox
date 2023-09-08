@@ -2,7 +2,7 @@ import typer
 
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
-from app.modules import mapper_registry
+from app.modules import mapper_registry, bus
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.bootstrap import bootstrap_accounts_module
 from app.modules.accounts.domain.password import Password
@@ -17,10 +17,8 @@ from app.modules.projects.application.commands import (
 from app.modules.projects.bootstrap import bootstrap_projects_module
 from app.modules.projects.domain.project import ProjectName
 from app.modules.shared_kernel.entities.email_address import EmailAddress
-from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
-bus = MessageBus()
 bootstrap_accounts_module(mapper_registry, bus)
 bootstrap_projects_module(mapper_registry, bus)
 

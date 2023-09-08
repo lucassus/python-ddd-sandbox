@@ -13,7 +13,7 @@ class CreateProject(Command[ProjectID]):
 
 
 class CreateProjectHandler(CommandHandler[CreateProject, ProjectID]):
-    def __init__(self, *, uow: AbstractUnitOfWork, bus: MessageBus):
+    def __init__(self, uow: AbstractUnitOfWork, bus: MessageBus):
         self._uow = uow
         self._bus = bus
 

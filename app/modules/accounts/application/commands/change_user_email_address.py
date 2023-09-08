@@ -14,7 +14,7 @@ class ChangeUserEmailAddress(Command[None]):
 
 
 class ChangeUserEmailAddressHandler(CommandHandler[ChangeUserEmailAddress, None]):
-    def __init__(self, *, uow: AbstractUnitOfWork):
+    def __init__(self, uow: AbstractUnitOfWork):
         self._uow = uow
 
     def __call__(self, command: ChangeUserEmailAddress) -> None:

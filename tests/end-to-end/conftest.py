@@ -5,12 +5,11 @@ from starlette.testclient import TestClient
 from app import create_app
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
-from app.modules import get_bus
+from app.modules import bus
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.domain.password import Password
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
-from app.shared.message_bus import MessageBus
 
 
 @pytest.fixture(autouse=True)
@@ -18,11 +17,6 @@ def _prepare_db():
     create_tables(engine)
     yield
     drop_tables(engine)
-
-
-@pytest.fixture(autouse=True)
-def bus():
-    return get_bus()
 
 
 @pytest.fixture(scope="session")
@@ -36,7 +30,7 @@ def anonymous_client(app):
 
 
 @pytest.fixture()
-def current_user(bus: MessageBus):
+def current_user():
     email = EmailAddress("test@email.com")
     user_id = bus.execute(RegisterUser(email, Password("password")))
 

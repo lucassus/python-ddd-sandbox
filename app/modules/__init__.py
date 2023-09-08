@@ -7,22 +7,11 @@ from app.shared.message_bus import MessageBus
 
 mapper_registry = registry()
 
-# TODO: Bit better, but still smelly
-_bus: MessageBus | None = None
-
-
-def get_bus() -> MessageBus:
-    global _bus
-
-    if _bus is None:
-        _bus = MessageBus()
-
-    return _bus
+bus = MessageBus()
 
 
 def create_app() -> FastAPI:
     app = FastAPI()
-    bus = get_bus()
 
     from app.modules.accounts.bootstrap import bootstrap_accounts_module
     from app.modules.projects.bootstrap import bootstrap_projects_module

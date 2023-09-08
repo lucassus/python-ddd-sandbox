@@ -12,7 +12,7 @@ class UpdateProject(Command[None]):
 
 
 class UpdateProjectHandler(CommandHandler[UpdateProject, None]):
-    def __init__(self, *, uow: AbstractUnitOfWork):
+    def __init__(self, uow: AbstractUnitOfWork):
         self._uow = uow
 
     def __call__(self, command: UpdateProject) -> None:

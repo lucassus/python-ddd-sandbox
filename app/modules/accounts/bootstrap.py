@@ -10,6 +10,8 @@ from app.modules.accounts.application.commands import (
     RegisterUserHandler,
 )
 from app.modules.accounts.application.event_handlers import SendWelcomeEmail
+from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
+from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
 from app.modules.accounts.infrastructure.mappers import start_mappers
@@ -38,22 +40,16 @@ def _create_container(bus: MessageBus) -> Container:
     return container
 
 
-def _register_commands(bus: MessageBus, container: Container) -> None:
-    uow = container.application.uow()
-
-    bus.register(
-        RegisterUser,
-        RegisterUserHandler(
-            uow=uow,
-            password_hasher=container.application.password_hasher(),
-        ),
-    )
-
-    bus.register(ChangeUserEmailAddress, ChangeUserEmailAddressHandler(uow=uow))
+def _register_commands(
+    bus: MessageBus,
+    uow: AbstractUnitOfWork,
+    password_hasher: AbstractPasswordHasher,
+) -> None:
+    bus.register(RegisterUser, RegisterUserHandler(uow, password_hasher))
+    bus.register(ChangeUserEmailAddress, ChangeUserEmailAddressHandler(uow))
 
 
-def _register_event_handlers(bus: MessageBus, container: Container) -> None:
-    uow = container.application.uow()
+def _register_event_handlers(bus: MessageBus, uow: AbstractUnitOfWork) -> None:
     bus.listen(UserAccountCreated, SendWelcomeEmail(uow))
 
 
@@ -61,8 +57,9 @@ def bootstrap_accounts_module(mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
 
     container = _create_container(bus)
+    uow = container.application.uow()
 
-    _register_commands(bus, container)
-    _register_event_handlers(bus, container)
+    _register_commands(bus, uow, password_hasher=container.application.password_hasher())
+    _register_event_handlers(bus, uow)
 
     return container

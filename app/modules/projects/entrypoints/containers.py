@@ -3,36 +3,10 @@ from sqlalchemy import Engine
 
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.archivization_service import ArchivizationService
-from app.modules.projects.application.create_example_project import CreateExampleProject
-from app.modules.projects.application.create_project import CreateProject
-from app.modules.projects.application.tasks_service import TasksService
-from app.modules.projects.application.update_project import UpdateProject
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
-from app.modules.shared_kernel.message_bus import MessageBus
-
-
-class ApplicationContainer(containers.DeclarativeContainer):
-    engine = providers.Dependency(instance_of=Engine)
-    bus = providers.Dependency(instance_of=MessageBus)
-
-    session_factory = providers.Factory(AppSession, bind=engine)
-
-    authentication = providers.AbstractFactory(AuthenticationContract)
-
-    uow = providers.Singleton(
-        UnitOfWork,
-        bus=bus,
-        session_factory=session_factory.provider,
-    )
-
-    create_project = providers.Singleton(CreateProject, uow=uow, bus=bus)
-    create_example_project = providers.Singleton(CreateExampleProject, uow=uow)
-    update_project = providers.Singleton(UpdateProject, uow=uow)
-    archivization_service = providers.Singleton(ArchivizationService, uow=uow)
-    tasks_service = providers.Singleton(TasksService, uow=uow)
+from app.shared.message_bus import MessageBus
 
 
 class QueriesContainer(containers.DeclarativeContainer):
@@ -45,17 +19,16 @@ class QueriesContainer(containers.DeclarativeContainer):
 
 
 class Container(containers.DeclarativeContainer):
-    wiring_config = containers.WiringConfiguration(
-        modules=[
-            ".dependencies",
-            ".routes.project_tasks",
-            ".routes.projects",
-        ],
-        auto_wire=False,
-    )
-
     engine = providers.Dependency(instance_of=Engine)
     bus = providers.Dependency(instance_of=MessageBus)
 
-    application = providers.Container(ApplicationContainer, engine=engine, bus=bus)
+    authentication = providers.AbstractFactory(AuthenticationContract)
+
+    session_factory = providers.Factory(AppSession, bind=engine)
+    uow = providers.Singleton(
+        UnitOfWork,
+        bus,
+        session_factory=session_factory.provider,
+    )
+
     queries = providers.Container(QueriesContainer, engine=engine)

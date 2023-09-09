@@ -2,7 +2,8 @@ from sqlalchemy import event
 from sqlalchemy.orm import attribute_keyed_dict, relationship
 
 from app.infrastructure.tables import projects_table, tasks_table
-from app.modules.projects.domain.project import Project, Task
+from app.modules.projects.domain.project import Project
+from app.modules.projects.domain.task import Task
 
 
 def start_mappers(mapper_registry):
@@ -30,7 +31,6 @@ def start_mappers(mapper_registry):
         properties={
             "_number": tasks_table.c.number,
             "_name": tasks_table.c.name,
-            "_created_by": tasks_table.c.created_by,
             "_completed_at": tasks_table.c.completed_at,
         },
     )

@@ -1,6 +1,6 @@
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
-from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
+from app.shared.message_bus import SupportsDispatchingEvents
 
 
 class FakeUnitOfWork(AbstractUnitOfWork):

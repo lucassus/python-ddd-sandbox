@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.anys import AnyUUID
+from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.containers import Container
@@ -14,14 +14,15 @@ from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.shared.message_bus import MessageBus
 
 
 def test_register_user_endpoint(container: Container, client: TestClient):
     # Given
-    register_user_mock = Mock()
+    bus_mock = Mock(MessageBus)
 
     # When
-    with container.application.register_user.override(register_user_mock):
+    with container.bus.override(bus_mock):
         response = client.post(
             "/users",
             json={
@@ -32,10 +33,11 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         )
 
     # Then
-    register_user_mock.assert_called_with(
-        AnyUUID,
-        email=EmailAddress("test@email.com"),
-        password=Password("password"),
+    bus_mock.execute.assert_called_with(
+        RegisterUser(
+            email=EmailAddress("test@email.com"),
+            password=Password("password"),
+        )
     )
     assert response.status_code == status.HTTP_200_OK
 
@@ -50,7 +52,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         ("", ""),
     ],
 )
-def test_register_user_endpoint_returns_422_when(client: TestClient, email, password):
+def test_register_user_endpoint_returns_422(client: TestClient, email, password):
     # When
     response = client.post(
         "/users",
@@ -63,10 +65,11 @@ def test_register_user_endpoint_returns_422_when(client: TestClient, email, pass
 
 def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):
     # Given
-    register_user_mock = Mock(side_effect=EmailAlreadyExistsException(EmailAddress("taken@email.com")))
+    bus_mock = Mock(MessageBus)
+    bus_mock.execute.side_effect = EmailAlreadyExistsException(EmailAddress("taken@email.com"))
 
     # When
-    with container.application.register_user.override(register_user_mock):
+    with container.bus.override(bus_mock):
         response = client.post(
             "/users",
             json={"email": "taken@email.com", "password": "password"},

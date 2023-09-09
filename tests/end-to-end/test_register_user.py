@@ -4,10 +4,18 @@ from freezegun import freeze_time
 from starlette import status
 from starlette.testclient import TestClient
 
+from app.modules import bus
+from app.modules.accounts.application.commands import RegisterUser
+from app.modules.accounts.domain.password import Password
+from app.modules.shared_kernel.entities.email_address import EmailAddress
+
 
 @freeze_time("2023-08-02 22:20:00")
-def test_register_user(register_user, anonymous_client: TestClient):
-    response = register_user(email="test@email.com")
+def test_register_user(anonymous_client: TestClient):
+    response = anonymous_client.post(
+        "/api/users",
+        json={"email": "test@email.com", "password": "password"},
+    )
     assert response.status_code == status.HTTP_200_OK
 
     response = anonymous_client.post(
@@ -65,9 +73,15 @@ def test_register_user(register_user, anonymous_client: TestClient):
     }
 
 
-def test_register_user_fail(register_user):
-    response = register_user(email="taken@email.com")
-    assert response.status_code == status.HTTP_200_OK
+def test_register_user_fail(anonymous_client: TestClient):
+    # Given
+    bus.execute(RegisterUser(EmailAddress("taken@email.com"), Password("password")))
 
-    response = register_user(email="taken@email.com")
+    # When
+    response = anonymous_client.post(
+        "/api/users",
+        json={"email": "taken@email.com", "password": "password"},
+    )
+
+    # Then
     assert response.status_code == status.HTTP_409_CONFLICT

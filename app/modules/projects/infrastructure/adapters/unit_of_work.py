@@ -4,13 +4,13 @@ from sqlalchemy.orm import Session
 
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.infrastructure.adapters.project_repository import ProjectRepository
-from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
+from app.shared.message_bus import SupportsDispatchingEvents
 
 
 class UnitOfWork(AbstractUnitOfWork):
     projects: ProjectRepository
 
-    def __init__(self, session_factory: Callable[..., Session], bus: SupportsDispatchingEvents):
+    def __init__(self, bus: SupportsDispatchingEvents, session_factory: Callable[..., Session]):
         super().__init__(bus)
         self._session_factory = session_factory
 

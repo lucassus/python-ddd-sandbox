@@ -1,21 +1,29 @@
-from unittest.mock import Mock
+from unittest.mock import ANY, Mock
 
 from fastapi import FastAPI
 from starlette import status
 from starlette.testclient import TestClient
 
 from app.anys import AnyUUID
-from app.modules.projects.application.archivization_service import ArchivizationService
-from app.modules.projects.domain.project import ProjectID
+from app.modules.projects.application.commands import (
+    ArchiveProject,
+    CreateProject,
+    DeleteProject,
+    UnarchiveProject,
+    UpdateProject,
+)
+from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints.containers import Container
+from app.shared.message_bus import MessageBus
 
 
 def test_create_project_endpoint(container: Container, app: FastAPI, client: TestClient):
     # Given
-    create_project_mock = Mock(return_value=1)
+    bus_mock = Mock(spec=MessageBus)
+    bus_mock.execute.return_value = ProjectID(1)
 
     # When
-    with container.application.create_project.override(create_project_mock):
+    with container.bus.override(bus_mock):
         response = client.post(
             "/projects",
             json={"name": "Test project"},
@@ -25,7 +33,12 @@ def test_create_project_endpoint(container: Container, app: FastAPI, client: Tes
     # Then
     assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/1"
-    create_project_mock.assert_called_with(user_id=AnyUUID, name="Test project")
+    bus_mock.execute.assert_called_with(
+        CreateProject(
+            user_id=AnyUUID,  # type: ignore
+            name=ProjectName("Test project"),
+        )
+    )
 
 
 def test_list_projects_endpoint(container: Container, client: TestClient):
@@ -49,10 +62,10 @@ def test_list_projects_endpoint(container: Container, client: TestClient):
 
 def test_update_project_endpoint(container: Container, client: TestClient):
     # Given
-    update_project_mock = Mock()
+    bus_mock = Mock(spec=MessageBus)
 
     # When
-    with container.application.update_project.override(update_project_mock):
+    with container.bus.override(bus_mock):
         response = client.put(
             "/projects/123",
             json={"name": "Test project"},
@@ -62,43 +75,53 @@ def test_update_project_endpoint(container: Container, client: TestClient):
     # Then
     assert response.status_code == status.HTTP_303_SEE_OTHER
     assert response.headers["location"] == "/api/projects/123"
-    update_project_mock.assert_called_with(ProjectID(123), "Test project")
+    bus_mock.execute.assert_called_with(
+        UpdateProject(
+            project_id=ProjectID(123),
+            name=ProjectName("Test project"),
+        )
+    )
 
 
 def test_archive_project_endpoint(container: Container, client: TestClient):
     # Given
-    archivization_service_mock = Mock(spec=ArchivizationService)
+    bus_mock = Mock(spec=MessageBus)
 
     # When
-    with container.application.archivization_service.override(archivization_service_mock):
+    with container.bus.override(bus_mock):
         response = client.put("/projects/123/archive")
 
     # Then
     assert response.status_code == status.HTTP_200_OK
-    archivization_service_mock.archive.assert_called_with(ProjectID(123))
+    bus_mock.execute.assert_called_with(
+        ArchiveProject(
+            project_id=ProjectID(123),
+            now=ANY,
+        )
+    )
 
 
 def test_unarchive_project_endpoint(container: Container, client: TestClient):
     # Given
-    archivization_service_mock = Mock(spec=ArchivizationService)
+    bus_mock = Mock(spec=MessageBus)
 
     # When
-    with container.application.archivization_service.override(archivization_service_mock):
+    with container.bus.override(bus_mock):
         response = client.put("/projects/124/unarchive")
 
     # Then
     assert response.status_code == status.HTTP_200_OK
-    archivization_service_mock.unarchive.assert_called_with(ProjectID(124))
+    bus_mock.execute.assert_called_with(UnarchiveProject(project_id=ProjectID(124)))
 
 
 def test_delete_project_endpoint(container: Container, client: TestClient):
     # Given
-    archivization_service_mock = Mock(spec=ArchivizationService)
+    bus_mock = Mock(spec=MessageBus)
 
     # When
-    with container.application.archivization_service.override(archivization_service_mock):
+    with container.bus.override(bus_mock):
         response = client.delete("/projects/124")
 
     # Then
     assert response.status_code == status.HTTP_200_OK
-    archivization_service_mock.delete.assert_called_with(ProjectID(124))
+    bus_mock.execute.assert_called_with(DeleteProject(project_id=ProjectID(124), now=ANY))

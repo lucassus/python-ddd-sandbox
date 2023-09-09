@@ -1,5 +1,4 @@
 import pytest
-from sqlalchemy.orm import clear_mappers
 
 from app.infrastructure.db import AppSession, engine
 from app.infrastructure.tables import create_tables, drop_tables
@@ -12,13 +11,12 @@ from app.modules.projects.infrastructure.mappers import start_mappers as start_p
 def _prepare_db():
     create_tables(engine)
 
-    clear_mappers()
     start_account_mappers(mapper_registry)
     start_project_mappers(mapper_registry)
 
     yield
 
-    clear_mappers()
+    mapper_registry.dispose()
     drop_tables(engine)
 
 

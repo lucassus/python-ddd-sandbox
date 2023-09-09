@@ -9,7 +9,12 @@ from app.modules.accounts.entrypoints.containers import Container
 @pytest.fixture(autouse=True)
 def container():
     container = Container(jwt_secret_key="test-secret")
-    container.wire()
+    container.wire(
+        [
+            ".dependencies",
+            ".routes",
+        ],
+    )
 
     return container
 

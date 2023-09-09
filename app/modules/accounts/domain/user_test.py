@@ -1,6 +1,7 @@
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
+from app.modules.shared_kernel.events import UserAccountCreated
 
 
 class TestUser:
@@ -11,4 +12,4 @@ class TestUser:
             hashed_password="asdf",
         )
 
-        assert user.events[-1] == User.AccountCreated(user_id=user.id)
+        assert user.events[-1] == UserAccountCreated(user_id=user.id)

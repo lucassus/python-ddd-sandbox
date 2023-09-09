@@ -5,6 +5,11 @@ from starlette.testclient import TestClient
 from app import create_app
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
+from app.modules import bus
+from app.modules.accounts.application.commands import RegisterUser
+from app.modules.accounts.domain.password import Password
+from app.modules.authentication_contract import AuthenticationContract
+from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 @pytest.fixture(autouse=True)
@@ -25,26 +30,20 @@ def anonymous_client(app):
 
 
 @pytest.fixture()
-def register_user(anonymous_client: TestClient):
-    def _register_user(email: str):
-        return anonymous_client.post(
-            "/api/users",
-            json={"email": email, "password": "password"},
-        )
+def current_user():
+    email = EmailAddress("test@email.com")
+    user_id = bus.execute(RegisterUser(email, Password("password")))
 
-    return _register_user
+    return AuthenticationContract.CurrentUserDTO(user_id, email)
 
 
 @pytest.fixture()
-def client(register_user, app, anonymous_client):
-    response = register_user("test@email.com")
-    assert response.status_code == status.HTTP_200_OK  # noqa: S101
-
+def client(current_user, app, anonymous_client):
     response = anonymous_client.post(
         "/api/users/login",
         data={
             "grant_type": "password",
-            "username": "test@email.com",
+            "username": str(current_user.email),
             "password": "password",
         },
     )
@@ -55,25 +54,3 @@ def client(register_user, app, anonymous_client):
         app,
         headers={"Authorization": f"Bearer {token}"},
     )
-
-
-@pytest.fixture()
-def create_project(register_user, client: TestClient):
-    def _create_project(name: str):
-        return client.post(
-            "/api/projects",
-            json={"name": name},
-        )
-
-    return _create_project
-
-
-@pytest.fixture()
-def create_task(client: TestClient):
-    def _create_task(project_id: int, name: str):
-        return client.post(
-            f"/api/projects/{project_id}/tasks",
-            json={"name": name},
-        )
-
-    return _create_task

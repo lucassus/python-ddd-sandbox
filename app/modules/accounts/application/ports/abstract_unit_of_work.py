@@ -3,7 +3,7 @@ from contextlib import AbstractContextManager
 from typing import Self
 
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
-from app.modules.shared_kernel.message_bus import SupportsDispatchingEvents
+from app.shared.message_bus import SupportsDispatchingEvents
 
 
 class AbstractUnitOfWork(AbstractContextManager["AbstractUnitOfWork"], metaclass=abc.ABCMeta):

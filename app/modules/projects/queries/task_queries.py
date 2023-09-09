@@ -10,7 +10,6 @@ from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.shared_kernel.errors import EntityNotFoundError
 from app.shared.base_schema import BaseSchema
-from app.shared.user_id_field import UserIDField
 
 
 class ListTasksQuery(BaseSQLQuery):
@@ -33,7 +32,6 @@ class GetTaskQuery(BaseSQLQuery):
     class Result(BaseSchema):
         number: int
         name: str
-        created_by: Optional[UserIDField]
         completed_at: Optional[datetime]
 
     class NotFoundError(EntityNotFoundError):
@@ -46,7 +44,6 @@ class GetTaskQuery(BaseSQLQuery):
                 tasks_table.c.id,
                 tasks_table.c.number,
                 tasks_table.c.name,
-                tasks_table.c.created_by,
                 tasks_table.c.completed_at,
             )
             .select_from(tasks_table)

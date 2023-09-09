@@ -1,17 +1,15 @@
-from typing import Annotated
-
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
-from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.application.tasks_service import TasksService
+from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
+from app.shared.message_bus import MessageBus
+from app.utc_datetime import utc_now
 
 router = APIRouter(prefix="/projects/{project_id}/tasks")
 
@@ -21,14 +19,9 @@ router = APIRouter(prefix="/projects/{project_id}/tasks")
 def task_create_endpoint(
     project_id: int,
     data: schemas.CreateTask,
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
-    service: TasksService = Depends(Provide[Container.application.tasks_service]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    task_number = service.create_task(
-        project_id=ProjectID(project_id),
-        created_by=current_user.id,
-        name=data.name,
-    )
+    task_number = bus.execute(CreateTask(ProjectID(project_id), name=data.name))
 
     return RedirectResponse(
         f"/api/projects/{project_id}/tasks/{task_number}",
@@ -66,10 +59,10 @@ def get_task_endpoint(
 @inject
 def task_complete_endpoint(
     project_id: int,
-    service: TasksService = Depends(Provide[Container.application.tasks_service]),
     task_number: int = Path(..., description="The number of the task to complete", ge=1),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    service.complete_task(ProjectID(project_id), TaskNumber(task_number))
+    bus.execute(CompleteTask(ProjectID(project_id), TaskNumber(task_number), now=utc_now()))
 
     return RedirectResponse(
         f"/api/projects/{project_id}/tasks/{task_number}",
@@ -81,10 +74,10 @@ def task_complete_endpoint(
 @inject
 def task_incomplete_endpoint(
     project_id: int,
-    service: TasksService = Depends(Provide[Container.application.tasks_service]),
     task_number: int = Path(..., description="The number of the task to incomplete", ge=1),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    service.incomplete_task(ProjectID(project_id), TaskNumber(task_number))
+    bus.execute(IncompleteTask(ProjectID(project_id), TaskNumber(task_number)))
 
     return RedirectResponse(
         f"/api/projects/{project_id}/tasks/{task_number}",

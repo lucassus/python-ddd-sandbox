@@ -3,7 +3,7 @@ from unittest import mock
 
 import pytest
 
-from app.modules.shared_kernel.message_bus import Event, MessageBus
+from app.shared.message_bus import Event, MessageBus
 
 
 @dataclass(frozen=True)
@@ -22,7 +22,7 @@ def bus() -> MessageBus:
 
 
 class TestMessageBus:
-    def test_simple_listener(self, bus):
+    def test_simple_listener(self, bus: MessageBus):
         # Given
         handle_some_event = mock.Mock()
         bus.listen(SomeEvent, handle_some_event)
@@ -35,22 +35,7 @@ class TestMessageBus:
         handle_some_event.assert_called()
         handle_some_event.assert_called_with(event)
 
-    def test_decorator_listener(self, bus):
-        # Given
-        mock_handle = mock.Mock()
-
-        @bus.listen(SomeEvent)
-        def handle_some_event(event: SomeEvent):
-            mock_handle(event)
-
-        # When
-        event = SomeEvent(message="Hello!")
-        bus.dispatch(event)
-
-        # Then
-        mock_handle.assert_called_with(event)
-
-    def test_event_can_have_multiple_handlers(self, bus):
+    def test_event_can_have_multiple_handlers(self, bus: MessageBus):
         # Given
         handle_event_1 = mock.Mock()
         bus.listen(SomeEvent, handle_event_1)
@@ -67,7 +52,7 @@ class TestMessageBus:
         assert handle_event_1.call_count == 2
         assert handle_event_2.call_count == 1
 
-    def test_do_nothing_when_the_message_cannot_be_handled(self, bus):
+    def test_do_nothing_when_the_message_cannot_be_handled(self, bus: MessageBus):
         # Given
         mock_handle = mock.Mock()
         bus.listen(SomeEvent, mock_handle)

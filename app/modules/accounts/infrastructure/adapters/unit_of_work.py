@@ -5,13 +5,13 @@ from sqlalchemy.orm import Session
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.infrastructure.adapters.user_repository import UserRepository
-from app.modules.shared_kernel.message_bus import MessageBus
+from app.shared.message_bus import MessageBus
 
 
 class UnitOfWork(AbstractUnitOfWork):
     repository: TrackingUserRepository
 
-    def __init__(self, session_factory: Callable[..., Session], bus: MessageBus):
+    def __init__(self, bus: MessageBus, session_factory: Callable[..., Session]):
         super().__init__(bus=bus)
         self._session_factory = session_factory
 

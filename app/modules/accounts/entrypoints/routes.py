@@ -6,15 +6,14 @@ from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
-from app.modules.accounts.application.change_user_email_address import ChangeUserEmailAddress
-from app.modules.accounts.application.register_user import RegisterUser
+from app.modules.accounts.application.commands import ChangeUserEmailAddress, RegisterUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.accounts.queries.find_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.shared_kernel.entities.user_id import UserID
+from app.shared.message_bus import MessageBus
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -23,12 +22,10 @@ router = APIRouter(prefix="/users", tags=["users"])
 @inject
 def user_register_endpoint(
     data: schemas.RegisterUser,
-    register_user: RegisterUser = Depends(Provide[Container.application.register_user]),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    user_id = UserID.generate()
-
     try:
-        register_user(user_id, email=data.email, password=data.password)
+        bus.execute(RegisterUser(email=data.email, password=data.password))
     except EmailAlreadyExistsException as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -40,7 +37,7 @@ def user_register_endpoint(
 @inject
 def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    authentication: Authentication = Depends(Provide[Container.application.authentication]),
+    authentication: Authentication = Depends(Provide[Container.authentication]),
 ):
     data = schemas.LoginUser(email=form_data.username, password=form_data.password)
     token = authentication.login(email=data.email, password=data.password)
@@ -56,11 +53,14 @@ def user_login_endpoint(
 def user_update_endpoint(
     current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
     data: schemas.UpdateUser,
-    change_user_email_address: ChangeUserEmailAddress = Depends(
-        Provide[Container.application.change_user_email_address]
-    ),
+    bus: MessageBus = Depends(Provide[Container.bus]),
 ):
-    change_user_email_address(user_id=current_user.id, new_email=data.email)
+    bus.execute(
+        ChangeUserEmailAddress(
+            user_id=current_user.id,
+            new_email=data.email,
+        )
+    )
 
     return RedirectResponse(
         "/api/users/me",

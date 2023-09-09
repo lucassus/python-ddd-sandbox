@@ -6,4 +6,4 @@ from app.modules.accounts.entrypoints.containers import Container
 
 @inject
 def get_authentication(container: Container = Depends(Provide[Container])):
-    return container.authentication()
+    return container.application.authentication()

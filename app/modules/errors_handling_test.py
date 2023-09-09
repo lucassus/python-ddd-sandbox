@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from app.modules.accounts.queries.find_user_query import GetUserQuery
+from app.modules.accounts.queries.get_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationError
 from app.modules.errors_handling import register_error_handlers
 from app.modules.shared_kernel.entities.user_id import UserID

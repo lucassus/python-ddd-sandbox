@@ -10,7 +10,7 @@ from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
-from app.modules.accounts.queries.find_user_query import GetUserQuery
+from app.modules.accounts.queries.get_user_query import GetUserQuery
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID

@@ -2,7 +2,7 @@ import pytest
 
 from app.anys import AnyUUID
 from app.infrastructure.db import engine
-from app.modules.accounts.queries.find_user_query import GetUserQuery
+from app.modules.accounts.queries.get_user_query import GetUserQuery
 from app.modules.shared_kernel.entities.user_id import UserID
 
 

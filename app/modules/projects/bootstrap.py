@@ -1,6 +1,6 @@
 from sqlalchemy.orm import registry
 
-from app.infrastructure.db import engine, AppSession
+from app.infrastructure.db import engine
 from app.modules.projects.application.commands import (
     ArchiveProject,
     ArchiveProjectHandler,
@@ -25,18 +25,22 @@ from app.modules.projects.application.event_handlers import CreateUserExamplePro
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import Project
 from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus
 
 
-def _create_container():
-    container = Container(engine=engine)
+def _create_container(bus: MessageBus) -> Container:
+    container = Container(engine=engine, bus=bus)
     container.wire(
-        modules=[".application.event_handlers"],
+        modules=[
+            ".application.event_handlers",
+            ".entrypoints.dependencies",
+        ],
         packages=[".entrypoints.routes"],
     )
+
+    return container
 
 
 def _register_commands(bus: MessageBus, uow: AbstractUnitOfWork) -> None:
@@ -56,11 +60,13 @@ def _register_event_handlers(bus: MessageBus, uow: AbstractUnitOfWork) -> None:
     bus.listen(Project.Created, SendProjectCreatedMessage(uow))
 
 
-def bootstrap_projects_module(mappers: registry, bus: MessageBus):
+def bootstrap_projects_module(mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
 
-    _create_container()
-    uow = UnitOfWork(bus, session_factory=lambda: AppSession(bind=engine))
+    container = _create_container(bus)
+    uow = container.application.uow()
 
     _register_commands(bus, uow)
     _register_event_handlers(bus, uow)
+
+    return container

@@ -10,7 +10,7 @@ from app.shared.message_bus import SupportsDispatchingEvents
 class UnitOfWork(AbstractUnitOfWork):
     projects: ProjectRepository
 
-    def __init__(self, bus: SupportsDispatchingEvents, session_factory: Callable[..., Session]):
+    def __init__(self, session_factory: Callable[..., Session], bus: SupportsDispatchingEvents):
         super().__init__(bus)
         self._session_factory = session_factory
 

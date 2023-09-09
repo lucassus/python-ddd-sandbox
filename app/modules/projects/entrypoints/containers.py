@@ -9,21 +9,6 @@ from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQue
 from app.shared.message_bus import MessageBus
 
 
-class ApplicationContainer(containers.DeclarativeContainer):
-    engine = providers.Dependency(instance_of=Engine)
-    bus = providers.Dependency(instance_of=MessageBus)
-
-    session_factory = providers.Factory(AppSession, bind=engine)
-
-    authentication = providers.AbstractFactory(AuthenticationContract)
-
-    uow = providers.Singleton(
-        UnitOfWork,
-        bus=bus,
-        session_factory=session_factory.provider,
-    )
-
-
 class QueriesContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
 
@@ -37,5 +22,13 @@ class Container(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
     bus = providers.Dependency(instance_of=MessageBus)
 
-    application = providers.Container(ApplicationContainer, engine=engine, bus=bus)
+    authentication = providers.AbstractFactory(AuthenticationContract)
+
+    session_factory = providers.Factory(AppSession, bind=engine)
+    uow = providers.Singleton(
+        UnitOfWork,
+        bus,
+        session_factory=session_factory.provider,
+    )
+
     queries = providers.Container(QueriesContainer, engine=engine)

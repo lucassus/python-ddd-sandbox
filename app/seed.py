@@ -2,7 +2,7 @@ import typer
 
 from app.infrastructure.db import engine
 from app.infrastructure.tables import create_tables, drop_tables
-from app.modules import mapper_registry, bus
+from app.modules import bus, mapper_registry
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.bootstrap import bootstrap_accounts_module
 from app.modules.accounts.domain.password import Password

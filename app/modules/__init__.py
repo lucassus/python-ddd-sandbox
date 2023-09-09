@@ -20,8 +20,8 @@ def create_app() -> FastAPI:
     projects_container = bootstrap_projects_module(mapper_registry, bus)
 
     # Pass down assembled authentication service to comply with the contract
-    projects_container.application.authentication.override(
-        providers.Factory(accounts_container.application.authentication),
+    projects_container.authentication.override(
+        providers.Factory(accounts_container.authentication),
     )
 
     # Include routers

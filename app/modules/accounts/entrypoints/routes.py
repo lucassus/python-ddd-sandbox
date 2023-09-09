@@ -37,7 +37,7 @@ def user_register_endpoint(
 @inject
 def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    authentication: Authentication = Depends(Provide[Container.application.authentication]),
+    authentication: Authentication = Depends(Provide[Container.authentication]),
 ):
     data = schemas.LoginUser(email=form_data.username, password=form_data.password)
     token = authentication.login(email=data.email, password=data.password)

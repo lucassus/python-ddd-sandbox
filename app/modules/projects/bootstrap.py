@@ -64,7 +64,7 @@ def bootstrap_projects_module(mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
 
     container = _create_container(bus)
-    uow = container.application.uow()
+    uow = container.uow()
 
     _register_commands(bus, uow)
     _register_event_handlers(bus, uow)

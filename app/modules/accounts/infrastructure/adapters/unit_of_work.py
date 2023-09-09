@@ -11,7 +11,7 @@ from app.shared.message_bus import MessageBus
 class UnitOfWork(AbstractUnitOfWork):
     repository: TrackingUserRepository
 
-    def __init__(self, session_factory: Callable[..., Session], bus: MessageBus):
+    def __init__(self, bus: MessageBus, session_factory: Callable[..., Session]):
         super().__init__(bus=bus)
         self._session_factory = session_factory
 

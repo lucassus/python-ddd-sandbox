@@ -26,7 +26,7 @@ def _create_container(bus: MessageBus) -> Container:
         bus=providers.Object(bus),
     )
 
-    container.application.password_hasher.override(
+    container.password_hasher.override(
         providers.Factory(PasswordHasher),
     )
 
@@ -57,9 +57,9 @@ def bootstrap_accounts_module(mappers: registry, bus: MessageBus) -> Container:
     start_mappers(mappers)
 
     container = _create_container(bus)
-    uow = container.application.uow()
+    uow = container.uow()
 
-    _register_commands(bus, uow, password_hasher=container.application.password_hasher())
+    _register_commands(bus, uow, password_hasher=container.password_hasher())
     _register_event_handlers(bus, uow)
 
     return container

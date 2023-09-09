@@ -19,13 +19,13 @@ argparse==1.4.0
     # via adr-tools-python
 attrs==23.1.0
     # via flake8-bugbear
-autoflake==2.2.0
+autoflake==2.2.1
     # via -r requirements.in
 bandit==1.7.5
     # via flake8-bandit
 bcrypt==4.0.1
     # via passlib
-black==23.7.0
+black==23.9.0
     # via -r requirements.in
 certifi==2023.7.22
     # via
@@ -166,7 +166,7 @@ pygments==2.15.1
     # via rich
 pyjwt==2.8.0
     # via -r requirements.in
-pytest==7.4.1
+pytest==7.4.2
     # via
     #   -r requirements.in
     #   pytest-asyncio

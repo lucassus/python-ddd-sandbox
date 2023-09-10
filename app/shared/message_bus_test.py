@@ -1,9 +1,10 @@
 from dataclasses import dataclass
+from typing import assert_type
 from unittest import mock
 
 import pytest
 
-from app.shared.message_bus import Event, MessageBus
+from app.shared.message_bus import Event, MessageBus, Command, CommandHandler
 
 
 @dataclass(frozen=True)
@@ -62,3 +63,47 @@ class TestMessageBus:
 
         # Then
         mock_handle.assert_not_called()
+
+    def test_command_without_return_value(self, bus: MessageBus):
+        # Given
+        @dataclass(frozen=True)
+        class Increment(Command[None]):
+            value: int
+
+        class IncrementHandler(CommandHandler[Increment, None]):
+            def __init__(self, by: int):
+                self._by = by
+
+            def __call__(self, command: Increment) -> None:
+                pass
+
+        bus.register(Increment, IncrementHandler(2))
+
+        # When
+        result = bus.execute(Increment(3))
+
+        # Then
+        assert_type(result, None)
+        assert result is None
+
+    def test_command_with_return_value(self, bus: MessageBus):
+        # Given
+        @dataclass(frozen=True)
+        class Increment(Command[int]):
+            value: int
+
+        class IncrementHandler(CommandHandler[Increment, int]):
+            def __init__(self, by: int):
+                self._by = by
+
+            def __call__(self, command: Increment) -> int:
+                return command.value + self._by
+
+        bus.register(Increment, IncrementHandler(2))
+
+        # When
+        result = bus.execute(Increment(3))
+
+        # Then
+        assert_type(result, int)
+        assert result == 5

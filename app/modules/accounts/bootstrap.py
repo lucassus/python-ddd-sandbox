@@ -12,8 +12,8 @@ from app.modules.accounts.application.commands import (
 from app.modules.accounts.application.event_handlers import SendWelcomeEmail
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
+from app.modules.accounts.infrastructure.containers import Container
 from app.modules.accounts.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus

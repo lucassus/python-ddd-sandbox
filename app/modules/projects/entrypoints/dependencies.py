@@ -5,7 +5,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from app.modules.authentication_contract import AuthenticationContract
-from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.infrastructure.containers import Container
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/users/login",

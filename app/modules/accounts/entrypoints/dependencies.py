@@ -4,7 +4,7 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 
-from app.modules.accounts.entrypoints.containers import Container
+from app.modules.accounts.infrastructure.containers import Container
 from app.modules.authentication_contract import AuthenticationContract
 
 oauth2_scheme = OAuth2PasswordBearer(

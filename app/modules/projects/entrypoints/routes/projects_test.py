@@ -13,7 +13,7 @@ from app.modules.projects.application.commands import (
     UpdateProject,
 )
 from app.modules.projects.domain.project import ProjectID, ProjectName
-from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.infrastructure.containers import Container
 from app.shared.message_bus import MessageBus
 
 

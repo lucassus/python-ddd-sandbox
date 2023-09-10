@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.modules.accounts.entrypoints import routes
-from app.modules.accounts.entrypoints.containers import Container
+from app.modules.accounts.infrastructure.containers import Container
 
 
 @pytest.fixture(autouse=True)

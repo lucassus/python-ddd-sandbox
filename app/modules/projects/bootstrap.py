@@ -24,7 +24,7 @@ from app.modules.projects.application.commands import (
 from app.modules.projects.application.event_handlers import CreateUserExampleProjectHandler, SendProjectCreatedMessage
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import Project
-from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.infrastructure.containers import Container
 from app.modules.projects.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus

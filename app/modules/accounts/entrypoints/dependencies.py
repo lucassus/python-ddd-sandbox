@@ -17,5 +17,5 @@ oauth2_scheme = OAuth2PasswordBearer(
 def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
     authentication: AuthenticationContract = Depends(Provide[Container.authentication]),
-) -> AuthenticationContract.CurrentUserDTO:
+) -> AuthenticationContract.Identity:
     return authentication.trade_token_for_user(token)

@@ -33,7 +33,7 @@ class Authentication(AuthenticationContract):
 
             return self._token.encode(user.id, now)
 
-    def trade_token_for_user(self, token: str) -> AuthenticationContract.CurrentUserDTO:
+    def trade_token_for_user(self, token: str) -> AuthenticationContract.Identity:
         try:
             user_id = self._token.decode(token)
         except AuthenticationTokenError as e:
@@ -46,7 +46,7 @@ class Authentication(AuthenticationContract):
         if user is None:
             raise AuthenticationError()
 
-        return AuthenticationContract.CurrentUserDTO(
+        return AuthenticationContract.Identity(
             id=user.id,
             email=user.email,
         )

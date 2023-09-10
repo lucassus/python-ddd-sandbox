@@ -51,7 +51,7 @@ def user_login_endpoint(
 @router.put("/me")
 @inject
 def user_update_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     data: schemas.UpdateUser,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
@@ -75,7 +75,7 @@ def user_update_endpoint(
 )
 @inject
 def user_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     get_user: GetUserQuery = Depends(Provide[Container.queries.get_user]),
 ):
     return get_user(current_user.id)

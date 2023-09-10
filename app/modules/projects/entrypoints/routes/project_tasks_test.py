@@ -20,7 +20,7 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     bus_mock.execute.return_value = TaskNumber(1)
     user_id = UserID.generate()
 
-    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
+    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.Identity(
         id=user_id,
         email=EmailAddress("test@email.com"),
     )

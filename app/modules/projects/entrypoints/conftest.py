@@ -26,7 +26,7 @@ def app():
     app = FastAPI()
     app.include_router(routes.router)
 
-    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
+    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.Identity(
         id=UserID.generate(),
         email=EmailAddress("test@email.com"),
     )

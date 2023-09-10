@@ -27,7 +27,7 @@ router = APIRouter(prefix="/projects")
 @router.post("")
 @inject
 def project_create_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     data: schemas.CreateProject,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
@@ -46,7 +46,7 @@ def project_create_endpoint(
 )
 @inject
 def list_projects_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     list_projects: ListProjectsQuery = Depends(Provide[Container.queries.list_projects]),
 ):
     return list_projects(current_user.id)

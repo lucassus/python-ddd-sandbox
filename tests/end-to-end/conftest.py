@@ -34,7 +34,7 @@ def current_user():
     email = EmailAddress("test@email.com")
     user_id = bus.execute(RegisterUser(email, Password("password")))
 
-    return AuthenticationContract.CurrentUserDTO(user_id, email)
+    return AuthenticationContract.Identity(user_id, email)
 
 
 @pytest.fixture()

@@ -6,7 +6,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class UpdateProject(Command[None]):
+class UpdateProject(Command):
     project_id: ProjectID
     name: ProjectName
 

@@ -7,7 +7,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class IncompleteTask(Command[None]):
+class IncompleteTask(Command):
     project_id: ProjectID
     task_number: TaskNumber
 

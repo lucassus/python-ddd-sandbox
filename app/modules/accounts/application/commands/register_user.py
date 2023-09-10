@@ -7,11 +7,11 @@ from app.modules.accounts.domain.password import Password
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.shared.message_bus import Command, CommandHandler
+from app.shared.message_bus import CommandHandler, CommandThatReturns
 
 
 @dataclass(frozen=True)
-class RegisterUser(Command[UserID]):
+class RegisterUser(CommandThatReturns[UserID]):
     email: EmailAddress
     password: Password
 

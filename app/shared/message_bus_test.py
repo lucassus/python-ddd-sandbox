@@ -4,7 +4,7 @@ from unittest import mock
 
 import pytest
 
-from app.shared.message_bus import Event, MessageBus, Command, CommandHandler
+from app.shared.message_bus import Command, CommandHandler, CommandThatReturns, Event, MessageBus
 
 
 @dataclass(frozen=True)
@@ -67,7 +67,7 @@ class TestMessageBus:
     def test_command_without_return_value(self, bus: MessageBus):
         # Given
         @dataclass(frozen=True)
-        class Increment(Command[None]):
+        class Increment(Command):
             value: int
 
         class IncrementHandler(CommandHandler[Increment, None]):
@@ -89,7 +89,7 @@ class TestMessageBus:
     def test_command_with_return_value(self, bus: MessageBus):
         # Given
         @dataclass(frozen=True)
-        class Increment(Command[int]):
+        class Increment(CommandThatReturns[int]):
             value: int
 
         class IncrementHandler(CommandHandler[Increment, int]):

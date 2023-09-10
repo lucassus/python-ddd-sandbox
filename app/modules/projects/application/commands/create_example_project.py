@@ -4,11 +4,11 @@ from app.modules.projects.application.ports.abstract_unit_of_work import Abstrac
 from app.modules.projects.domain.factories import build_example_project
 from app.modules.projects.domain.project import ProjectID
 from app.modules.shared_kernel.entities.user_id import UserID
-from app.shared.message_bus import Command, CommandHandler
+from app.shared.message_bus import CommandHandler, CommandThatReturns
 
 
 @dataclass(frozen=True)
-class CreateExampleProject(Command[ProjectID]):
+class CreateExampleProject(CommandThatReturns[ProjectID]):
     user_id: UserID
 
 

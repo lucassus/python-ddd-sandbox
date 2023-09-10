@@ -8,7 +8,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class ChangeUserEmailAddress(Command[None]):
+class ChangeUserEmailAddress(Command):
     user_id: UserID
     new_email: EmailAddress
 

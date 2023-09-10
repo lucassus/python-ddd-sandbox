@@ -8,7 +8,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class CompleteTask(Command[None]):
+class CompleteTask(Command):
     project_id: ProjectID
     task_number: TaskNumber
     now: datetime

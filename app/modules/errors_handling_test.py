@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from app.modules.accounts.queries.get_user_query import GetUserQuery
+from app.modules.accounts.application.queries import GetUser
 from app.modules.authentication_contract import AuthenticationError
 from app.modules.errors_handling import register_error_handlers
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -45,7 +45,7 @@ def test_handle_user_not_found_error(app, client):
 
     @app.get("/foo")
     def raise_user_not_found_error():
-        raise GetUserQuery.NotFoundError(user_id)
+        raise GetUser.NotFoundError(user_id)
 
     # When
     response = client.get("/foo")

@@ -7,11 +7,12 @@ from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.commands import ChangeUserEmailAddress, RegisterUser
+from app.modules.accounts.application.queries import GetUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.dependencies import get_current_user
 from app.modules.accounts.infrastructure.containers import Container
-from app.modules.accounts.queries.get_user_query import GetUserQuery
+from app.modules.accounts.infrastructure.queries import GetUserQueryHandler
 from app.modules.authentication_contract import AuthenticationContract
 from app.shared.message_bus import MessageBus
 
@@ -71,11 +72,11 @@ def user_update_endpoint(
 @router.get(
     "/me",
     name="Returns the current user along with projects",
-    response_model=GetUserQuery.Result,
+    response_model=GetUser.Result,
 )
 @inject
 def user_endpoint(
     current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
-    get_user: GetUserQuery = Depends(Provide[Container.queries.get_user]),
+    get_user: GetUserQueryHandler = Depends(Provide[Container.queries.get_user]),
 ):
-    return get_user(current_user.id)
+    return get_user(GetUser(current_user.id))

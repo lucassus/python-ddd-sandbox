@@ -6,13 +6,13 @@ from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.accounts.queries.get_user_query import GetUserQuery
+from app.modules.accounts.infrastructure.queries import GetUserQueryHandler
 from app.shared.message_bus import MessageBus
 
 
 class QueriesContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
-    get_user = providers.Singleton(GetUserQuery, engine=engine)
+    get_user = providers.Singleton(GetUserQueryHandler, engine=engine)
 
 
 class Container(containers.DeclarativeContainer):

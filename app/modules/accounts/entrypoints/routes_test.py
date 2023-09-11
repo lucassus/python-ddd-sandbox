@@ -105,7 +105,7 @@ def test_get_current_user_endpoint(
     )
 
     # When
-    with container.queries.get_user.override(get_user_mock):
+    with container.queries.get_user_handler.override(get_user_mock):
         response = client.get("/users/me")
 
     # Then

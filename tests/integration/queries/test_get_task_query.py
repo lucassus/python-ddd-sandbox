@@ -2,9 +2,10 @@ import pytest
 from sqlalchemy.orm import Session
 
 from app.infrastructure.db import engine
+from app.modules.projects.application.queries import GetTask
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
-from app.modules.projects.queries.task_queries import GetTaskQuery
+from app.modules.projects.infrastructure.queries.task_queries import GetTaskQueryHandler
 
 
 def test_get_task_query(
@@ -13,7 +14,7 @@ def test_get_task_query(
     create_project,
 ):
     # Given
-    get_task = GetTaskQuery(engine=engine)
+    handle = GetTaskQueryHandler(engine=engine)
 
     user = create_user()
 
@@ -27,7 +28,7 @@ def test_get_task_query(
     session.commit()
 
     # When
-    task = get_task(project_id=second_project.id, number=TaskNumber(1))
+    task = handle(GetTask(project_id=second_project.id, number=TaskNumber(1)))
 
     # Then
     assert task.name == "Task Two"
@@ -36,8 +37,8 @@ def test_get_task_query(
 
 def test_get_task_query_raises_error():
     # Given
-    get_task = GetTaskQuery(engine=engine)
+    handle = GetTaskQueryHandler(engine=engine)
 
     # When
-    with pytest.raises(GetTaskQuery.NotFoundError):
-        get_task(project_id=ProjectID(1), number=TaskNumber(1))
+    with pytest.raises(GetTask.NotFoundError):
+        handle(GetTask(project_id=ProjectID(1), number=TaskNumber(1)))

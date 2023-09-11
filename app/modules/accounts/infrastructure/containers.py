@@ -12,7 +12,8 @@ from app.shared.message_bus import MessageBus
 
 class QueriesContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
-    get_user = providers.Singleton(GetUserQueryHandler, engine=engine)
+
+    get_user_handler = providers.Singleton(GetUserQueryHandler, engine=engine)
 
 
 class Container(containers.DeclarativeContainer):

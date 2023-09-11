@@ -1,12 +1,15 @@
+from typing import assert_type
+
 from sqlalchemy.orm import Session
 
 from app.infrastructure.db import engine
-from app.modules.projects.queries.task_queries import ListTasksQuery
+from app.modules.projects.application.queries import ListTasks
+from app.modules.projects.infrastructure.queries.task_queries import ListTasksQueryHandler
 
 
 def test_list_tasks_query(session: Session, create_project):
     # Given
-    list_tasks = ListTasksQuery(engine=engine)
+    handle = ListTasksQueryHandler(engine=engine)
 
     project = create_project()
     project.add_task(name="Task One")
@@ -14,7 +17,9 @@ def test_list_tasks_query(session: Session, create_project):
     session.commit()
 
     # When
-    tasks = list_tasks(project_id=project.id).tasks
+    result = handle(ListTasks(project_id=project.id))
+    assert_type(result, ListTasks.Result)
+    tasks = result.tasks
 
     # Then
     assert len(tasks) == 2

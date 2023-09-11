@@ -4,11 +4,12 @@ from starlette.testclient import TestClient
 
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
+from app.modules.projects.application.queries import ListTasks
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.infrastructure.containers import Container
-from app.modules.projects.queries.task_queries import ListTasksQuery
+from app.modules.projects.infrastructure.queries.task_queries import ListTasksQueryHandler
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus
@@ -41,11 +42,11 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
 
 def test_task_list_endpoint(container: Container, client: TestClient):
     # Given
-    class ListTasksQueryMock(ListTasksQuery):
-        def __call__(self, project_id: ProjectID) -> ListTasksQuery.Result:
-            return ListTasksQuery.Result(
+    class ListTasksQueryHandlerMock(ListTasksQueryHandler):
+        def __call__(self, query: ListTasks) -> ListTasks.Result:
+            return ListTasks.Result(
                 tasks=[
-                    ListTasksQuery.Result.Task(
+                    ListTasks.Result.Task(
                         number=TaskNumber(1),
                         name="Some task",
                         completed_at=None,
@@ -53,15 +54,15 @@ def test_task_list_endpoint(container: Container, client: TestClient):
                 ]
             )
 
-    list_tasks_query_mock = Mock(wraps=ListTasksQueryMock(engine=Mock()))
+    handler_mock = Mock(wraps=ListTasksQueryHandlerMock(engine=Mock()))
 
     # When
-    with container.queries.list_tasks.override(list_tasks_query_mock):
+    with container.queries.list_tasks_handler.override(handler_mock):
         response = client.get("/projects/1/tasks")
 
     # Then
     assert response.status_code == 200
-    list_tasks_query_mock.assert_called_once_with(ProjectID(1))
+    handler_mock.assert_called_once_with(ListTasks(ProjectID(1)))
     assert response.json() == {
         "tasks": [
             {

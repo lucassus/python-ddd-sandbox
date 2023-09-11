@@ -1,11 +1,11 @@
 from sqlalchemy import select
 
-from app.infrastructure.base_query import BaseSQLQuery
+from app.infrastructure.base_sql_query_handler import BaseSQLQueryHandler
 from app.infrastructure.tables import projects_table, users_table
 from app.modules.accounts.application.queries import GetUser
 
 
-class GetUserQueryHandler(BaseSQLQuery[GetUser, GetUser.Result]):
+class GetUserQueryHandler(BaseSQLQueryHandler[GetUser, GetUser.Result]):
     def __call__(self, query: GetUser) -> GetUser.Result:
         user_id = query.user_id
 

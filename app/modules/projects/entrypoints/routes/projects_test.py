@@ -53,7 +53,7 @@ def test_list_projects_endpoint(container: Container, client: TestClient):
     )
 
     # When
-    with container.queries.list_projects.override(list_projects_query_mock):
+    with container.queries.list_projects_handler.override(list_projects_query_mock):
         response = client.get("/projects")
 
     # Then

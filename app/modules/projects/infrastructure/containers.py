@@ -4,18 +4,18 @@ from sqlalchemy import Engine
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
-from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
+from app.modules.projects.infrastructure.queries.project_queries import GetProjectQueryHandler, ListProjectsQueryHandler
+from app.modules.projects.infrastructure.queries.task_queries import GetTaskQueryHandler, ListTasksQueryHandler
 from app.shared.message_bus import MessageBus
 
 
 class QueriesContainer(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
 
-    list_projects = providers.Singleton(ListProjectsQuery, engine=engine)
-    get_project = providers.Singleton(GetProjectQuery, engine=engine)
-    list_tasks = providers.Singleton(ListTasksQuery, engine=engine)
-    get_task = providers.Singleton(GetTaskQuery, engine=engine)
+    list_projects_handler = providers.Singleton(ListProjectsQueryHandler, engine=engine)
+    get_project_handler = providers.Singleton(GetProjectQueryHandler, engine=engine)
+    list_tasks_handler = providers.Singleton(ListTasksQueryHandler, engine=engine)
+    get_task_handler = providers.Singleton(GetTaskQueryHandler, engine=engine)
 
 
 class Container(containers.DeclarativeContainer):

@@ -3,11 +3,12 @@ from dataclasses import dataclass
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.modules.shared_kernel.errors import EntityNotFoundError
 from app.shared.base_schema import BaseSchema
+from app.shared.query import Query
 from app.shared.user_id_field import UserIDField
 
 
 @dataclass(frozen=True)
-class GetUser:
+class GetUser(Query):
     class Result(BaseSchema):
         class Project(BaseSchema):
             id: int

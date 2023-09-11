@@ -1,5 +1,5 @@
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
+from app.modules.accounts.application.tracking_user_repository import TrackingUserRepository
 from app.shared.message_bus import SupportsDispatchingEvents
 
 

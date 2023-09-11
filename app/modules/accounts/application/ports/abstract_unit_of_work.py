@@ -2,7 +2,7 @@ import abc
 from contextlib import AbstractContextManager
 from typing import Self
 
-from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
+from app.modules.accounts.application.tracking_user_repository import TrackingUserRepository
 from app.shared.message_bus import SupportsDispatchingEvents
 
 

@@ -1,8 +1,8 @@
 from unittest.mock import Mock
 
 from app.modules.accounts.application.ports.abstract_user_repository import AbstractUserRepository
-from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.application.testing.fake_unit_of_work import FakeUnitOfWork
+from app.modules.accounts.application.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.domain.user import User
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID

@@ -4,8 +4,11 @@ from sqlalchemy import Engine
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
-from app.modules.projects.infrastructure.queries.project_queries import GetProjectQueryHandler, ListProjectsQueryHandler
-from app.modules.projects.infrastructure.queries.task_queries import GetTaskQueryHandler, ListTasksQueryHandler
+from app.modules.projects.infrastructure.queries.project_query_handlers import (
+    GetProjectQueryHandler,
+    ListProjectsQueryHandler,
+)
+from app.modules.projects.infrastructure.queries.task_query_handlers import GetTaskQueryHandler, ListTasksQueryHandler
 from app.shared.message_bus import MessageBus
 
 

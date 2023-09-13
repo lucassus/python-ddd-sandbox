@@ -18,7 +18,10 @@ from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.infrastructure.containers import Container
-from app.modules.projects.infrastructure.queries.project_queries import GetProjectQueryHandler, ListProjectsQueryHandler
+from app.modules.projects.infrastructure.queries.project_query_handlers import (
+    GetProjectQueryHandler,
+    ListProjectsQueryHandler,
+)
 from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 

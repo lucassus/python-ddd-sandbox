@@ -8,7 +8,7 @@ from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
 from app.modules.projects.infrastructure.containers import Container
-from app.modules.projects.infrastructure.queries.task_queries import GetTaskQueryHandler, ListTasksQueryHandler
+from app.modules.projects.infrastructure.queries.task_query_handlers import GetTaskQueryHandler, ListTasksQueryHandler
 from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 

@@ -9,7 +9,7 @@ from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints.dependencies import get_current_user
 from app.modules.projects.infrastructure.containers import Container
-from app.modules.projects.infrastructure.queries.task_queries import ListTasksQueryHandler
+from app.modules.projects.infrastructure.queries.task_query_handlers import ListTasksQueryHandler
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus

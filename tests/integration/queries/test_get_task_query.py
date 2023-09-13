@@ -5,7 +5,7 @@ from app.infrastructure.db import engine
 from app.modules.projects.application.queries import GetTask
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
-from app.modules.projects.infrastructure.queries.task_queries import GetTaskQueryHandler
+from app.modules.projects.infrastructure.queries.task_query_handlers import GetTaskQueryHandler
 
 
 def test_get_task_query(

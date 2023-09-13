@@ -5,6 +5,8 @@ from app.infrastructure.base_sql_query_handler import BaseSQLQueryHandler
 from app.infrastructure.tables import tasks_table
 from app.modules.projects.application.queries import GetTask, ListTasks
 
+# TODO: Split these classes?
+
 
 class ListTasksQueryHandler(BaseSQLQueryHandler[ListTasks, ListTasks.Result]):
     def __call__(self, query: ListTasks) -> ListTasks.Result:

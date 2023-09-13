@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.infrastructure.db import engine
 from app.modules.projects.application.queries import ListTasks
-from app.modules.projects.infrastructure.queries.task_queries import ListTasksQueryHandler
+from app.modules.projects.infrastructure.queries.task_query_handlers import ListTasksQueryHandler
 
 
 def test_list_tasks_query(session: Session, create_project):

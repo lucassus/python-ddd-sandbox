@@ -4,6 +4,8 @@ from app.infrastructure.base_sql_query_handler import BaseSQLQueryHandler
 from app.infrastructure.tables import projects_table
 from app.modules.projects.application.queries import GetProject, ListProjects
 
+# TODO: Split these classes?
+
 
 class ListProjectsQueryHandler(BaseSQLQueryHandler[ListProjects, ListProjects.Result]):
     def __call__(self, query: ListProjects) -> ListProjects.Result:

@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 
     environment: Environment = Field(..., validation_alias="APP_ENV")
     database_url: str = Field(..., validation_alias="APP_DATABASE_URL")
+    async_database_url: str = Field(..., validation_alias="APP_ASYNC_DATABASE_URL")
     jwt_secret_key: str = Field(..., validation_alias="APP_JWT_SECRET_KEY")
 
 

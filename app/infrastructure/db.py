@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.config import app_config
@@ -12,6 +13,11 @@ engine = create_engine(
     echo=False,  # To have SQLAlchemy log every SQL statements issued to the database
     pool_size=5,
     max_overflow=10,  # The maximum number of connections above the pool that can be created during the spike
+)
+
+async_engine = create_async_engine(
+    app_config.async_database_url,
+    echo=False,
 )
 
 # See https://docs.sqlalchemy.org/en/20/orm/session_api.html#session-and-sessionmaker

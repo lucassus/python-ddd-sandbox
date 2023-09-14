@@ -1,6 +1,6 @@
 from sqlalchemy.orm import registry
 
-from app.infrastructure.db import engine
+from app.infrastructure.db import async_engine, engine
 from app.modules.projects.application.commands import (
     ArchiveProject,
     ArchiveProjectHandler,
@@ -24,14 +24,19 @@ from app.modules.projects.application.commands import (
 from app.modules.projects.application.event_handlers import CreateUserExampleProjectHandler, SendProjectCreatedMessage
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import Project
-from app.modules.projects.entrypoints.containers import Container
+from app.modules.projects.infrastructure.containers import Container
 from app.modules.projects.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus
 
 
 def _create_container(bus: MessageBus) -> Container:
-    container = Container(engine=engine, bus=bus)
+    container = Container(
+        engine=engine,
+        async_engine=async_engine,
+        bus=bus,
+    )
+
     container.wire(
         modules=[
             ".application.event_handlers",

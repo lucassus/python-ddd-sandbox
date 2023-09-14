@@ -3,11 +3,12 @@ from fastapi import APIRouter, Depends, Path, status
 from starlette.responses import RedirectResponse
 
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
+from app.modules.projects.application.queries import GetTask, ListTasks
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.entrypoints import schemas
-from app.modules.projects.entrypoints.containers import Container
-from app.modules.projects.queries.task_queries import GetTaskQuery, ListTasksQuery
+from app.modules.projects.infrastructure.containers import Container
+from app.modules.projects.infrastructure.queries.task_query_handlers import GetTaskQueryHandler, ListTasksQueryHandler
 from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
@@ -32,27 +33,27 @@ def task_create_endpoint(
 @router.get(
     "",
     name="Returns list of tasks",
-    response_model=ListTasksQuery.Result,
+    response_model=ListTasks.Result,
 )
 @inject
-def list_tasks_endpoint(
+async def list_tasks_endpoint(
     project_id: ProjectID,
-    list_tasks: ListTasksQuery = Depends(Provide[Container.queries.list_tasks]),
+    handle: ListTasksQueryHandler = Depends(Provide[Container.queries.list_tasks_handler]),
 ):
-    return list_tasks(project_id)
+    return await handle(ListTasks(project_id))
 
 
 @router.get(
     "/{number}",
-    response_model=GetTaskQuery.Result,
+    response_model=GetTask.Result,
 )
 @inject
-def get_task_endpoint(
-    get_task: GetTaskQuery = Depends(Provide[Container.queries.get_task]),
+async def get_task_endpoint(
+    handle: GetTaskQueryHandler = Depends(Provide[Container.queries.get_task_handler]),
     project_id: ProjectID = Path(..., description="The ID of the project"),
     number: TaskNumber = Path(..., description="The number of the task", ge=1),
 ):
-    return get_task(project_id, number)
+    return await handle(GetTask(project_id, number))
 
 
 @router.put("/{task_number}/complete")

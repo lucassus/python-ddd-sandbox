@@ -5,7 +5,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class UnarchiveProject(Command[None]):
+class UnarchiveProject(Command):
     project_id: ProjectID
 
 

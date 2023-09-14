@@ -11,10 +11,10 @@ class AuthenticationError(Exception):
 
 class AuthenticationContract(metaclass=abc.ABCMeta):
     @dataclass(frozen=True)
-    class CurrentUserDTO:
+    class Identity:
         id: UserID
         email: EmailAddress
 
     @abc.abstractmethod
-    def trade_token_for_user(self, token: str) -> CurrentUserDTO:
+    def trade_token_for_user(self, token: str) -> Identity:
         raise NotImplementedError

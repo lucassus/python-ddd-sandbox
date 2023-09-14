@@ -7,7 +7,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class DeleteProject(Command[None]):
+class DeleteProject(Command):
     project_id: ProjectID
     now: datetime
 

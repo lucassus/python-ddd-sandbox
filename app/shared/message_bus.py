@@ -10,11 +10,15 @@ class Event(metaclass=abc.ABCMeta):
 CR = TypeVar("CR", bound=Any)
 
 
-class Command(Generic[CR], metaclass=abc.ABCMeta):
+class CommandThatReturns(Generic[CR], metaclass=abc.ABCMeta):
     pass
 
 
-C = TypeVar("C", bound=Command[Any])
+class Command(CommandThatReturns[None], metaclass=abc.ABCMeta):
+    pass
+
+
+C = TypeVar("C", bound=CommandThatReturns[Any])
 
 
 class CommandHandler(Generic[C, CR], metaclass=abc.ABCMeta):
@@ -38,12 +42,12 @@ class SupportsDispatchingEvents(Protocol):
 
 
 class CommandHandlerNotFoundError(Exception):
-    def __init__(self, command: Command[Any]) -> None:
+    def __init__(self, command: CommandThatReturns[Any]) -> None:
         super().__init__(f"Command handler not found for {type(command)}")
 
 
 class MessageBus(SupportsDispatchingEvents):
-    _command_handlers: dict[type[Command[Any]], CommandHandler[Command[Any], Any]]
+    _command_handlers: dict[type[CommandThatReturns[Any]], CommandHandler[CommandThatReturns[Any], Any]]
 
     _event_listeners: dict[type[Event], list[EventHandler[Any]]]
 
@@ -51,7 +55,7 @@ class MessageBus(SupportsDispatchingEvents):
         self._event_listeners = defaultdict(list)
         self._command_handlers = {}
 
-    def execute(self, command: Command[CR]) -> CR:
+    def execute(self, command: CommandThatReturns[CR]) -> CR:
         handler = self._command_handlers.get(type(command))
         if handler is None:
             raise CommandHandlerNotFoundError(command)
@@ -69,7 +73,7 @@ class MessageBus(SupportsDispatchingEvents):
         command_class: type[C],
         handler: CommandHandler[C, CR],
     ):
-        self._command_handlers[command_class] = cast(CommandHandler[Any, Command[Any]], handler)
+        self._command_handlers[command_class] = cast(CommandHandler[Any, CommandThatReturns[Any]], handler)
 
     def listen(self, event_class: type[Event], handler: EventHandler[E]):
         self._event_listeners[event_class].append(handler)

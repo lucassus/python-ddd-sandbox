@@ -1,29 +1,31 @@
+import asyncio
 from unittest.mock import Mock
 
 import pytest
 from fastapi import FastAPI
+from httpx import AsyncClient
 from starlette import status
-from starlette.testclient import TestClient
 
 from app.modules.accounts.application.commands import RegisterUser
+from app.modules.accounts.application.queries import GetUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
-from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.entrypoints.dependencies import get_current_user
-from app.modules.accounts.queries.find_user_query import GetUserQuery
+from app.modules.accounts.infrastructure.containers import Container
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus
 
 
-def test_register_user_endpoint(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_register_user_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
 
     # When
     with container.bus.override(bus_mock):
-        response = client.post(
+        response = await client.post(
             "/users",
             json={
                 "email": "test@email.com",
@@ -42,6 +44,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.asyncio()
 @pytest.mark.parametrize(
     ("email", "password"),
     [
@@ -52,9 +55,9 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         ("", ""),
     ],
 )
-def test_register_user_endpoint_returns_422(client: TestClient, email, password):
+async def test_register_user_endpoint_returns_422(client: AsyncClient, email, password):
     # When
-    response = client.post(
+    response = await client.post(
         "/users",
         json={"email": email, "password": password},
     )
@@ -63,14 +66,15 @@ def test_register_user_endpoint_returns_422(client: TestClient, email, password)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
-def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_register_user_endpoint_errors_handling(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
     bus_mock.execute.side_effect = EmailAlreadyExistsException(EmailAddress("taken@email.com"))
 
     # When
     with container.bus.override(bus_mock):
-        response = client.post(
+        response = await client.post(
             "/users",
             json={"email": "taken@email.com", "password": "password"},
             follow_redirects=False,
@@ -80,36 +84,39 @@ def test_register_user_endpoint_errors_handling(container: Container, client: Te
     assert response.status_code == status.HTTP_409_CONFLICT
 
 
-def test_get_current_user_endpoint(
+@pytest.mark.asyncio()
+async def test_get_current_user_endpoint(
     container: Container,
     app: FastAPI,
-    client: TestClient,
+    client: AsyncClient,
 ):
     # Given
     user_id = UserID.generate()
 
-    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.CurrentUserDTO(
+    app.dependency_overrides[get_current_user] = lambda: AuthenticationContract.Identity(
         id=user_id,
         email=EmailAddress("test@email.com"),
     )
 
-    get_user_mock = Mock(
-        return_value=GetUserQuery.Result(
+    future = asyncio.Future[GetUser.Result]()
+    future.set_result(
+        GetUser.Result(
             id=user_id,
             email="test@email.com",
             projects=[
-                GetUserQuery.Result.Project(id=1, name="Project One"),
-                GetUserQuery.Result.Project(id=2, name="Project Two"),
+                GetUser.Result.Project(id=1, name="Project One"),
+                GetUser.Result.Project(id=2, name="Project Two"),
             ],
         )
     )
+    get_user_mock = Mock(return_value=future)
 
     # When
-    with container.queries.get_user.override(get_user_mock):
-        response = client.get("/users/me")
+    with container.queries.get_user_handler.override(get_user_mock):
+        response = await client.get("/users/me")
 
     # Then
-    get_user_mock.assert_called_with(user_id)
+    get_user_mock.assert_called_with(GetUser(user_id))
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": str(user_id),

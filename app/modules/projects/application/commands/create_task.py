@@ -3,11 +3,11 @@ from dataclasses import dataclass
 from app.modules.projects.application.ports.abstract_unit_of_work import AbstractUnitOfWork
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
-from app.shared.message_bus import Command, CommandHandler
+from app.shared.message_bus import CommandHandler, CommandThatReturns
 
 
 @dataclass(frozen=True)
-class CreateTask(Command[TaskNumber]):
+class CreateTask(CommandThatReturns[TaskNumber]):
     project_id: ProjectID
     name: str
 

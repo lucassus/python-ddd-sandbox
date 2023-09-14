@@ -13,11 +13,15 @@ from app.modules.projects.application.commands import (
     UnarchiveProject,
     UpdateProject,
 )
+from app.modules.projects.application.queries import GetProject, ListProjects
 from app.modules.projects.domain.project import ProjectID, ProjectName
 from app.modules.projects.entrypoints import schemas
-from app.modules.projects.entrypoints.containers import Container
 from app.modules.projects.entrypoints.dependencies import get_current_user
-from app.modules.projects.queries.project_queries import GetProjectQuery, ListProjectsQuery
+from app.modules.projects.infrastructure.containers import Container
+from app.modules.projects.infrastructure.queries.project_query_handlers import (
+    GetProjectQueryHandler,
+    ListProjectsQueryHandler,
+)
 from app.shared.message_bus import MessageBus
 from app.utc_datetime import utc_now
 
@@ -27,7 +31,7 @@ router = APIRouter(prefix="/projects")
 @router.post("")
 @inject
 def project_create_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
+    current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     data: schemas.CreateProject,
     bus: MessageBus = Depends(Provide[Container.bus]),
 ):
@@ -41,27 +45,27 @@ def project_create_endpoint(
 
 @router.get(
     "",
-    response_model=ListProjectsQuery.Result,
+    response_model=ListProjects.Result,
     name="Returns the list of projects",
 )
 @inject
-def list_projects_endpoint(
-    current_user: Annotated[AuthenticationContract.CurrentUserDTO, Depends(get_current_user)],
-    list_projects: ListProjectsQuery = Depends(Provide[Container.queries.list_projects]),
+async def list_projects_endpoint(
+    current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
+    handle: ListProjectsQueryHandler = Depends(Provide[Container.queries.list_projects_handler]),
 ):
-    return list_projects(current_user.id)
+    return await handle(ListProjects(current_user.id))
 
 
 @router.get(
     "/{project_id}",
-    response_model=GetProjectQuery.Result,
+    response_model=GetProject.Result,
 )
 @inject
-def get_project_endpoint(
+async def get_project_endpoint(
     project_id: ProjectID,
-    get_project: GetProjectQuery = Depends(Provide[Container.queries.get_project]),
+    handle: GetProjectQueryHandler = Depends(Provide[Container.queries.get_project_handler]),
 ):
-    return get_project(project_id)
+    return await handle(GetProject(project_id))
 
 
 @router.put("/{project_id}")

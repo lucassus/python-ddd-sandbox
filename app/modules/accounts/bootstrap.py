@@ -2,7 +2,7 @@ from dependency_injector import providers
 from sqlalchemy.orm import registry
 
 from app.config import app_config
-from app.infrastructure.db import engine
+from app.infrastructure.db import async_engine, engine
 from app.modules.accounts.application.commands import (
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
@@ -12,8 +12,8 @@ from app.modules.accounts.application.commands import (
 from app.modules.accounts.application.event_handlers import SendWelcomeEmail
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.application.ports.abstract_unit_of_work import AbstractUnitOfWork
-from app.modules.accounts.entrypoints.containers import Container
 from app.modules.accounts.infrastructure.adapters.password_hasher import PasswordHasher
+from app.modules.accounts.infrastructure.containers import Container
 from app.modules.accounts.infrastructure.mappers import start_mappers
 from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus
@@ -23,6 +23,7 @@ def _create_container(bus: MessageBus) -> Container:
     container = Container(
         jwt_secret_key=providers.Object(app_config.jwt_secret_key),
         engine=providers.Object(engine),
+        async_engine=providers.Object(async_engine),
         bus=providers.Object(bus),
     )
 

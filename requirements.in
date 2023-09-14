@@ -14,7 +14,7 @@ uvicorn==0.23.2
 # Development
 adr-tools-python==1.0.3
 autoflake==2.2.1
-black==23.9.0
+black==23.9.1
 flake8-bandit==4.1.1
 flake8-bugbear==23.7.10
 flake8-builtins==2.1.0

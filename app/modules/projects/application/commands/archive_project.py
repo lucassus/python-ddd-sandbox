@@ -7,7 +7,7 @@ from app.shared.message_bus import Command, CommandHandler
 
 
 @dataclass(frozen=True)
-class ArchiveProject(Command[None]):
+class ArchiveProject(Command):
     project_id: ProjectID
     now: datetime
 

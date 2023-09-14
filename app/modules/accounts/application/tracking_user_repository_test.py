@@ -1,7 +1,7 @@
 import pytest
 
-from app.modules.accounts.application.ports.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.application.testing.fake_user_repository import FakeUserRepository
+from app.modules.accounts.application.tracking_user_repository import TrackingUserRepository
 from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 

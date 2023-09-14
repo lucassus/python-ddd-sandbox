@@ -25,7 +25,7 @@ bandit==1.7.5
     # via flake8-bandit
 bcrypt==4.0.1
     # via passlib
-black==23.9.0
+black==23.9.1
     # via -r requirements.in
 certifi==2023.7.22
     # via

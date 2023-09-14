@@ -1,6 +1,6 @@
 from sqlalchemy.orm import registry
 
-from app.infrastructure.db import engine
+from app.infrastructure.db import async_engine, engine
 from app.modules.projects.application.commands import (
     ArchiveProject,
     ArchiveProjectHandler,
@@ -31,7 +31,12 @@ from app.shared.message_bus import MessageBus
 
 
 def _create_container(bus: MessageBus) -> Container:
-    container = Container(engine=engine, bus=bus)
+    container = Container(
+        engine=engine,
+        async_engine=async_engine,
+        bus=bus,
+    )
+
     container.wire(
         modules=[
             ".application.event_handlers",

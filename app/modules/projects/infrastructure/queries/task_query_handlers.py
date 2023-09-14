@@ -5,20 +5,18 @@ from app.infrastructure.base_sql_query_handler import BaseSQLQueryHandler
 from app.infrastructure.tables import tasks_table
 from app.modules.projects.application.queries import GetTask, ListTasks
 
-# TODO: Split these classes?
-
 
 class ListTasksQueryHandler(BaseSQLQueryHandler[ListTasks, ListTasks.Result]):
-    def __call__(self, query: ListTasks) -> ListTasks.Result:
+    async def __call__(self, query: ListTasks) -> ListTasks.Result:
         stmt = select(tasks_table).where(tasks_table.c.project_id == query.project_id)
-        tasks = self._all_from(stmt)
+        tasks = await self._all_from(stmt)
 
         return ListTasks.Result(tasks=tasks)
 
 
 class GetTaskQueryHandler(BaseSQLQueryHandler[GetTask, GetTask.Result]):
-    def __call__(self, query: GetTask) -> GetTask.Result:
-        task = self._first_from(
+    async def __call__(self, query: GetTask) -> GetTask.Result:
+        task = await self._first_from(
             select(
                 tasks_table.c.id,
                 tasks_table.c.number,

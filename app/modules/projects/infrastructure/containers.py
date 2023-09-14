@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
 from sqlalchemy import Engine
+from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
@@ -13,16 +14,17 @@ from app.shared.message_bus import MessageBus
 
 
 class QueriesContainer(containers.DeclarativeContainer):
-    engine = providers.Dependency(instance_of=Engine)
+    engine = providers.Dependency(instance_of=AsyncEngine)
 
-    list_projects_handler = providers.Singleton(ListProjectsQueryHandler, engine=engine)
-    get_project_handler = providers.Singleton(GetProjectQueryHandler, engine=engine)
-    list_tasks_handler = providers.Singleton(ListTasksQueryHandler, engine=engine)
-    get_task_handler = providers.Singleton(GetTaskQueryHandler, engine=engine)
+    list_projects_handler = providers.Singleton(ListProjectsQueryHandler, engine)
+    get_project_handler = providers.Singleton(GetProjectQueryHandler, engine)
+    list_tasks_handler = providers.Singleton(ListTasksQueryHandler, engine)
+    get_task_handler = providers.Singleton(GetTaskQueryHandler, engine)
 
 
 class Container(containers.DeclarativeContainer):
     engine = providers.Dependency(instance_of=Engine)
+    async_engine = providers.Dependency(instance_of=AsyncEngine)
     bus = providers.Dependency(instance_of=MessageBus)
 
     authentication = providers.AbstractFactory(AuthenticationContract)
@@ -34,4 +36,4 @@ class Container(containers.DeclarativeContainer):
         session_factory=session_factory.provider,
     )
 
-    queries = providers.Container(QueriesContainer, engine=engine)
+    queries = providers.Container(QueriesContainer, engine=async_engine)

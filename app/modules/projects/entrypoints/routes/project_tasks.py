@@ -36,11 +36,11 @@ def task_create_endpoint(
     response_model=ListTasks.Result,
 )
 @inject
-def list_tasks_endpoint(
+async def list_tasks_endpoint(
     project_id: ProjectID,
     handle: ListTasksQueryHandler = Depends(Provide[Container.queries.list_tasks_handler]),
 ):
-    return handle(ListTasks(project_id))
+    return await handle(ListTasks(project_id))
 
 
 @router.get(
@@ -48,12 +48,12 @@ def list_tasks_endpoint(
     response_model=GetTask.Result,
 )
 @inject
-def get_task_endpoint(
+async def get_task_endpoint(
     handle: GetTaskQueryHandler = Depends(Provide[Container.queries.get_task_handler]),
     project_id: ProjectID = Path(..., description="The ID of the project"),
     number: TaskNumber = Path(..., description="The number of the task", ge=1),
 ):
-    return handle(GetTask(project_id, number))
+    return await handle(GetTask(project_id, number))
 
 
 @router.put("/{task_number}/complete")

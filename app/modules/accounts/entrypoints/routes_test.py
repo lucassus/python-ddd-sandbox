@@ -1,9 +1,10 @@
+import asyncio
 from unittest.mock import Mock
 
 import pytest
 from fastapi import FastAPI
+from httpx import AsyncClient
 from starlette import status
-from starlette.testclient import TestClient
 
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.application.queries import GetUser
@@ -17,13 +18,14 @@ from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus
 
 
-def test_register_user_endpoint(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_register_user_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
 
     # When
     with container.bus.override(bus_mock):
-        response = client.post(
+        response = await client.post(
             "/users",
             json={
                 "email": "test@email.com",
@@ -42,6 +44,7 @@ def test_register_user_endpoint(container: Container, client: TestClient):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.asyncio()
 @pytest.mark.parametrize(
     ("email", "password"),
     [
@@ -52,9 +55,9 @@ def test_register_user_endpoint(container: Container, client: TestClient):
         ("", ""),
     ],
 )
-def test_register_user_endpoint_returns_422(client: TestClient, email, password):
+async def test_register_user_endpoint_returns_422(client: AsyncClient, email, password):
     # When
-    response = client.post(
+    response = await client.post(
         "/users",
         json={"email": email, "password": password},
     )
@@ -63,14 +66,15 @@ def test_register_user_endpoint_returns_422(client: TestClient, email, password)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
-def test_register_user_endpoint_errors_handling(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_register_user_endpoint_errors_handling(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
     bus_mock.execute.side_effect = EmailAlreadyExistsException(EmailAddress("taken@email.com"))
 
     # When
     with container.bus.override(bus_mock):
-        response = client.post(
+        response = await client.post(
             "/users",
             json={"email": "taken@email.com", "password": "password"},
             follow_redirects=False,
@@ -80,10 +84,11 @@ def test_register_user_endpoint_errors_handling(container: Container, client: Te
     assert response.status_code == status.HTTP_409_CONFLICT
 
 
-def test_get_current_user_endpoint(
+@pytest.mark.asyncio()
+async def test_get_current_user_endpoint(
     container: Container,
     app: FastAPI,
-    client: TestClient,
+    client: AsyncClient,
 ):
     # Given
     user_id = UserID.generate()
@@ -93,8 +98,9 @@ def test_get_current_user_endpoint(
         email=EmailAddress("test@email.com"),
     )
 
-    get_user_mock = Mock(
-        return_value=GetUser.Result(
+    future = asyncio.Future[GetUser.Result]()
+    future.set_result(
+        GetUser.Result(
             id=user_id,
             email="test@email.com",
             projects=[
@@ -103,10 +109,11 @@ def test_get_current_user_endpoint(
             ],
         )
     )
+    get_user_mock = Mock(return_value=future)
 
     # When
     with container.queries.get_user_handler.override(get_user_mock):
-        response = client.get("/users/me")
+        response = await client.get("/users/me")
 
     # Then
     get_user_mock.assert_called_with(GetUser(user_id))

@@ -2,7 +2,7 @@ from dependency_injector import providers
 from sqlalchemy.orm import registry
 
 from app.config import app_config
-from app.infrastructure.db import engine
+from app.infrastructure.db import async_engine, engine
 from app.modules.accounts.application.commands import (
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
@@ -23,6 +23,7 @@ def _create_container(bus: MessageBus) -> Container:
     container = Container(
         jwt_secret_key=providers.Object(app_config.jwt_secret_key),
         engine=providers.Object(engine),
+        async_engine=providers.Object(async_engine),
         bus=providers.Object(bus),
     )
 

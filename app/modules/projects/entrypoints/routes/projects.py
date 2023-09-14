@@ -49,11 +49,11 @@ def project_create_endpoint(
     name="Returns the list of projects",
 )
 @inject
-def list_projects_endpoint(
+async def list_projects_endpoint(
     current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     handle: ListProjectsQueryHandler = Depends(Provide[Container.queries.list_projects_handler]),
 ):
-    return handle(ListProjects(current_user.id))
+    return await handle(ListProjects(current_user.id))
 
 
 @router.get(
@@ -61,11 +61,11 @@ def list_projects_endpoint(
     response_model=GetProject.Result,
 )
 @inject
-def get_project_endpoint(
+async def get_project_endpoint(
     project_id: ProjectID,
     handle: GetProjectQueryHandler = Depends(Provide[Container.queries.get_project_handler]),
 ):
-    return handle(GetProject(project_id))
+    return await handle(GetProject(project_id))
 
 
 @router.put("/{project_id}")

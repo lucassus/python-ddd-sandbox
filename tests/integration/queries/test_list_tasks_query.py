@@ -1,15 +1,17 @@
 from typing import assert_type
 
+import pytest
 from sqlalchemy.orm import Session
 
-from app.infrastructure.db import engine
+from app.infrastructure.db import async_engine
 from app.modules.projects.application.queries import ListTasks
 from app.modules.projects.infrastructure.queries.task_query_handlers import ListTasksQueryHandler
 
 
-def test_list_tasks_query(session: Session, create_project):
+@pytest.mark.asyncio()
+async def test_list_tasks_query(session: Session, create_project):
     # Given
-    handle = ListTasksQueryHandler(engine=engine)
+    handle = ListTasksQueryHandler(engine=async_engine)
 
     project = create_project()
     project.add_task(name="Task One")
@@ -17,7 +19,7 @@ def test_list_tasks_query(session: Session, create_project):
     session.commit()
 
     # When
-    result = handle(ListTasks(project_id=project.id))
+    result = await handle(ListTasks(project_id=project.id))
     assert_type(result, ListTasks.Result)
     tasks = result.tasks
 

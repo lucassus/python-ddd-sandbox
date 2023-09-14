@@ -1,6 +1,6 @@
 import pytest
 from fastapi import FastAPI
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
 from app.modules.accounts.entrypoints import routes
 from app.modules.accounts.infrastructure.containers import Container
@@ -29,4 +29,4 @@ def app():
 
 @pytest.fixture()
 def client(app):
-    return TestClient(app)
+    return AsyncClient(app=app, base_url="http://test")

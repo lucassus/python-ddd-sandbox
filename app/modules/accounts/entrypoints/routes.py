@@ -75,8 +75,8 @@ def user_update_endpoint(
     response_model=GetUser.Result,
 )
 @inject
-def user_endpoint(
+async def user_endpoint(
     current_user: Annotated[AuthenticationContract.Identity, Depends(get_current_user)],
     handle: GetUserQueryHandler = Depends(Provide[Container.queries.get_user_handler]),
 ):
-    return handle(GetUser(current_user.id))
+    return await handle(GetUser(current_user.id))

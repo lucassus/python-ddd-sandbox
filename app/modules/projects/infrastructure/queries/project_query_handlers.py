@@ -4,12 +4,10 @@ from app.infrastructure.base_sql_query_handler import BaseSQLQueryHandler
 from app.infrastructure.tables import projects_table
 from app.modules.projects.application.queries import GetProject, ListProjects
 
-# TODO: Split these classes?
-
 
 class ListProjectsQueryHandler(BaseSQLQueryHandler[ListProjects, ListProjects.Result]):
-    def __call__(self, query: ListProjects) -> ListProjects.Result:
-        projects = self._all_from(
+    async def __call__(self, query: ListProjects) -> ListProjects.Result:
+        projects = await self._all_from(
             select(
                 projects_table.c.id,
                 projects_table.c.name,
@@ -22,9 +20,9 @@ class ListProjectsQueryHandler(BaseSQLQueryHandler[ListProjects, ListProjects.Re
 
 
 class GetProjectQueryHandler(BaseSQLQueryHandler[GetProject, GetProject.Result]):
-    def __call__(self, query: GetProject) -> GetProject.Result:
+    async def __call__(self, query: GetProject) -> GetProject.Result:
         stmt = select(projects_table).where(projects_table.c.id == query.id)
-        project = self._first_from(stmt)
+        project = await self._first_from(stmt)
 
         if project is None:
             raise GetProject.NotFoundError(query.id)

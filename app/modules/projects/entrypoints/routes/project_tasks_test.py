@@ -1,6 +1,7 @@
 from unittest.mock import ANY, Mock
 
-from starlette.testclient import TestClient
+import pytest
+from httpx import AsyncClient
 
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask
@@ -15,7 +16,8 @@ from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus
 
 
-def test_task_create_endpoint(container: Container, app, client: TestClient):
+@pytest.mark.asyncio()
+async def test_task_create_endpoint(container: Container, app, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
     bus_mock.execute.return_value = TaskNumber(1)
@@ -28,7 +30,7 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
 
     # When
     with container.bus.override(bus_mock):
-        response = client.post(
+        response = await client.post(
             "/projects/123/tasks",
             json={"name": "Some task"},
             follow_redirects=False,
@@ -40,10 +42,11 @@ def test_task_create_endpoint(container: Container, app, client: TestClient):
     bus_mock.execute.assert_called_once_with(CreateTask(project_id=ProjectID(123), name="Some task"))
 
 
-def test_task_list_endpoint(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_task_list_endpoint(container: Container, client: AsyncClient):
     # Given
     class ListTasksQueryHandlerMock(ListTasksQueryHandler):
-        def __call__(self, query: ListTasks) -> ListTasks.Result:
+        async def __call__(self, query: ListTasks) -> ListTasks.Result:
             return ListTasks.Result(
                 tasks=[
                     ListTasks.Result.Task(
@@ -58,7 +61,7 @@ def test_task_list_endpoint(container: Container, client: TestClient):
 
     # When
     with container.queries.list_tasks_handler.override(handler_mock):
-        response = client.get("/projects/1/tasks")
+        response = await client.get("/projects/1/tasks")
 
     # Then
     assert response.status_code == 200
@@ -74,14 +77,15 @@ def test_task_list_endpoint(container: Container, client: TestClient):
     }
 
 
-def test_task_complete_endpoint(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_task_complete_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
     bus_mock.execute.return_value = TaskNumber(667)
 
     # When
     with container.bus.override(bus_mock):
-        response = client.put(
+        response = await client.put(
             "/projects/665/tasks/667/complete",
             follow_redirects=False,
         )
@@ -98,14 +102,15 @@ def test_task_complete_endpoint(container: Container, client: TestClient):
     )
 
 
-def test_task_incomplete_endpoint(container: Container, client: TestClient):
+@pytest.mark.asyncio()
+async def test_task_incomplete_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
     bus_mock.execute.return_value = TaskNumber(668)
 
     # When
     with container.bus.override(bus_mock):
-        response = client.put(
+        response = await client.put(
             "/projects/665/tasks/668/incomplete",
             follow_redirects=False,
         )

@@ -20,7 +20,11 @@ class GetUserQueryHandler(BaseSQLQueryHandler[GetUser, GetUser.Result]):
         if user is None:
             raise GetUser.NotFoundError(user_id)
 
-        data = {"id": user.id, "email": user.email}
+        data = {
+            "id": user.id,
+            "email": user.email,
+            "projects": None,
+        }
 
         if query.include_projects:
             projects = await self._all_from(

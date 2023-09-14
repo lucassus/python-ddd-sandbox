@@ -16,7 +16,7 @@ class GetUser(Query):
 
         id: UserIDField
         email: str
-        projects: list[Project]
+        projects: list[Project] | None
 
     class NotFoundError(EntityNotFoundError):
         def __init__(self, id: UserID):

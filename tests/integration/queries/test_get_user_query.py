@@ -13,7 +13,7 @@ class TestGetUserQueryHandler:
         return GetUserQueryHandler(engine=async_engine)
 
     @pytest.mark.asyncio()
-    async def test_it_loads_user_details(
+    async def test_it_loads_user_details_along_projects(
         self,
         create_user,
         create_project,
@@ -28,7 +28,26 @@ class TestGetUserQueryHandler:
         assert loaded
         assert loaded.id == AnyUUID
         assert loaded.email == "test@email.com"
+        assert loaded.projects is not None
         assert len(loaded.projects) == 2
+
+    @pytest.mark.asyncio()
+    async def test_it_loads_user_details_without_projects(
+        self,
+        create_user,
+        create_project,
+        handler: GetUserQueryHandler,
+    ):
+        user = create_user()
+        create_project(user=user, name="Project One")
+        create_project(user=user, name="Project Two")
+
+        loaded = await handler(GetUser(user.id, include_projects=False))
+
+        assert loaded
+        assert loaded.id == AnyUUID
+        assert loaded.email == "test@email.com"
+        assert loaded.projects is None
 
     @pytest.mark.asyncio()
     async def test_not_found(

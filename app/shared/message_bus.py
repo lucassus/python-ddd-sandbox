@@ -82,3 +82,8 @@ class MessageBus(SupportsDispatchingEvents):
 
     def listen(self, event_class: type[Event], handler: EventHandler[E]):
         self._event_listeners[event_class].append(handler)
+
+    def listen_all(self, event_handlers: dict[type[E], list[EventHandler[E]]]):
+        for event_class, handlers in event_handlers.items():
+            for handler in handlers:
+                self.listen(event_class, handler)

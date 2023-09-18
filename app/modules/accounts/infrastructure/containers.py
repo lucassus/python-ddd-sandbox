@@ -5,15 +5,17 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.commands import (
-    RegisterUser,
     ChangeUserEmailAddress,
-    RegisterUserHandler,
     ChangeUserEmailAddressHandler,
+    RegisterUser,
+    RegisterUserHandler,
 )
+from app.modules.accounts.application.event_handlers import SendWelcomeEmail
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.accounts.infrastructure.queries import GetUserQueryHandler
+from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus
 
 
@@ -29,18 +31,15 @@ class Container(containers.DeclarativeContainer):
     async_engine = providers.Dependency(instance_of=AsyncEngine)
     bus = providers.Dependency(instance_of=MessageBus)
 
-    session_factory = providers.Factory(AppSession, bind=engine)
     uow = providers.Singleton(
         UnitOfWork,
         bus,
-        session_factory=session_factory.provider,
+        session_factory=providers.Factory(AppSession, bind=engine).provider,
     )
 
     auth_token = providers.Singleton(JWTAuthentication, secret_key=jwt_secret_key)
     password_hasher = providers.AbstractFactory(AbstractPasswordHasher)
     authentication = providers.Singleton(Authentication, uow, auth_token, password_hasher)
-
-    queries = providers.Container(QueriesContainer, engine=async_engine)
 
     register_command_handlers = providers.Callable(
         lambda bus, command_handlers: bus.register_all(command_handlers),
@@ -52,3 +51,15 @@ class Container(containers.DeclarativeContainer):
             }
         ),
     )
+
+    register_event_handlers = providers.Callable(
+        lambda bus, event_handlers: bus.listen_all(event_handlers),
+        bus=bus,
+        event_handlers=providers.Dict(
+            {
+                UserAccountCreated: providers.List(providers.Factory(SendWelcomeEmail, uow)),
+            }
+        ),
+    )
+
+    queries = providers.Container(QueriesContainer, engine=async_engine)

@@ -5,31 +5,34 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import (
-    CreateProject,
-    CreateExampleProject,
-    UpdateProject,
     ArchiveProject,
-    UnarchiveProject,
-    DeleteProject,
-    CreateTask,
-    CompleteTask,
-    IncompleteTask,
-    CreateProjectHandler,
-    CreateExampleProjectHandler,
-    UpdateProjectHandler,
     ArchiveProjectHandler,
-    UnarchiveProjectHandler,
-    DeleteProjectHandler,
-    CreateTaskHandler,
+    CompleteTask,
     CompleteTaskHandler,
+    CreateExampleProject,
+    CreateExampleProjectHandler,
+    CreateProject,
+    CreateProjectHandler,
+    CreateTask,
+    CreateTaskHandler,
+    DeleteProject,
+    DeleteProjectHandler,
+    IncompleteTask,
     IncompleteTaskHandler,
+    UnarchiveProject,
+    UnarchiveProjectHandler,
+    UpdateProject,
+    UpdateProjectHandler,
 )
+from app.modules.projects.application.event_handlers import CreateUserExampleProjectHandler, SendProjectCreatedMessage
+from app.modules.projects.domain.project import Project
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.infrastructure.queries.project_query_handlers import (
     GetProjectQueryHandler,
     ListProjectsQueryHandler,
 )
 from app.modules.projects.infrastructure.queries.task_query_handlers import GetTaskQueryHandler, ListTasksQueryHandler
+from app.modules.shared_kernel.events import UserAccountCreated
 from app.shared.message_bus import MessageBus
 
 
@@ -49,11 +52,10 @@ class Container(containers.DeclarativeContainer):
 
     authentication = providers.AbstractFactory(AuthenticationContract)
 
-    session_factory = providers.Factory(AppSession, bind=engine)
     uow = providers.Singleton(
         UnitOfWork,
         bus,
-        session_factory=session_factory.provider,
+        session_factory=providers.Factory(AppSession, bind=engine).provider,
     )
 
     register_command_handlers = providers.Callable(
@@ -70,6 +72,17 @@ class Container(containers.DeclarativeContainer):
                 CreateTask: providers.Factory(CreateTaskHandler, uow),
                 CompleteTask: providers.Factory(CompleteTaskHandler, uow),
                 IncompleteTask: providers.Factory(IncompleteTaskHandler, uow),
+            }
+        ),
+    )
+
+    register_event_handlers = providers.Callable(
+        lambda bus, event_handlers: bus.listen_all(event_handlers),
+        bus=bus,
+        event_handlers=providers.Dict(
+            {
+                UserAccountCreated: providers.List(providers.Factory(CreateUserExampleProjectHandler, bus)),
+                Project.Created: providers.List(providers.Factory(SendProjectCreatedMessage, uow)),
             }
         ),
     )

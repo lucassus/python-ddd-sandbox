@@ -112,7 +112,7 @@ async def test_get_current_user_endpoint(
     get_user_mock = Mock(return_value=future)
 
     # When
-    with container.queries.get_user_handler.override(get_user_mock):
+    with container.queries.get_user.override(get_user_mock):
         response = await client.get("/users/me")
 
     # Then

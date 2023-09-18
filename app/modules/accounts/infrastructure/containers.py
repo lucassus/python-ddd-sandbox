@@ -4,6 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.infrastructure.db import AppSession
 from app.modules.accounts.application.authentication import Authentication
+from app.modules.accounts.application.commands import (
+    RegisterUser,
+    ChangeUserEmailAddress,
+    RegisterUserHandler,
+    ChangeUserEmailAddressHandler,
+)
 from app.modules.accounts.application.ports.abstract_password_hasher import AbstractPasswordHasher
 from app.modules.accounts.infrastructure.adapters.jwt_authentication import JWTAuthentication
 from app.modules.accounts.infrastructure.adapters.unit_of_work import UnitOfWork
@@ -35,3 +41,14 @@ class Container(containers.DeclarativeContainer):
     authentication = providers.Singleton(Authentication, uow, auth_token, password_hasher)
 
     queries = providers.Container(QueriesContainer, engine=async_engine)
+
+    register_command_handlers = providers.Callable(
+        lambda bus, command_handlers: bus.register_all(command_handlers),
+        bus=bus,
+        command_handlers=providers.Dict(
+            {
+                RegisterUser: providers.Factory(RegisterUserHandler, uow, password_hasher),
+                ChangeUserEmailAddress: providers.Factory(ChangeUserEmailAddressHandler, uow),
+            }
+        ),
+    )

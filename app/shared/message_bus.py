@@ -73,7 +73,12 @@ class MessageBus(SupportsDispatchingEvents):
         command_class: type[C],
         handler: CommandHandler[C, CR],
     ):
+        # TODO: Throw an error when a command is already registered
         self._command_handlers[command_class] = cast(CommandHandler[Any, CommandThatReturns[Any]], handler)
+
+    def register_all(self, command_handlers: dict[type[C], CommandHandler[C, CR]]):
+        for command_class, handler in command_handlers.items():
+            self.register(command_class, handler)
 
     def listen(self, event_class: type[Event], handler: EventHandler[E]):
         self._event_listeners[event_class].append(handler)

@@ -41,15 +41,7 @@ def _create_container(bus: MessageBus) -> Container:
     return container
 
 
-def _register_commands(
-    bus: MessageBus,
-    uow: AbstractUnitOfWork,
-    password_hasher: AbstractPasswordHasher,
-) -> None:
-    bus.register(RegisterUser, RegisterUserHandler(uow, password_hasher))
-    bus.register(ChangeUserEmailAddress, ChangeUserEmailAddressHandler(uow))
-
-
+# TODO: Do the same for events
 def _register_event_handlers(bus: MessageBus, uow: AbstractUnitOfWork) -> None:
     bus.listen(UserAccountCreated, SendWelcomeEmail(uow))
 
@@ -59,8 +51,8 @@ def bootstrap_accounts_module(mappers: registry, bus: MessageBus) -> Container:
 
     container = _create_container(bus)
     uow = container.uow()
+    container.register_command_handlers()
 
-    _register_commands(bus, uow, password_hasher=container.password_hasher())
     _register_event_handlers(bus, uow)
 
     return container

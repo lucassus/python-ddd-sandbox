@@ -4,6 +4,26 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.infrastructure.db import AppSession
 from app.modules.authentication_contract import AuthenticationContract
+from app.modules.projects.application.commands import (
+    CreateProject,
+    CreateExampleProject,
+    UpdateProject,
+    ArchiveProject,
+    UnarchiveProject,
+    DeleteProject,
+    CreateTask,
+    CompleteTask,
+    IncompleteTask,
+    CreateProjectHandler,
+    CreateExampleProjectHandler,
+    UpdateProjectHandler,
+    ArchiveProjectHandler,
+    UnarchiveProjectHandler,
+    DeleteProjectHandler,
+    CreateTaskHandler,
+    CompleteTaskHandler,
+    IncompleteTaskHandler,
+)
 from app.modules.projects.infrastructure.adapters.unit_of_work import UnitOfWork
 from app.modules.projects.infrastructure.queries.project_query_handlers import (
     GetProjectQueryHandler,
@@ -34,6 +54,24 @@ class Container(containers.DeclarativeContainer):
         UnitOfWork,
         bus,
         session_factory=session_factory.provider,
+    )
+
+    register_command_handlers = providers.Callable(
+        lambda bus, command_handlers: bus.register_all(command_handlers),
+        bus=bus,
+        command_handlers=providers.Dict(
+            {
+                CreateProject: providers.Factory(CreateProjectHandler, uow, bus),
+                CreateExampleProject: providers.Factory(CreateExampleProjectHandler, uow),
+                UpdateProject: providers.Factory(UpdateProjectHandler, uow),
+                ArchiveProject: providers.Factory(ArchiveProjectHandler, uow),
+                UnarchiveProject: providers.Factory(UnarchiveProjectHandler, uow),
+                DeleteProject: providers.Factory(DeleteProjectHandler, uow),
+                CreateTask: providers.Factory(CreateTaskHandler, uow),
+                CompleteTask: providers.Factory(CompleteTaskHandler, uow),
+                IncompleteTask: providers.Factory(IncompleteTaskHandler, uow),
+            }
+        ),
     )
 
     queries = providers.Container(QueriesContainer, engine=async_engine)

@@ -7,11 +7,11 @@ from starlette.responses import RedirectResponse
 
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.commands import ChangeUserEmailAddress, RegisterUser
+from app.modules.accounts.application.containers import AppContainer
 from app.modules.accounts.application.queries import GetUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.entrypoints import schemas
 from app.modules.accounts.entrypoints.dependencies import get_current_user
-from app.modules.accounts.application.containers import AppContainer
 from app.modules.accounts.infrastructure.containers import QueriesContainer
 from app.modules.accounts.infrastructure.queries import GetUserQueryHandler
 from app.modules.authentication_contract import AuthenticationContract

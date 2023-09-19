@@ -19,8 +19,8 @@ from app.modules.projects.domain.project import ProjectName
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.utc_datetime import utc_now
 
-bootstrap_accounts_module(mapper_registry, bus)
-bootstrap_projects_module(mapper_registry, bus)
+authentication = bootstrap_accounts_module(mapper_registry, bus)
+bootstrap_projects_module(mapper_registry, bus, authentication)
 
 
 def main(rebuild_db: bool = True):

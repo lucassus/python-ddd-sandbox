@@ -2,10 +2,10 @@ from dependency_injector import containers, providers
 
 from app.modules.accounts.application.authentication import Authentication
 from app.modules.accounts.application.commands import (
-    RegisterUser,
-    RegisterUserHandler,
     ChangeUserEmailAddress,
     ChangeUserEmailAddressHandler,
+    RegisterUser,
+    RegisterUserHandler,
 )
 from app.modules.accounts.application.event_handlers import SendWelcomeEmail
 from app.modules.shared_kernel.events import UserAccountCreated
@@ -23,6 +23,7 @@ class AppContainer(containers.DeclarativeContainer):
         adapters.password_hasher,
     )
 
+    # TODO: Find more straightforward solution
     register_command_handlers = providers.Callable(
         lambda bus, command_handlers: bus.register_all(command_handlers),
         bus=adapters.bus,

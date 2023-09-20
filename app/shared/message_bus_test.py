@@ -64,6 +64,25 @@ class TestMessageBus:
         # Then
         mock_handle.assert_not_called()
 
+    def test_register_throws_an_error_when_a_command_is_already_registered(self, bus: MessageBus):
+        # Given
+        @dataclass(frozen=True)
+        class SomeCommand(CommandThatReturns[int]):
+            value: int
+
+        class SomeCommandHandler(CommandHandler[SomeCommand, int]):
+            def __call__(self, command: SomeCommand) -> int:
+                return command.value
+
+        bus.register(SomeCommand, SomeCommandHandler())
+
+        # When
+        with pytest.raises(
+            ValueError,
+            match=f"Command {SomeCommand} is already registered",
+        ):
+            bus.register(SomeCommand, SomeCommandHandler())
+
     def test_command_without_return_value(self, bus: MessageBus):
         # Given
         @dataclass(frozen=True)

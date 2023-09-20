@@ -27,8 +27,12 @@ def _create_commands_container(bus: MessageBus) -> AppContainer:
         ]
     )
 
-    container.register_command_handlers()
-    container.register_event_handlers()
+    for command, handler in container.command_handlers().items():
+        bus.register(command, handler)
+
+    for event, handlers in container.event_handlers().items():
+        for handler in handlers:
+            bus.listen(event, handler)
 
     return container
 

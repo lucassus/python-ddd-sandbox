@@ -23,24 +23,15 @@ class AppContainer(containers.DeclarativeContainer):
         adapters.password_hasher,
     )
 
-    # TODO: Find more straightforward solution
-    register_command_handlers = providers.Callable(
-        lambda bus, command_handlers: bus.register_all(command_handlers),
-        bus=adapters.bus,
-        command_handlers=providers.Dict(
-            {
-                RegisterUser: providers.Factory(RegisterUserHandler, adapters.uow, adapters.password_hasher),
-                ChangeUserEmailAddress: providers.Factory(ChangeUserEmailAddressHandler, adapters.uow),
-            }
-        ),
+    command_handlers = providers.Dict(
+        {
+            RegisterUser: providers.Factory(RegisterUserHandler, adapters.uow, adapters.password_hasher),
+            ChangeUserEmailAddress: providers.Factory(ChangeUserEmailAddressHandler, adapters.uow),
+        }
     )
 
-    register_event_handlers = providers.Callable(
-        lambda bus, event_handlers: bus.listen_all(event_handlers),
-        bus=adapters.bus,
-        event_handlers=providers.Dict(
-            {
-                UserAccountCreated: providers.List(providers.Factory(SendWelcomeEmail, adapters.uow)),
-            }
-        ),
+    event_handlers = providers.Dict(
+        {
+            UserAccountCreated: providers.List(providers.Factory(SendWelcomeEmail, adapters.uow)),
+        }
     )

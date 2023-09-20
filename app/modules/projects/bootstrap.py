@@ -36,5 +36,10 @@ def bootstrap_projects_module(
     start_mappers(mappers)
 
     container = _create_container(bus, authentication)
-    container.register_command_handlers()
-    container.register_event_handlers()
+
+    for command, handler in container.command_handlers().items():
+        bus.register(command, handler)
+
+    for event, handlers in container.event_handlers().items():
+        for handler in handlers:
+            bus.listen(event, handler)

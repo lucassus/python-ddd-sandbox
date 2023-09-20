@@ -58,33 +58,25 @@ class Container(containers.DeclarativeContainer):
         session_factory=providers.Factory(AppSession, bind=engine).provider,
     )
 
-    register_command_handlers = providers.Callable(
-        lambda bus, command_handlers: bus.register_all(command_handlers),
-        bus=bus,
-        command_handlers=providers.Dict(
-            {
-                CreateProject: providers.Factory(CreateProjectHandler, uow, bus),
-                CreateExampleProject: providers.Factory(CreateExampleProjectHandler, uow),
-                UpdateProject: providers.Factory(UpdateProjectHandler, uow),
-                ArchiveProject: providers.Factory(ArchiveProjectHandler, uow),
-                UnarchiveProject: providers.Factory(UnarchiveProjectHandler, uow),
-                DeleteProject: providers.Factory(DeleteProjectHandler, uow),
-                CreateTask: providers.Factory(CreateTaskHandler, uow),
-                CompleteTask: providers.Factory(CompleteTaskHandler, uow),
-                IncompleteTask: providers.Factory(IncompleteTaskHandler, uow),
-            }
-        ),
+    command_handlers = providers.Dict(
+        {
+            CreateProject: providers.Factory(CreateProjectHandler, uow, bus),
+            CreateExampleProject: providers.Factory(CreateExampleProjectHandler, uow),
+            UpdateProject: providers.Factory(UpdateProjectHandler, uow),
+            ArchiveProject: providers.Factory(ArchiveProjectHandler, uow),
+            UnarchiveProject: providers.Factory(UnarchiveProjectHandler, uow),
+            DeleteProject: providers.Factory(DeleteProjectHandler, uow),
+            CreateTask: providers.Factory(CreateTaskHandler, uow),
+            CompleteTask: providers.Factory(CompleteTaskHandler, uow),
+            IncompleteTask: providers.Factory(IncompleteTaskHandler, uow),
+        }
     )
 
-    register_event_handlers = providers.Callable(
-        lambda bus, event_handlers: bus.listen_all(event_handlers),
-        bus=bus,
-        event_handlers=providers.Dict(
-            {
-                UserAccountCreated: providers.List(providers.Factory(CreateUserExampleProjectHandler, bus)),
-                Project.Created: providers.List(providers.Factory(SendProjectCreatedMessage, uow)),
-            }
-        ),
+    event_handlers = providers.Dict(
+        {
+            UserAccountCreated: providers.List(providers.Factory(CreateUserExampleProjectHandler, bus)),
+            Project.Created: providers.List(providers.Factory(SendProjectCreatedMessage, uow)),
+        }
     )
 
     queries = providers.Container(QueriesContainer, engine=async_engine)

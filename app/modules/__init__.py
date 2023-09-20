@@ -4,14 +4,8 @@ from sqlalchemy.orm import registry
 from app.modules.errors_handling import register_error_handlers
 from app.shared.message_bus import MessageBus
 
-# TODO: Find a way to make it private
-mapper_registry = registry()
 
-# TODO: Find a way to make it private
-bus = MessageBus()
-
-
-def create_app() -> FastAPI:
+def create_app(mapper_registry: registry, bus: MessageBus) -> FastAPI:
     app = FastAPI()
 
     from app.modules.accounts.bootstrap import bootstrap_accounts_module

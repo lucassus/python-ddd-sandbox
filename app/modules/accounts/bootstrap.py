@@ -27,13 +27,6 @@ def _create_commands_container(bus: MessageBus) -> AppContainer:
         ]
     )
 
-    for command, handler in container.command_handlers().items():
-        bus.register(command, handler)
-
-    for event, handlers in container.event_handlers().items():
-        for handler in handlers:
-            bus.listen(event, handler)
-
     return container
 
 
@@ -51,6 +44,10 @@ def bootstrap_accounts_module(mappers: registry, bus: MessageBus) -> Authenticat
     start_mappers(mappers)
 
     container = _create_commands_container(bus)
+
+    bus.register_all(container.command_handlers())
+    bus.listen_all(container.event_handlers())
+
     _create_queries_container()
 
     return container.authentication()

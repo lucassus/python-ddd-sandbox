@@ -37,9 +37,5 @@ def bootstrap_projects_module(
 
     container = _create_container(bus, authentication)
 
-    for command, handler in container.command_handlers().items():
-        bus.register(command, handler)
-
-    for event, handlers in container.event_handlers().items():
-        for handler in handlers:
-            bus.listen(event, handler)
+    bus.register_all(container.command_handlers())
+    bus.listen_all(container.event_handlers())

@@ -11,7 +11,6 @@ from app.modules.accounts.infrastructure.containers import QueriesContainer
 
 @pytest.fixture(autouse=True)
 def container():
-    # TODO: Configure fake adapters here?
     container = AppContainer()
     container.wire(
         [

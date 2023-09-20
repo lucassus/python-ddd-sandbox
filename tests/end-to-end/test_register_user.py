@@ -4,10 +4,10 @@ from freezegun import freeze_time
 from starlette import status
 from starlette.testclient import TestClient
 
-from app.modules import bus
 from app.modules.accounts.application.commands import RegisterUser
 from app.modules.accounts.domain.password import Password
 from app.modules.shared_kernel.entities.email_address import EmailAddress
+from app.shared.message_bus import MessageBus
 
 
 @freeze_time("2023-08-02 22:20:00")
@@ -73,7 +73,7 @@ def test_register_user(anonymous_client: TestClient):
     }
 
 
-def test_register_user_fail(anonymous_client: TestClient):
+def test_register_user_fail(bus: MessageBus, anonymous_client: TestClient):
     # Given
     bus.execute(RegisterUser(EmailAddress("taken@email.com"), Password("password")))
 

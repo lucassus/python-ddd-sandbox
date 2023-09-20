@@ -7,11 +7,12 @@ from httpx import AsyncClient
 from starlette import status
 
 from app.modules.accounts.application.commands import RegisterUser
+from app.modules.accounts.application.containers import AppContainer
 from app.modules.accounts.application.queries import GetUser
 from app.modules.accounts.domain.errors import EmailAlreadyExistsException
 from app.modules.accounts.domain.password import Password
 from app.modules.accounts.entrypoints.dependencies import get_current_user
-from app.modules.accounts.infrastructure.containers import Container
+from app.modules.accounts.infrastructure.containers import QueriesContainer
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -19,7 +20,7 @@ from app.shared.message_bus import MessageBus
 
 
 @pytest.mark.asyncio()
-async def test_register_user_endpoint(container: Container, client: AsyncClient):
+async def test_register_user_endpoint(container: AppContainer, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
 
@@ -67,7 +68,7 @@ async def test_register_user_endpoint_returns_422(client: AsyncClient, email, pa
 
 
 @pytest.mark.asyncio()
-async def test_register_user_endpoint_errors_handling(container: Container, client: AsyncClient):
+async def test_register_user_endpoint_errors_handling(container: AppContainer, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
     bus_mock.execute.side_effect = EmailAlreadyExistsException(EmailAddress("taken@email.com"))
@@ -86,7 +87,7 @@ async def test_register_user_endpoint_errors_handling(container: Container, clie
 
 @pytest.mark.asyncio()
 async def test_get_current_user_endpoint(
-    container: Container,
+    queries_container: QueriesContainer,
     app: FastAPI,
     client: AsyncClient,
 ):
@@ -112,7 +113,7 @@ async def test_get_current_user_endpoint(
     get_user_mock = Mock(return_value=future)
 
     # When
-    with container.queries.get_user_handler.override(get_user_mock):
+    with queries_container.get_user.override(get_user_mock):
         response = await client.get("/users/me")
 
     # Then

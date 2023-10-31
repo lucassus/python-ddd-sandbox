@@ -1,4 +1,9 @@
 {
+    "features": {
+        "ghcr.io/devcontainers/features/sshd:1": {
+            "version": "latest"
+        },
+    },
     "image": "mcr.microsoft.com/devcontainers/python:0-3.11-bullseye",
     "postCreateCommand": "pip install --user -r requirements.txt"
 }

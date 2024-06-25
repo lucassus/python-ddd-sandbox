@@ -1,7 +1,7 @@
 VENV_DIR=venv
 
 venv:
-	python3.9 -m venv $(VENV_DIR)
+	python -m venv $(VENV_DIR)
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:

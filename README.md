@@ -2,6 +2,7 @@
 
 ## Preparing and running the app
 
+* Use asdf to manage Python versions
 * `make venv`
 * `make install`
 * `make seed`

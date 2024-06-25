@@ -34,7 +34,7 @@ def anonymous_client(app):
     return TestClient(app)
 
 
-@pytest.fixture()
+@pytest.fixture
 def current_user(bus: MessageBus):
     email = EmailAddress("test@email.com")
     user_id = bus.execute(RegisterUser(email, Password("password")))
@@ -42,7 +42,7 @@ def current_user(bus: MessageBus):
     return AuthenticationContract.Identity(user_id, email)
 
 
-@pytest.fixture()
+@pytest.fixture
 def client(current_user, app, anonymous_client):
     response = anonymous_client.post(
         "/api/users/login",

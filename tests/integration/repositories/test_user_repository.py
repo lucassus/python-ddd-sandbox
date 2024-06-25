@@ -8,7 +8,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class TestUserRepository:
-    @pytest.fixture()
+    @pytest.fixture
     def repository(self, session: Session):
         return UserRepository(session=session)
 

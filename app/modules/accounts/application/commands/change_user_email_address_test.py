@@ -9,7 +9,7 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
-@pytest.fixture()
+@pytest.fixture
 def change_user_email_address(uow: FakeUnitOfWork):
     return ChangeUserEmailAddressHandler(uow=uow)
 

@@ -25,7 +25,7 @@ class FakeAuthenticationToken(AuthenticationToken):
 
 
 class TestAuthenticate:
-    @pytest.fixture()
+    @pytest.fixture
     def authentication(self, uow: FakeUnitOfWork):
         return Authentication(
             uow=uow,

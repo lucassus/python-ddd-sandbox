@@ -19,7 +19,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_register_user_endpoint(container: AppContainer, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
@@ -45,7 +45,7 @@ async def test_register_user_endpoint(container: AppContainer, client: AsyncClie
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("email", "password"),
     [
@@ -67,7 +67,7 @@ async def test_register_user_endpoint_returns_422(client: AsyncClient, email, pa
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_register_user_endpoint_errors_handling(container: AppContainer, client: AsyncClient):
     # Given
     bus_mock = Mock(MessageBus)
@@ -85,7 +85,7 @@ async def test_register_user_endpoint_errors_handling(container: AppContainer, c
     assert response.status_code == status.HTTP_409_CONFLICT
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_current_user_endpoint(
     queries_container: QueriesContainer,
     app: FastAPI,

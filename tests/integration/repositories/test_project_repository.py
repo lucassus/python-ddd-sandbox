@@ -7,7 +7,7 @@ from app.utc_datetime import utc_now
 
 
 class TestProjectRepository:
-    @pytest.fixture()
+    @pytest.fixture
     def repository(self, session):
         return ProjectRepository(session=session)
 

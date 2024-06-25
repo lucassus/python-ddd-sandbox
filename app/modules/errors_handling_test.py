@@ -9,14 +9,14 @@ from app.modules.shared_kernel.entities.user_id import UserID
 from app.modules.shared_kernel.errors import EntityNotFoundError
 
 
-@pytest.fixture()
+@pytest.fixture
 def app():
     app = FastAPI()
     register_error_handlers(app)
     return app
 
 
-@pytest.fixture()
+@pytest.fixture
 def client(app):
     return TestClient(app)
 

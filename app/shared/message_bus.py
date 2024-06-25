@@ -37,8 +37,7 @@ class EventHandler(Generic[E], metaclass=abc.ABCMeta):
 
 
 class SupportsDispatchingEvents(Protocol):
-    def dispatch(self, event: Event) -> None:
-        ...
+    def dispatch(self, event: Event) -> None: ...
 
 
 class CommandHandlerNotFoundError(Exception):

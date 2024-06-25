@@ -34,7 +34,7 @@ def queries_container():
     return container
 
 
-@pytest.fixture()
+@pytest.fixture
 def app():
     app = FastAPI()
     app.include_router(routes.router)
@@ -42,6 +42,6 @@ def app():
     return app
 
 
-@pytest.fixture()
+@pytest.fixture
 def client(app):
     return AsyncClient(app=app, base_url="http://test")

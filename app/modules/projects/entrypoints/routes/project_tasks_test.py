@@ -16,7 +16,7 @@ from app.modules.shared_kernel.entities.user_id import UserID
 from app.shared.message_bus import MessageBus
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_task_create_endpoint(container: Container, app, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
@@ -42,7 +42,7 @@ async def test_task_create_endpoint(container: Container, app, client: AsyncClie
     bus_mock.execute.assert_called_once_with(CreateTask(project_id=ProjectID(123), name="Some task"))
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_task_list_endpoint(container: Container, client: AsyncClient):
     # Given
     class ListTasksQueryHandlerMock(ListTasksQueryHandler):
@@ -77,7 +77,7 @@ async def test_task_list_endpoint(container: Container, client: AsyncClient):
     }
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_task_complete_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
@@ -102,7 +102,7 @@ async def test_task_complete_endpoint(container: Container, client: AsyncClient)
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_task_incomplete_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)

@@ -79,3 +79,5 @@ test-integration:
 
 test-end-to-end:
 	APP_ENV=test pytest tests/end-to-end
+
+test-all: test test-integration test-end-to-end

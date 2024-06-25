@@ -25,7 +25,7 @@ curl http://localhost:8000/api/projects/1/tasks --silent | jq
 ## Other useful commands
 
 * `pip list --outdated`
-* `libyear -r requirements.txt`
+* `libyear -r requirements.txt --sort`
 
 ## Books that inspired me to create this project
 

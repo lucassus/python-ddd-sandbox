@@ -20,7 +20,7 @@ from app.modules.projects.infrastructure.containers import Container
 from app.shared.message_bus import MessageBus
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_project_endpoint(container: Container, app: FastAPI, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
@@ -45,7 +45,7 @@ async def test_create_project_endpoint(container: Container, app: FastAPI, clien
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_list_projects_endpoint(container: Container, client: AsyncClient):
     # Given
     future = asyncio.Future[dict[Any, Any]]()
@@ -67,7 +67,7 @@ async def test_list_projects_endpoint(container: Container, client: AsyncClient)
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_update_project_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
@@ -91,7 +91,7 @@ async def test_update_project_endpoint(container: Container, client: AsyncClient
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_archive_project_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
@@ -110,7 +110,7 @@ async def test_archive_project_endpoint(container: Container, client: AsyncClien
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_unarchive_project_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)
@@ -124,7 +124,7 @@ async def test_unarchive_project_endpoint(container: Container, client: AsyncCli
     bus_mock.execute.assert_called_with(UnarchiveProject(project_id=ProjectID(124)))
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_delete_project_endpoint(container: Container, client: AsyncClient):
     # Given
     bus_mock = Mock(spec=MessageBus)

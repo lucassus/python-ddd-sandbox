@@ -7,7 +7,7 @@ from app.utc_datetime import utc_datetime
 
 
 class TestJWTImplementation:
-    @pytest.fixture()
+    @pytest.fixture
     def jwt(self) -> JWTAuthentication:
         return JWTAuthentication(secret_key="test-secret")
 

@@ -21,7 +21,7 @@ def _prepare_db():
     drop_tables(engine)
 
 
-@pytest.fixture()
+@pytest.fixture
 def session():
     session = AppSession(bind=engine)
     yield session

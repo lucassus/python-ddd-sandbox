@@ -8,11 +8,11 @@ from app.modules.shared_kernel.entities.user_id import UserID
 
 
 class TestGetUserQueryHandler:
-    @pytest.fixture()
+    @pytest.fixture
     def handler(self):
         return GetUserQueryHandler(engine=async_engine)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_it_loads_user_details_along_projects(
         self,
         create_user,
@@ -31,7 +31,7 @@ class TestGetUserQueryHandler:
         assert loaded.projects is not None
         assert len(loaded.projects) == 2
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_it_loads_user_details_without_projects(
         self,
         create_user,
@@ -49,7 +49,7 @@ class TestGetUserQueryHandler:
         assert loaded.email == "test@email.com"
         assert loaded.projects is None
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_not_found(
         self,
         handler: GetUserQueryHandler,

@@ -9,7 +9,7 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress
 from app.modules.shared_kernel.entities.user_id import UserID
 
 
-@pytest.fixture()
+@pytest.fixture
 def create_user(session: Session):
     repository = UserRepository(session=session)
 
@@ -28,7 +28,7 @@ def create_user(session: Session):
     return _create_user
 
 
-@pytest.fixture()
+@pytest.fixture
 def create_project(session: Session, create_user):
     repository = ProjectRepository(session=session)
 

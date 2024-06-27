@@ -5,16 +5,16 @@ from app.modules.projects.application.testing.fake_unit_of_work import FakeUnitO
 from app.shared.message_bus import MessageBus
 
 
-@pytest.fixture()
+@pytest.fixture
 def repository():
     return FakeProjectRepository()
 
 
-@pytest.fixture()
+@pytest.fixture
 def message_bus() -> MessageBus:
     return MessageBus()
 
 
-@pytest.fixture()
+@pytest.fixture
 def fake_uow(repository, message_bus):
     return FakeUnitOfWork(repository, bus=message_bus)

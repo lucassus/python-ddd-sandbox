@@ -10,7 +10,7 @@ from app.modules.accounts.domain.user_builder import UserBuilder
 from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
-@pytest.fixture()
+@pytest.fixture
 def register_user(uow: FakeUnitOfWork, message_bus):
     return RegisterUserHandler(uow=uow, password_hasher=FakePasswordHasher())
 

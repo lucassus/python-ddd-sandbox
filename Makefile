@@ -1,11 +1,11 @@
 VENV_DIR=venv
 
 venv:
-	python3.9 -m venv $(VENV_DIR)
+	python -m venv $(VENV_DIR)
 	@echo "\nUse '. $(VENV_DIR)/bin/activate' to activate"
 
 deps-pre:
-	pip install --upgrade pip==23.2.1 pip-tools==7.3.0
+	pip install --upgrade pip==24.1.1 pip-tools==7.4.1
 
 deps-compile:
 	pip-compile requirements.in --output-file requirements.txt
@@ -43,6 +43,10 @@ check-flake8:
 check-types:
 	python -m mypy .
 
+lint-all: check-types check-flake8 check-isort check-black
+
+# Formatting
+
 format-autoflake:
 	autoflake --in-place --recursive \
 		--remove-all-unused-imports \
@@ -53,8 +57,6 @@ format-yesqa:
 	yesqa app/**/*.py tests/**/*.py
 
 format: format-yesqa format-autoflake format-isort format-black
-
-lint: check-types check-flake8 check-isort check-black
 
 # Testing
 
@@ -79,3 +81,5 @@ test-integration:
 
 test-end-to-end:
 	APP_ENV=test pytest tests/end-to-end
+
+test-all: test test-integration test-end-to-end

@@ -8,7 +8,7 @@ from app.modules.projects.application.queries import ListTasks
 from app.modules.projects.infrastructure.queries.task_query_handlers import ListTasksQueryHandler
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_list_tasks_query(session: Session, create_project):
     # Given
     handle = ListTasksQueryHandler(engine=async_engine)

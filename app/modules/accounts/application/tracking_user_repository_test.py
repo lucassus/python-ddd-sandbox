@@ -7,7 +7,7 @@ from app.modules.shared_kernel.entities.email_address import EmailAddress
 
 
 class TestTrackingUserRepository:
-    @pytest.fixture()
+    @pytest.fixture
     def repository(self):
         return TrackingUserRepository(FakeUserRepository())
 

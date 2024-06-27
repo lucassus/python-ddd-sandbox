@@ -6,16 +6,16 @@ from app.modules.accounts.application.tracking_user_repository import TrackingUs
 from app.shared.message_bus import MessageBus
 
 
-@pytest.fixture()
+@pytest.fixture
 def repository():
     return FakeUserRepository()
 
 
-@pytest.fixture()
+@pytest.fixture
 def message_bus() -> MessageBus:
     return MessageBus()
 
 
-@pytest.fixture()
+@pytest.fixture
 def uow(repository: FakeUserRepository, message_bus: MessageBus):
     return FakeUnitOfWork(repository=TrackingUserRepository(repository), bus=message_bus)

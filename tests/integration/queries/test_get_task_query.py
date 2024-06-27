@@ -8,7 +8,7 @@ from app.modules.projects.domain.task import TaskNumber
 from app.modules.projects.infrastructure.queries.task_query_handlers import GetTaskQueryHandler
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_task_query(
     session: Session,
     create_user,
@@ -36,7 +36,7 @@ async def test_get_task_query(
     assert task.number == TaskNumber(1)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_get_task_query_raises_error():
     # Given
     handle = GetTaskQueryHandler(engine=async_engine)

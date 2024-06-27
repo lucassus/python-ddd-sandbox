@@ -1,4 +1,4 @@
-name: CI
+name: Test
 
 on:
   pull_request:
@@ -27,4 +27,5 @@ jobs:
       - run: make test
       - run: make test-integration
       - run: make test-end-to-end
+
       - run: make seed

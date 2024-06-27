@@ -12,9 +12,9 @@ annotated-types==0.5.0
     # via pydantic
 anyio==3.7.1
     # via
-    #   fastapi
     #   httpcore
     #   starlette
+    #   watchfiles
 argparse==1.4.0
     # via adr-tools-python
 attrs==23.1.0
@@ -51,9 +51,13 @@ dnspython==2.4.0
 docopt==0.6.2
     # via pytest-watch
 email-validator==2.2.0
+    # via
+    #   fastapi
+    #   pydantic
+fastapi==0.111.0
     # via -r requirements.in
-fastapi==0.103.1
-    # via -r requirements.in
+fastapi-cli==0.0.4
+    # via fastapi
 flake8==7.1.0
     # via
     #   -r requirements.in
@@ -99,8 +103,12 @@ httpcore==0.17.3
     # via
     #   dnspython
     #   httpx
+httptools==0.6.1
+    # via uvicorn
 httpx==0.24.1
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   fastapi
 icdiff==2.0.6
     # via pytest-icdiff
 idna==2.10
@@ -113,10 +121,14 @@ iniconfig==2.0.0
     # via pytest
 isort==5.13.2
     # via -r requirements.in
+jinja2==3.1.4
+    # via fastapi
 libyear==0.2.1
     # via -r requirements.in
 markdown-it-py==3.0.0
     # via rich
+markupsafe==2.1.5
+    # via jinja2
 mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
@@ -127,6 +139,8 @@ mypy-extensions==1.0.0
     # via
     #   black
     #   mypy
+orjson==3.10.5
+    # via fastapi
 packaging==23.1
     # via
     #   black
@@ -149,14 +163,14 @@ pycodestyle==2.12.0
     # via
     #   flake8
     #   flake8-debugger
-pydantic==2.3.0
+pydantic[email]==2.7.4
     # via
     #   -r requirements.in
     #   fastapi
     #   pydantic-settings
-pydantic-core==2.6.3
+pydantic-core==2.18.4
     # via pydantic
-pydantic-settings==2.0.3
+pydantic-settings==2.3.4
     # via -r requirements.in
 pyflakes==3.2.0
     # via
@@ -186,11 +200,17 @@ python-dateutil==2.8.2
     #   freezegun
     #   libyear
 python-dotenv==1.0.0
-    # via pydantic-settings
+    # via
+    #   pydantic-settings
+    #   uvicorn
 python-multipart==0.0.9
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   fastapi
 pyyaml==6.0.1
-    # via bandit
+    # via
+    #   bandit
+    #   uvicorn
 requests==2.31.0
     # via libyear
 rich==13.5.2
@@ -214,7 +234,7 @@ sniffio==1.3.0
     #   httpx
 sqlalchemy[asyncio]==2.0.31
     # via -r requirements.in
-starlette==0.27.0
+starlette==0.37.2
     # via fastapi
 stevedore==5.1.0
     # via bandit
@@ -225,7 +245,9 @@ toml==0.10.2
 tryceratops==2.3.2
     # via -r requirements.in
 typer==0.12.3
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   fastapi-cli
 types-passlib==1.7.7.13
     # via -r requirements.in
 typing-extensions==4.12.2
@@ -236,13 +258,23 @@ typing-extensions==4.12.2
     #   pydantic-core
     #   sqlalchemy
     #   typer
+ujson==5.10.0
+    # via fastapi
 urllib3==1.26.16
     # via requests
-uvicorn==0.30.1
-    # via -r requirements.in
+uvicorn[standard]==0.30.1
+    # via
+    #   -r requirements.in
+    #   fastapi
+uvloop==0.19.0
+    # via uvicorn
 watchdog==3.0.0
     # via pytest-watch
+watchfiles==0.22.0
+    # via uvicorn
 wcwidth==0.2.6
     # via prettytable
+websockets==12.0
+    # via uvicorn
 yesqa==1.5.0
     # via -r requirements.in

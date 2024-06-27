@@ -1,10 +1,9 @@
 aiosqlite==0.19.0
 dependency-injector==4.41.0
-email-validator==2.2.0
-fastapi==0.103.1
+fastapi==0.111.0
 passlib[bcrypt]==1.7.4
-pydantic-settings==2.0.3
-pydantic==2.3.0
+pydantic-settings==2.3.4
+pydantic[email]==2.7.4
 pyjwt==2.8.0
 python-multipart==0.0.9
 sqlalchemy[asyncio]==2.0.31

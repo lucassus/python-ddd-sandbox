@@ -43,7 +43,7 @@ check-flake8:
 check-types:
 	python -m mypy .
 
-lint: check-types check-flake8 check-isort check-black
+lint-all: check-types check-flake8 check-isort check-black
 
 # Formatting
 

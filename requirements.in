@@ -3,7 +3,7 @@ dependency-injector==4.41.0
 fastapi==0.111.0
 passlib[bcrypt]==1.7.4
 pydantic-settings==2.3.4
-pydantic[email]==2.7.4
+pydantic[email]==2.8.2
 pyjwt==2.8.0
 python-multipart==0.0.9
 sqlalchemy[asyncio]==2.0.31

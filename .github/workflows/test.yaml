@@ -13,16 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: 3.11.9
+          python-version: "3.14"
+          enable-cache: true
 
-      - run: make install
+      - run: uv sync --frozen
 
       - run: make check-types
-      - run: make check-flake8
-      - run: make check-isort
-      - run: make check-black
+      - run: make lint
+      - run: make check-format
 
       - run: make test
       - run: make test-integration

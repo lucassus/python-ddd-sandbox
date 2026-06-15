@@ -3,7 +3,7 @@ from collections import defaultdict
 from typing import Any, Generic, Protocol, TypeVar, cast
 
 
-class Event(metaclass=abc.ABCMeta):
+class Event(metaclass=abc.ABCMeta):  # noqa: B024  intentional marker base class
     pass
 
 

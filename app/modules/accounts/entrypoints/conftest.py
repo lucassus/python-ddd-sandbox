@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 from fastapi import FastAPI
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
 from app.modules.accounts.application.containers import AppContainer
 from app.modules.accounts.entrypoints import routes
@@ -44,4 +44,4 @@ def app():
 
 @pytest.fixture
 def client(app):
-    return AsyncClient(app=app, base_url="http://test")
+    return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")

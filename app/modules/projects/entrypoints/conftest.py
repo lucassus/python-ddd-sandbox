@@ -1,6 +1,6 @@
 import pytest
 from fastapi import FastAPI
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.entrypoints import routes
@@ -36,4 +36,4 @@ def app():
 
 @pytest.fixture
 def client(app):
-    return AsyncClient(app=app, base_url="http://test")
+    return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")

@@ -64,7 +64,7 @@ async def test_register_user_endpoint_returns_422(client: AsyncClient, email, pa
     )
 
     # Then
-    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
 
 
 @pytest.mark.asyncio
@@ -102,7 +102,7 @@ async def test_get_current_user_endpoint(
     future = asyncio.Future[GetUser.Result]()
     future.set_result(
         GetUser.Result(
-            id=user_id,
+            id=user_id,  # ty: ignore[invalid-argument-type]  pydantic coerces UserID -> UUID
             email="test@email.com",
             projects=[
                 GetUser.Result.Project(id=1, name="Project One"),

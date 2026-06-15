@@ -41,7 +41,8 @@ def user_login_endpoint(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     authentication: Authentication = Depends(Provide[AppContainer.authentication]),
 ):
-    data = schemas.LoginUser(email=form_data.username, password=form_data.password)
+    # pydantic coerces str -> EmailAddress/Password; ty has no pydantic plugin, so it can't see it.
+    data = schemas.LoginUser(email=form_data.username, password=form_data.password)  # ty: ignore[invalid-argument-type]
     token = authentication.login(email=data.email, password=data.password)
 
     return {

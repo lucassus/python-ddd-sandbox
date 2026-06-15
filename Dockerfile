@@ -1,6 +1,6 @@
-FROM python:3.11.9
+FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim
 
 WORKDIR /usr/src/app
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY pyproject.toml uv.lock .python-version ./
+RUN uv sync --frozen

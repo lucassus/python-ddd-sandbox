@@ -9,7 +9,7 @@ from app.utc_datetime import utc_datetime
 class TestJWTImplementation:
     @pytest.fixture
     def jwt(self) -> JWTAuthentication:
-        return JWTAuthentication(secret_key="test-secret")
+        return JWTAuthentication(secret_key="test-secret-key-with-at-least-32-bytes!")
 
     def test_encode_and_decode(self, jwt: JWTAuthentication):
         user_id = UserID.generate()

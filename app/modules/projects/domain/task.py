@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import NewType, Optional
+from typing import NewType
 
 from app.modules.shared_kernel.entities.entity import Entity
 
@@ -9,7 +9,7 @@ TaskNumber = NewType("TaskNumber", int)
 class Task(Entity):
     _number: TaskNumber
     _name: str
-    _completed_at: Optional[datetime] = None
+    _completed_at: datetime | None = None
 
     def __init__(
         self,
@@ -28,7 +28,7 @@ class Task(Entity):
         return self._number
 
     @property
-    def completed_at(self) -> Optional[datetime]:
+    def completed_at(self) -> datetime | None:
         return self._completed_at
 
     @property

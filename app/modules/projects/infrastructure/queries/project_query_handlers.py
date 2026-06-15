@@ -16,7 +16,9 @@ class ListProjectsQueryHandler(BaseSQLQueryHandler[ListProjects, ListProjects.Re
             .where(projects_table.c.user_id == query.user_id)
         )
 
-        return ListProjects.Result(projects=projects)
+        # pydantic validates SQLAlchemy Row sequences into the Result model; ty (no pydantic plugin)
+        # only sees Sequence[Row[Any]] vs list[Project].
+        return ListProjects.Result(projects=projects)  # ty: ignore[invalid-argument-type]
 
 
 class GetProjectQueryHandler(BaseSQLQueryHandler[GetProject, GetProject.Result]):

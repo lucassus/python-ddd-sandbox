@@ -1,16 +1,13 @@
 import abc
 from collections import defaultdict
-from typing import Any, Generic, Protocol, TypeVar, cast
+from typing import Any, Protocol, cast
 
 
-class Event(metaclass=abc.ABCMeta):
+class Event(metaclass=abc.ABCMeta):  # noqa: B024  intentional marker base class
     pass
 
 
-CR = TypeVar("CR", bound=Any)
-
-
-class CommandThatReturns(Generic[CR], metaclass=abc.ABCMeta):
+class CommandThatReturns[CR](metaclass=abc.ABCMeta):  # noqa: B024  intentional marker base class
     pass
 
 
@@ -18,19 +15,13 @@ class Command(CommandThatReturns[None], metaclass=abc.ABCMeta):
     pass
 
 
-C = TypeVar("C", bound=CommandThatReturns[Any])
-
-
-class CommandHandler(Generic[C, CR], metaclass=abc.ABCMeta):
+class CommandHandler[C: CommandThatReturns[Any], CR](metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __call__(self, command: C) -> CR:
         raise NotImplementedError
 
 
-E = TypeVar("E", bound=Event)
-
-
-class EventHandler(Generic[E], metaclass=abc.ABCMeta):
+class EventHandler[E: Event](metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __call__(self, event: E) -> None:
         raise NotImplementedError
@@ -54,7 +45,7 @@ class MessageBus(SupportsDispatchingEvents):
         self._event_listeners = defaultdict(list)
         self._command_handlers = {}
 
-    def execute(self, command: CommandThatReturns[CR]) -> CR:
+    def execute[CR](self, command: CommandThatReturns[CR]) -> CR:
         handler = self._command_handlers.get(type(command))
         if handler is None:
             raise CommandHandlerNotFoundError(command)
@@ -67,7 +58,7 @@ class MessageBus(SupportsDispatchingEvents):
         for handle in handlers:
             handle(event)
 
-    def register(
+    def register[C: CommandThatReturns[Any], CR](
         self,
         command_class: type[C],
         handler: CommandHandler[C, CR],
@@ -77,14 +68,14 @@ class MessageBus(SupportsDispatchingEvents):
 
         self._command_handlers[command_class] = cast(CommandHandler[Any, CommandThatReturns[Any]], handler)
 
-    def register_all(self, command_handlers: dict[type[C], CommandHandler[C, CR]]):
+    def register_all[C: CommandThatReturns[Any], CR](self, command_handlers: dict[type[C], CommandHandler[C, CR]]):
         for command, handler in command_handlers.items():
             self.register(command, handler)
 
-    def listen(self, event_class: type[Event], handler: EventHandler[E]):
+    def listen[E: Event](self, event_class: type[Event], handler: EventHandler[E]):
         self._event_listeners[event_class].append(handler)
 
-    def listen_all(self, event_handlers: dict[type[Event], list[EventHandler[E]]]):
+    def listen_all[E: Event](self, event_handlers: dict[type[Event], list[EventHandler[E]]]):
         for event, handlers in event_handlers.items():
             for handler in handlers:
                 self.listen(event, handler)

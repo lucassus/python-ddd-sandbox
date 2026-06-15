@@ -5,7 +5,7 @@ app/infrastructure/databases/*.db
 docs
 htmlcov
 node_modules
-venv
+.venv
 .coverage
 coverage.xml
 README.local.md

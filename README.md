@@ -2,9 +2,8 @@
 
 ## Preparing and running the app
 
-* Use asdf to manage Python versions
-* `make venv`
-* `make install`
+* Install [uv](https://docs.astral.sh/uv/) — it manages the Python 3.14 toolchain and dependencies
+* `uv sync` (creates `.venv` from `uv.lock`, installing Python 3.14 if needed)
 * `make seed`
 * `make server-dev`
 
@@ -13,7 +12,8 @@ http://localhost:8000/api/docs
 
 ## Linting and testing
 
-* `make lint`
+* `make lint-all` (ruff lint + format check + ty type check)
+* `make format` (ruff format + autofix)
 * `make test`
 * `make test-watch`
 
@@ -24,8 +24,8 @@ curl http://localhost:8000/api/projects/1/tasks --silent | jq
 
 ## Other useful commands
 
-* `pip list --outdated`
-* `libyear -r requirements.txt --sort`
+* `uv pip list --outdated`
+* `uv lock --upgrade` (refresh the lockfile to the latest compatible versions)
 
 ## Books that inspired me to create this project
 

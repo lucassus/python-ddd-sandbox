@@ -9,7 +9,7 @@ class UserID:
             self._uuid = uuid.UUID(str(id))
 
     @classmethod
-    def generate(cls) -> "UserID":
+    def generate(cls) -> UserID:
         return cls(uuid.uuid4())
 
     def __str__(self):

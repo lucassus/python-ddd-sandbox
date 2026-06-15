@@ -11,7 +11,9 @@ class ListTasksQueryHandler(BaseSQLQueryHandler[ListTasks, ListTasks.Result]):
         stmt = select(tasks_table).where(tasks_table.c.project_id == query.project_id)
         tasks = await self._all_from(stmt)
 
-        return ListTasks.Result(tasks=tasks)
+        # pydantic validates SQLAlchemy Row sequences into the Result model; ty (no pydantic plugin)
+        # only sees Sequence[Row[Any]] vs list[Task].
+        return ListTasks.Result(tasks=tasks)  # ty: ignore[invalid-argument-type]
 
 
 class GetTaskQueryHandler(BaseSQLQueryHandler[GetTask, GetTask.Result]):

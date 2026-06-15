@@ -1,7 +1,7 @@
 from unittest.mock import ANY, Mock
 
 import pytest
-from httpx import AsyncClient
+from httpx2 import AsyncClient
 
 from app.modules.authentication_contract import AuthenticationContract
 from app.modules.projects.application.commands import CompleteTask, CreateTask, IncompleteTask

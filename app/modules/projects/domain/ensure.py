@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from app.modules.projects.domain.project import Project
 
 
-def project_has_allowed_number_of_incomplete_tasks(project: "Project") -> None:
+def project_has_allowed_number_of_incomplete_tasks(project: Project) -> None:
     if project.maximum_number_of_incomplete_tasks is None:
         return
 
@@ -18,11 +18,11 @@ def project_has_allowed_number_of_incomplete_tasks(project: "Project") -> None:
         raise MaxIncompleteTasksNumberIsReachedError()
 
 
-def all_project_tasks_are_completed(project: "Project") -> None:
+def all_project_tasks_are_completed(project: Project) -> None:
     if project.incomplete_tasks_count > 0:
         raise ProjectIsNotCompletedError(f"Project has {project.incomplete_tasks_count} incomplete tasks")
 
 
-def project_is_archived(project: "Project") -> None:
+def project_is_archived(project: Project) -> None:
     if not project.archived:
         raise ProjectNotArchivedError()

@@ -11,9 +11,7 @@ class GetUserQueryHandler(BaseSQLQueryHandler[GetUser, GetUser.Result]):
 
         user = await self._first_from(
             # fmt: off
-            select(users_table.c.id, users_table.c.email)
-            .select_from(users_table)
-            .where(users_table.c.id == user_id)
+            select(users_table.c.id, users_table.c.email).select_from(users_table).where(users_table.c.id == user_id)
             # fmt: on
         )
 
@@ -35,8 +33,10 @@ class GetUserQueryHandler(BaseSQLQueryHandler[GetUser, GetUser.Result]):
 
             data["projects"] = projects
 
+        # pydantic validates the row values (incl. SQLAlchemy Row projects) into the Result model;
+        # ty (no pydantic plugin) can't model that coercion.
         return GetUser.Result(
-            **{
+            **{  # ty: ignore[invalid-argument-type]
                 "id": user.id,
                 "email": str(user.email),
                 "projects": data["projects"],

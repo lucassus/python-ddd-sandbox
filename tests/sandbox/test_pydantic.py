@@ -1,4 +1,4 @@
-from typing import Annotated, Union
+from typing import Annotated
 
 import pytest
 from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, ValidationError
@@ -9,7 +9,7 @@ class InvalidEmailError(ValueError):
 
 
 class EmailAddress:
-    def __init__(self, address: Union["EmailAddress", str]):
+    def __init__(self, address: EmailAddress | str):
         if "@" not in address:
             raise InvalidEmailError()
 

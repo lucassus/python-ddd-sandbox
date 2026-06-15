@@ -44,7 +44,9 @@ extend-exclude = [".venv", "htmlcov", "examples"]
 # Carried over from the flake8 stack: E/W/F (flake8 core), S (bandit), B (bugbear),
 # A (builtins), C4 (comprehensions), DTZ (datetimez), T10 (debugger), PT (pytest-style),
 # PTH (use-pathlib), TRY (tryceratops), I (isort), TID (banned relative imports).
-select = ["E", "W", "F", "S", "B", "A", "C4", "DTZ", "T10", "PT", "PTH", "TRY", "I", "TID"]
+# UP (pyupgrade) holds syntax at the py314 baseline: PEP 604 unions (X | None), PEP 695
+# generics, collections.abc imports, and unquoted (PEP 649 deferred) annotations.
+select = ["E", "W", "F", "S", "B", "A", "C4", "DTZ", "T10", "PT", "PTH", "TRY", "I", "TID", "UP"]
 # A002/A003 (shadowing builtins), B008 (FastAPI Depends() in defaults), PT016, S105/S106
 # (hardcoded passwords). W503/E704 are dropped — the formatter owns line breaks.
 # TRY003 (long messages outside the exception class) is dropped — it is the noisiest

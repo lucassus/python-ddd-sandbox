@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 import pytest
 
@@ -17,7 +16,7 @@ class FakeAuthenticationToken(AuthenticationToken):
     def __init__(self, secret_key: str):
         super().__init__(secret_key=secret_key)
 
-    def encode(self, user_id: UserID, now: Optional[datetime] = None) -> str:
+    def encode(self, user_id: UserID, now: datetime | None = None) -> str:
         return f"token-{self._secret_key}-{user_id}"
 
     def decode(self, token: str) -> UserID:

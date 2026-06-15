@@ -1,4 +1,4 @@
-from typing import Iterator
+from collections.abc import Iterator
 
 from app.modules.projects.application.ports.abstract_project_repository import AbstractProjectRepository
 from app.modules.projects.domain.errors import ProjectNotFoundError

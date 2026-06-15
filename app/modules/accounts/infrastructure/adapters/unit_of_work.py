@@ -1,4 +1,5 @@
-from typing import Callable, Self
+from collections.abc import Callable
+from typing import Self
 
 from sqlalchemy.orm import Session
 

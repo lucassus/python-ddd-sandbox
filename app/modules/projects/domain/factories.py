@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from app.modules.projects.domain.project import Project, ProjectName
 from app.modules.shared_kernel.entities.user_id import UserID
@@ -8,7 +7,7 @@ from app.utc_datetime import utc_now
 
 def build_example_project(
     user_id: UserID,
-    completed_at: Optional[datetime] = None,
+    completed_at: datetime | None = None,
 ) -> Project:
     if completed_at is None:
         completed_at = utc_now()

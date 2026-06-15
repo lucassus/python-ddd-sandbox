@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
 from app.modules.projects.domain.project import ProjectID
 from app.modules.projects.domain.task import TaskNumber
@@ -41,7 +40,7 @@ class ListTasks(Query):
         class Task(BaseSchema):
             number: int
             name: str
-            completed_at: Optional[datetime] = None
+            completed_at: datetime | None = None
 
         tasks: list[Task]
 
@@ -53,7 +52,7 @@ class GetTask(Query):
     class Result(BaseSchema):
         number: int
         name: str
-        completed_at: Optional[datetime]
+        completed_at: datetime | None
 
     class NotFoundError(EntityNotFoundError):
         def __init__(self, project_id: ProjectID, number: TaskNumber):

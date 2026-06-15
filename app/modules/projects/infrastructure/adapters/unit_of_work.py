@@ -1,4 +1,4 @@
-from typing import Callable
+from collections.abc import Callable
 
 from sqlalchemy.orm import Session
 
@@ -14,7 +14,7 @@ class UnitOfWork(AbstractUnitOfWork):
         super().__init__(bus)
         self._session_factory = session_factory
 
-    def __enter__(self) -> "UnitOfWork":
+    def __enter__(self) -> UnitOfWork:
         self._session = self._session_factory()
         self.projects = ProjectRepository(session=self._session)
 

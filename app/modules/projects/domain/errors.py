@@ -8,12 +8,12 @@ if TYPE_CHECKING:
 
 
 class ProjectNotFoundError(EntityNotFoundError):
-    def __init__(self, id: "ProjectID"):
+    def __init__(self, id: ProjectID):
         super().__init__(f"Unable to find Project with {id=}")
 
 
 class TaskNotFoundError(EntityNotFoundError):
-    def __init__(self, number: "TaskNumber"):
+    def __init__(self, number: TaskNumber):
         super().__init__(f"Unable to find Task with {number=}")
 
 

@@ -19,7 +19,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "adr-tools-python",
     "freezegun",
     "httpx2",
     "libyear",

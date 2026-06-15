@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 from fastapi import FastAPI
-from httpx import ASGITransport, AsyncClient
+from httpx2 import ASGITransport, AsyncClient
 
 from app.modules.accounts.application.containers import AppContainer
 from app.modules.accounts.entrypoints import routes

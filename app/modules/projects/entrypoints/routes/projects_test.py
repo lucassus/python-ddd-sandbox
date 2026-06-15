@@ -4,7 +4,7 @@ from unittest.mock import ANY, Mock
 
 import pytest
 from fastapi import FastAPI
-from httpx import AsyncClient
+from httpx2 import AsyncClient
 from starlette import status
 
 from app.anys import AnyUUID

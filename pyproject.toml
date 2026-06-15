@@ -21,7 +21,7 @@ dependencies = [
 dev = [
     "adr-tools-python",
     "freezegun",
-    "httpx",
+    "httpx2",
     "libyear",
     "pytest",
     "pytest-asyncio",
